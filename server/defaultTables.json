@@ -1,0 +1,179 @@
+{
+	"0": {
+		"tablename": "post",
+		"fields": {
+			"content": {
+				"type": "postText"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			},
+			"owner": {
+				"type":"string",
+				"default": "anon"
+			},
+			"upvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"downvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"answered": {
+				"type": "boolean",
+				"default": "0"
+			},
+			"timestamp": {
+				"type": "datetime"
+			},
+			"tags": {
+				"type": "string"
+			}
+		}
+	},
+
+	"1": {
+		"tablename": "comment",
+		"fields": {
+			"content": {
+				"type": "commentText"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			},
+			"owner": {
+				"type": "string",
+				"default": "anon"
+			},
+			"upvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"downvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"isSolution": {
+				"type": "boolean",
+				"default": "0"
+			},
+			"commentLevel": {
+				"type": "tinyint",
+				"default": "0"
+			},
+			"parentPost": {
+				"type": "uniqueidentifier"
+			},
+			"parentComment": {
+				"type": "uniqueidentifier"
+			},
+			"timestamp": {
+				"type": "datetime"
+			}
+		}
+	},
+
+	"2": {
+		"tablename": "user",
+		"fields": {
+			"netid": {
+				"type": "string"
+			},
+			"username": {
+				"type": "string"
+			},
+			"totalUpvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"totalDownvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"totalSolved": {
+				"type": "tinyint",
+				"default": "0"
+			},
+			"reportCount": {
+				"type": "tinyint",
+				"default": "0"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			},
+			"dateJoined": {
+				"type": "date"
+			},
+			"privilege": {
+				"type" : "string",
+				"default": "None"
+			}
+		}
+	},
+
+	"3": {
+		"tablename": "report",
+		"fields": {
+			"reportSummary": {
+				"type": "string"
+			},
+			"report": {
+				"type": "commentText"
+			},
+			"reportingUser": {
+				"type": "uniqueidentifier"
+			},
+			"reportedUser": {
+				"type": "uniqueidentifier"
+			},
+			"relatedCommentOrPostID": {
+				"type": "uniqueidentifier"
+			},
+			"timestamp": {
+				"type": "datetime"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			}
+		}
+	},
+
+	"4": {
+		"tablename": "tag",
+		"fields": {
+			"name": {
+				"type": "string"
+			},
+			"relatedTags": {
+				"type": "string"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			}
+		}
+	},
+	"5": {
+		"tablename": "vote",
+		"fields": {
+			"commentOrPostID": {
+				"type": "uniqueidentifier"
+			},
+			"userID": {
+				"type": "uniqueidentifier"
+			},
+			"vote": {
+				"type": "bool"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			}
+		}
+	}
+}

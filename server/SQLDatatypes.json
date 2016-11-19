@@ -1,0 +1,66 @@
+{
+	"_comment": "THIS IS A COMMENT, DO NOT USE THIS KEY IN ACTUAL CODE This file contains all the datatypes that can be used in SQL This file should be read into program memory upon startup (NOT object instantiation) Do not use the comment or header keys, they are only for datatype documentation",
+
+	"_header1": "~~~~NUMERICAL DATATYPES~~~~",
+
+	"bit": "BIT(64)",
+	"tinyint": "TINYINT",
+	"smallint": "SMALLINT",
+	"mediumint": "MEDIUMINT",
+	"int": "INT",
+	"integer": "INTEGER",
+	"bigint": "BIGINT",
+
+	"decimal": "DECIMAL",
+	"dec": "DEC",
+	"numeric": "NUMERIC",
+	"fixed": "FIXED",
+	"float": "FLOAT",
+	"double": "DOUBLE",
+	"double precision": "DOUBLE PRECISION",
+	"real": "REAL",
+
+	"unsigned": "UNSIGNED",
+	"zerofill": "ZEROFILL",
+
+	"_header2": "~~~~BOOLEAN DATATYPES~~~~",
+
+	"bool": "BOOL",
+	"boolean": "BOOLEAN",
+
+	"_header3": "~~~~DATE AND TIME DATATYPES~~~~",
+
+	"date": "DATE",
+	"datetime": "DATETIME",
+	"datetimeMedPrecision": "DATETIME(3)",
+	"datetimeHighPrecision": "DATETIME(6)",
+	"timestamp": "TIMESTAMP",
+	"timestampMedPrecision": "TIMESTAMP(3)",
+	"timestampHighPrecision": "TIMESTAMP(6)",
+	"time": "TIME",
+	"timeMedPrecision": "TIME(3)",
+	"timeHighPrecision": "TIME(6)",
+	"year": "YEAR",
+
+	"_header4": "~~~~STRING DATATYPES~~~~ ENUM and SET types have not been enumerated here",
+
+	"char": "CHAR",
+	"varchar": "VARCHAR",
+	"binary": "BINARY",
+	"varbinary": "VARBINARY",
+	"tinyblob": "TINYBLOB",
+	"blob": "BLOB",
+	"tinytext": "TINYTEXT",
+	"text": "TEXT",
+	"mediumblob": "MEDIUMBLOB",
+	"mediumtext": "MEDIUMTEXT",
+	"longblob": "LONGBLOB",
+	"longtext": "LONGTEXT",
+
+	"_header5": "~~~~CUSTOM DATATYPES~~~~",
+
+	"postText": "text(1000)",
+	"commentText": "text(500)",
+	"uniqueidentifier": "varchar(16)",
+	"string": "varchar(100)"
+}

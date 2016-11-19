@@ -1,0 +1,7 @@
+{
+	"host": "localhost",
+	"user": "root",
+	"secret": "simple",
+	"database": "testing",
+	"maxConnections": "50"
+}
