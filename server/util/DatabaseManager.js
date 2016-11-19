@@ -2,9 +2,10 @@
 
 var mysql = require('mysql');
 var fs = require('fs');
+var path = require('path');
 var log = require('./log');
 
-var databaseInformation = JSON.parse(fs.readFileSync('database.json', 'utf8')) 
+var databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/database.json'), 'utf8')) 
 
 exports.DatabaseManager = function() {
 	var pool = mysql.createPool({
@@ -20,14 +21,13 @@ exports.DatabaseManager = function() {
 			pool.getConnection(function(err, connection) {
 				if (err) {
 					log.error(err.message);
-					reject(err);
+					return reject(err);
 				}
 
 				connection.query(queryString, function(err, rows, fields) {
 					if (err) {
-						reject(err);
 						log.error(err.message);
-						return;
+						return reject(err);
 					}
 
 					connection.release();

@@ -1,13 +1,15 @@
 "use strict";
 
 var fs = require('fs');
+var path = require('path')
 var db = require('../DatabaseManager.js');
 var log = require('../log.js')
 
-var possibleTypes = JSON.parse(fs.readFileSync('SQLDatatypes.json', 'utf8')) 
-var defaults = JSON.parse(fs.readFileSync('defaultTables.json', 'utf8')) 
+var possibleTypes = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/SQLDatatypes.json'), 'utf8')) 
+var defaults = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/defaultTables.json'), 'utf8')) 
 
 var dbm = new db.DatabaseManager();
+var numCreated = 0;
 
 function createTable(tableName, fields, numberTablesToCreate, numberCreated) { //TODO: make this more intelligent to match changes to defaultTables.json
 	var keyCount = 0;
@@ -37,13 +39,16 @@ function createTable(tableName, fields, numberTablesToCreate, numberCreated) { /
 	}
 
 	dbm.query(queryString).then(function(){
-		log.info("Table '" + defaults[prop]["tablename"] + "' created!");
-		if (numberTablesToCreate == numberCreated)
+		numCreated++;
+		log.info("Table '" + tableName + "' created!");
+		if (numberTablesToCreate == numCreated)
 			log.info("~~~~~~~~~~~~~~~End of Database Setup~~~~~~~~~~~~~~~~\n\n")
 	}, function(err){
+		numCreated++;
 		log.warn("Table '" + tableName + "' not created! Likely due to a previously logged error")
-		if (numberTablesToCreate == numberCreated)
-			log.info("~~~~~~~~~~~~~~~End of Database Setup~~~~~~~~~~~~~~~~\n\n")
+		if (numberTablesToCreate == numCreated)
+			log.info("~~~~~~~~~~~~~~~End of Database Setup~~~~~~~~~~~~~~~~\n")
+
 	});
 }
 
@@ -51,10 +56,9 @@ exports.setupDatabase = function() {
 	log.info("~~~~~~~~~~~~~~Starting Database Setup~~~~~~~~~~~~~~~")
 
 	var totalLength = Object.keys(defaults).length;
-	var numCreated = 0;
+	numCreated = 0;
 
 	for (var prop in defaults) {
-		numCreated++;
 		createTable(defaults[prop]["tablename"], defaults[prop]["fields"], totalLength, numCreated);
 	}
 	

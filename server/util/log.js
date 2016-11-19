@@ -1,8 +1,9 @@
 "use strict"
 
 var fs = require('fs');
+var path = require('path');
 
-var config =  JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+var config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/config.json'), 'utf8'));
 
 var loggingShouldOccur = (config["logging"] == 'true');
 
@@ -41,11 +42,14 @@ exports.info = function(logString) {
 function writeToFile(logString) {
 	var currentdate = new Date().toISOString();
 	var currentdate = currentdate.slice(0, currentdate.indexOf('T'));
+
 	var logFileName = "logs/" + currentdate + ".txt";
+	var logFilePath = path.join(__dirname, '..', logFileName);
+
 	var correctedString = logString + "\n";
-	fs.open(logFileName, "a", function(err, fd) {
+	fs.open(logFilePath, "a", function(err, fd) {
 		if (err){
-			fs.writeFile(logFileName, correctedString, {"flag": "wx"}, function(err){
+			fs.writeFile(logFilePath, correctedString, {"flag": "wx"}, function(err){
 				if (err)
 					console.log(err);
 			});

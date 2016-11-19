@@ -1,4 +1,4 @@
 {
-	"logging": "true",
+	"logging": "false",
 	"databaseSetupNeeded": "false"
 }
