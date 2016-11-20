@@ -1,0 +1,90 @@
+body {
+  background-color: #34056D;
+}
+
+a {
+  color: inherit;
+}
+
+.container-fluid {
+  padding: 0px;
+}
+
+.navbar {
+  height: 70px;
+  background-color: #000;
+  font-family: 'Comfortaa', cursive;
+  color: #FF9200;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.navbar-logo p,
+.profile p {
+  font-size: 20px;
+  margin: 0px;
+  display: inline-block;
+  margin-top: 15px;
+}
+
+.navbar-logo {
+  float: left;
+}
+
+.profile {
+  float: right;
+}
+
+.main-search {
+  text-align: center;
+  padding-top: 200px;
+}
+
+.main-search p {
+  font-family: 'Comfortaa', cursive;
+  color: #FF9200;
+  font-size: 50px;
+}
+
+.search-bar {
+  background-color: white;
+  width: 900px;
+  height: 50px;
+  margin: auto;
+  border-radius: 10px;
+}
+
+.search-bar input {
+  width: 850px;
+  height: 45px;
+  background-color: transparent;
+  border: none;
+}
+
+.search-bar input:focus {
+  outline: none;
+}
+
+.featured-content {
+  margin-top: 100px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.featured-content a:hover {
+  color: #FF9200;
+}
+
+.featured-item {
+  height: 100px;
+}
+
+.featured-item p {
+  background-color: white;
+  border-radius: 10px;
+  text-align: center;
+  padding-top: 33px;
+  font-family: 'Comfortaa', cursive;
+  height: 100%;
+  font-size: 25px;
+}
