@@ -1,0 +1,118 @@
+<DOCTYPE html>
+	<HTML lang="en">
+		<HEAD>
+
+			<style type="text/css">
+				body { background: #8A2BE2 !important; } 
+			</style>
+
+			<TITLE> Eng Forum</TITLE> 
+
+			<!-- Bottstrap initializing stuff -->
+			<meta charset="utf-8"> 
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+		</HEAD>
+			<!-- Navbar -->
+			<nav class="navbar navbar-inverse">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">Eng Forum</a>
+					</div>
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a href="#">Page 1?</a></li>
+						<li><a href="#">Page 2?</a></li>
+					</ul>
+				</div>
+			</nav>
+
+			<!-- possible area for stuff? -->
+			<br><br><br>
+
+			<!-- Questiom -->
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<h2>Question
+						<br>
+						<small>date...</small>
+					</h2>
+					<p>Description of question.....</p>
+				</div>
+			</div>
+
+			<!-- Comment Box -->
+			<div class="panel panel-default" style = "background-color:#fff">
+				<form>
+					<div class="form-group">
+						<label for="comment">Comment:</label>
+						<textarea class="form-control" rows="3" id="comment"></textarea>
+					</div>
+					<button type="button" class="btn btn-default" value="Submit Button" style = "color:#8A2BE2">Submit</button>
+				</form>
+			</div>
+
+			<!-- Nesting comment-->
+			<div class = "container-fluid" style = "background-color:#fff; height:600px">
+				<h2>Comments/Responses</h2>
+				<br>
+				<div class="media">
+					<div class="media-body">
+						<h4 class="media-heading">Larry <small><i>Posted on February 18, 2016</i></small></h4>
+						<p>Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff </p>
+						<button type="button" class="btn btn-default btn-xs" value = "Reply Button">Reply</button>
+						<button type="button" class="btn btn-default btn-xs" value = "Save Button">Save</button>
+						<hr>
+
+						<!-- Nested media object -->
+						<div class="media">
+							<div class="media-body">
+								<h4 class="media-heading">User... <small><i>Posted on February 18, 2016</i></small></h4>
+								<p>Random Random Random Random Random Random Random Random Random Random Random Random Random </p>
+								<hr>
+
+								<!-- Nested media object -->
+								<div class="media">
+									<div class="media-body">
+										<h4 class="media-heading">User <small><i>Posted on February 19, 2016</i></small></h4>
+										<p>Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff </p>
+										<hr>
+									</div>
+								</div>
+
+							</div>
+
+							<!-- Nested media object -->
+							<div class="media">
+								<div class="media-body">
+									<h4 class="media-heading">User...<small><i>Posted on February 20, 2016</i></small></h4>
+									<p>Random Random Random Random Random Random Random Random Random Random Random Random Random </p>
+									<hr>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<!-- Nested media object -->
+					<div class="media">
+						<div class="media-body">
+							<h4 class="media-heading">BOB  <small><i>Posted on February 20, 2016</i></small></h4>
+							<p>Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff</p>
+							<hr>
+						</div>
+					</div>
+
+				</div>
+			</div> 
+
+
+			<div class="container">
+				<h3>Other Options</h3>
+				<p>Will we be adding stuff here?</p>
+			</div>
+		</BODY>
+	</HTML>
