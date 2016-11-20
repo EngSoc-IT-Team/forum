@@ -1,9 +1,15 @@
 "use strict";
+
 var express = require('express');
+var path = require('path');
+var log = require('./util/log');
 
 const PORT = 8080;
 
 var server = express();
+
+console.log(path.join(__dirname, '..', 'css'));
+
 
 /*AUTHENTICATION -- NEED COOKIES*/
 // https://stormpath.com/blog/everything-you-ever-wanted-to-know-about-node-dot-js-sessions
@@ -11,7 +17,8 @@ var server = express();
 
 server.get('/', function(request, response) { // default link, delivers landing page
 	// validateSession(); // this needs to be at the beginning of every request
-	response.send('<h2>This would be our landing page</h2><br><input type="text" placeholder="type your question">');
+	express.static(path.join(__dirname, '..', 'css')
+	response.sendFile(path.join(__dirname, '..', 'html/index.html'));
 });
 
 server.get('/goodbye', function(request, response) { // stupid test link, delivers static message
@@ -56,4 +63,4 @@ server.get('/user', function(request, response) { //user home page
 })
 
 server.listen(PORT);
-console.log("Listening on port " + PORT.toString());
+log.info("Listening on port " + PORT.toString());
