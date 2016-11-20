@@ -77,6 +77,7 @@ a {
 
 .featured-item {
   height: 100px;
+  margin-top: 20px;
 }
 
 .featured-item p {
