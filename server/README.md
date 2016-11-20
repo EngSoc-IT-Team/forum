@@ -14,6 +14,13 @@
 
 ![](https://si.wsj.net/public/resources/images/BN-MT095_COSTUM_JV_20160223171342.jpg)
 
+# Server-Side Setup (Windows ONLY)
+1. Download and install with [MySQL installer](https://dev.mysql.com/downloads/installer/)
+2. Set the root password when prompted in the installer
+3. Go to start > all programs > MySQL > MySQL 5.7 Command Line Client and enter the root password
+4. In the same directory is the much nicer looking client, MySQL Workbench
+5. That's it! So much easier than on Mac! Wow, Windows > Macs!
+
 # Moving Forward - The javascript
 1. Make sure your nodejs is up to date (Version 7.0.0 or up please)
 2. Make sure you have npm installed ([try this ](http://blog.npmjs.org/post/85484771375/how-to-install-npm) if you need to install both node and npm)
