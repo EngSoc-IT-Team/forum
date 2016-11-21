@@ -3,13 +3,14 @@
 var express = require('express');
 var path = require('path');
 var log = require('./util/log');
+var cp = require('cookie-parser')
 
 const PORT = 8080;
-
 var server = express();
 
-console.log(path.join(__dirname, '..', 'css'));
-
+server.use('/css', express.static('../css'));
+server.use('/js', express.static('../js'));
+server.use(cp());
 
 /*AUTHENTICATION -- NEED COOKIES*/
 // https://stormpath.com/blog/everything-you-ever-wanted-to-know-about-node-dot-js-sessions
@@ -17,24 +18,19 @@ console.log(path.join(__dirname, '..', 'css'));
 
 server.get('/', function(request, response) { // default link, delivers landing page
 	// validateSession(); // this needs to be at the beginning of every request
-	express.static(path.join(__dirname, '..', 'css')
 	response.sendFile(path.join(__dirname, '..', 'html/index.html'));
-});
-
-server.get('/goodbye', function(request, response) { // stupid test link, delivers static message
-	// validateSession(); // this needs to be at the beginning of every request
-	response.send('<h2>Goodbye World :(</h2>');
+	response.cookie("the first cookie", "the value of my cookie")
 });
 
 server.get('/search', function(request, response) { // to search bar
 	// validateSession(); // this needs to be at the beginning of every request
-	response.send('<h2>This would be our search page</h2><br><input type="text" placeholder="type your question">');
+	response.sendFile(path.join(__dirname, '..', 'html/index.html'));
 });
 
 server.get('/question/id=\*', function(request, response) { // question page, queried by id
 	// validateSession(); // this needs to be at the beginning of every request
 	var pertinentQuery = request.url.replace('/question/id=', '');
-	response.send('<h2>This could be a post page</h2><br><h2>Question</h2><h4>comment</h4><h4>commment</h4><h3>Question ID: ' + pertinentQuery + "</h3>");
+	response.sendFile(path.join(__dirname, '..', 'html/Q_APage.HTML'));
 });
 
 server.get('/about', function(request, response) { //about page
