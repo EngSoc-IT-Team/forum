@@ -89,3 +89,30 @@ a {
   height: 100%;
   font-size: 25px;
 }
+
+.page-header {  
+    font-family: 'Comfortaa', cursive;
+}
+
+.eng-text{  
+    font-family: 'Comfortaa', cursive;
+    color: #FF9200;
+    margin: 1em;
+}
+
+.header-img {
+  width: 3.5em;
+  height: 3.5em;
+} 
+
+.body-image {
+  width: 250px;
+  height: 250px;
+  display: inline-block;
+  float: right;
+  margin-right: 2em;
+}
+
+.black-background {
+  background-color: black;
+}

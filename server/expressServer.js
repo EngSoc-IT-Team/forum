@@ -2,19 +2,18 @@
 
 var express = require('express');
 var path = require('path');
+var cp = require('cookie-parser');
 var log = require('./util/log');
-var cp = require('cookie-parser')
 
 const PORT = 8080;
 var server = express();
 
+// directories from which we serve css, js and assets statically
 server.use('/css', express.static('../css'));
 server.use('/js', express.static('../js'));
-server.use(cp());
+server.use('/assets', express.static('../assets'));
 
-/*AUTHENTICATION -- NEED COOKIES*/
-// https://stormpath.com/blog/everything-you-ever-wanted-to-know-about-node-dot-js-sessions
-// this looks super promising
+server.use(cp()); // imports all the cookie-parser middleware to express
 
 server.get('/', function(request, response) { // default link, delivers landing page
 	// validateSession(); // this needs to be at the beginning of every request
@@ -34,8 +33,7 @@ server.get('/question/id=\*', function(request, response) { // question page, qu
 });
 
 server.get('/about', function(request, response) { //about page
-	// validateSession(); // this needs to be at the beginning of every request
-	response.send('<h2>Our about page</h2><br><h3>' + request.url + "</h3>");
+	response.sendFile(path.join(__dirname, '..', 'html/about.HTML'));
 })
 
 server.get('/new', function(request, response) { // newest questions being asked in list view
@@ -53,10 +51,11 @@ server.get('/list/filter?\*', function(request, response) { //return the list fi
 	response.send('<h2>List view of questions</h2><br><h4>listItem</h4><br><h4>listItem</h4><br><h4>listItem</h4><br><h3>' + request.url + "</h3>");
 })
 
-server.get('/user', function(request, response) { //user home page
+server.get('/profile', function(request, response) { //user home page
 	// validateSession(); // this needs to be at the beginning of every request
 	response.send('<h2>Home Page for the user currently logged in</h2><h3>' + request.url + "</h3>");
 })
 
+// start the server
 server.listen(PORT);
 log.info("Listening on port " + PORT.toString());
