@@ -21,8 +21,11 @@ function createTable(tableName, fields, numberTablesToCreate, numberCreated) { /
 			if (fields[field]["default"])
 				queryString += " DEFAULT '" + fields[field]["default"] + "'";
 
-			if(fields[field]["primaryKey"])
+			if (fields[field]["primaryKey"])
 				queryString += " PRIMARY KEY"
+
+			if (fields[field]["constraint"])
+				queryString += " " + fields[field]["constraint"];
 
 			queryString += ', ';
 			keyCount++;
@@ -32,8 +35,9 @@ function createTable(tableName, fields, numberTablesToCreate, numberCreated) { /
 			if (fields[field]["default"])
 				queryString += " DEFAULT '" + fields[field]["default"] + "'";
 
-			if(fields[field]["primaryKey"])
+			if (fields[field]["primaryKey"])
 				queryString += " PRIMARY KEY"
+			
 			queryString += ')';
 		}
 	}

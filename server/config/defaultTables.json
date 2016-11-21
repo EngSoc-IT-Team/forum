@@ -3,7 +3,8 @@
 		"tablename": "post",
 		"fields": {
 			"content": {
-				"type": "postText"
+				"type": "postText",
+				"constraint": "NOT NULL"
 			},
 			"id": {
 				"type": "uniqueidentifier",
@@ -26,10 +27,12 @@
 				"default": "0"
 			},
 			"timestamp": {
-				"type": "datetime"
+				"type": "datetime",
+				"constraint": "NOT NULL"
 			},
 			"tags": {
-				"type": "string"
+				"type": "string",
+				"constraint": "NOT NULL"
 			}
 		}
 	},
@@ -38,7 +41,8 @@
 		"tablename": "comment",
 		"fields": {
 			"content": {
-				"type": "commentText"
+				"type": "commentText",
+				"constraint": "NOT NULL"
 			},
 			"id": {
 				"type": "uniqueidentifier",
@@ -46,7 +50,8 @@
 			},
 			"owner": {
 				"type": "string",
-				"default": "anon"
+				"default": "anon",
+				"constraint": "NOT NULL"
 			},
 			"upvotes": {
 				"type": "mediumint",
@@ -65,13 +70,15 @@
 				"default": "0"
 			},
 			"parentPost": {
-				"type": "uniqueidentifier"
+				"type": "uniqueidentifier",
+				"constraint": "NOT NULL"
 			},
 			"parentComment": {
 				"type": "uniqueidentifier"
 			},
 			"timestamp": {
-				"type": "datetime"
+				"type": "datetime",
+				"constraint": "NOT NULL"
 			}
 		}
 	},
@@ -80,10 +87,12 @@
 		"tablename": "user",
 		"fields": {
 			"netid": {
-				"type": "string"
+				"type": "string",
+				"constraint": "UNIQUE"
 			},
 			"username": {
-				"type": "string"
+				"type": "string",
+				"constraint": "UNIQUE"
 			},
 			"totalUpvotes": {
 				"type": "mediumint",
@@ -118,8 +127,9 @@
 	"3": {
 		"tablename": "report",
 		"fields": {
-			"reportSummary": {
-				"type": "string"
+			"reportReason": {
+				"type": "tinyint",
+				"constraint": "NOT NULL CHECK (reportReason>=0 AND reportReason<=4)"
 			},
 			"report": {
 				"type": "commentText"
@@ -175,5 +185,24 @@
 				"primaryKey": "true"
 			}
 		}
+	},
+	"6": {
+		"tablename": "session",
+		"fields": {
+			"sessionStart": {
+				"type": "datetime"
+			},
+			"sessionId": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			},
+			"userID": {
+				"type": "uniqueidentifier",
+				"constraint": "NOT NULL UNIQUE"
+			}
+		}
 	}
 }
+
+
+
