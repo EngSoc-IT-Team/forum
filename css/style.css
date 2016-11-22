@@ -31,6 +31,11 @@ a {
   float: left;
 }
 
+.nav-font p {
+  font-family: 'Comfortaa',cursive,
+ color: #FF9200;
+}
+
 .profile {
   float: right;
 }

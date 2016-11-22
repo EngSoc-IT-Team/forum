@@ -3,7 +3,7 @@
 		<HEAD>
 
 			<style type="text/css">
-				body { background: #8A2BE2 !important; } 
+				body { background: #34056D !important; } 
 			</style>
 
 			<TITLE> Eng Forum</TITLE> 
@@ -11,52 +11,80 @@
 			<!-- Bottstrap initializing stuff -->
 			<meta charset="utf-8"> 
 			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<meta name="description" content="Eng Forum">
+			<meta name="author" content="Ayrton Foster">
+			<meta name="keywords" content="Queens University, Forum, Engineering">
+
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+			<!--integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous"-->
+			<link rel="stylesheet" href="../css/normalize.css" />
+			<link rel="stylesheet" href="../css/style.css" />
+			<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 		</HEAD>
+		<BODY style = "color: black; font-family: sans-serif">
 			<!-- Navbar -->
-			<nav class="navbar navbar-inverse">
-				<div class="container-fluid">
-					<div class="navbar-header">
-						<a class="navbar-brand" href="#">Eng Forum</a>
+			<HEADER>
+				<nav class="navbar navbar-inverse navbar-fixed-top" class="nav-font" style = " font-family: 'Comfortaa' cursive; color: #FF9200">
+					<div class="container-fluid">
+						<div class="navbar sticky">
+							<a href="#" class="navbar-logo" >
+								<img class="header-img" src="../assets/qef.png">
+							</a>
+							<a href="#" class="profile">
+								<p>Profile</p>
+							</a>
+						</div>
 					</div>
-					<ul class="nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Page 1?</a></li>
-						<li><a href="#">Page 2?</a></li>
-					</ul>
-				</div>
-			</nav>
-
+				</nav>
+			</HEADER>
 			<!-- possible area for stuff? -->
-			<br><br><br>
+			<br><br><br><br><br><br><br><br>
+
 
 			<!-- Questiom -->
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h2>Question
-						<br>
-						<small>date...</small>
-					</h2>
-					<p>Description of question.....</p>
-				</div>
-			</div>
-
-			<!-- Comment Box -->
 			<div class="panel panel-default" style = "background-color:#fff">
 				<form>
 					<div class="form-group">
-						<label for="comment">Comment:</label>
-						<textarea class="form-control" rows="3" id="comment"></textarea>
+						<h2>Question
+							<br>
+							<small>date...</small>
+						</h2>
+						<p>Description of question.....</p>
 					</div>
-					<button type="button" class="btn btn-default" value="Submit Button" style = "color:#8A2BE2">Submit</button>
+					<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Comment</button>
 				</form>
 			</div>
 
+			<!-- Comment Box -->
+			<!--<div class="container" style = "background-color:#fff">-->
+				
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog">
+
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">Comment here</h4>
+							</div>
+							<div class="modal-body">
+								<textarea class="form-control" rows="5" id="comment"></textarea>	
+							</div>
+							<div class="modal-footer">
+								<button type="Submit" class="btn btn-default" value="Submit Button" data-dismiss="modal">Submit</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			
+
 			<!-- Nesting comment-->
-			<div class = "container-fluid" style = "background-color:#fff; height:600px">
+			<div class = "container-fluid" style = "background-color:#fff; height:800px">
 				<h2>Comments/Responses</h2>
 				<br>
 				<div class="media">
@@ -110,9 +138,11 @@
 			</div> 
 
 
-			<div class="container">
-				<h3>Other Options</h3>
-				<p>Will we be adding stuff here?</p>
+			<div class="container ">
+				<div class = "nav-font">
+					<h3>Other Options</h3>
+					<p>Will we be adding stuff here?</p>
+				</div>
 			</div>
 		</BODY>
 	</HTML>
