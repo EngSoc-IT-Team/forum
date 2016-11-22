@@ -177,7 +177,7 @@
 			"userID": {
 				"type": "uniqueidentifier"
 			},
-			"vote": {
+			"voteValue": {
 				"type": "bool"
 			},
 			"id": {
