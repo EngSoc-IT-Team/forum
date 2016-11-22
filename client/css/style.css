@@ -113,3 +113,7 @@ a {
 .black-background {
   background-color: black;
 }
+
+.centered{
+  text-align: center; 
+}
