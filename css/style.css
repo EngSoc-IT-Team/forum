@@ -1,5 +1,7 @@
 body {
   background-color: #34056D;
+  font-family: 'Comfortaa', cursive;
+  color: #FF9200;
 }
 
 a {
@@ -13,8 +15,6 @@ a {
 .navbar {
   height: 70px;
   background-color: #000;
-  font-family: 'Comfortaa', cursive;
-  color: #FF9200;
   padding-left: 40px;
   padding-right: 40px;
 }
@@ -41,8 +41,6 @@ a {
 }
 
 .main-search p {
-  font-family: 'Comfortaa', cursive;
-  color: #FF9200;
   font-size: 50px;
 }
 
@@ -85,18 +83,12 @@ a {
   border-radius: 10px;
   text-align: center;
   padding-top: 33px;
-  font-family: 'Comfortaa', cursive;
+  color: black;
   height: 100%;
   font-size: 25px;
 }
 
-.page-header {  
-    font-family: 'Comfortaa', cursive;
-}
-
-.eng-text{  
-    font-family: 'Comfortaa', cursive;
-    color: #FF9200;
+.eng-text {  
     margin: 1em;
 }
 
