@@ -2,6 +2,7 @@
 
 var log = require('./log');
 var db = require('./DatabaseManager');
+var qb = require('./QueryBuilder');
 
 var dbm = new db.DatabaseManager();
 
@@ -14,9 +15,7 @@ var dbm = new db.DatabaseManager();
  ** table: The table name of the table the row you want to access is on
 **/
 exports.DBRow = function(table) {
-	var specificQueries = "";
 	var querySort = "";
-	var setRows = "";
 	var returnLimit = "";
 	var currentIndex = -1;
 	var rows = [];
@@ -37,14 +36,14 @@ exports.DBRow = function(table) {
 	 ** Promises are necesary to make sure the row object is set before you try to get or set values to it
 	 ** Note: if a row does not match this ID, underfined will be returned
 	**/
-	this.getRow = function(systemId) { //use a system id to get a row from a table immediately
-		var qs =  "SELECT * FROM " + table + " " + "WHERE id='" + systemId + "' LIMIT 1";
+	this.getRow = function(systemId) {
+		var qs = qb.get(table, systemId);
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row){
 				rows = row;
 				currentIndex = 0;
+				currentRow = rows[currentIndex];
 				resolve(true);
-				currentRow = row[currentIndex];
 			}, function(err){
 				currentRow = {};
 				rows = [];
@@ -61,18 +60,16 @@ exports.DBRow = function(table) {
 	 ** To access the rows, you must use the next() function to iterate
 	**/
 	this.query = function() { //queries the database, will set this.row to the retrieved row, YOU MUST USE PROMISES for this
-		var qs =  "SELECT * FROM " + table + " " + specificQueries + querySort + returnLimit;
-		console.log(qs);
-		return new Promise(function(resolve, reject){
-			dbm.query(qs).then(function(row){
-				console.log(row)
-				resolve(true);
+		var qs =  qb.query(table, currentRow) + returnLimit + querySort;
+		return new Promise(function(resolve, reject) {
+			dbm.query(qs).then(function(row) {
 				rows = row;
 				currentIndex = -1;
-			}, function(err){
-				resolve(false);
+				resolve(true);
+			}, function(err) {
 				currentRow = {};
 				rows = [];
+				resolve(false);
 			});
 		});
 	}
@@ -89,14 +86,14 @@ exports.DBRow = function(table) {
 	 ** This is super dangerous to ever expose to user input SO LET'S NEVER DO IT. Right gang? :D
 	**/
 	this._directQuery = function(_queryString) {
-		return new Promise(function(resolve, reject){
-			dbm.query(_queryString).then(function(row){
+		return new Promise(function(resolve, reject) {
+			dbm.query(_queryString).then(function(row) {
 				rows = row;
 				resolve(true);
-			}, function(err){
-				resolve(false);
+			}, function(err) {
 				currentRow = {};
 				rows = [];
+				resolve(false);
 			});	
 		});
 	}
@@ -108,14 +105,14 @@ exports.DBRow = function(table) {
 	 ** Any errors during update will be logged
 	**/
 	this.update = function() { //iterate through property - value pairs, use old id as reference
-		var qs = "UPDATE " + table + " SET " + setRows + " WHERE " + "";
-		return new Promise(function(resolve, reject){
-			dbm.query(_queryString).then(function(row){
+		var qs = qb.update(table, currentRow);
+		return new Promise(function(resolve, reject) {
+			dbm.query(qs).then(function(row) {
 				resolve(true);
-			}, function(err){
-				resolve(false);
+			}, function(err) {
 				currentRow = {};
 				rows = [];
+				resolve(false);
 			});	
 		});
 	}
@@ -127,14 +124,14 @@ exports.DBRow = function(table) {
 	 ** Any errors during insert will be logged
 	**/
 	this.insert = function() { // iterate through property - value pairs
-		var qs = "INSERT INTO " + table + " VALUES ";
-		return new Promise(function(resolve, reject){
-			dbm.query(qs).then(function(row){
+		var qs = qb.insert(table, currentRow);
+		return new Promise(function(resolve, reject) {
+			dbm.query(qs).then(function(row) {
 				resolve(true);
-			}, function(err){
-				resolve(undefined);
+			}, function(err) {
 				currentRow = {};
 				rows = [];
+				resolve(false);
 			});	
 		});
 	}
@@ -150,15 +147,15 @@ exports.DBRow = function(table) {
 	 ** thus, if you really want to delete a row you need to go through ALL tables and delete referring back to 
 	 ** whatever row you delete (you can use the id of the row deleted here -- but make sure it gets done)
 	**/
-	this.delete = function(id){ 
-		var qs = "DELETE FROM " + table + " WHERE id=" + id;
-		return new Promise(function(resolve, reject){
-			dbm.query(qs).then(function(row){
+	this.delete = function(id) {
+		var qs = qb.delete(table, id);
+		return new Promise(function(resolve, reject) {
+			dbm.query(qs).then(function(row) {
 				resolve(true);
-			}, function(err){
-				resolve(undefined);
+			}, function(err) {
 				currentRow = {};
 				rows = [];
+				resolve(false);
 			});	
 		});
 	}
@@ -174,10 +171,7 @@ exports.DBRow = function(table) {
 	 ** TODO: Implement three argument addQuery that is more specific (i.e. not queries, >=, <= queries)
 	**/
 	this.addQuery = function(property, value) { // with three arguments it will be interpreted as operator (OR, AND) property, value
-		if (!specificQueries)
-			specificQueries = "WHERE " + property +  "='" + value + "' ";
-		else
-			specificQueries += "AND " + property + "='" + value + "'' ";
+		currentRow[property] = value; 
 	}
 
 	/** orderBy(field, ascOrDesc)
@@ -185,11 +179,11 @@ exports.DBRow = function(table) {
 	 ** ascOrDesc: whether to sort in ascending or descending order, input argument must be "ASC" or "DESC"
 	 ** No return values
 	**/
-	this.orderBy = function(field, ascOrDesc){ 
+	this.orderBy = function(field, ascOrDesc) { 
 		if (ascOrDesc != "ASC" || ascOrDesc != "asc" || ascOrDesc != "DESC" || ascOrDesc != "desc")
-			return log.log("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
+			return log.warn("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
-		querySort = "ORDER BY " + field + " " + ascOrDesc;
+		querySort = qb.escapeOrberBy(field, ascOrDesc);
 	}
 
 	/** getValue(property)
@@ -208,7 +202,10 @@ exports.DBRow = function(table) {
 	 ** Food for thought: if you set values to fields that don't exist in the table, you will cause errors
 	 ** and your row will not get inserted
 	**/
-	this.setValue = function(property, value) {
+	this.setValue = function(property, value, setRows) {
+		if (property == "id")
+			log.warn("Once a row's ID has been set it SHOULD NOT be reset. If this ")
+
 		currentRow[property] = value;
 		if (!setRows)
 			setRows = property + "=" + value;
@@ -231,7 +228,7 @@ exports.DBRow = function(table) {
 	 ** Sets the limit on the number of rows returned from the database
 	**/
 	this.setLimit = function(limit) {
-		returnLimit = "LIMIT " + limit;
+		returnLimit = qb.escapeLimit(limit);
 	}
 
 	/** next()
@@ -242,7 +239,7 @@ exports.DBRow = function(table) {
 	 ** Switches the currentRow to the next row object
 	 ** This method is very useful for iterating through all the rows returned from the database
 	**/
-	this.next = function(){ // changes to the next row returned from the database 
+	this.next = function() { // changes to the next row returned from the database 
 		currentIndex++;
 		if (rows[currentIndex]){
 			currentRow = rows[currentIndex];
@@ -260,5 +257,16 @@ exports.DBRow = function(table) {
 	**/
 	this.resetIndex = function() {
 		currentIndex = -1;
+	}
+
+	/** getRowJSON()
+	 ** No input parameters
+	 ** Returns the currentRow object
+	 **
+	 ** This is not the best way to interact with a row, but if you need to pass an entire row to the browser ...
+	 ** or somethning to the client. Not sure why you would do it this way but to each their own
+	**/
+	this.getRowJSON = function() {
+		return currentRow;
 	}
 }

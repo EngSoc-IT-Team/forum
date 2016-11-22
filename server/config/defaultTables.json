@@ -190,19 +190,21 @@
 		"tablename": "session",
 		"fields": {
 			"sessionStart": {
-				"type": "datetime"
+				"type": "datetime",
+				"constraint": "NOT NULL"
 			},
-			"sessionId": {
+			"browserSessionId": {
 				"type": "uniqueidentifier",
-				"primaryKey": "true"
+				"constraint": "NOT NULL UNIQUE"
 			},
 			"userID": {
 				"type": "uniqueidentifier",
 				"constraint": "NOT NULL UNIQUE"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
 			}
 		}
 	}
 }
-
-
-

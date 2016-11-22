@@ -1,49 +1,131 @@
 "use strict";
 
+var mysql = require('mysql');
+var log = require('./log')
+
 exports.update = function(table, dbObject) {
+	if (!dbObject["id"])
+		return log.warn("The field 'id' must be set in order to update a row");
+
 	var base = "UPDATE " + table + " SET ";// + keyValPairsToChange + " WHERE id='" +  + "'"
-	// ignore limit and order queries
+	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false);
+	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject["id"]) + ";";
 }
 
 exports.insert = function(table, dbObject) {
-	var base = "INSERT INTO " + table + " VALUES ";
-	var fields;
-	var values;
+	if (!dbObject['id'])
+		return log.warn("The field 'id' must be set in order to insert a row");
 
-	//ignore limit and order queries
+	var base = "INSERT INTO " + table + " ";
+	var dboBrokenDown = breakdownDBObject(dbObject, true, true, true);
+	return base + dboBrokenDown[0] + " VALUES " + dboBrokenDown[1] + ";";
 }
 
 exports.get = function(table, rowId) {
-	var dbObject = 
-	{
-		"id": rowId,
-		"limit": '1'
-	};
-
-	return exports.query(table, dbObject);
+	return "SELECT * FROM " + table + " WHERE id=" + mysql.escape(rowId) + ";";
 }
 
 exports.query = function(table, dbObject) {
-	var fields;
-	var values;
 	var base =  "SELECT * FROM " + table + " WHERE ";
-
-	// allow limit and order queries
+	var dboBrokenDown = breakdownDBObject(dbObject, false, false, true);
+	return base + dboBrokenDown + ";";
+	
 }
 
+// This is the only way we will allow a record to be deleted (by id)
 exports.delete = function(table, id) {
-	return "DELETE FROM " + table + " WHERE id='" + id + "'";
-	//
+	return "DELETE FROM " + table + " WHERE id=" + resolveObjectType(id) + ";";
 }
 
-function breakdownDBObject(obj) {
-	var fields = [];
-	var values = [];
+exports.escapeLimit = function(limitNum) {
+	return "LIMIT " + resolveObjectType(limitNum);
+}
 
-	for (var prop in obj) {
-		fields.push(prop);
-		values.push(obj[prop]);
+exports.escapeOrderBy = function(field, ascOrDesc) {
+	return "ORDER BY " + mysql.escape(field) + " " + mysql.escape(ascOrDesc);
+}
+
+exports.escapeID = function(idToEscape) {
+	return mysql.escape(idToEscape);
+}
+
+// if string, return a string of format (id1='value1', id2='value2' ...)
+// if true, return string of column ids and values where the indices are the same for each list
+function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis) {
+	var fields = "";
+	var values = "";
+	var dbObjectString = "";
+
+	if (parenthesis){
+		fields = '(';
+		values = '(';
+		dbObjectString = "(";
 	}
 
-	return [fields, values];
+	var numOfFields = Object.keys(obj).length;
+	var itrs = 0;
+
+	if (!allowSettingId)
+		itrs = 1
+
+	if (returnAsTwoStrings){
+		for (var prop in obj) {
+			if (!allowSettingId && prop == 'id') // skip field if setting the ID is not allowed
+				continue;
+
+			fields += prop;
+			values += resolveObjectType(obj[prop]);
+			if (itrs < numOfFields-1) { // skip field if setting the ID is not allowed
+				fields += ',';
+				values += ','; 
+			}
+			else {
+				if (parenthesis) {
+					fields += ')';
+					values += ')'; 
+				}
+			}
+			itrs++;
+		}
+		return [fields, values];
+	}
+	else {
+		for (var prop in obj) {
+			if (!allowSettingId && prop == 'id') 
+				continue;
+
+			dbObjectString += prop + "=" + resolveObjectType(obj[prop])
+			if (itrs < numOfFields-1) //until the second to last element do this
+				dbObjectString += ",";
+			else
+				if (parenthesis)
+					dbObjectString += ")";
+
+			itrs++;
+		}
+		return dbObjectString;
+	}
+}
+
+function resolveObjectType(resolveThis) {
+	var objectType = typeof resolveThis;
+	if (objectType == 'undefined' || objectType == 'symbol' || objectType == 'function' || objectType == 'object')
+		return log.warn("Objects with type '" + objectType + "' are not currently implemented, please pass a number, boolean or string");
+
+	if (objectType == "number")
+		return resolveThis.toString();
+
+	if (!isNaN(resolveThis))
+		return resolveThis;
+
+	if (objectType == "boolean" || resolveThis === "true" || resolveThis === "false") {
+		if (resolveThis === true || resolveThis == "true")
+			return "1";
+		else
+			return "0";
+	}
+
+	if (objectType == "string"){
+		return mysql.escape(resolveThis);
+	}
 }

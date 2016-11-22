@@ -61,6 +61,6 @@
 
 	"postText": "text(1000)",
 	"commentText": "text(500)",
-	"uniqueidentifier": "varchar(16)",
+	"uniqueidentifier": "varchar(32)",
 	"string": "varchar(100)"
 }
