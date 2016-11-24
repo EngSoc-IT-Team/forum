@@ -193,10 +193,6 @@
 				"type": "datetime",
 				"constraint": "NOT NULL"
 			},
-			"browserSessionId": {
-				"type": "uniqueidentifier",
-				"constraint": "NOT NULL UNIQUE"
-			},
 			"userID": {
 				"type": "uniqueidentifier",
 				"constraint": "NOT NULL UNIQUE"

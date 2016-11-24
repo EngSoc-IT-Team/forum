@@ -47,7 +47,7 @@ exports.DBRow = function(table) {
 			}, function(err){
 				currentRow = {};
 				rows = [];
-				resolve(false);
+				reject(false);
 			});
 		});
 	}
@@ -69,7 +69,7 @@ exports.DBRow = function(table) {
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				resolve(false);
+				reject(false);
 			});
 		});
 	}
@@ -93,7 +93,7 @@ exports.DBRow = function(table) {
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				resolve(false);
+				reject(false);
 			});	
 		});
 	}
@@ -112,7 +112,7 @@ exports.DBRow = function(table) {
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				resolve(false);
+				reject(false);
 			});	
 		});
 	}
@@ -131,7 +131,7 @@ exports.DBRow = function(table) {
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				resolve(false);
+				reject(false);
 			});	
 		});
 	}
@@ -155,7 +155,7 @@ exports.DBRow = function(table) {
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				resolve(false);
+				reject(false);
 			});	
 		});
 	}
@@ -181,7 +181,7 @@ exports.DBRow = function(table) {
 	**/
 	this.orderBy = function(field, ascOrDesc) { 
 		if (ascOrDesc != "ASC" || ascOrDesc != "asc" || ascOrDesc != "DESC" || ascOrDesc != "desc")
-			return log.warn("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
+			return log.error("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
 		querySort = qb.escapeOrberBy(field, ascOrDesc);
 	}
@@ -204,7 +204,7 @@ exports.DBRow = function(table) {
 	**/
 	this.setValue = function(property, value, setRows) {
 		if (property == "id")
-			log.warn("Once a row's ID has been set it SHOULD NOT be reset. If this ")
+			log.warn("Once a row's ID has been set it SHOULD NOT be reset. Resetting ID for an update can cause query failures"); //will be removed eventually
 
 		currentRow[property] = value;
 		if (!setRows)
