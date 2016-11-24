@@ -3,6 +3,7 @@
 var log = require('./log');
 var db = require('./DatabaseManager');
 var qb = require('./QueryBuilder');
+var compare = require('./Compare');
 
 var dbm = new db.DatabaseManager();
 
@@ -180,10 +181,10 @@ exports.DBRow = function(table) {
 	 ** No return values
 	**/
 	this.orderBy = function(field, ascOrDesc) { 
-		if (ascOrDesc != "ASC" || ascOrDesc != "asc" || ascOrDesc != "DESC" || ascOrDesc != "desc")
+		if (!(ascOrDesc == "ASC" || ascOrDesc == "asc" || ascOrDesc == "DESC" || ascOrDesc == "desc"))
 			return log.error("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
-		querySort = qb.escapeOrberBy(field, ascOrDesc);
+		querySort = qb.escapeOrderBy(field, ascOrDesc);
 	}
 
 	/** getValue(property)
@@ -241,7 +242,7 @@ exports.DBRow = function(table) {
 	**/
 	this.next = function() { // changes to the next row returned from the database 
 		currentIndex++;
-		if (rows[currentIndex]){
+		if (rows[currentIndex] != undefined){
 			currentRow = rows[currentIndex];
 			return true;
 		}

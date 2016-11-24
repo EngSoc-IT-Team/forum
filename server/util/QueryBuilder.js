@@ -28,7 +28,7 @@ exports.get = function(table, rowId) {
 exports.query = function(table, dbObject) {
 	var base =  "SELECT * FROM " + table + " WHERE ";
 	var dboBrokenDown = breakdownDBObject(dbObject, false, false, true);
-	return base + dboBrokenDown + ";";
+	return base + dboBrokenDown;
 	
 }
 
@@ -42,7 +42,7 @@ exports.escapeLimit = function(limitNum) {
 }
 
 exports.escapeOrderBy = function(field, ascOrDesc) {
-	return "ORDER BY " + mysql.escape(field) + " " + mysql.escape(ascOrDesc);
+	return "ORDER BY " + field + " " + ascOrDesc;
 }
 
 exports.escapeID = function(idToEscape) {
