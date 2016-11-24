@@ -17,7 +17,7 @@ server.use('/js', express.static('../client/js'));
 server.use('/assets', express.static('../client/assets'));
 
 // imports all the required middleware to express
-server.use(cp("simplesecret")); //simple secret is an example 
+server.use(cp("simplesecret")); //simple secret is an example password
 server.use(bp.json());
 
 
@@ -120,7 +120,7 @@ server.post('/login', function(request, response) {
 });
 
 
-server.post('/logout', function(request, response) {
+server.post('/logout', function(request, response) { // a place to post exclusively for logout requests
 	if (compare.isEmpty(request.signedCookies)){
 		response.redirect('/'); //then there's nothing to sign out of
 		return;
