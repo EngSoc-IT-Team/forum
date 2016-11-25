@@ -25,5 +25,5 @@
 # Moving Forward - The javascript
 1. Make sure your nodejs is up to date (Version 7.0.0 or up please)
 2. Make sure you have npm installed ([try this ](http://blog.npmjs.org/post/85484771375/how-to-install-npm) if you need to install both node and npm)
-3. Now that you have npm, you'll need to run `npm install mysql`, `npm install cookie parser` and `npm install express` so that you have all the dependencies we need to get our server up and running (this list will be added to over time)
+3. Now that you have npm, you'll need to run `npm install mysql`, `npm install cookie parser`, 'npm install body-parser' and `npm install express` so that you have all the dependencies we need to get our server up and running (this list will be added to over time)
 4. Note: All files must be run from the top of the directory, otherwise certain utility objects/functions may not work as expected 
