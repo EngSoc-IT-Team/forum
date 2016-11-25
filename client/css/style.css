@@ -109,6 +109,10 @@ a {
   font-size: 25px;
 }
 
+.featured-item p:hover {
+  background-color: #FF9200;
+}
+
 .eng-text {
     margin: 1em;
 }
