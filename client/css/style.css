@@ -8,6 +8,11 @@ a {
   color: inherit;
 }
 
+.row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
 .container-fluid {
   padding: 0px;
 }
@@ -17,6 +22,7 @@ a {
   background-color: #000;
   padding-left: 40px;
   padding-right: 40px;
+  border-radius: 0px
 }
 
 .navbar-logo p,
@@ -93,14 +99,14 @@ a {
   font-size: 25px;
 }
 
-.eng-text {  
+.eng-text {
     margin: 1em;
 }
 
 .header-img {
   width: 3.5em;
   height: 3.5em;
-} 
+}
 
 .body-image {
   width: 250px;
@@ -115,5 +121,5 @@ a {
 }
 
 .centered{
-  text-align: center; 
+  text-align: center;
 }
