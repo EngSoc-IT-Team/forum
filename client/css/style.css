@@ -1,3 +1,5 @@
+/* General */
+
 body {
   background-color: #34056D;
   font-family: 'Comfortaa', cursive;
@@ -16,6 +18,8 @@ a {
 .container-fluid {
   padding: 0px;
 }
+
+/* Navbar */
 
 .navbar {
   height: 70px;
@@ -38,13 +42,11 @@ a {
 }
 
 .nav-font p {
-  font-family: 'Comfortaa',cursive,
- color: #FF9200;
+  font-family: 'Comfortaa',cursive;
+  color: #FF9200;
 }
 
-.profile {
-  float: right;
-}
+/* Main Page */
 
 .main-search {
   text-align: center;
@@ -72,6 +74,10 @@ a {
 
 .search-bar input:focus {
   outline: none;
+}
+
+.profile {
+  float: right;
 }
 
 .featured-content {
