@@ -106,7 +106,7 @@ a {
   padding-top: 33px;
   color: black;
   height: 100%;
-  font-size: 25px;
+  font-size: 23px;
 }
 
 .featured-item p:hover {
@@ -136,4 +136,6 @@ a {
 
 .centered{
   text-align: center;
+}
+
 }
