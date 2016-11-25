@@ -20,7 +20,7 @@
 3. Set the root password when prompted in the installer
 4. Go to start > all programs > MySQL > MySQL 5.7 Command Line Client and enter the root password
 5. In the same directory is the much nicer looking client, MySQL Workbench
-6. That's it! So much easier than on Mac! Wow, Windows > Macs!
+6. That's it! So much easier than on Mac! Wow, Windows > Macs!!
 
 # Moving Forward - The javascript
 1. Make sure your nodejs is up to date (Version 7.0.0 or up please)
