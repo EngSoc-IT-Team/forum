@@ -30,7 +30,7 @@ a {
 }
 
 .navbar-logo p,
-.profile p {
+.nav-profile p {
   font-size: 20px;
   margin: 0px;
   display: inline-block;
@@ -44,6 +44,10 @@ a {
 .nav-font p {
   font-family: 'Comfortaa',cursive;
   color: #FF9200;
+}
+
+.navbar a:hover {
+  color: #cc7e15;
 }
 
 /* Main Page */
@@ -76,7 +80,7 @@ a {
   outline: none;
 }
 
-.profile {
+.nav-profile {
   float: right;
 }
 
