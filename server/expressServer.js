@@ -5,8 +5,8 @@ var path = require('path');
 var cp = require('cookie-parser');
 var bp = require('body-parser');
 var log = require('./util/log');
-var validator = require('./util/CookieValidator')
-var compare = require('./util/Compare')
+var validator = require('./util/CookieValidator');
+var compare = require('./util/Compare');
 
 const PORT = 8080;
 var server = express();
@@ -73,7 +73,7 @@ server.get('/list', function(request, response) { //return the a default most re
 		return;
 	}
 
-	response.send('<h2>List view of questions</h2><br><h4>listItem</h4><br><h4>listItem</h4><br><h4>listItem</h4><br><h3>' + request.url + "</h3>");
+	response.sendFile(path.join(__dirname, '..', 'client/html/question-list.html'))
 });
 
 server.get('/list/filter?\*', function(request, response) { //return the list filtered by the passed parameters, active search must route here ordered by most positive votes
@@ -82,7 +82,7 @@ server.get('/list/filter?\*', function(request, response) { //return the list fi
 		return;
 	}
 
-	response.send('<h2>List view of questions</h2><br><h4>listItem</h4><br><h4>listItem</h4><br><h4>listItem</h4><br><h3>' + request.url + "</h3>");
+	response.sendFile(path.join(__dirname, '..', 'client/html/question-list.html'));
 });
 
 server.get('/profile', function(request, response) { //user home page
