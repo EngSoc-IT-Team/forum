@@ -46,6 +46,26 @@ a {
   color: #FF9200;
 }
 
+.comment-nesting{
+  padding-left: 50px;
+}
+
+.comment-head {
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 40px;
+}
+
+.comment-list{
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+}
+
+.comment-date a:hover {
+  color: #cc7e15;
+}
+
 .navbar a:hover {
   color: #cc7e15;
 }
