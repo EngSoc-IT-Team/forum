@@ -2,7 +2,7 @@
 
 var log = require('../log');
 
-const dependencies = ['mysql', 'express', 'path', 'fs']; //'client-session' might need to be added
+const dependencies = ['mysql', 'express', 'path', 'fs', 'cookie-parser', 'body-parser']; //'client-session' might need to be added
 
 exports.checkDependencies = function() {
 	log.info("~~~~~~~~~~~~~~~~Module Check~~~~~~~~~~~~~~~~~");
