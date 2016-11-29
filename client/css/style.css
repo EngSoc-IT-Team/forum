@@ -10,6 +10,14 @@ a {
   color: inherit;
 }
 
+.body-link {
+  color: white;
+}
+
+.body-link:hover {
+  color: #cc7e15;
+}
+
 .row {
   margin-left: 0px;
   margin-right: 0px;
@@ -143,7 +151,7 @@ a {
   height: 250px;
   display: inline-block;
   float: right;
-  margin-right: 2em;
+  margin: 2em;
 }
 
 .black-background {

@@ -20,7 +20,6 @@ server.use('/assets', express.static('../client/assets'));
 server.use(cp("simplesecret")); //simple secret is an example password
 server.use(bp.json());
 
-
 server.get('/', function(request, response) { // default link, delivers landing page
 	if (compare.isEmpty(request.signedCookies)) {
 		response.redirect('/login');
@@ -104,6 +103,16 @@ server.get('/login', function(request, response) { // mock login page
 	}
 });
 
+server.get('/guidelines', function(request, response) { // mock login page
+	if (compare.isEmpty(request.signedCookies)) {
+		response.redirect('/');
+		return;
+	}
+	else {
+		response.sendFile(path.join(__dirname, '..', 'client/html/guidelines.html'));
+	}
+});
+
 server.post('/login', function(request, response) {
 	if (!request.body){
 		response.send(false);
@@ -122,7 +131,7 @@ server.post('/login', function(request, response) {
 
 server.post('/logout', function(request, response) { // a place to post exclusively for logout requests
 	if (compare.isEmpty(request.signedCookies)){
-		response.redirect('/'); //then there's nothing to sign out of
+		response.redirect('/login'); //then there's nothing to sign out of
 		return;
 	}
 
@@ -135,6 +144,22 @@ server.post('/logout', function(request, response) { // a place to post exclusiv
 		});
 	}
 });
+
+server.post('/vote' function(request, response) {
+	if (compare.isEmpty(request.signedCookies)){ // if not signed in, you can't vote
+		response.send('needLogin'); //tell the client to tell the user they need to login
+		return;
+	}
+})
+
+server.use(function (err, req, res, next) { // catches URL errors
+  log.error(err.stack)
+  res.status(500).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'))
+})
+
+server.use(function (req, res, next) { // returns 404s instead of cannot GET
+  res.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+})
 
 // start the server
 server.listen(PORT);
