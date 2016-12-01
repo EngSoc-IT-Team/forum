@@ -145,7 +145,7 @@ server.post('/logout', function(request, response) { // a place to post exclusiv
 	}
 });
 
-server.post('/vote' function(request, response) {
+server.post('/vote', function(request, response) {
 	if (compare.isEmpty(request.signedCookies)){ // if not signed in, you can't vote
 		response.send('needLogin'); //tell the client to tell the user they need to login
 		return;
