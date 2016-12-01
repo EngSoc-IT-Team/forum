@@ -181,9 +181,12 @@ exports.DBRow = function(table) {
 	 ** No return values
 	**/
 	this.orderBy = function(field, ascOrDesc) { 
-		if (!(ascOrDesc == "ASC" || ascOrDesc == "asc" || ascOrDesc == "DESC" || ascOrDesc == "desc"))
+		if (!(ascOrDesc == "ASC" || ascOrDesc == "asc" || ascOrDesc == "DESC" || ascOrDesc == "desc" || ascOrDesc == undefined))
 			return log.error("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
+		if (ascOrDesc == undefined)
+			ascOrDesc = "ASC";
+		
 		querySort = qb.escapeOrderBy(field, ascOrDesc);
 	}
 

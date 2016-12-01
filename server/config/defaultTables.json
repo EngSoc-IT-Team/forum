@@ -6,19 +6,27 @@
 				"type": "postText",
 				"constraint": "NOT NULL"
 			},
+			"title" : {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
 			},
-			"owner": {
+			"author": {
 				"type":"string",
-				"default": "anon"
+				"constraint": "NOT NULL"
 			},
 			"upvotes": {
 				"type": "mediumint",
 				"default": "0"
 			},
 			"downvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"netVotes": {
 				"type": "mediumint",
 				"default": "0"
 			},
@@ -48,7 +56,7 @@
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
 			},
-			"owner": {
+			"author": {
 				"type": "string",
 				"default": "anon",
 				"constraint": "NOT NULL"
@@ -58,6 +66,10 @@
 				"default": "0"
 			},
 			"downvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"netVotes": {
 				"type": "mediumint",
 				"default": "0"
 			},
@@ -99,6 +111,10 @@
 				"default": "0"
 			},
 			"totalDownvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"netVotes": {
 				"type": "mediumint",
 				"default": "0"
 			},
