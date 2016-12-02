@@ -7,7 +7,9 @@
 6.	Question Creation page
 7.	First Year Area
 8.	How to use forum page
-9.  Login
-10. About Page
-11. Class Page (?) --we should talk about these two (11 and 12)
+9.  Login - Michael — needs updates
+10. About Page - Michael — needs updates
+11. Class Page (?)
 12. Prof Page (?)
+13. Help page
+14. Not found page - Michael — needs updates
