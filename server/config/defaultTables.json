@@ -36,7 +36,8 @@
 			},
 			"timestamp": {
 				"type": "datetime",
-				"constraint": "NOT NULL"
+				"constraint": "NOT NULL",
+				"default": "CURRENT_TIMESTAMP"
 			},
 			"tags": {
 				"type": "string",
@@ -90,7 +91,8 @@
 			},
 			"timestamp": {
 				"type": "datetime",
-				"constraint": "NOT NULL"
+				"constraint": "NOT NULL",
+				"default": "CURRENT_TIMESTAMP"
 			}
 		}
 	},
@@ -160,7 +162,8 @@
 				"type": "uniqueidentifier"
 			},
 			"timestamp": {
-				"type": "datetime"
+				"type": "datetime",
+				"default": "CURRENT_TIMESTAMP"
 			},
 			"id": {
 				"type": "uniqueidentifier",
@@ -207,11 +210,12 @@
 		"fields": {
 			"sessionStart": {
 				"type": "datetime",
-				"constraint": "NOT NULL"
+				"constraint": "NOT NULL",
+				"default": "CURRENT_TIMESTAMP"
 			},
 			"userID": {
 				"type": "uniqueidentifier",
-				"constraint": "NOT NULL UNIQUE"
+				"constraint": "NOT NULL"
 			},
 			"id": {
 				"type": "uniqueidentifier",

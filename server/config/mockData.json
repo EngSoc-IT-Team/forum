@@ -1,0 +1,181 @@
+{
+	"0": {
+		"table": "user",
+		"username": "WizardPikachu",
+		"id": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"netid": "13ma100",
+		"dateJoined": "2016-12-01",
+		"privilege": "admin",
+		"reportCount": "1"
+	},
+	"1": {
+		"table": "user",
+		"username": "anon",
+		"id": "c1t58gst8anhdpfe54h2fpiq9xvh7gy0",
+		"netid": "anon",
+		"dateJoined": "2016-12-01"
+	},
+	"2": {
+		"table": "user",
+		"username": "ayrton",
+		"id": "ui0bec9abmg4zmxgfjhz4jzdgam0ale2",
+		"netid": "ayrton",
+		"dateJoined": "2016-12-01",
+		"privilege": "admin"
+	},
+	"3": {
+		"table": "user",
+		"username": "CaptainUnicorn",
+		"netid": "14cdwc",
+		"id": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
+		"dateJoined": "2016-12-01",
+		"privilege": "admin"
+	},
+	"4": {
+		"table": "user",
+		"username": "HotMuffin",
+		"netid": "11rec9",
+		"id": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"dateJoined": "2016-12-01",
+		"privilege": "admin"
+	},
+	"5": {
+		"table": "post",
+		"id": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
+		"author": "WizardPikachu",
+		"timestamp": "2016-12-01",
+		"tags": "MECH321, STATICS, PHYSICS, MECH",
+		"title": "How do you analyze statically indeterminate systems?",
+		"content": "I've been confused all year and have no idea what I'm doing pls help.",
+		"upvotes": "189",
+		"downvotes": "49",
+		"netVotes": "140"
+	},
+	"6": {
+		"table": "tag",
+		"name": "MECH321",
+		"relatedTags": "STATICS, PHYSICS, CIVIL, MECH328",
+		"id": "wpi1qlxb601ksm5cwh70k76jxfafn2bc"
+	},
+	"7": {
+		"table": "tag",
+		"name": "STATICS",
+		"relatedTags": "MECH321, CIVIL, MECH, MECH328",
+		"id": "qko42021rnu1shic0vyyotrzbygkz17m"
+	},
+	"8": {
+		"table": "tag",
+		"name": "PHYSICS",
+		"relatedTags": "MECH321, STATICS, MECH, MECH328",
+		"id": "elibsfxg0mbs8qzfpuqz16yr7cvinaio"
+	},
+	"9": {
+		"table": "tag",
+		"name": "PHYSICS",
+		"relatedTags": "MECH321, STATICS, MECH, MECH328",
+		"id": "yc7o90k9khvk8wb0kdoyiiatjp56ural"
+	},
+	"10": {
+		"table": "tag",
+		"name": "MECH",
+		"relatedTags": "MECH321, STATICS, PHYSICS, MECH328",
+		"id": "b43bnb2k1btjwczj0aqdwgdxogmbq18k"
+	},
+	"11": {
+		"table": "tag",
+		"name": "MECH328",
+		"relatedTags": "MECH321, STATICS, PHYSICS, MECH",
+		"id": "ep42hxl0pb5hzox5w4rae9h6tpjnzke8"
+	},
+	"12": {
+		"table": "tag",
+		"name": "CIVIL",
+		"relatedTags": "MECH321, STATICS, PHYSICS, MECH",
+		"id": "pbzhoyq9agjxfz11wgg8m1fhyydot0h9"
+	},
+	"13": {
+		"table": "vote",
+		"commentOrPostID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"voteValue": "1",
+		"id": "yy6e996fc2fqzadi8vsah8fhu9cgtsxk"
+	},
+	"14": {
+		"table": "comment",
+		"id": "kotkw12crnsvbldigyobt315r4e6tyj5",
+		"parentPost": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
+		"content": "I've never taken this class but just wanted to say hey.",
+		"author": "CaptainUnicorn",
+		"upvotes": "1",
+		"netVotes": "1",
+		"commentLevel": "0",
+		"timestamp": "2016-12-01"
+	},
+	"15": {
+		"table": "vote",
+		"commentOrPostID": "kotkw12crnsvbldigyobt315r4e6tyj5",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"voteValue": "1",
+		"id": "g6p045fi4dxlzrlzmbte9hw7026ew5th"
+	},
+	"16": {
+		"table": "comment",
+		"id": "3ntcfsbrqunk27yymvmtetdvkrg33es1",
+		"parentPost": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
+		"content": "I have taken this class, but have completely forgotten all useful information about it. My apologies for commenting.",
+		"author": "HotMuffin",
+		"upvotes": "1",
+		"netVotes": "1",
+		"commentLevel": "0",
+		"timestamp": "2016-12-01"
+	},
+	"17": {
+		"table": "vote",
+		"commentOrPostID": "3ntcfsbrqunk27yymvmtetdvkrg33es1",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"voteValue": "1",
+		"id": "bt6qm5admkmme5bqr92j516kpk1nsuav"
+	},
+	"18": {
+		"table": "post",
+		"id": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"author": "WizardPikachu",
+		"timestamp": "2016-12-01",
+		"tags": "MECH328",
+		"title": "I don't understand this class either",
+		"content": "Someone explain everything to me.",
+		"upvotes": "1",
+		"downvotes": "2",
+		"netVotes": "-1"
+	},
+	"19": {
+		"table": "vote",
+		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"voteValue": "0",
+		"id": "3suitlts01ph7qbul1j9wnd0c8tiv8km"
+	},
+	"20": {
+		"table": "vote",
+		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
+		"voteValue": "0",
+		"id": "x380tpfwn3prfozzliceo0h6loetj4q5"
+	},
+	"21": {
+		"table": "vote",
+		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"voteValue": "1",
+		"id": "xme5ikh2sgwnvwsnd9twpc0zifcmnlw2"
+	},
+	"22": {
+		"table": "report",
+		"reportReason": "0",
+		"reportingUser": "CaptainUnicorn",
+		"reportedUser": "WizardPikachu",
+		"relatedCommentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"id": "64pradujn6vg26rsgk1epmz93fr2s25u",
+		"report": "This post is a waste of space."
+	}
+}
