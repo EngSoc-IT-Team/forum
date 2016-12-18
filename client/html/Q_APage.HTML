@@ -1,209 +1,125 @@
 <!DOCTYPE html>
 <HTML lang="en">
-	<HEAD>
-
-		<!-- backfground color-->
-		<TITLE> Eng Forum</TITLE>
-
-		<!-- Bottstrap initializing stuff -->
+	<head>
+		<title> Eng Forum</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="Eng Forum">
 		<meta name="author" content="Ayrton Foster">
 		<meta name="keywords" content="Queens University, Forum, Engineering">
-
-
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<!--integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous"-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
 		<link rel="stylesheet" href="../css/normalize.css" />
 		<link rel="stylesheet" href="../css/style.css" />
 		<link rel="icon" href="../assets/qef.png">
 		<link rel="icon" href="../assets/favicon.ico">
 		<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
-
-
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-	</HEAD>
-	<BODY style = "color: black; font-family: sans-serif">
-		<div class="container-fluid">
-
-			<!-- Navbar -->
-			<HEADER>
-				<div class="navbar sticky" style = "font-family: 'Comfortaa', cursive; color: #FF9200">
-					<a href="/" class="navbar-logo">
-						<img class="header-img" src="../assets/qef.png">
-					</a>
-					<a href="#" class="nav-profile">
-						<p>Profile</p>
-					</a>
-				</div>
-			</HEADER>
-
-			<!-- Spacing  -->
-			<br><br><br><br>
-
+		<script src="https://use.fontawesome.com/0063f48ece.js"></script>
+	</head>
+	<body class="row">
+	<div class="container-fluid">
+	<header>
+		<div class="navbar sticky">
+      <a href="/" class="navbar-logo">
+        <img class="header-img" src="../assets/qef.png">
+      </a>
+      <a href="#" class="nav-profile">
+        <p>Profile</p>
+      </a>
+    </div>
+  </header>
 			<!--Body of page-->
+<div class="main-content">
+	<!-- Questiom -->
+		<div class="question-item comment-head">
+			<p class="question-title"><a href="/question/id=tobecreated">Question 1 Title</a></p>
+			<p class="question-date">February 2, 1993 @ 2:34 PM by <a href="#">Serious Badass</a></p>
+			<p class="question-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
+			<!-- <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Comment</button> -->
+			<a class="btn btn-sm question-button" href="/question/id=tobecreated">Comment</a>
+			<button class="btn btn-sm question-tag" type="submit">Tag 3</button>
+			<button class="btn btn-sm question-tag" type="submit">Tag 2</button>
+			<button class="btn btn-sm question-tag" type="submit">Tag 1</button>
+		</div>
 
-			<!-- Questiom -->
-			<div class="row comment-head">
-				<div class="panel panel-default" style = "background-color:#fff">
-					<div class="row comment-list">
-						<div class="form-group">
-							<h2>Question
-								<br>
-							</h2>
-							<p>Description of question.....</p>
+		<div class="comment-list media">
+			<div class="question-item media">
+				<h2>Comments</h2>
+				<p class="comment-date">February 2, 1993 @ 2:34 PM by <a href="#">Palpatine</a></p>
+				<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+				<span class="label label-default">5</span>
+				<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+				<p class="question-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
+				<a class="btn btn-sm question-button" href="/question/id=tobecreated">Reply</a>
+				<a class="btn btn-sm question-button" href="/question/id=tobecreated">Save</a>
+				<a class="btn btn-sm question-button" href="/question/id=tobecreated">Report</a>
+				<a class="btn btn-sm question-button" href="/question/id=tobecreated">Edit</a>
+				<hr />
+				<!-- Nested media object -->
+				<div class="question-item media">
+					<p class="comment-date">February 2, 1993 @ 2:34 PM by <a href="#">Tim</a></p>
+					<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+					<span class="label label-default">5</span>
+					<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+					<p class="question-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
+					<a class="btn btn-sm question-button" href="/question/id=tobecreated">Reply</a>
+					<a class="btn btn-sm question-button" href="/question/id=tobecreated">Save</a>
+					<a class="btn btn-sm question-button" href="/question/id=tobecreated">Report</a>
+					<hr />
 
-						</div>
-						<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">Comment</button>
-						<div class = "pull-right">
-							<p class="question-date">February 2, 1993 @ 2:34 PM by <a href="#">Darth Vader</a></p>
-							<button type="submit" class="btn btn-xs question-tag">APSC-111</button>
-							<button type="submit" class="btn btn-xs question-tag">APSC-171</button>
-							<button type="submit" class="btn btn-xs question-tag">APSC-131</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Comment Box -->
-			<!--<div class="container" style = "background-color:#fff">-->
-			<div class="modal fade" id="myModal" role="dialog">
-				<div class="modal-dialog">
-
-					<!-- Modal content-->
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">Comment here</h4>
-						</div>
-						<div class="modal-body">
-							<textarea class="form-control" rows="5" id="comment"></textarea>
-						</div>
-						<div class="modal-footer">
-							<button type="Submit" class="btn btn-default" value="Submit Button" data-dismiss="modal">Submit</button>
-						</div>
-					</div>
-
-				</div>
-			</div>
-
-
-			<!-- Nesting comment-->
-			<div class = "container-fluid" style = "background-color:#fff; height:700px">
-				<div class="row comment-list">
-					<h2>Comments</h2>
-					<br>
-					<div class="media">
-					
-						<div class="media-body">
-							<div class="glyphicon glyphicon-chevron-up"></div>
-							<span class="label label-default">5</span>
-							<div class="glyphicon glyphicon-chevron-down"></div>
-							<p>Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff </p>
-							<button type="button" class="btn btn-default btn-xs" value = "Reply Button">Reply</button>
-							<button type="button" class="btn btn-default btn-xs" value = "Save Button">Save</button>
-							<button type="button" class="btn btn-default btn-xs" value = "Report Button">Report</button>
-							<button type="button" class="btn btn-default btn-xs" value = "Edit Button"  data-toggle="modal" data-target="#myModal">Edit</button>
-							<div class = "pull-right">
-								<p class="comment-date"><small>February 2, 1993 @ 2:40 PM by <a href="#">Palpatine</a></p></small>
-							</div>
-							<hr>
-
-							<!-- Nested media object -->
-							<div class="media">
-								<div class="comment-nesting">
-								<div class="media-body">
-									<div class="glyphicon glyphicon-chevron-up"></div>
-									<span class="label label-default">5</span>
-									<div class="glyphicon glyphicon-chevron-down"></div>
-									<p>Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff </p>
-									<button type="button" class="btn btn-default btn-xs" value = "Reply Button">Reply</button>
-									<button type="button" class="btn btn-default btn-xs" value = "Save Button">Save</button>
-									<button type="button" class="btn btn-default btn-xs" value = "Report Button">Report</button>
-									<div class = "pull-right">
-										<p class="comment-date"><small>February 2, 1993 @ 2:40 PM by <a href="#">Boba Fett</a></p></small>
-									</div>
-									<hr>
-
-									<!-- Nested media object -->
-									<div class="media">
-										<div class="comment-nesting">
-										<div class="media-body">
-											<div class="glyphicon glyphicon-chevron-up"></div>
-											<span class="label label-default">5</span>
-											<div class="glyphicon glyphicon-chevron-down"></div>
-											<p>Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff </p>
-											<button type="button" class="btn btn-default btn-xs" value = "Reply Button">Reply</button>
-											<button type="button" class="btn btn-default btn-xs" value = "Save Button">Save</button>
-											<button type="button" class="btn btn-default btn-xs" value = "Report Button">Report</button>
-											<div class = "pull-right">
-												<p class="comment-date"><small>February 2, 1993 @ 2:40 PM by <a href="#">Luke</a></p></small>
-											</div>
-											<hr>
-										</div>
-										</div>
-									</div>
-
-								</div>
-								</div>
-
-								<!-- Nested media object -->
-								<div class="media">
-									<div class="comment-nesting">
-									<div class="media-body">
-										<div class="glyphicon glyphicon-chevron-up"></div>
-										<span class="label label-default">5</span>
-										<div class="glyphicon glyphicon-chevron-down"></div>
-										<p>Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff </p>
-										<button type="button" class="btn btn-default btn-xs" value = "Reply Button">Reply</button>
-										<button type="button" class="btn btn-default btn-xs" value = "Save Button">Save</button>
-										<button type="button" class="btn btn-default btn-xs" value = "Report Button">Report</button>
-										<div class = "pull-right">
-											<p class="comment-date"><small>February 2, 1993 @ 2:40 PM by <a href="#">BOB</a></p></small>
-										</div>
-										<hr>
-									</div>
-									</div>
-								</div>
-
-							</div>
-						</div>
+					<!-- Nested media object -->
+					<div class="question-item media">
+						<p class="comment-date">February 2, 1993 @ 2:34 PM by <a href="#">Bob</a></p>
+						<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+						<span class="label label-default">5</span>
+						<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+						<p class="question-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
+						<a class="btn btn-sm question-button" href="/question/id=tobecreated">Reply</a>
+						<a class="btn btn-sm question-button" href="/question/id=tobecreated">Save</a>
+						<a class="btn btn-sm question-button" href="/question/id=tobecreated">Report</a>
+						<hr />
 
 						<!-- Nested media object -->
-						<div class="media">
-							<div class="media-body">
-								<div class="glyphicon glyphicon-chevron-up"></div>
-								<span class="label label-default">5</span>
-								<div class="glyphicon glyphicon-chevron-down"></div>
-								<p>Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff Stuff </p>
-								<button type="button" class="btn btn-default btn-xs" value = "Reply Button">Reply</button>
-								<button type="button" class="btn btn-default btn-xs" value = "Save Button">Save</button>
-								<button type="button" class="btn btn-default btn-xs" value = "Report Button">Report</button>
-								<div class = "pull-right">
-									<p class="comment-date"><small>February 2, 1993 @ 2:40 PM by <a href="#">Jabba</a></p></small>
-								</div>
-								<hr>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>	
-	</div>	
-	<!--bottom of the page-->
-	<div class="pull-left">
-		<div class = "nav-font" style = "color: white">
-			<div class="row comment-list">
-			<a href="#"><h3>About</h3></a>
-			<a href="#"><p>Who are we?</p></a>
-			<a href="#"><p>Learn moreabout EngSoc</p></a>
-			<a href="#"><p>Page details</p></a>
-			<a href="#"><p>Feedback</p></a>
+						<div class="question-item media">
+							<p class="comment-date">February 2, 1993 @ 2:34 PM by <a href="#">Boba Fett</a></p>
+							<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+							<span class="label label-default">5</span>
+							<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+							<p class="question-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
+							<a class="btn btn-sm question-button" href="/question/id=tobecreated">Reply</a>
+							<a class="btn btn-sm question-button" href="/question/id=tobecreated">Save</a>
+							<a class="btn btn-sm question-button" href="/question/id=tobecreated">Report</a>
+							<hr />
+						</div> <!-- End of Nested media object -->
+					</div> <!-- End of Nested media object -->
+				</div> <!-- End of Nested media object -->
+				<!-- Nested media object -->
+				<div class="question-item media">
+					<p class="comment-date">February 2, 1993 @ 2:34 PM by <a href="#">Dark Vader</a></p>
+					<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+					<span class="label label-default">5</span>
+					<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+					<p class="question-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
+					<a class="btn btn-sm question-button" href="/question/id=tobecreated">Reply</a>
+					<a class="btn btn-sm question-button" href="/question/id=tobecreated">Save</a>
+					<a class="btn btn-sm question-button" href="/question/id=tobecreated">Report</a>
+					<hr />
+				</div> <!-- End of Nested media object -->
 			</div>
 		</div>
 	</div>
+</div>
+<!--footer-->
+<div class="pull-left">
+	<div class = "nav-font" style = "color: white">
+		<div class="row comment-list">
+		<a href="#"><h3>About</h3></a>
+		<a href="#"><p>Who are we?</p></a>
+		<a href="#"><p>Learn moreabout EngSoc</p></a>
+		<a href="#"><p>Page details</p></a>
+		<a href="#"><p>Feedback</p></a>
+		</div>
+	</div>
+</div>
 </BODY>
 </HTML>
