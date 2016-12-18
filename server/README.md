@@ -28,11 +28,11 @@
 3. Now that you have npm, you'll need to run `npm install mysql`, `npm install cookie-parser`, `npm install body-parser` and `npm install express` so that you have all the dependencies we need to get our server up and running (this list will be added to over time)
 4. In your mysql client add a database called `testing`
 5. Navigate to the forum/server directory using your terminal or shell
-6. Navigate to the config directory and run `git update-index --assume-unchanged config.json`. This prevents your local changes to this file from being pushed back to master.
-7. Make sure that in the config.json file, your database name is set to `testing`, that the user is set to `root` and the password is the same as the one set in the previous section
+6. Navigate to the config directory and run `git update-index --assume-unchanged config.json` and `git update-index --assume-unchanged database.json`. This prevents your local changes to this file from being pushed back to master.
+7. Make sure that in the database.json file, your database name is set to `testing`, that the user is set to `root` and the password is the same as the one set in the previous section
 8. Return to the server directory
 9. Run `node setup.js` -- this will make sure you have all the necessary dependencies for the backend and load an empty database into the database `testing`
-10. Note that a sample user with netid `anon` will be loaded into the database when this script is run, this will be how you sign into the website
+10. Note that a sample user with netid `anon` will be loaded into the database along with the username you requested 
 11. Run `node expressServer.js`
 12. If there are no errors in the terminal/shell, the server should now be up and running! Go to `localhost:8080` in your browser of choice
 13. You should be routed to the login page. Enter `anon` as the netid and whatever you want for the password (we aren't checking for passwords yet)
