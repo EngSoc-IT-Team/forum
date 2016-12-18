@@ -33,7 +33,7 @@
 8. Return to the server directory
 9. Run `node setup.js` -- this will make sure you have all the necessary dependencies for the backend and load an empty database into the database `testing`
 10. Note that a sample user with netid `anon` will be loaded into the database along with the username you requested 
-11. Run `node expressServer.js`
+11. In terminal, halt the execution of the server using `control` + `c` and run the command `node expressServer.js`
 12. If there are no errors in the terminal/shell, the server should now be up and running! Go to `localhost:8080` in your browser of choice
 13. You should be routed to the login page. Enter `anon` as the netid and whatever you want for the password (we aren't checking for passwords yet)
 14. You're all set up! Happy developing :)
