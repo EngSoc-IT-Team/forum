@@ -10,12 +10,9 @@ a {
   color: inherit;
 }
 
-.body-link {
-  color: white;
-}
-
-.body-link:hover {
-  color: #cc7e15;
+a:hover,
+.fa {
+  color: #FF9200;
 }
 
 .row {
@@ -56,14 +53,6 @@ a {
 
 .comment-nesting{
   padding-left: 50px;
-}
-
-.comment-date a:hover {
-  color: #cc7e15;
-}
-
-.navbar a:hover {
-  color: #cc7e15;
 }
 
 .main-search {
@@ -193,11 +182,6 @@ a {
   color: #FF9200;
 }
 
-.question-date a:hover,
-.comment-date a:hover {
-  color: #cc7e15;
-}
-
 .question-description,
 .comment-description {
   margin: 10px 0px;
@@ -246,12 +230,14 @@ a {
    clear: both;
 }
 
-.fa-thumbs-up,
+.fa-thumbs-up:hover,
 .positive {
   color: green;
+  cursor: pointer;
 }
 
-.fa-thumbs-down,
+.fa-thumbs-down:hover,
 .negative {
   color: red;
+  cursor: pointer;
 }
