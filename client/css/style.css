@@ -58,12 +58,6 @@ a {
   padding-left: 50px;
 }
 
-.comment-head {
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-bottom: 40px;
-}
-
 .comment-date a:hover {
   color: #cc7e15;
 }
@@ -71,8 +65,6 @@ a {
 .navbar a:hover {
   color: #cc7e15;
 }
-
-/* Main Page */
 
 .main-search {
   text-align: center;
@@ -156,32 +148,34 @@ a {
   text-align: center;
 }
 
-/* Question List Page */
-
 .main-content {
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 40px;
 }
 
-.question-item {
+.question-block,
+.comment-block {
   height: 100%;
   margin-top: 20px;
   background-color: white;
   padding: 10px;
 }
 
-.question-item p,
-h2 {
+.question-block p,
+h2,
+.comment-block p {
   margin-bottom: 0px;
   color: black;
 }
 
-.question-item .question-title {
+.question-title,
+.comment-title  {
   font-size: 23px;
 }
 
-.question-item .question-title a:hover {
+.question-title a:hover,
+.comment-title a:hover {
   color: inherit;
   text-decoration: none;
 }
@@ -195,7 +189,8 @@ h2 {
 
 .question-date a,
 .comment-date a,
-.question-item .question-button:hover {
+.question-button:hover,
+.comment-button:hover {
   color: #FF9200;
 }
 
@@ -204,17 +199,18 @@ h2 {
   color: #cc7e15;
 }
 
-.question-item .question-button,
-.question-item .question-tag {
+.question-button,
+.comment-button {
   margin-top: 5px;
 }
 
-.question-item .question-button {
+.question-button,
+.comment-button {
   background-color: #34056D;
   color: #fff;
 }
 
-.question-item .question-tag {
+.question-tag {
   min-width: 90px;
   margin-right: 20px;
   float: right;
@@ -222,18 +218,12 @@ h2 {
   color: #fff;
 }
 
-.question-item .question-tag:hover {
+.question-tag:hover {
   background-color: #34056D;
 }
 
-/* Q & A Page */
-
-.comment-head {
+.question-answer-page .question-block {
   margin: 100px 0px;
-}
-
-.panel {
-  background-color: #fff;
 }
 
 .comment-list h2 {
@@ -244,10 +234,10 @@ h2 {
   /*float: right;*/
 }
 
-.comment-list .question-item {
+.comment-block {
   margin-top: 0px;
 }
 
-.question-item .media {
+.comment-block .media {
   padding-left: 30px;
 }
