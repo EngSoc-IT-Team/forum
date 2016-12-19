@@ -241,3 +241,10 @@ h2,
 .comment-block .media {
   padding-left: 30px;
 }
+
+.clearfix:after {
+   content: " ";
+   display: block;
+   height: 0;
+   clear: both;
+}
