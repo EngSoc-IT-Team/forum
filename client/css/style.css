@@ -60,7 +60,7 @@ a:hover,
 }
 
 .navbar a:hover {
-  color: #cc7e15;
+  color: black;
 }
 
 /* Profile menu */
@@ -68,6 +68,8 @@ a:hover,
 .transparent-background {
   background-color: rgba(0,0,0,0);
 }
+
+.dropdown-toggle {}
 
 .dropdown-toggle:after{ /* unfortunately cannot add classes to an after element specifically, so I had to repeat myself */
   color: #FF9200;
@@ -85,12 +87,12 @@ a:hover,
 }
 
 .dropdown-menu {
-  width: 10px; !important;
   background-color: black;
+  min-width: 10px !important;
 }
 
 .dropdown-item {
-  padding-left: 10%;
+  padding-left: 15%;
   color: #FF9200;
   text-decoration: none;
 }
@@ -132,7 +134,7 @@ a:hover,
 .nav-profile {
   float: right;
   padding-top: 10px;
-  margin-right: -25px;
+  margin-right: -40px;
 }
 
 .featured-content {
