@@ -55,6 +55,52 @@ a:hover,
   padding-left: 50px;
 }
 
+.comment-date a:hover {
+  color: #cc7e15;
+}
+
+.navbar a:hover {
+  color: #cc7e15;
+}
+
+/* Profile menu */
+
+.transparent-background {
+  background-color: rgba(0,0,0,0);
+}
+
+.dropdown-toggle:after{ /* unfortunately cannot add classes to an after element specifically, so I had to repeat myself */
+  color: #FF9200;
+}
+
+.profile-image {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+}
+
+.indented {
+  border-color: white;
+  background-color: #F9F9F9;
+}
+
+.dropdown-menu {
+  width: 10px; !important;
+  background-color: black;
+}
+
+.dropdown-item {
+  padding-left: 10%;
+  color: #FF9200;
+  text-decoration: none;
+}
+
+.dropdown-item:hover {
+  color: black;
+}
+
+/* Main Page */
+
 .main-search {
   text-align: center;
   padding-top: 200px;
@@ -85,6 +131,8 @@ a:hover,
 
 .nav-profile {
   float: right;
+  padding-top: 10px;
+  margin-right: -25px;
 }
 
 .featured-content {
@@ -178,7 +226,8 @@ a:hover,
 .question-date a,
 .comment-date a,
 .question-button:hover,
-.comment-button:hover {
+.comment-button:hover
+.dropdown-item:hover {
   color: #FF9200;
 }
 
@@ -240,4 +289,8 @@ a:hover,
 .negative {
   color: red;
   cursor: pointer;
+}
+
+.body-link {
+  color: white;
 }
