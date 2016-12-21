@@ -1,13 +1,13 @@
 "use strict";
 
-var dbr = require('./DBRow');
+var DBRow = require('./DBRow').DBRow;
 var log = require('./log');
 var generator = require('./IDGenerator');
 
 exports.validateSession = function(cookie) {
 	return new Promise(function(resolve, reject){
 		if (cookie){ //first of all you need to have a cookie for us to expend resources
-			var row = new dbr.DBRow("session");
+			var row = new DBRow("session");
 			row.getRow(cookie.sessionID).then(function(row){
 				resolve(); //allow user to continue
 
@@ -26,7 +26,7 @@ exports.validateSession = function(cookie) {
 exports.loginAndCreateSession = function(postResult) {
 	return new Promise(function(resolve, reject) {
 		if (postResult) {
-			var row = new dbr.DBRow("user");
+			var row = new DBRow("user");
 			row.addQuery("netid", postResult.username)
 			// row.addQuery("secret", postResult.secret) // BUT WE DON'T KNOW THE PASSWORD _/(O.O)\_
 
@@ -37,7 +37,7 @@ exports.loginAndCreateSession = function(postResult) {
 				}
 
 				row.next()
-				var newSession = new dbr.DBRow("session");
+				var newSession = new DBRow("session");
 				var sessionInfo = {sessionStart: "2016-11-24", 
 									userID: row.getValue("id"), 
 									sessionID: generator.generate()};
@@ -65,7 +65,7 @@ exports.logout = function(cookie) {
 		if(!cookie)
 			reject(false);
 
-		var row = new dbr.DBRow('session');
+		var row = new DBRow('session');
 		row.delete(cookie.sessionID).then(function(res) {
 			resolve(true);
 
@@ -73,6 +73,25 @@ exports.logout = function(cookie) {
 			reject(false);
 
 		});
+	});
+}
+
+exports.hasRole = function(userID, role) {
+	return new Promise(function(resolve, reject) {
+		if (!userID) {
+			reject(false);
+			return;
+		}
+
+		var user = new DBRow('user');
+		user.getRow(userID).then(function(res) {
+			if(user.getValue('privilege').includes(role))
+				resolve(true);
+			else
+				reject(false)
+		}, function(res) {
+			reject(false);
+		})
 	});
 }
 

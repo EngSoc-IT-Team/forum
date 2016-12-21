@@ -5,7 +5,7 @@ var path = require('path');
 var cp = require('cookie-parser');
 var bp = require('body-parser');
 var log = require('./util/log');
-var validator = require('./util/CookieValidator');
+var validator = require('./util/Validator');
 var compare = require('./util/Compare');
 
 const PORT = 8080;
@@ -46,7 +46,7 @@ server.get('/question/id=\*', function(request, response) { // question page, qu
 	}
 
 	var pertinentQuery = request.url.replace('/question/id=', '');
-	response.sendFile(path.join(__dirname, '..', 'client/html/Q_APage.HTML'));
+	response.sendFile(path.join(__dirname, '..', 'client/html/Q_APage.html'));
 });
 
 server.get('/about', function(request, response) { //about page
@@ -110,6 +110,21 @@ server.get('/guidelines', function(request, response) { // mock login page
 	}
 	else {
 		response.sendFile(path.join(__dirname, '..', 'client/html/guidelines.html'));
+	}
+});
+
+server.get('/dev', function(request, response) { // mock login page
+	if (compare.isEmpty(request.signedCookies)) {
+		response.redirect('/');
+		return;
+	}
+	else {
+		validator.hasRole(request.signedCookies.usercookie.userID, 'admin').then(function(res) {
+			response.sendFile(path.join(__dirname, '..', 'client/html/dev.html'));
+		}, function(res) {
+			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+		})
+		
 	}
 });
 

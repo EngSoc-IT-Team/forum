@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Engineering Society Forum">
+		<meta name="author" content="Robert Cooper">
+		<meta name="keywords" content="Queens University, School, Forum, Engineering, Undergraduate">
+		<title>EngSoc Forum - TODO</title>
+		<link rel="icon" href="../assets/favicon.ico">
+		<link rel="stylesheet" href="../css/normalize.css"/>
+		 <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="../css/style.css" />
+		<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+		<script type="text/javascript" src="/js/common.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+	<header>
+		<div class="navbar sticky">
+			<a href="/" class="navbar-logo">
+				<img class="header-img" src="../assets/qef.png">
+			</a>
+			<div class="dropdown nav-profile">
+				<button class="btn btn-default dropdown-toggle transparent-background" type="button" id="menu1" data-toggle="dropdown">
+					<img id="profile" class="profile-image" src="/assets/profile.png">
+					<span class="caret inverted"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+					<a role="menuitem" tabindex="-1" href="/profile" class="dropdown-item"><li role="presentation">Profile</li></a>
+					<a role="menuitem" tabindex="-1" href="#" onclick="logout()" class="dropdown-item"><li role="presentation">Logout</li></a>
+				</ul>
+			</div>
+		</div>
+	</header>
+		<div class="main-content">
+			<div class="comment-list media">
+				<div class="comment-block media">
+				<h2><b>Admin TODO Page</b></h2>
+				<p style="size: .25em">This is a place I will periodically update with things that different team members should be working on. Feel free to ask if you have any questions.</p>
+				<hr>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 col-md-3">
+							<h4>Robert</h4>
+							<ul>
+								<li>Add searchbar to pages</li>
+								<li>Get the thumbs up/down locally hosted and properly resized instead of downloading</li>
+								<li>Remove (most of) empty space on Question page</li>
+								<li>Add see more button/link to the bottom of the list page (or a next page button, but would then need a previous page button too)</li>
+								<li>Will also need a see more comments button/link for the question page</li>
+							</ul>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-3">
+							<h4>Ayrton</h4>
+							<ul>
+								<li>Get all styling out of html files and into css files</li>
+								<li>Fix modal comment window</li>
+							</ul>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-3">
+							<h4>Carson</h4>
+              				<ul>
+                				<li>QueryEscaper (let me know when this gets done)</li>
+              				</ul>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-3">
+							<h4>Michael</h4>
+              				<ul>
+                				<li>Fix up DBRow</li>
+                				<li>Permissions</li>
+              				</ul>
+						</div>
+					</div>
+				<hr>
+
+				<h3><b>Up for grabs</b></h3>
+				<p><i>Let me know if you want to take up one of these</i></p>
+				<div class="row">
+					<div class="col-sm-6">
+						<h5><b>Client</b></h5>
+						<ul>
+							<li>Footer Design</li>
+							<li>Javascript game easter egg</li>
+							<li>User profile page</li>
+							<li>Reporting modal subsection and implementation</li>
+							<li>Question Creation Page</li>
+							<li>How to use forum/help page</li>
+							<li>Class Page</li>
+							<li>First year area (larger, may need to be a series of pages)</li>
+							<li>Filtering on questions and comments by new, highest voted</li>
+							<li>Filter results by questions, classes or links on list page</li>
+						</ul>
+					</div>
+					<div class="col-sm-6">
+						<h5><b>Server</b></h5>
+						<ul>
+							<li>Natural Language Parsing</li>
+							<li>Post subscription and emailing</li>
+							<li>Updating of vote points for post/user when votes are made</li>
+							<li>More mock data</li>
+							<li>Links and link authentification</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
