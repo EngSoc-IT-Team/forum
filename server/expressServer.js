@@ -20,6 +20,19 @@ server.use('/assets', express.static('../client/assets'));
 server.use(cp("simplesecret")); //simple secret is an example password
 server.use(bp.json());
 
+//configuration information
+var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config/config.json'), 'utf8'));
+
+var isInProduction = (config["production"] == 'true');
+
+/* GET Requests
+**
+** These correspond to the urls you type into the browser and define the actions to be 
+** taken when something like http://localhost:8080/***** is typed in
+** For instance typing http://localhost:8080 in will correspond to the server.get('/', ...)
+** call, http://localhost:8080/search corresponds to the server.get('/search', ...) call etc
+*/
+
 server.get('/', function(request, response) { // default link, delivers landing page
 	if (compare.isEmpty(request.signedCookies)) {
 		response.redirect('/login');
@@ -128,6 +141,12 @@ server.get('/dev', function(request, response) { // mock login page
 	}
 });
 
+/* POST Requests
+**
+** These are not directly accessable from the browser, but can be used by making a POST
+** request to the corresponding link.
+*/
+
 server.post('/login', function(request, response) {
 	if (!request.body){
 		response.send(false);
@@ -142,7 +161,6 @@ server.post('/login', function(request, response) {
 		response.send(false);
 	});
 });
-
 
 server.post('/logout', function(request, response) { // a place to post exclusively for logout requests
 	if (compare.isEmpty(request.signedCookies)){
@@ -165,16 +183,19 @@ server.post('/vote', function(request, response) {
 		response.send('needLogin'); //tell the client to tell the user they need to login
 		return;
 	}
+	//check if user has already voted here and the vote is the same as their previous vote
+	//reject if they have, allow if they haven't, regardless, increment count on the client
 })
 
 server.use(function (err, req, res, next) { // catches URL errors
-  log.error(err.stack)
-  res.status(500).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'))
+	log.error(err.stack)
+	res.status(500).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'))
 })
 
 server.use(function (req, res, next) { // returns 404s instead of cannot GET
-  res.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+	res.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
 })
+
 
 // start the server
 server.listen(PORT);

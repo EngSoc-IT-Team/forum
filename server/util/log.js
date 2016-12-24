@@ -5,43 +5,47 @@ var path = require('path');
 
 var config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/config.json'), 'utf8'));
 
-var loggingShouldOccur = (config["logging"] == 'true');
+var isInProduction = (config["production"] == 'true');
 
 exports.log = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 	var logThis = currentTime + ": " + logString;
-	console.log(logThis);
-	if (loggingShouldOccur)
+	if (isInProduction)
 		writeToFile(logThis);
+	else
+		console.log(logThis);
 }
 
 exports.warn = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 	var logThis = currentTime + " WARNING: " + logString;
-	console.warn(logThis);
-	if (loggingShouldOccur)
+	if (isInProduction)
 		writeToFile(logThis);
+	else
+		console.warn(logThis);
 }
 
 exports.error = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 	var logThis = currentTime + " ERROR: " + logString;
-	console.error(logThis);
-	if (loggingShouldOccur)
+	if (isInProduction)
 		writeToFile(logThis);
+	else
+		console.error(logThis);
 }
 
 exports.info = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 	var logThis = currentTime + " INFO: " + logString;
-	console.log(logThis);
-	if (loggingShouldOccur)
+	if (isInProduction)
 		writeToFile(logThis);
+	else
+		console.log(logThis);
 }
 
 function writeToFile(logString) {
 	var currentdate = new Date().toISOString();
-	var currentdate = currentdate.slice(0, currentdate.indexOf('T'));
+	currentdate = currentdate.slice(0, currentdate.indexOf('T'));
 
 	var logFileName = "logs/" + currentdate + ".txt";
 	var logFilePath = path.join(__dirname, '..', logFileName);
