@@ -181,6 +181,10 @@
 			"relatedTags": {
 				"type": "string"
 			},
+			"summary": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
@@ -216,6 +220,83 @@
 			"userID": {
 				"type": "uniqueidentifier",
 				"constraint": "NOT NULL"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			}
+		}
+	},
+	"7": {
+		"tablename": "class",
+		"fields": {
+			"courseCode": {
+				"type": "string",
+				"constraint": "UNIQUE"
+			},
+			"title": {
+				"type": "title",
+				"constraint": "NOT NULL"
+			},
+			"summary": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"longSummary": {
+				"type": "postText"
+			},
+			"tags": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"upvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"downvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"netVotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			}
+		}
+	},
+	"8": {
+		"tablename": "link",
+		"fields": {
+			"link": {
+				"type": "string",
+				"constraint": "UNIQUE"
+			},
+			"title": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"tags": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"summary": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"upvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"downvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"netVotes": {
+				"type": "mediumint",
+				"default": "0"
 			},
 			"id": {
 				"type": "uniqueidentifier",

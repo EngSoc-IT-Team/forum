@@ -54,42 +54,42 @@
 	"6": {
 		"table": "tag",
 		"name": "MECH321",
+		"summary": "A course covering the physics of static structures. An extension of material in MECH 221.",
 		"relatedTags": "STATICS, PHYSICS, CIVIL, MECH328",
 		"id": "wpi1qlxb601ksm5cwh70k76jxfafn2bc"
 	},
 	"7": {
 		"table": "tag",
 		"name": "STATICS",
+		"summary": "The study of structural members and statically indeterminate systems.",
 		"relatedTags": "MECH321, CIVIL, MECH, MECH328",
 		"id": "qko42021rnu1shic0vyyotrzbygkz17m"
 	},
 	"8": {
 		"table": "tag",
 		"name": "PHYSICS",
+		"summary": "The study of the nature and properties of nature including mechanics, heat, light, work, energy, radiation, electricity and magnetism.",
 		"relatedTags": "MECH321, STATICS, MECH, MECH328",
 		"id": "elibsfxg0mbs8qzfpuqz16yr7cvinaio"
 	},
 	"9": {
 		"table": "tag",
-		"name": "PHYSICS",
-		"relatedTags": "MECH321, STATICS, MECH, MECH328",
-		"id": "yc7o90k9khvk8wb0kdoyiiatjp56ural"
-	},
-	"10": {
-		"table": "tag",
 		"name": "MECH",
+		"summary": "A shorthand for Mechanical Engineering. Covers a wide variety of topics, typically considered the broadest field of engineering.",
 		"relatedTags": "MECH321, STATICS, PHYSICS, MECH328",
 		"id": "b43bnb2k1btjwczj0aqdwgdxogmbq18k"
 	},
-	"11": {
+	"10": {
 		"table": "tag",
 		"name": "MECH328",
+		"summary": "A class covering the physics of dynamic rigid bodies and vibrations.",
 		"relatedTags": "MECH321, STATICS, PHYSICS, MECH",
 		"id": "ep42hxl0pb5hzox5w4rae9h6tpjnzke8"
 	},
-	"12": {
+	"11": {
 		"table": "tag",
 		"name": "CIVIL",
+		"summary":"A shorthand for Civil Engineering, which primarily focuses on structural and urban engineering.",
 		"relatedTags": "MECH321, STATICS, PHYSICS, MECH",
 		"id": "pbzhoyq9agjxfz11wgg8m1fhyydot0h9"
 	},
@@ -177,5 +177,29 @@
 		"relatedCommentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"id": "64pradujn6vg26rsgk1epmz93fr2s25u",
 		"report": "This post is a waste of space."
+	},
+	"23": {
+		"table": "link",
+		"title": "Mass Moments of Inertia",
+		"tags": "MECH328, MECH",
+		"summary": "A list of mass moments of inertia from Wikipedia.",
+		"id": "j0mg989m6mca6g53cpdw8xos0dsv874w",
+		"link": "https://en.wikipedia.org/wiki/List_of_moments_of_inertia"
+	},
+	"24": {
+		"table": "tag",
+		"name": "MECH GENERAL",
+		"summary":"The Mechanical Engineering General option.",
+		"relatedTags": "MECH, MECH328, MECH321",
+		"id": "igmc48hc2st5ixwp84ujymzvhxmxr475"
+	},
+	"24": {
+		"table": "class",
+		"courseCode": "MECH328",
+		"title": "Dynamics and Vibrations",
+		"summary": "A class covering the physics of dynamic rigid bodies and vibrations.",
+		"longSummary": "A longer summary would go here",
+		"tags": "MECH328, MECH, MECH GENERAL",
+		"id": "pcqrhscxws28nrpgk6s6qzpwsnmm8jfl"
 	}
 }

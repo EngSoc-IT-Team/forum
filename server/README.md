@@ -37,3 +37,19 @@
 12. If there are no errors in the terminal/shell, the server should now be up and running! Go to `localhost:8080` in your browser of choice
 13. You should be routed to the login page. Enter `anon` as the netid and whatever you want for the password (we aren't checking for passwords yet)
 14. You're all set up! Happy developing :)
+
+# Resetting the database
+### Every so often the way the database is setup (or it's "schema") will change. When it does, you'll need to follow these steps. There are two ways of resetting the database. The first is the mac-only way, the second is from the MySQL terminal and can be done cross-platform. Note this should NEVER be done while the `expressServer.js` file is running.
+### Mac-Only way
+1. Open up Sequel Pro and log in as you normally would
+2. Select the database from the top-left dropdown (should be named "testing")
+3. Select Database > Delete Database from the header
+4. Click "Add Database" from the top left dropdown
+5. Make the database name "testing"
+6. Then run the `setup.js` file, and you should be good to go!
+### Cross-platform way
+1. Open up the MySQL monitor
+2. Run `DROP DATABASE testing;`
+3. Run `CREATE DATABASE testing;`
+4. Then run the `setup.js` file, and you should be good to go!
+
