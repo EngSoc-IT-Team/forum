@@ -55,7 +55,9 @@ a:hover,
   padding-left: 50px;
 }
 
-.comment-date a:hover {
+.comment-date a:hover,
+.question-date a:hover,
+.media a:hover {
   color: #cc7e15;
 }
 
@@ -68,8 +70,6 @@ a:hover,
 .transparent-background {
   background-color: rgba(0,0,0,0);
 }
-
-.dropdown-toggle {}
 
 .dropdown-toggle:after{ /* unfortunately cannot add classes to an after element specifically, so I had to repeat myself */
   color: #FF9200;
@@ -183,7 +183,7 @@ a:hover,
   background-color: black;
 }
 
-.centered{
+.centered {
   text-align: center;
 }
 
@@ -196,9 +196,9 @@ a:hover,
 .question-block,
 .comment-block {
   height: 100%;
-  margin-top: 20px;
   background-color: white;
   padding: 10px;
+  color: black;
 }
 
 .question-title a:hover {
@@ -209,12 +209,6 @@ a:hover,
 .question-title,
 .comment-title {
   margin: 10px 0 15px;
-}
-
-
-.comment-block,
-.question-block {
-  color: black;
 }
 
 
@@ -240,13 +234,9 @@ a:hover,
 
 .question-button,
 .comment-button {
-  margin-top: 5px;
-}
-
-.question-button,
-.comment-button {
   background-color: #34056D;
   color: #fff;
+  margin-top: 5px;
 }
 
 .question-tag {
@@ -260,11 +250,6 @@ a:hover,
 .question-tag:hover {
   background-color: #34056D;
 }
-
-.question-answer-page .question-block {
-  margin: 100px 0px;
-}
-
 
 .comment-block {
   margin-top: 0px;
@@ -295,4 +280,8 @@ a:hover,
 
 .body-link {
   color: white;
+}
+
+.media {
+  background-color: white;
 }
