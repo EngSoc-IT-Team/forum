@@ -7,6 +7,7 @@ var bp = require('body-parser');
 var log = require('./util/log');
 var validator = require('./util/Validator');
 var compare = require('./util/Compare');
+var fs = require('fs');
 
 const PORT = 8080;
 var server = express();
