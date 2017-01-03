@@ -11,8 +11,7 @@ var defaultTables = require("../config/defaultTables.json");
  * @param tableName the table query
  * @returns {boolean} true if tableName is an actual table, false if not
  */
-
-exports.escapeTable = function(tableName){
+exports.escapeTable = function (tableName) {
     return getTableNames().includes(tableName);
 }
 
@@ -21,9 +20,9 @@ exports.escapeTable = function(tableName){
  * and puts them in an array.
  * @returns {Array} names of tables in defaultTables.json
  */
-function getTableNames(){
-    var tables=[]; //will hold name of each table
-    for (var index in defaultTables){
+function getTableNames() {
+    var tables = []; //will hold name of each table
+    for (var index in defaultTables) {
         tables.push(defaultTables[index]['tablename']);
     }
     return tables;
