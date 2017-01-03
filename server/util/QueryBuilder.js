@@ -3,11 +3,13 @@
 var mysql = require('mysql');
 var log = require('./log')
 
+const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"] //TODO: implement 'in' and 'between' operators
+
 exports.update = function(table, dbObject) {
 	if (!dbObject["id"])
 		return log.warn("The field 'id' must be set in order to update a row");
 
-	var base = "UPDATE " + table + " SET ";// + keyValPairsToChange + " WHERE id='" +  + "'"
+	var base = "UPDATE " + table + " SET ";
 	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false);
 	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject["id"]) + ";";
 }
@@ -49,8 +51,9 @@ exports.escapeID = function(idToEscape) {
 	return mysql.escape(idToEscape);
 }
 
-// if string, return a string of format (id1='value1', id2='value2' ...)
+// if string, return a string of format "(field1='value1', field2='value2' ...)"
 // if true, return string of column ids and values where the indices are the same for each list
+// i.e. ["field1, field2, field3", "'value1', 'value2, 'value3'"]
 function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis) {
 	var fields = "";
 	var values = "";
@@ -94,8 +97,12 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis)
 			if (!allowSettingId && prop == 'id') 
 				continue;
 
-			dbObjectString += prop + "=" + resolveObjectType(obj[prop])
-			if (itrs < numOfFields-1) //until the second to last element do this
+			if (typeof obj[prop] == 'object' && obj[prop]['operator'])
+				dbObjectString += prop + " " + checkOperator(obj[prop]['operator']) + " " + resolveObjectType(obj[prop]['value'])
+			else
+				dbObjectString += prop + "=" + resolveObjectType(obj[prop])
+
+			if (itrs < numOfFields) //until the second to last element do this
 				dbObjectString += ",";
 			else
 				if (parenthesis)
@@ -127,5 +134,17 @@ function resolveObjectType(resolveThis) {
 
 	if (objectType == "string"){
 		return mysql.escape(resolveThis);
+	}
+}
+
+function checkOperator(op) {
+	if (allowedOperators.includes(op.toLowerCase()))
+		return op.toUpperCase();
+	else {
+		if (op.toLowerCase() == 'in' || op.toLowerCase() == 'between')
+			log.warn('The operator "' + op + '" has not yet been implemented... \n Using "=" instead.');
+		else
+			log.warn('An unacceptable operator was passed into the query, replacing with the equals operator');
+		return '=';
 	}
 }

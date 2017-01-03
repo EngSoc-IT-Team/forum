@@ -7,6 +7,7 @@ var bp = require('body-parser');
 var log = require('./util/log');
 var validator = require('./util/Validator');
 var compare = require('./util/Compare');
+var fs = require('fs');
 
 const PORT = 8080;
 var server = express();
@@ -186,6 +187,12 @@ server.post('/vote', function(request, response) {
 	//check if user has already voted here and the vote is the same as their previous vote
 	//reject if they have, allow if they haven't, regardless, increment count on the client
 })
+
+/* Use Links
+**
+** These are general purpose links used to catch server errors and requests that ask for
+** links that do not exist
+*/
 
 server.use(function (err, req, res, next) { // catches URL errors
 	log.error(err.stack)

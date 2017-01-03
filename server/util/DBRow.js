@@ -4,6 +4,7 @@ var log = require('./log');
 var db = require('./DatabaseManager');
 var qb = require('./QueryBuilder');
 var compare = require('./Compare');
+var generator = require('./IDGenerator');
 
 var dbm = new db.DatabaseManager();
 
@@ -11,8 +12,8 @@ var dbm = new db.DatabaseManager();
 /** DBRow
  ** This object is capable of querying the database to retrieve a row, or multiple rows, from the database
  ** The retrieved row(s) cannot be directly accessed, you must use obj.getValue
- ** If using the query() or getRow() methods you MUST use promises to make sure you have the row(s) before continuing
- ** If using the update() or insert() functionalities, promises do not need to be used
+ ** All querying methods must be used with promises or else the row may not be set when it is accessed.
+ **
  ** table: The table name of the table the row you want to access is on
 **/
 exports.DBRow = function(table) {
@@ -31,132 +32,146 @@ exports.DBRow = function(table) {
 
 	/** getRow(systemId)
 	 ** systemID: the id of the row you want returned
-	 ** Returns true if the query is sucessful, returns false if the query is unsucessful
+	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
 	 **
 	 ** getRow() gets the single row from the table specified by using the ID of the row
-	 ** Promises are necesary to make sure the row object is set before you try to get or set values to it
-	 ** Note: if a row does not match this ID, underfined will be returned
+	 **
+	 ** Note: if a row does not match this ID, underfined will be returned and the promise is not rejected.
 	**/
 	this.getRow = function(systemId) {
+		log.log("GET for table '" + table + "' with id: '" + currentRow.id + "'");
 		var qs = qb.get(table, systemId);
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row){
 				rows = row;
 				currentIndex = 0;
 				currentRow = rows[currentIndex];
-				resolve(true);
+				resolve();
 			}, function(err){
 				currentRow = {};
 				rows = [];
-				reject(false);
+				reject(err);
 			});
 		});
 	}
 
 	/** query()
 	 ** No input parameters
-	 ** Returns true if the query is sucessful, returns false if the query is unsucessful
+	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
 	 **
 	 ** Queries the databse are sets the result to the rows variable
 	 ** To access the rows, you must use the next() function to iterate
+	 **
+	 ** Note: if a row does not match this query, underfined will be returned and the promise is not rejected.
 	**/
-	this.query = function() { //queries the database, will set this.row to the retrieved row, YOU MUST USE PROMISES for this
+	this.query = function() {
 		var qs =  qb.query(table, currentRow) + returnLimit + querySort;
+		log.log("QUERY with query string: '" + qs + "'");
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row) {
 				rows = row;
 				currentIndex = -1;
-				resolve(true);
+				resolve();
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				reject(false);
+				reject(err);
 			});
 		});
 	}
 
 	/** directQuery()
 	 ** queryString: the query string to pass to the database
-	 ** Returns true if the query is sucessful, returns false if the query is unsucessful
+	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
 	 **
 	 ** Queries the databse are sets the result to the rows variable
 	 ** To access the rows, you must use the next() function to iterate
 	 ** Returns nothing if the query is sucessful, returns undefined if the query is unsucessful
 	 **
-	 ** THIS WILL BE DEPRECIATED AFTER SOME TIME: focus on using query() and building queryStrings 
+	 ** THIS WILL BE DEPRECIATED AFTER SOME TIME: focus on using addQuery() and query() 
 	 ** This is super dangerous to ever expose to user input SO LET'S NEVER DO IT. Right gang? :D
 	**/
 	this._directQuery = function(_queryString) {
 		return new Promise(function(resolve, reject) {
 			dbm.query(_queryString).then(function(row) {
 				rows = row;
-				resolve(true);
+				resolve();
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				reject(false);
+				reject(err);
 			});	
 		});
 	}
 
 	/** update()
 	 ** No input parameters
-	 ** No return values
+	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
+	 **
+	 ** Updates the current row. Cannot be used interchangably with insert().
 	 **
 	 ** Any errors during update will be logged
 	**/
 	this.update = function() { //iterate through property - value pairs, use old id as reference
+		log.log("UPDATE for table '" + table + "' with id: '" + currentRow.id + "'");
 		var qs = qb.update(table, currentRow);
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row) {
-				resolve(true);
+				resolve();
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				reject(false);
+				reject(err);
 			});	
 		});
 	}
 
 	/** insert()
 	 ** No input parameters
-	 ** No return values
+	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
+	 **
+	 ** Inserts a new row into the database. The id of the row will be randomly generated before insertion and
+	 ** should not be set beforehand
 	 **
 	 ** Any errors during insert will be logged
 	**/
-	this.insert = function() { // iterate through property - value pairs
+	this.insert = function() {
+		log.log("INSERT for table '" + table + "' with id: '" + currentRow.id + "'");
+		currentRow.id = generator.generate();
 		var qs = qb.insert(table, currentRow);
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row) {
-				resolve(true);
+				resolve();
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				reject(false);
+				reject(err);
 			});	
 		});
 	}
 
 	/** delete()
 	 ** id: the system id of the row you want to delete
-	 ** Returns true if the query is sucessful, returns false if the query is unsucessful
+	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
 	 **
 	 ** DELETES the current row
 	 ** There is no recovering the row once the delete goes through
-	 ** it is STRONGLY discuraged to use this function 
-	 ** deleting a row results in issues where other rows refer back to that row... and they need to be deleted too
-	 ** thus, if you really want to delete a row you need to go through ALL tables and delete referring back to 
+	 ** it is STRONGLY discuraged to use this function unless completely neccesary
+	 **
+	 ** Deleting a row results in issues where other rows refer back to that row... and they need to be deleted too
+	 ** thus, if you really want to delete a row you need to go through ALL tables and delete everything referring back to 
 	 ** whatever row you delete (you can use the id of the row deleted here -- but make sure it gets done)
 	**/
 	this.delete = function(id) {
+		log.log("DELETE for table '" + table + "' with id: '" + id + "'");
 		var qs = qb.delete(table, id);
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row) {
-				resolve(true);
+				resolve();
 			}, function(err) {
 				currentRow = {};
 				rows = [];
-				reject(false);
+				reject(err);
 			});	
 		});
 	}
@@ -172,7 +187,13 @@ exports.DBRow = function(table) {
 	 ** TODO: Implement three argument addQuery that is more specific (i.e. not queries, >=, <= queries)
 	**/
 	this.addQuery = function(property, value) { // with three arguments it will be interpreted as operator (OR, AND) property, value
-		currentRow[property] = value; 
+		if (arguments.length == 2)
+			currentRow[property] = value; 
+		else if (arguments.length == 3) {
+			currentRow[property] = {'operator': arguments[1], 'value': arguments[2]};
+		}
+		else
+			return log.error("No more than three arguments are allowed for the addQuery function");
 	}
 
 	/** orderBy(field, ascOrDesc)
