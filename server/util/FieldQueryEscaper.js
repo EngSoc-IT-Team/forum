@@ -14,13 +14,13 @@ var tableQueryEscaper = require('./TableQueryEscaper.js');
  * @returns {boolean} true if field exists in given table, else false
  */
 exports.isGoodField = function (fieldName, tableName) {
-    //if tableName invalid, field name invalid by default
+    //if table doesn't exist, field doesn't exist by default
     if (!tableQueryEscaper.isGoodTableName(tableName)) {
         return false;
     }
     //else depends on fieldName being in the table specified
     var goodFieldName = getFieldNames(tableName);
-    return goodFieldName == null ? false : goodFieldName.includes(fieldName);
+    return goodFieldName == null ? false : goodFieldName.includes(fieldName); //if no fields return false
 }
 
 /**
@@ -30,7 +30,7 @@ exports.isGoodField = function (fieldName, tableName) {
  */
 function getFieldNames(tableName) {
     var fields = []; //holds all of the fields in the given table
-    var tableIndex = tableQueryEscaper.findTable(tableName); //index of table that holds the fields being checked
+    var tableIndex = findTable(tableName); //index of table that holds the fields being checked
     if (tableIndex < 0) { //tableName doesn't exist in defaultTables.json. This should never happen if
         //this function is called from isGoodField()
         return null;
@@ -39,4 +39,19 @@ function getFieldNames(tableName) {
         fields.push(index);
     }
     return fields;
+}
+
+/**
+ * Finds the index of a tablename in defaultTables.json.
+ * @param tableName tablename to look up in defaultTables.json.
+ * @returns {*} Index of table with tablename in defaultTables.json.
+ * If tablename doesn't appear in json file, returns -1.
+ */
+function findTable(tableName) {
+    for (var index in defaultTables) {
+        if (defaultTables[index]['tablename'] == tableName) {
+            return index;
+        }
+    }
+    return -1;
 }

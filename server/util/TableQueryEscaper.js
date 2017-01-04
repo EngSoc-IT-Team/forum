@@ -27,18 +27,3 @@ function getTableNames() {
     }
     return tables;
 }
-
-/**
- * Finds the index of a tablename in defaultTables.json.
- * @param tableName tablename to look up in defaultTables.json.
- * @returns {*} Index of table with tablename in defaultTables.json.
- * If tablename doesn't appear in json file, returns -1.
- */
-exports.findTable = function (tableName) {
-    for (var index in defaultTables) {
-        if (defaultTables[index]['tablename'] == tableName) {
-            return index;
-        }
-    }
-    return -1;
-}
