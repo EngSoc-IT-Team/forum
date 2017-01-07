@@ -11,7 +11,7 @@ var generator = require('../util/IDGenerator');
 ** To run a function to try it out just copy its call somewhere in this document and run this file.
 */
 
-alternateWildcardExample()
+usingOrderBy()
 
 /* getARowExample()
 **
@@ -121,7 +121,7 @@ function updateARow() {
 	row.query().then(function() {
 		row.next();
 		row.setValue('voteValue', 1);
-
+		console.log("do stuff")
 		row.update().then(function(res) {
 			console.log("Successfully updated the row");
 
@@ -135,7 +135,7 @@ function updateARow() {
 		})
 
 	}, function(err) {
-		console.log("there were no votes with value 0")
+		console.log("The query failed")
 
 		// other code
 
@@ -246,16 +246,22 @@ function usingWildcardsToFindAPattern() {
 		row.next();
 		console.log(row.getValue('title'))
 		console.log(row.getValue('content'));
+
+	}, function(err) {
+		console.log("There was an error")
 	})
 }
 
 function alternateWildcardExample() { //TODO: Make this work if at all possible
 	var row = new dbr.DBRow('comment');
-	row.addQuery('author', 'HotMuffin');
 	row.addQuery('content', 'like', "%taken this class%");
+	row.addQuery('author', 'HotMuffin');
 	row.query().then(function() {
 		row.next();
-		console.log(row.getValue('title'))
+		console.log(row.getValue('author') + " wrote:")
 		console.log(row.getValue('content'));
+
+	}, function(err) {
+		console.log("There was an error")
 	})
 }

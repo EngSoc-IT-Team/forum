@@ -10,7 +10,7 @@ exports.update = function(table, dbObject) {
 		return log.warn("The field 'id' must be set in order to update a row");
 
 	var base = "UPDATE " + table + " SET ";
-	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false);
+	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false, true);
 	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject["id"]) + ";";
 }
 
@@ -19,7 +19,7 @@ exports.insert = function(table, dbObject) {
 		return log.warn("The field 'id' must be set in order to insert a row");
 
 	var base = "INSERT INTO " + table + " ";
-	var dboBrokenDown = breakdownDBObject(dbObject, true, true, true);
+	var dboBrokenDown = breakdownDBObject(dbObject, true, true, true, false);
 	return base + dboBrokenDown[0] + " VALUES " + dboBrokenDown[1] + ";";
 }
 
@@ -29,7 +29,7 @@ exports.get = function(table, rowId) {
 
 exports.query = function(table, dbObject) {
 	var base =  "SELECT * FROM " + table + " WHERE ";
-	var dboBrokenDown = breakdownDBObject(dbObject, false, false, true);
+	var dboBrokenDown = breakdownDBObject(dbObject, false, false, true, false);
 	return base + dboBrokenDown;
 	
 }
@@ -54,7 +54,7 @@ exports.escapeID = function(idToEscape) {
 // if string, return a string of format "(field1='value1', field2='value2' ...)"
 // if true, return string of column ids and values where the indices are the same for each list
 // i.e. ["field1, field2, field3", "'value1', 'value2, 'value3'"]
-function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis) {
+function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis, isUpdate) {
 	var fields = "";
 	var values = "";
 	var dbObjectString = "";
@@ -79,8 +79,8 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis)
 			fields += prop;
 			values += resolveObjectType(obj[prop]);
 			if (itrs < numOfFields-1) { // skip field if setting the ID is not allowed
-				fields += ',';
-				values += ','; 
+				fields += ' , ';
+				values += ' , '; 
 			}
 			else {
 				if (parenthesis) {
@@ -103,7 +103,12 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis)
 				dbObjectString += prop + "=" + resolveObjectType(obj[prop])
 
 			if (itrs < numOfFields) //until the second to last element do this
-				dbObjectString += ",";
+				if (isUpdate) {
+					if (itrs < numOfFields - 1) // ugly but needs to be done
+						dbObjectString += ",";
+				}
+				else
+					dbObjectString += " AND ";
 			else
 				if (parenthesis)
 					dbObjectString += ")";
