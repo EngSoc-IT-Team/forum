@@ -135,6 +135,10 @@
 			"dateJoined": {
 				"type": "date"
 			},
+			"acceptedTerms": {
+				"type": "boolean",
+				"default": "0"
+			},
 			"privilege": {
 				"type" : "string",
 				"default": "None"
@@ -296,6 +300,10 @@
 			},
 			"netVotes": {
 				"type": "mediumint",
+				"default": "0"
+			},
+			"trusted": {
+				"type": "boolean",
 				"default": "0"
 			},
 			"id": {
