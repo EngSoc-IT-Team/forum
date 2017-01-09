@@ -39,7 +39,7 @@ exports.DBRow = function(table) {
 	 ** Note: if a row does not match this ID, underfined will be returned and the promise is not rejected.
 	**/
 	this.getRow = function(systemId) {
-		log.log("GET for table '" + table + "' with id: '" + currentRow.id + "'");
+		log.log("GET for table '" + table + "' with id: '" + systemId + "'");
 		var qs = qb.get(table, systemId);
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row){
