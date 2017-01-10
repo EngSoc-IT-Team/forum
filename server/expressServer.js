@@ -7,6 +7,7 @@ var bp = require('body-parser');
 var log = require('./util/log');
 var validator = require('./util/Validator');
 var compare = require('./util/Compare');
+var Environment = require('./util/evalEnvironment').Environment;
 var fs = require('fs');
 
 const PORT = 8080;
@@ -142,6 +143,20 @@ server.get('/dev', function(request, response) { // mock login page
 	}
 });
 
+server.get('/eval', function(request, response) { //allows evaluation of server side code from the client
+	if (compare.isEmpty(request.signedCookies)) {
+		response.redirect('/');
+		return;
+	}
+	else {
+		validator.hasRole(request.signedCookies.usercookie.userID, 'admin').then(function(res) {
+			response.sendFile(path.join(__dirname, '..', 'client/html/eval.html'));
+		}, function(res) {
+			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+		})
+	}
+});
+
 /* POST Requests
 **
 ** These are not directly accessable from the browser, but can be used by making a POST
@@ -149,7 +164,7 @@ server.get('/dev', function(request, response) { // mock login page
 */
 
 server.post('/login', function(request, response) {
-	if (!request.body){
+	if (!request.body) {
 		response.send(false);
 		return;
 	}
@@ -163,8 +178,29 @@ server.post('/login', function(request, response) {
 	});
 });
 
+server.post('/eval', function(request, response) {
+	if (compare.isEmpty(request.signedCookies)) {
+		response.redirect('/');
+		return;
+	}
+	else {
+		validator.hasRole(request.signedCookies.usercookie.userID, 'admin').then(function(res) {
+			var env = new Environment();
+			env.execute(request.body.code).then(function(res) {
+				response.send(res);
+
+			}, function(err) {
+				response.send(err);
+
+			})
+		}, function(res) {
+			response.send("You are not authorized for this role");
+		})
+	}
+})
+
 server.post('/logout', function(request, response) { // a place to post exclusively for logout requests
-	if (compare.isEmpty(request.signedCookies)){
+	if (compare.isEmpty(request.signedCookies)) {
 		response.redirect('/login'); //then there's nothing to sign out of
 		return;
 	}
