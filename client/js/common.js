@@ -9,11 +9,11 @@ function logout() {
     }).done(function(data) {
         if (data)
             location.href = '/login'
-        else{
+        else {
             // TODO: display some error message
             console.log(data)
         }
     }).fail(function(err) {
-        console.log(err);
+        console.error(err);
     });
 }
