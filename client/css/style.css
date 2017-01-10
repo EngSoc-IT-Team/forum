@@ -57,6 +57,8 @@ a:hover,
 
 .comment-date a:hover,
 .question-date a:hover,
+.comment-description a:hover,
+.question-description a:hover,
 .media a:hover {
   color: #cc7e15;
 }
@@ -199,6 +201,11 @@ a:hover,
   background-color: white;
   padding: 10px;
   color: black;
+}
+
+.comment-description a,
+.question-description a {
+  color: #FF9200;
 }
 
 .question-title a:hover {
