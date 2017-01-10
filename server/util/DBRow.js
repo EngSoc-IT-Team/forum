@@ -136,8 +136,8 @@ exports.DBRow = function(table) {
 	 ** Any errors during insert will be logged
 	**/
 	this.insert = function() {
-		log.log("INSERT for table '" + table + "' with id: '" + currentRow.id + "'");
 		currentRow.id = generator.generate();
+		log.log("INSERT for table '" + table + "' with id: '" + currentRow.id + "'");
 		var qs = qb.insert(table, currentRow);
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row) {
