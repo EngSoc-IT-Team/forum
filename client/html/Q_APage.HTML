@@ -20,55 +20,65 @@
 </head>
 <body class="question-answer-page">
 	<div class="container-fluid">
-	<header>
-		<div class="navbar sticky">
-    		<a href="/" class="navbar-logo">
-        		<img class="header-img" src="../assets/qef.png">
-      		</a>
-      		<div class="dropdown nav-profile">
-            	<button class="btn btn-default dropdown-toggle transparent-background" type="button" id="menu1" data-toggle="dropdown">
-    				<img id="profile" class="profile-image" src="/assets/profile.png">
-                 	<span class="caret inverted"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                	<a role="menuitem" tabindex="-1" href="/profile" class="dropdown-item"><li role="presentation">Profile</li></a>
-                    <a role="menuitem" tabindex="-1" href="#" onclick="logout()" class="dropdown-item"><li role="presentation">Logout</li></a>
-                </ul>
-            </div>
-    	</div>
-    </header>
-	<div class="main-content">
-		<!-- Question -->
-		<div class="question-block">
-			<h2 class="question-title"><a href="/question/id=tobecreated">Question 1 Title</a></h2>
-			<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-			<span class="positive">5</span>
-			<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-			<span class="question-date">February 2, 1993 @ 2:34 PM by <a href="#">Serious Badass</a></span>
-			<p class="question-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
-			<div class="clearfix">
-				<button class="btn btn-sm question-tag" type="submit">Tag 3</button>
-				<button class="btn btn-sm question-tag" type="submit">Tag 2</button>
-				<button class="btn btn-sm question-tag" type="submit">Tag 1</button>
+		<header>
+			<div class="navbar sticky">
+				<a href="/" class="navbar-logo">
+					<img class="header-img" src="../assets/qef.png">
+				</a>
+				<div class="dropdown nav-profile">
+					<button class="btn btn-default dropdown-toggle transparent-background" type="button" id="menu1" data-toggle="dropdown">
+						<img id="profile" class="profile-image" src="/assets/profile.png">
+						<span class="caret inverted"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+						<a role="menuitem" tabindex="-1" href="/profile" class="dropdown-item"><li role="presentation">Profile</li></a>
+						<a role="menuitem" tabindex="-1" href="#" onclick="logout()" class="dropdown-item"><li role="presentation">Logout</li></a>
+					</ul>
+				</div>
 			</div>
-		</div>
-		<br>
-		<!-- Comments -->
-		<div class="comment-list media">
-			<div class="comment-block media">
-				<h2 class="comment-title">Comments</h2>
+		</header>
+		<div class="main-content">
+			<!-- Question -->
+			<div class="question-block">
+				<h2 class="question-title"><a href="/question/id=tobecreated">Question 1 Title</a></h2>
 				<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 				<span class="positive">5</span>
 				<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-				<span class="comment-date">February 2, 1993 @ 2:34 PM by <a href="#">Palpatine</a></span>
-				<p class="comment-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
-				<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Reply</a>
-				<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Save</a>
-				<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Report</a>
-				<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Edit</a>
-				<hr />
-				<!-- Nested media object -->
+				<span class="question-date">February 2, 1993 @ 2:34 PM by <a href="#">Serious Badass</a></span>
+				<p class="question-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
+
+				
+
+				<!-- Modal -->
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog">
+
+						<div class="modal-content">
+							<div class="modal-body">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<label for="comment">Comment:</label>
+									<textarea class="form-control" rows="5" id="comment"></textarea>
+							</div>
+							<div class="modal-footer">
+								<button type="submit" class="btn btn-default">Comment</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				
+				<div class="clearfix">
+					<button type="button" class="btn btn-sm" data-toggle="modal" data-target="#myModal">Comment</button>
+					<button class="btn btn-sm question-tag" type="submit">Tag 3</button>
+					<button class="btn btn-sm question-tag" type="submit">Tag 2</button>
+					<button class="btn btn-sm question-tag" type="submit">Tag 1</button>
+				</div>
+			</div>
+			<br>
+			<!-- Comments -->
+			<div class="comment-list media">
 				<div class="comment-block media">
+					<h2 class="comment-title">Comments</h2>
 					<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 					<span class="positive">5</span>
 					<i class="fa fa-thumbs-down" aria-hidden="true"></i>
@@ -77,6 +87,7 @@
 					<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Reply</a>
 					<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Save</a>
 					<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Report</a>
+					<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Edit</a>
 					<hr />
 					<!-- Nested media object -->
 					<div class="comment-block media">
@@ -100,39 +111,50 @@
 							<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Save</a>
 							<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Report</a>
 							<hr />
+							<!-- Nested media object -->
+							<div class="comment-block media">
+								<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+								<span class="positive">5</span>
+								<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+								<span class="comment-date">February 2, 1993 @ 2:34 PM by <a href="#">Palpatine</a></span>
+								<p class="comment-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
+								<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Reply</a>
+								<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Save</a>
+								<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Report</a>
+								<hr />
+							</div> <!-- End of Nested media object -->
 						</div> <!-- End of Nested media object -->
 					</div> <!-- End of Nested media object -->
-				</div> <!-- End of Nested media object -->
-				<!-- Nested media object -->
-				<div class="comment-block media">
-					<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-					<span class="negative">-3</span>
-					<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-					<span class="comment-date">February 2, 1993 @ 2:34 PM by <a href="#">Palpatine</a></span>
-					<p class="comment-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
-					<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Reply</a>
-					<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Save</a>
-					<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Report</a>
-				</div> 
-				<!-- End of Nested media object -->
-			</div>
-			<div class="centered media">
-				<hr>
-				<a href="#" onclick="getMore()">v See More v</a>
+					<!-- Nested media object -->
+					<div class="comment-block media">
+						<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+						<span class="negative">-3</span>
+						<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+						<span class="comment-date">February 2, 1993 @ 2:34 PM by <a href="#">Palpatine</a></span>
+						<p class="comment-description">Bacon ipsum dolor amet shankle jerky ribeye chicken swine meatloaf. Pork belly kevin tongue, rump sausage bacon strip steak pig short loin jowl ball tip burgdoggen. Cow tri-tip corned beef meatloaf pork chop. Chicken meatball pancetta leberkas pork belly picanha tail kevin pork loin.</p>
+						<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Reply</a>
+						<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Save</a>
+						<a class="btn btn-sm comment-button" href="/question/id=tobecreated">Report</a>
+					</div> 
+					<!-- End of Nested media object -->
+				</div>
+				<div class="centered media">
+					<hr>
+					<a href="#" onclick="getMore()">v See More v</a>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
 	<!--footer-->
 	<div class="pull-left">
 		<div class = "nav-font" style = "color: white">
 			<div class="row comment-list">
-			<a href="#"><h3>About</h3></a>
-			<a href="#"><p>Who are we?</p></a>
-			<a href="#"><p>Learn moreabout EngSoc</p></a>
-			<a href="#"><p>Page details</p></a>
-			<a href="#"><p>Feedback</p></a>
+				<a href="#"><h3>About</h3></a>
+				<a href="#"><p>Who are we?</p></a>
+				<a href="#"><p>Learn moreabout EngSoc</p></a>
+				<a href="#"><p>Page details</p></a>
+				<a href="#"><p>Feedback</p></a>
 			</div>
 		</div>
 	</div>
