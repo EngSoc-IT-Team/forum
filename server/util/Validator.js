@@ -18,7 +18,7 @@ exports.validateSession = function(cookie) {
 		}
 		else
 			reject();
-	})
+	});
 }
 
 //TODO: check if previous session exists and use this session instead
@@ -35,17 +35,17 @@ exports.loginAndCreateSession = function(postResult) {
 					reject(false);
 					return;
 				}
+				var date = new Date();
 
 				row.next()
 				var newSession = new DBRow("session");
-				var sessionInfo = {sessionStart: "2016-11-24", 
-									userID: row.getValue("id"), 
-									sessionID: generator.generate()};
+				var sessionInfo = {sessionStart: date.toISOString().slice(0, date.toISOString().indexOf('T')), 
+									userID: row.getValue("id")};
 
 				newSession.setValue('sessionStart', sessionInfo.sessionStart);
 				newSession.setValue('userID', sessionInfo.userID);
-				newSession.setValue('id', sessionInfo.sessionID);
 				newSession.insert().then(function(res) {
+					sessionInfo.sessionID = newSession.getValue('id')
 					resolve(sessionInfo);
 				}, function(res) {
 					reject(false);
@@ -85,13 +85,17 @@ exports.hasRole = function(userID, role) {
 
 		var user = new DBRow('user');
 		user.getRow(userID).then(function(res) {
+			if (user.count() == 0)
+				reject(false);
+
 			if(user.getValue('privilege').includes(role))
 				resolve(true);
 			else
 				reject(false)
+			
 		}, function(res) {
 			reject(false);
-		})
+		});
 	});
 }
 
