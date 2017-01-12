@@ -15,15 +15,6 @@ a:hover,
   color: #FF9200;
 }
 
-.row {
-  margin-left: 0px;
-  margin-right: 0px;
-}
-
-.container-fluid {
-  padding: 0px;
-}
-
 /* Navbar */
 
 .navbar {
@@ -32,6 +23,10 @@ a:hover,
   padding-left: 40px;
   padding-right: 40px;
   border-radius: 0px
+}
+
+.navbar a:hover {
+  color: black;
 }
 
 .navbar-logo p,
@@ -51,20 +46,15 @@ a:hover,
   color: #FF9200;
 }
 
-.comment-nesting{
+.comment-nesting {
   padding-left: 50px;
 }
 
-.comment-date a:hover,
-.question-date a:hover,
-.comment-description a:hover,
-.question-description a:hover,
-.media a:hover {
+.date a:hover,
+.description a:hover,
+.media a:hover,
+.button:hover {
   color: #cc7e15;
-}
-
-.navbar a:hover {
-  color: black;
 }
 
 /* Profile menu */
@@ -73,7 +63,7 @@ a:hover,
   background-color: rgba(0,0,0,0);
 }
 
-.dropdown-toggle:after{ /* unfortunately cannot add classes to an after element specifically, so I had to repeat myself */
+.dropdown-toggle:after {
   color: #FF9200;
 }
 
@@ -90,7 +80,7 @@ a:hover,
 
 .dropdown-menu {
   background-color: black;
-  min-width: 10px !important;
+  min-width: 10px;
 }
 
 .dropdown-item {
@@ -104,6 +94,15 @@ a:hover,
 }
 
 /* Main Page */
+
+.row {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.container-fluid {
+  padding: 0px;
+}
 
 .main-search {
   text-align: center;
@@ -195,52 +194,42 @@ a:hover,
   padding-bottom: 40px;
 }
 
-.question-block,
-.comment-block {
+.info-block {
   height: 100%;
   background-color: white;
   padding: 10px;
   color: black;
 }
 
-.comment-description a,
-.question-description a {
+.description a {
   color: #FF9200;
 }
 
-.question-title a:hover {
+.info-block a:hover:not(.button) {
   color: inherit;
   text-decoration: none;
 }
 
-.question-title,
-.comment-title {
+.title {
   margin: 10px 0 15px;
 }
 
-
-.question-date,
-.comment-date {
+.date {
   font-size: 13px;
   font-style: italic;
   margin-left: 20px;
 }
 
-.question-date a,
-.comment-date a,
-.question-button:hover,
-.comment-button:hover
+.date a,
 .dropdown-item:hover {
   color: #FF9200;
 }
 
-.question-description,
-.comment-description {
+.description {
   margin: 10px 0px;
 }
 
-.question-button,
-.comment-button {
+.button {
   background-color: #34056D;
   color: #fff;
   margin-top: 5px;
@@ -258,12 +247,9 @@ a:hover,
   background-color: #34056D;
 }
 
-.comment-block {
-  margin-top: 0px;
-}
-
 .comment-block .media {
   padding-left: 30px;
+  margin-top: 0px;
 }
 
 .clearfix:after {
