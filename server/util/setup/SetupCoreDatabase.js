@@ -35,6 +35,7 @@ exports.loadDemoData = function() {
 
 function loadRow(table, fields, numElementsToCreate, numberCreated) {
 	var newRow = new dbr.DBRow(table);
+	newRow.setId = false;
 	for (var field in fields) {
 		if (field == "table")
 			continue
