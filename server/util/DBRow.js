@@ -23,6 +23,8 @@ exports.DBRow = function(table) {
 	var rows = [];
 	var currentRow = {}; // left as an empty object in case we are creating a new row
 
+	this.setId = true; // allows setting of rows manually
+
 	if (!table){
 		log.error("No table was specified for the DB row, all queries will fail!! Object instantiation terminated.");
 		return;
@@ -136,7 +138,9 @@ exports.DBRow = function(table) {
 	 ** Any errors during insert will be logged
 	**/
 	this.insert = function() {
-		currentRow.id = generator.generate();
+		if (this.setId)
+			currentRow.id = generator.generate();
+
 		log.log("INSERT for table '" + table + "' with id: '" + currentRow.id + "'");
 		var qs = qb.insert(table, currentRow);
 		return new Promise(function(resolve, reject) {

@@ -5,18 +5,21 @@
 		"netid": "13ma100",
 		"dateJoined": "2016-12-01",
 		"privilege": "admin",
+		"id": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"reportCount": "1"
 	},
 	"1": {
 		"table": "user",
 		"username": "anon",
 		"netid": "anon",
+		"id": "c1t58gst8anhdpfe54h2fpiq9xvh7gy0",
 		"dateJoined": "2016-12-01"
 	},
 	"2": {
 		"table": "user",
 		"username": "BilboSwaggings",
 		"netid": "16atf",
+		"id": "ui0bec9abmg4zmxgfjhz4jzdgam0ale2",
 		"dateJoined": "2016-12-01",
 		"privilege": "admin"
 	},
@@ -24,6 +27,7 @@
 		"table": "user",
 		"username": "CaptainUnicorn",
 		"netid": "14cdwc",
+		"id": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"dateJoined": "2016-12-01",
 		"privilege": "admin"
 	},
@@ -31,11 +35,13 @@
 		"table": "user",
 		"username": "HotMuffin",
 		"netid": "11rec9",
+		"id": "cctb6p164pkq86zsw4uydqmltpllf7jf",
 		"dateJoined": "2016-12-01",
 		"privilege": "admin"
 	},
 	"5": {
 		"table": "post",
+		"id": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"author": "WizardPikachu",
 		"timestamp": "2016-12-01",
 		"tags": "MECH321, STATICS, PHYSICS, MECH",
@@ -47,6 +53,7 @@
 	},
 	"6": {
 		"table": "tag",
+		"id": "wpi1qlxb601ksm5cwh70k76jxfafn2bc",
 		"name": "MECH321",
 		"summary": "A course covering the physics of static structures. An extension of material in MECH 221.",
 		"relatedTags": "STATICS, PHYSICS, CIVIL, MECH328"
@@ -54,12 +61,14 @@
 	"7": {
 		"table": "tag",
 		"name": "STATICS",
+		"id": "qko42021rnu1shic0vyyotrzbygkz17m",
 		"summary": "The study of structural members and statically indeterminate systems.",
 		"relatedTags": "MECH321, CIVIL, MECH, MECH328"
 	},
 	"8": {
 		"table": "tag",
 		"name": "PHYSICS",
+		"id": "elibsfxg0mbs8qzfpuqz16yr7cvinaio",
 		"summary": "The study of the nature and properties of nature including mechanics, heat, light, work, energy, radiation, electricity and magnetism.",
 		"relatedTags": "MECH321, STATICS, MECH, MECH328"
 	},
@@ -67,17 +76,20 @@
 		"table": "tag",
 		"name": "MECH",
 		"summary": "A shorthand for Mechanical Engineering. Covers a wide variety of topics, typically considered the broadest field of engineering.",
+		"id": "b43bnb2k1btjwczj0aqdwgdxogmbq18k",
 		"relatedTags": "MECH321, STATICS, PHYSICS, MECH328"
 	},
 	"10": {
 		"table": "tag",
 		"name": "MECH328",
+		"id": "ep42hxl0pb5hzox5w4rae9h6tpjnzke8",
 		"summary": "A class covering the physics of dynamic rigid bodies and vibrations.",
 		"relatedTags": "MECH321, STATICS, PHYSICS, MECH"
 	},
 	"11": {
 		"table": "tag",
 		"name": "CIVIL",
+		"id": "pbzhoyq9agjxfz11wgg8m1fhyydot0h9",
 		"summary":"A shorthand for Civil Engineering, which primarily focuses on structural and urban engineering.",
 		"relatedTags": "MECH321, STATICS, PHYSICS, MECH"
 	},
@@ -85,10 +97,12 @@
 		"table": "vote",
 		"commentOrPostID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"id": "yy6e996fc2fqzadi8vsah8fhu9cgtsxk",
 		"voteValue": "1"
 	},
 	"14": {
 		"table": "comment",
+		"id": "kotkw12crnsvbldigyobt315r4e6tyj5",
 		"parentPost": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"content": "I've never taken this class but just wanted to say hey.",
 		"author": "CaptainUnicorn",
@@ -99,12 +113,14 @@
 	},
 	"15": {
 		"table": "vote",
+		"id": "g6p045fi4dxlzrlzmbte9hw7026ew5th",
 		"commentOrPostID": "kotkw12crnsvbldigyobt315r4e6tyj5",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"voteValue": "1"
 	},
 	"16": {
 		"table": "comment",
+		"id": "3ntcfsbrqunk27yymvmtetdvkrg33es1",
 		"parentPost": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"content": "I have taken this class, but have completely forgotten all useful information about it. My apologies for commenting.",
 		"author": "HotMuffin",
@@ -117,12 +133,14 @@
 		"table": "vote",
 		"commentOrPostID": "3ntcfsbrqunk27yymvmtetdvkrg33es1",
 		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"id": "bt6qm5admkmme5bqr92j516kpk1nsuav",
 		"voteValue": "1"
 	},
 	"18": {
 		"table": "post",
 		"author": "WizardPikachu",
 		"timestamp": "2016-12-01",
+		"id": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"tags": "MECH328",
 		"title": "I don't understand this class either",
 		"content": "Someone explain everything to me.",
@@ -132,6 +150,7 @@
 	},
 	"19": {
 		"table": "vote",
+		"id": "3suitlts01ph7qbul1j9wnd0c8tiv8km",
 		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
 		"voteValue": "0"
@@ -140,12 +159,14 @@
 		"table": "vote",
 		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
+		"id": "x380tpfwn3prfozzliceo0h6loetj4q5",
 		"voteValue": "0"
 	},
 	"21": {
 		"table": "vote",
 		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"id": "xme5ikh2sgwnvwsnd9twpc0zifcmnlw2",
 		"voteValue": "1"
 	},
 	"22": {
@@ -153,6 +174,7 @@
 		"reportReason": "0",
 		"reportingUser": "CaptainUnicorn",
 		"reportedUser": "WizardPikachu",
+		"id": "64pradujn6vg26rsgk1epmz93fr2s25u",
 		"relatedCommentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"report": "This post is a waste of space."
 	},
@@ -160,17 +182,20 @@
 		"table": "link",
 		"title": "Mass Moments of Inertia",
 		"tags": "MECH328, MECH",
+		"id": "j0mg989m6mca6g53cpdw8xos0dsv874w",
 		"summary": "A list of mass moments of inertia from Wikipedia.",
 		"link": "https://en.wikipedia.org/wiki/List_of_moments_of_inertia"
 	},
 	"24": {
 		"table": "tag",
 		"name": "MECH GENERAL",
+		"id": "igmc48hc2st5ixwp84ujymzvhxmxr475",
 		"summary":"The Mechanical Engineering General option.",
 		"relatedTags": "MECH, MECH328, MECH321"
 	},
 	"24": {
 		"table": "class",
+		"id": "pcqrhscxws28nrpgk6s6qzpwsnmm8jfl",
 		"courseCode": "MECH328",
 		"title": "Dynamics and Vibrations",
 		"summary": "A class covering the physics of dynamic rigid bodies and vibrations.",
