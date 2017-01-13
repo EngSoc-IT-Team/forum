@@ -25,7 +25,7 @@ server.use(bp.json());
 //configuration information
 var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config/config.json'), 'utf8'));
 
-var isInProduction = (config["production"] == 'true');
+var isInProduction = (config.production == 'true');
 
 /* GET Requests
 **
@@ -87,7 +87,7 @@ server.get('/list', function(request, response) { //return the a default most re
 		return;
 	}
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/question-list.html'))
+	response.sendFile(path.join(__dirname, '..', 'client/html/question-list.html'));
 });
 
 server.get('/list/filter?\*', function(request, response) { //return the list filtered by the passed parameters, active search must route here ordered by most positive votes
@@ -138,7 +138,7 @@ server.get('/dev', function(request, response) { // mock login page
 			response.sendFile(path.join(__dirname, '..', 'client/html/dev.html'));
 		}, function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
-		})
+		});
 		
 	}
 });
@@ -153,7 +153,7 @@ server.get('/eval', function(request, response) { //allows evaluation of server 
 			response.sendFile(path.join(__dirname, '..', 'client/html/eval.html'));
 		}, function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
-		})
+		});
 	}
 });
 
@@ -192,12 +192,12 @@ server.post('/eval', function(request, response) {
 			}, function(err) {
 				response.send(err);
 
-			})
+			});
 		}, function(res) {
 			response.send("You are not authorized for this role");
-		})
+		});
 	}
-})
+});
 
 server.post('/logout', function(request, response) { // a place to post exclusively for logout requests
 	if (compare.isEmpty(request.signedCookies)) {
@@ -205,7 +205,7 @@ server.post('/logout', function(request, response) { // a place to post exclusiv
 		return;
 	}
 
-	if (request.body.logout == true) {
+	if (request.body.logout === true) {
 		validator.logout(request.signedCookies.usercookie).then(function(res) {
 			response.clearCookie("usercookie");
 			response.send(true);
@@ -222,7 +222,19 @@ server.post('/vote', function(request, response) {
 	}
 	//check if user has already voted here and the vote is the same as their previous vote
 	//reject if they have, allow if they haven't, regardless, increment count on the client
-})
+});
+
+server.post('/subscribe', function(request, response) {
+	if (compare.isEmpty(request.signedCookies)) { //if you're not signed in you can't subscribe
+		response.send('needLogin'); // tell them to log in
+		return;
+	}
+
+	// check if user is already subscribed
+	// subscribe them if they aren't
+	// you'll have request.body = { 'userId': 'useridentifyingid', 'itemId': 'itemidentifyingid' } to get information out of
+
+});
 
 /* Use Links
 **
@@ -231,13 +243,13 @@ server.post('/vote', function(request, response) {
 */
 
 server.use(function (err, req, res, next) { // catches URL errors
-	log.error(err.stack)
-	res.status(500).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'))
-})
+	log.error(err.stack);
+	res.status(500).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+});
 
 server.use(function (req, res, next) { // returns 404s instead of cannot GET
 	res.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
-})
+});
 
 
 // start the server
