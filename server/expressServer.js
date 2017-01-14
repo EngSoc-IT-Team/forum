@@ -61,7 +61,7 @@ server.get('/question/id=\*', function(request, response) { // question page, qu
 	}
 
 	var pertinentQuery = request.url.replace('/question/id=', '');
-	response.sendFile(path.join(__dirname, '..', 'client/html/Q_APage.html'));
+	response.sendFile(path.join(__dirname, '..', 'client/html/postAndComment.html'));
 });
 
 server.get('/about', function(request, response) { //about page
@@ -70,7 +70,7 @@ server.get('/about', function(request, response) { //about page
 		return;
 	}
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/about.HTML'));
+	response.sendFile(path.join(__dirname, '..', 'client/html/about.html'));
 });
 
 server.get('/new', function(request, response) { // newest questions being asked in list view
@@ -78,7 +78,7 @@ server.get('/new', function(request, response) { // newest questions being asked
 		response.redirect('/login');
 		return;
 	}
-	response.send('<h2>A new post</h2><form><h3>Question</h3><input type="text"><br><h3>Tags</h3><input type="text"><br><br><input type="button" value="Submit"></form><h3>' + request.url + "</h3>");
+	response.sendFile(path.join(__dirname, '..', 'client/html/questionList.html'));
 });
 
 server.get('/list', function(request, response) { //return the a default most recent list of questions
@@ -87,7 +87,7 @@ server.get('/list', function(request, response) { //return the a default most re
 		return;
 	}
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/question-list.html'));
+	response.sendFile(path.join(__dirname, '..', 'client/html/questionList.html'));
 });
 
 server.get('/list/filter?\*', function(request, response) { //return the list filtered by the passed parameters, active search must route here ordered by most positive votes
@@ -96,7 +96,7 @@ server.get('/list/filter?\*', function(request, response) { //return the list fi
 		return;
 	}
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/question-list.html'));
+	response.sendFile(path.join(__dirname, '..', 'client/html/questionList.html'));
 });
 
 server.get('/profile', function(request, response) { //user home page
@@ -105,7 +105,7 @@ server.get('/profile', function(request, response) { //user home page
 		return;
 	}
 
-	response.send('<h2>Home Page for the user currently logged in</h2><h3>' + request.url + "</h3>");
+	response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
 });
 
 server.get('/login', function(request, response) { // mock login page
