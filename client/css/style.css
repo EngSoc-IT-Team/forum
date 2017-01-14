@@ -57,6 +57,12 @@ a:hover,
   color: #cc7e15;
 }
 
+#navbar-search {
+  width: 300px;
+  float: right;
+  margin-top: 8px;
+}
+
 /* Profile menu */
 
 .transparent-background {
