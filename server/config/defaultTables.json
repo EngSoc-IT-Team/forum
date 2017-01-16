@@ -315,16 +315,17 @@
 	"9": {
 		"tablename": "subscriptions",
 		"fields": {
-			"userId": {
+			"userID": {
 				"type": "string",
-				"constraint": "UNIQUE"
+				"constraint": "NOT NULL"
 			},
-			"subscribedItem": {
+			"itemID": {
 				"type": "string",
-				"constraint": "UNIQUE"
+				"constraint": "NOT NULL"
 			},
 			"lastNotified": {
-				"type": "timestamp"
+				"type": "timestamp",
+				"default": "CURRENT_TIMESTAMP"
 			},
 			"numNotificationsMissed": {
 				"type": "int",
@@ -343,11 +344,11 @@
 	"10": {
 		"tablename": "saved",
 		"fields": {
-			"userId": {
+			"userID": {
 				"type": "string",
 				"constraint": "UNIQUE"
 			},
-			"itemId": {
+			"itemID": {
 				"type": "string",
 				"constraint": "UNIQUE"
 			},
