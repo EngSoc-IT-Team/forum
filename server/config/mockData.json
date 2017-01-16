@@ -3,10 +3,15 @@
 		"table": "user",
 		"username": "WizardPikachu",
 		"netid": "13ma100",
-		"dateJoined": "2016-12-01",
+		"dateJoined": "2016-11-10",
 		"privilege": "admin",
 		"id": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
-		"reportCount": "1"
+		"reportCount": "1",
+		"totalUpvotes": "406",
+		"totalDownvotes": "562",
+		"netVotes": "-156",
+		"totalSolved": "5",
+		"acceptedTerms": "1"
 	},
 	"1": {
 		"table": "user",
@@ -93,14 +98,14 @@
 		"summary":"A shorthand for Civil Engineering, which primarily focuses on structural and urban engineering.",
 		"relatedTags": "MECH321, STATICS, PHYSICS, MECH"
 	},
-	"13": {
+	"12": {
 		"table": "vote",
 		"commentOrPostID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"id": "yy6e996fc2fqzadi8vsah8fhu9cgtsxk",
 		"voteValue": "1"
 	},
-	"14": {
+	"13": {
 		"table": "comment",
 		"id": "kotkw12crnsvbldigyobt315r4e6tyj5",
 		"parentPost": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
@@ -111,14 +116,14 @@
 		"commentLevel": "0",
 		"timestamp": "2016-12-01"
 	},
-	"15": {
+	"14": {
 		"table": "vote",
 		"id": "g6p045fi4dxlzrlzmbte9hw7026ew5th",
 		"commentOrPostID": "kotkw12crnsvbldigyobt315r4e6tyj5",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"voteValue": "1"
 	},
-	"16": {
+	"15": {
 		"table": "comment",
 		"id": "3ntcfsbrqunk27yymvmtetdvkrg33es1",
 		"parentPost": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
@@ -129,14 +134,14 @@
 		"commentLevel": "0",
 		"timestamp": "2016-12-01"
 	},
-	"17": {
+	"16": {
 		"table": "vote",
 		"commentOrPostID": "3ntcfsbrqunk27yymvmtetdvkrg33es1",
 		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
 		"id": "bt6qm5admkmme5bqr92j516kpk1nsuav",
 		"voteValue": "1"
 	},
-	"18": {
+	"17": {
 		"table": "post",
 		"author": "WizardPikachu",
 		"timestamp": "2016-12-01",
@@ -148,28 +153,28 @@
 		"downvotes": "2",
 		"netVotes": "-1"
 	},
-	"19": {
+	"18": {
 		"table": "vote",
 		"id": "3suitlts01ph7qbul1j9wnd0c8tiv8km",
 		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
 		"voteValue": "0"
 	},
-	"20": {
+	"19": {
 		"table": "vote",
 		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"id": "x380tpfwn3prfozzliceo0h6loetj4q5",
 		"voteValue": "0"
 	},
-	"21": {
+	"20": {
 		"table": "vote",
 		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"id": "xme5ikh2sgwnvwsnd9twpc0zifcmnlw2",
 		"voteValue": "1"
 	},
-	"22": {
+	"21": {
 		"table": "report",
 		"reportReason": "0",
 		"reportingUser": "CaptainUnicorn",
@@ -178,7 +183,7 @@
 		"relatedCommentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"report": "This post is a waste of space."
 	},
-	"23": {
+	"22": {
 		"table": "link",
 		"title": "Mass Moments of Inertia",
 		"tags": "MECH328, MECH",
@@ -186,7 +191,7 @@
 		"summary": "A list of mass moments of inertia from Wikipedia.",
 		"link": "https://en.wikipedia.org/wiki/List_of_moments_of_inertia"
 	},
-	"24": {
+	"23": {
 		"table": "tag",
 		"name": "MECH GENERAL",
 		"id": "igmc48hc2st5ixwp84ujymzvhxmxr475",
@@ -201,5 +206,29 @@
 		"summary": "A class covering the physics of dynamic rigid bodies and vibrations.",
 		"longSummary": "A longer summary would go here",
 		"tags": "MECH328, MECH, MECH GENERAL"
+	},
+	"25": {
+		"table": "saved",
+		"id": "5utwbazxxrktf5flas0lysytgrt570cj",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz"
+	},
+	"26": {
+		"table": "saved",
+		"id": "wvy6mfv0hei9sqknqfn48ob5kkqmgu80",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6"
+	},
+	"27": {
+		"table": "subscriptions",
+		"id": "mqel64ee3hiu49okfh28r6qweicylnr7",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz"
+	},
+	"28": {
+		"table": "subscriptions",
+		"id": "kggqu1euyscbeqtfxztx03ydn2d89qow",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6"
 	}
 }

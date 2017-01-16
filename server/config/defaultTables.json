@@ -309,6 +309,10 @@
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
+			},
+			"dateAdded": {
+				"type": "timestamp",
+				"default": "CURRENT_TIMESTAMP"
 			}
 		}
 	},
@@ -346,15 +350,19 @@
 		"fields": {
 			"userID": {
 				"type": "string",
-				"constraint": "UNIQUE"
+				"constraint": "NOT NULL"
 			},
 			"itemID": {
 				"type": "string",
-				"constraint": "UNIQUE"
+				"constraint": "NOT NULL"
 			},
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
+			},
+			"dateSaved": {
+				"type": "timestamp",
+				"default": "CURRENT_TIMESTAMP"
 			}
 		}
 	}
