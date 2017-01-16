@@ -315,24 +315,41 @@
 	"9": {
 		"tablename": "subscriptions",
 		"fields": {
-			"userNetId": {
+			"userId": {
 				"type": "string",
 				"constraint": "UNIQUE"
 			},
-			"subscribed_to": {
+			"subscribedItem": {
 				"type": "string",
 				"constraint": "UNIQUE"
 			},
-			"last_notified": {
+			"lastNotified": {
 				"type": "timestamp"
 			},
-			"num_notifications_missed": {
+			"numNotificationsMissed": {
 				"type": "int",
 				"default": "0"
 			},
-			"num_times_notified": {
+			"numTimesNotified": {
 				"type": "int",
 				"default": "0"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			}
+		}
+	},
+	"10": {
+		"tablename": "saved",
+		"fields": {
+			"userId": {
+				"type": "string",
+				"constraint": "UNIQUE"
+			},
+			"itemId": {
+				"type": "string",
+				"constraint": "UNIQUE"
 			},
 			"id": {
 				"type": "uniqueidentifier",
