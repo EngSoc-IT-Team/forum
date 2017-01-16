@@ -311,5 +311,33 @@
 				"primaryKey": "true"
 			}
 		}
+	},
+	"9": {
+		"tablename": "subscriptions",
+		"fields": {
+			"userNetId": {
+				"type": "string",
+				"constraint": "UNIQUE"
+			},
+			"subscribed_to": {
+				"type": "string",
+				"constraint": "UNIQUE"
+			},
+			"last_notified": {
+				"type": "timestamp"
+			},
+			"num_notifications_missed": {
+				"type": "int",
+				"default": "0"
+			},
+			"num_times_notified": {
+				"type": "int",
+				"default": "0"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			}
+		}
 	}
 }
