@@ -10,7 +10,7 @@ exports.update = function(table, dbObject) {
 		return log.warn("The field 'id' must be set in order to update a row");
 
 	var base = "UPDATE " + table + " SET ";
-	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false, true);
+	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false, true, false);
 	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject["id"]) + ";";
 }
 
@@ -19,7 +19,7 @@ exports.insert = function(table, dbObject) {
 		return log.warn("The field 'id' must be set in order to insert a row");
 
 	var base = "INSERT INTO " + table + " ";
-	var dboBrokenDown = breakdownDBObject(dbObject, true, true, true, false);
+	var dboBrokenDown = breakdownDBObject(dbObject, true, true, true, false, false);
 	return base + dboBrokenDown[0] + " VALUES " + dboBrokenDown[1] + ";";
 }
 
@@ -29,7 +29,7 @@ exports.get = function(table, rowId) {
 
 exports.query = function(table, dbObject) {
 	var base =  "SELECT * FROM " + table + " WHERE ";
-	var dboBrokenDown = breakdownDBObject(dbObject, false, false, true, false);
+	var dboBrokenDown = breakdownDBObject(dbObject, false, true, true, false, true);
 	return base + dboBrokenDown;
 	
 }
@@ -54,7 +54,7 @@ exports.escapeID = function(idToEscape) {
 // if string, return a string of format "(field1='value1', field2='value2' ...)"
 // if true, return string of column ids and values where the indices are the same for each list
 // i.e. ["field1, field2, field3", "'value1', 'value2, 'value3'"]
-function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis, isUpdate) {
+function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis, isUpdate, addOne) {
 	var fields = "";
 	var values = "";
 	var dbObjectString = "";
@@ -68,7 +68,7 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 	var numOfFields = Object.keys(obj).length;
 	var itrs = 0;
 
-	if (!allowSettingId)
+	if (!allowSettingId || addOne)
 		itrs = 1
 
 	if (returnAsTwoStrings){
