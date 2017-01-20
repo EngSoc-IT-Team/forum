@@ -189,7 +189,8 @@
 		"tags": "MECH328, MECH",
 		"id": "j0mg989m6mca6g53cpdw8xos0dsv874w",
 		"summary": "A list of mass moments of inertia from Wikipedia.",
-		"link": "https://en.wikipedia.org/wiki/List_of_moments_of_inertia"
+		"link": "https://en.wikipedia.org/wiki/List_of_moments_of_inertia",
+		"addedBy": "ufs6jhhbjavxymgt0m8a1x024pcj7khx"
 	},
 	"23": {
 		"table": "tag",

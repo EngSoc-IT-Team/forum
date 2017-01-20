@@ -110,7 +110,7 @@
 			},
 			"totalUpvotes": {
 				"type": "mediumint",
-				"default": "0"
+				"default": "1"
 			},
 			"totalDownvotes": {
 				"type": "mediumint",
@@ -313,6 +313,10 @@
 			"dateAdded": {
 				"type": "timestamp",
 				"default": "CURRENT_TIMESTAMP"
+			},
+			"addedBy": {
+				"type": "uniqueidentifier",
+				"default": "NOT NULL"
 			}
 		}
 	},
