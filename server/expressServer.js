@@ -169,6 +169,15 @@ server.get('/eval', function(request, response) { //allows evaluation of server 
 	}
 });
 
+server.get('/help', function(request, response) { // user help page
+	if (compare.isEmpty(request.signedCookies)) {
+		response.redirect('/');
+		return;
+	}
+	
+	response.sendFile(path.join(__dirname, '..', 'client/html/help.html'))
+});
+
 /* POST Requests
 **
 ** These are not directly accessable from the browser, but can be used by making a POST
