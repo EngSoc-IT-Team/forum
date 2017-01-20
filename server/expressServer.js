@@ -8,6 +8,7 @@ var log = require('./util/log');
 var validator = require('./util/Validator');
 var compare = require('./util/Compare');
 var Environment = require('./util/evalEnvironment').Environment;
+var requestor = require('./util/requestResponder');
 var fs = require('fs');
 
 const PORT = 8080;
@@ -104,8 +105,19 @@ server.get('/profile', function(request, response) { //user home page
 		response.redirect('/login');
 		return;
 	}
+	if (!compare.isEmpty(request.query)) {
+		console.log('why')
+		validator.validateUser(request).then(function(res) {
+			response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
+		}, function(err) {
+			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+
+		});
+	}
+	else{
+		response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
+	}
 });
 
 server.get('/login', function(request, response) { // mock login page
@@ -233,6 +245,24 @@ server.post('/subscribe', function(request, response) {
 	// check if user is already subscribed
 	// subscribe them if they aren't
 	// you'll have request.body = { 'userId': 'useridentifyingid', 'itemId': 'itemidentifyingid' } to get information out of
+
+});
+
+server.post('/info', function(request, response) {
+	if (compare.isEmpty(request.signedCookies)) { //if you're not signed in you can't get information
+		response.send('needLogin'); // tell them to log in
+		return;
+	}
+	requestor.parseRequest(request).then(function(resultToReturn) {
+		response.send(resultToReturn);
+
+	}, function(err) {
+		response.send({res: "not found"});
+
+	}).catch(function(err) {
+		response.send(err);
+		
+	})
 
 });
 

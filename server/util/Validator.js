@@ -99,3 +99,32 @@ exports.hasRole = function(userID, role) {
 	});
 }
 
+exports.validateUser = function(request) {
+	return new Promise(function(resolve, reject) {
+
+		var user = new DBRow('user');
+		for (var key in request.query)
+			user.addQuery(key, request.query[key]);
+
+		user.query().then(function(res) {
+			if (user.count() == 0)
+				reject(false);
+			else
+				resolve(true);
+			
+		}, function(res) {
+			reject(false);
+		});
+
+		// var user = new DBRow('user');
+		// user.getRow(id).then(function(res) {
+		// 	if (user.count() == 0)
+		// 		reject(false);
+		// 	else
+		// 		resolve(true);
+			
+		// }, function(res) {
+		// 	reject(false);
+		// });
+	});
+}
