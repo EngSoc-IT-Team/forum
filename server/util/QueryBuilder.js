@@ -1,7 +1,8 @@
 "use strict";
 
 var mysql = require('mysql');
-var log = require('./log')
+var log = require('./log');
+var escaper = require('./QueryEscaper')
 
 const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"] //TODO: implement 'in' and 'between' operators
 
@@ -9,8 +10,11 @@ exports.update = function(table, dbObject) {
 	if (!dbObject["id"])
 		return log.warn("The field 'id' must be set in order to update a row");
 
+	if (!escaper.isValidTableName(table))
+		return log.warn("Invalid table name used for call to UPDATE");
+
 	var base = "UPDATE " + table + " SET ";
-	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false, true, false);
+	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false, true, false, table);
 	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject["id"]) + ";";
 }
 
@@ -18,24 +22,40 @@ exports.insert = function(table, dbObject) {
 	if (!dbObject['id'])
 		return log.warn("The field 'id' must be set in order to insert a row");
 
+	if (!escaper.isValidTableName(table))
+		return log.warn("Invalid table name used for call to INSERT");
+
 	var base = "INSERT INTO " + table + " ";
-	var dboBrokenDown = breakdownDBObject(dbObject, true, true, true, false, false);
+	var dboBrokenDown = breakdownDBObject(dbObject, true, true, true, false, false, table);
+
+	if (!dboBrokenDown)
+		return undefined;
+
 	return base + dboBrokenDown[0] + " VALUES " + dboBrokenDown[1] + ";";
 }
 
 exports.get = function(table, rowId) {
+	if (!escaper.isValidTableName(table))
+		return log.warn("Invalid table name used for call to GET");
+
 	return "SELECT * FROM " + table + " WHERE id=" + mysql.escape(rowId) + ";";
 }
 
 exports.query = function(table, dbObject) {
+	if (!escaper.isValidTableName(table))
+		return log.warn("Invalid table name used for call to QUERY");
+
 	var base =  "SELECT * FROM " + table + " WHERE ";
-	var dboBrokenDown = breakdownDBObject(dbObject, false, true, true, false, true);
+	var dboBrokenDown = breakdownDBObject(dbObject, false, true, true, false, true, table);
 	return base + dboBrokenDown;
 	
 }
 
 // This is the only way we will allow a record to be deleted (by id)
 exports.delete = function(table, id) {
+	if (!escaper.isValidTableName(table))
+		return log.warn("Invalid table name used for call to DELETE");
+
 	return "DELETE FROM " + table + " WHERE id=" + resolveObjectType(id) + ";";
 }
 
@@ -54,7 +74,7 @@ exports.escapeID = function(idToEscape) {
 // if string, return a string of format "(field1='value1', field2='value2' ...)"
 // if true, return string of column ids and values where the indices are the same for each list
 // i.e. ["field1, field2, field3", "'value1', 'value2, 'value3'"]
-function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis, isUpdate, addOne) {
+function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis, isUpdate, addOne, table) {
 	var fields = "";
 	var values = "";
 	var dbObjectString = "";
@@ -73,6 +93,9 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 
 	if (returnAsTwoStrings){
 		for (var prop in obj) {
+			if (!escaper.isValidField(table, prop))
+				return log.warn('An invalid field "' + prop + '" for the table "' + table + '" was entered');
+
 			if (!allowSettingId && prop == 'id') // skip field if setting the ID is not allowed
 				continue;
 
@@ -94,13 +117,16 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 	}
 	else {
 		for (var prop in obj) {
+			if (!escaper.isValidField(table, prop))
+				return log.warn('An invalid field "' + prop + '" for the table "' + table + '" was entered');
+
 			if (!allowSettingId && prop == 'id') 
 				continue;
 
 			if (typeof obj[prop] == 'object' && obj[prop]['operator'])
-				dbObjectString += prop + " " + checkOperator(obj[prop]['operator']) + " " + resolveObjectType(obj[prop]['value'])
+				dbObjectString += prop + " " + checkOperator(obj[prop]['operator']) + " " + resolveObjectType(obj[prop]['value']);
 			else
-				dbObjectString += prop + "=" + resolveObjectType(obj[prop])
+				dbObjectString += prop + "=" + resolveObjectType(obj[prop]);
 
 			if (itrs < numOfFields) //until the second to last element do this
 				if (isUpdate) {
