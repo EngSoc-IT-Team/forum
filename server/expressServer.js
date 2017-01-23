@@ -106,7 +106,6 @@ server.get('/profile', function(request, response) { //user home page
 		return;
 	}
 	if (!compare.isEmpty(request.query)) {
-		console.log('why')
 		validator.validateUser(request).then(function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
 
@@ -206,7 +205,7 @@ server.post('/eval', function(request, response) {
 	}
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, 'admin').then(function(res) {
-			var env = new Environment();
+			var env = new Environment(); // a new disposable execution environment
 			env.execute(request.body.code).then(function(res) {
 				response.send(res);
 

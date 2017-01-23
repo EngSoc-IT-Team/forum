@@ -48,7 +48,6 @@ exports.parseRequest = function(request) {
 */
 function profileRequest(request) {
 	return new Promise(function(resolve, reject) {
-		console.log(request.body.self)
 		if (request.body.self) {
 			var userID = request.signedCookies.usercookie.userID;
 			var row = new DBRow('user');
@@ -121,7 +120,6 @@ function aggregateOthers(user, info) { // turn this into a file called aggregato
 				reject()
 			})
 		}, function() {
-			console.log("failed here")
 			reject();
 		})
 	})
