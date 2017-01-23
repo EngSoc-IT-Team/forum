@@ -13,6 +13,7 @@ function whenLoaded() {
     }
     else {
         content.self = true;
+        $(knowledge)[0].innerHTML = "I know about:"
         href = '/info';
     }
 

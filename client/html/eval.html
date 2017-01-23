@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="../css/style.css" />
-		<link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700&amp;subset=cyrillic" rel="stylesheet">
 		<script type="text/javascript" src="/js/common.js"></script>
 </head>
 <body>
@@ -41,12 +41,13 @@
 					<h2>Code to Execute</h2>
 					<p>Code must be valid strict-mode javascript. All database queries are permanent. To log something, use log(str) instead of console.log(str).</p>
 					<hr>
-					<textarea id="code" style="resize: both; min-width: 50%; max-width: 100%; min-height: 200px;"></textarea>
+					<b>
+						<div contenteditable="true" id="code" style="resize: both; min-width: 50%; max-width: 100%; min-height: 200px; border: 1px solid #ccc;"></div>
 					<br>
 					<input type="button" name="submit" value="Run" onclick="execute()">
 					<br><hr>
 					<h4>Result</h4>
-					<textarea id="result" style="resize: both; min-width: 50%; max-width: 100%;" disabled></textarea>
+					<textarea id="result" style="font-weight:bold; resize: both; min-width: 50%; max-width: 100%;" disabled></textarea>
 				</div>
 			</div>
 		</div>
@@ -54,11 +55,12 @@
 </body>
 <script type="text/javascript">
 	function execute() {
+		console.log()
     	$.ajax({
         	url: '/eval',
         	type: 'POST',
         	contentType: 'application/json',
-        	data: JSON.stringify({"code": $(code).val()})
+        	data: JSON.stringify({"code": $(code)[0].innerText})
     	}).done(function(data) {
     		var logs = "Result: \n" + getInfo(data);
         	$(result).val(logs);
