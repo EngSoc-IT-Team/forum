@@ -4,6 +4,8 @@ var DBRow = require('./DBRow').DBRow;
 var log = require('./log');
 var generator = require('./IDGenerator');
 
+const allowedUserKeys = ['id', 'username'];
+
 exports.validateSession = function(cookie) {
 	return new Promise(function(resolve, reject){
 		if (cookie){ //first of all you need to have a cookie for us to expend resources
@@ -103,8 +105,10 @@ exports.validateUser = function(request) {
 	return new Promise(function(resolve, reject) {
 
 		var user = new DBRow('user');
-		for (var key in request.query)
-			user.addQuery(key, request.query[key]);
+		for (var key in request.query) {
+			if (allowedUserKeys.includes(key)) // we do not allow searches for users by netid
+				user.addQuery(key, request.query[key]);
+		}
 
 		user.query().then(function(res) {
 			if (user.count() == 0)
@@ -115,16 +119,5 @@ exports.validateUser = function(request) {
 		}, function(res) {
 			reject(false);
 		});
-
-		// var user = new DBRow('user');
-		// user.getRow(id).then(function(res) {
-		// 	if (user.count() == 0)
-		// 		reject(false);
-		// 	else
-		// 		resolve(true);
-			
-		// }, function(res) {
-		// 	reject(false);
-		// });
 	});
 }
