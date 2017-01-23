@@ -38,12 +38,12 @@ function subscribe(userid, itemid) {
     });
 }
 
-function vote(userid, itemid, votevalue) {
+function vote(itemid, votevalue) {
     $.ajax({
         url: '/vote',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({userId: userid, itemId: itemid, voteValue: votevalue})
+        data: JSON.stringify({itemId: itemid, voteValue: votevalue})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success
