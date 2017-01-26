@@ -79,7 +79,7 @@ server.get('/new', function(request, response) { // newest questions being asked
 		response.redirect('/login');
 		return;
 	}
-	response.sendFile(path.join(__dirname, '..', 'client/html/questionList.html'));
+	response.sendFile(path.join(__dirname, '..', 'client/html/Post.html'));
 });
 
 server.get('/list', function(request, response) { //return the a default most recent list of questions
