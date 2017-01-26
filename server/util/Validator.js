@@ -23,8 +23,7 @@ exports.validateSession = function(cookie) {
 	});
 }
 
-//TODO: check if previous session exists and use this session instead
-// also TODO: figure out how the hell the SSL works with this because this first query will have to change
+// TODO: figure out how the hell the SSO works with this because this first query will have to change
 exports.loginAndCreateSession = function(postResult) {
 	return new Promise(function(resolve, reject) {
 		if (postResult) {
@@ -33,21 +32,17 @@ exports.loginAndCreateSession = function(postResult) {
 			// row.addQuery("secret", postResult.secret) // BUT WE DON'T KNOW THE PASSWORD _/(O.O)\_
 
 			row.query().then(function(result) {
-				if (row.count() == 0){
-					reject(false);
-					return;
-				}
+				if (!row.next())
+					return reject(false);
+					
 				var date = new Date();
-
-				row.next()
 				var newSession = new DBRow("session");
 				var sessionInfo = {sessionStart: date.toISOString().slice(0, date.toISOString().indexOf('T')), 
 									userID: row.getValue("id")};
 
-				newSession.setValue('sessionStart', sessionInfo.sessionStart);
 				newSession.setValue('userID', sessionInfo.userID);
 				newSession.insert().then(function(res) {
-					sessionInfo.sessionID = newSession.getValue('id')
+					sessionInfo.sessionID = newSession.getValue('id');
 					resolve(sessionInfo);
 				}, function(res) {
 					reject(false);
