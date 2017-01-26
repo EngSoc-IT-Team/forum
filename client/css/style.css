@@ -195,7 +195,8 @@ a:hover,
   text-align: center;
 }
 
-.main-content {
+.main-content,
+.wrap {
   padding-left: 40px;
   padding-right: 40px;
   padding-bottom: 40px;
@@ -296,4 +297,12 @@ a:hover,
 
 .hidden {
   display: none;
+}
+
+/* Footer */
+
+footer {
+  margin-top: 100px;
+  padding-top: 20px;
+  background-color: #000;
 }
