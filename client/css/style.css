@@ -268,12 +268,14 @@ a:hover,
 .fa-thumbs-up:hover,
 .positive {
   color: green;
-  cursor: pointer;
 }
 
 .fa-thumbs-down:hover,
 .negative {
   color: red;
+}
+
+.fa {
   cursor: pointer;
 }
 
