@@ -60,7 +60,8 @@ a:hover,
 #navbar-search {
   width: 300px;
   float: right;
-  margin-top: 8px;
+  margin-top: 10px;
+  margin-right: 50px;
 }
 
 /* Profile menu */
@@ -140,7 +141,7 @@ a:hover,
 
 .nav-profile {
   float: right;
-  padding-top: 10px;
+  padding-top: 5px;
   margin-right: -40px;
 }
 
@@ -266,7 +267,8 @@ a:hover,
 }
 
 .thumbs-up svg,
-.thumbs-down svg {
+.thumbs-down svg
+ {
   fill: #FF9200;
   width: 17px;
   cursor: pointer;
