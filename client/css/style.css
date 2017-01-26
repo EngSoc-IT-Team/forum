@@ -265,20 +265,22 @@ a:hover,
    clear: both;
 }
 
-.thumbs-up,
-.thumbs-down {
-  fill: yellow;
+.thumbs-up svg,
+.thumbs-down svg {
+  fill: #FF9200;
   width: 17px;
   cursor: pointer;
 }
 
-.thumbs-up:hover,
+.thumbs-up svg:hover,
 .positive {
+  fill: green;
   color: green;
 }
 
-.thumbs-down:hover,
+.thumbs-down svg:hover,
 .negative {
+  fill: red;
   color: red;
 }
 
