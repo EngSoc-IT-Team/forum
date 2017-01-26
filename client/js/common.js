@@ -57,3 +57,23 @@ function vote(itemid, votevalue) {
         console.error(err);
     });
 }
+
+
+/* fillTemplate(template [, strings, used, to, fill, template])
+**
+**
+** This is a basic templating function that can be used to 
+** fill a specified template using the template and arguments provided.
+** Note that this function should be wrapped around for page-specific
+** uses. 
+*/
+function fillTemplate(template) {
+    var completedTemplate = template;
+    var replaceThis;
+    for (var i=1; i<arguments.length; i++){
+        replaceThis = "{" + (i - 1) + "}";
+        completedTemplate = completedTemplate.replace(replaceThis, arguments[i]);
+    }
+
+    return completedTemplate;
+}
