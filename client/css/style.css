@@ -265,18 +265,21 @@ a:hover,
    clear: both;
 }
 
-.fa-thumbs-up:hover,
+.thumbs-up,
+.thumbs-down {
+  fill: yellow;
+  width: 17px;
+  cursor: pointer;
+}
+
+.thumbs-up:hover,
 .positive {
   color: green;
 }
 
-.fa-thumbs-down:hover,
+.thumbs-down:hover,
 .negative {
   color: red;
-}
-
-.fa {
-  cursor: pointer;
 }
 
 .body-link {
