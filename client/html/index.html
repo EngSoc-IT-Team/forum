@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../css/style.css" />
     <link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700&amp;subset=cyrillic" rel="stylesheet">
     <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
 </head>
 <body>
   <div class="container-fluid">
@@ -23,14 +24,6 @@
         <a href="/" class="navbar-logo">
         <img class="header-img" src="../assets/qef.png">
         </a>
-
-        <div class="input-group" id="navbar-search">
-          <input type="text" class="form-control" placeholder="Search for...">
-          <span class="input-group-btn">
-            <button class="btn btn-secondary" type="button">Go!</button>
-          </span>
-        </div>
-
         <div class="dropdown nav-profile">
             <button class="btn btn-default dropdown-toggle transparent-background" type="button" id="menu1" data-toggle="dropdown">
                 <img id="profile" class="profile-image" src="/assets/profile.png">
@@ -48,6 +41,23 @@
     <div class="search-bar">
       <input />
     </div>
+  </div>
+  <br>
+  <div id="toggle" class="centered">
+    <a href="#" onclick="showOptions()">See Search Options</a>
+  </div>
+  <div id="options" class="centered hidden">
+    <p>What Would You Like To Search For?</p>
+    <div class="btn-group centered" role="group" aria-label="Basic example">
+      <button id="all" type="button" class="btn btn-secondary active" onclick="toggleSelection('all')">All</button>
+      <button id="posts" type="button" class="btn btn-secondary" onclick="toggleSelection('posts')">Posts</button>
+      <button id="links" type="button" class="btn btn-secondary" onclick="toggleSelection('links')">Links</button>
+      <button id="classes" type="button" class="btn btn-secondary" onclick="toggleSelection('classes')">Classes</button>
+      <button id="users" type="button" class="btn btn-secondary" onclick="toggleSelection('users')">Users</button> 
+    </div>
+    <br>
+    <br>
+    <a href="/advanced">Advanced Search</a>
   </div>
 
     <div class="row featured-content">
