@@ -174,7 +174,16 @@ server.get('/help', function(request, response) { // user help page
 		return;
 	}
 	
-	response.sendFile(path.join(__dirname, '..', 'client/html/help.html'))
+	response.sendFile(path.join(__dirname, '..', 'client/html/help.html'));
+});
+
+server.get('/class', function(request, response) { // user help page
+	if (compare.isEmpty(request.signedCookies)) {
+		response.redirect('/');
+		return;
+	}
+	
+	response.sendFile(path.join(__dirname, '..', 'client/html/class.html'));
 });
 
 /* POST Requests
