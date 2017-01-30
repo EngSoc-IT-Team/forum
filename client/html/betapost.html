@@ -41,32 +41,89 @@
 		<div class = "main-content">
 			<div class="info-block media">
 				<div class="container">
-					<h2>Dynamic Tabs</h2>
-					<p>To make the tabs toggleable, add the data-toggle="tab" attribute to each link. Then add a .tab-pane class with a unique ID for every tab and wrap them inside a div element with class .tab-content.</p>
+					<h2>Post a question</h2>
+					<!--<p>MAKING TABS</p>-->
+					<!--<p>To make the tabs toggleable, add the data-toggle="tab" attribute to each link. Then add a .tab-pane class with a unique ID for every tab and wrap them inside a div element with class .tab-content.</p>-->
 
-					<ul class="nav nav-tabs">
+					<!--<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
 						<li><a data-toggle="tab" href="#menu1">Menu 1</a></li>
 						<li><a data-toggle="tab" href="#menu2">Menu 2</a></li>
 						<li><a data-toggle="tab" href="#menu3">Menu 3</a></li>
-					</ul>
+					</ul>-->
+
+					<div class="btn-group centered" role="group" aria-label="Basic example">
+						<button id="normal" type="button" class="btn btn-secondary" data-toggle="tab" href="#home">All</button>
+						<button id="link" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu2">link</button>
+						<button id="other" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu3">other</button>
+					</div>
+
+					<hr>	
 
 					<div class="tab-content">
 						<div id="home" class="tab-pane fade in active">
-							<h3>HOME</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-						</div>
-						<div id="menu1" class="tab-pane fade">
-							<h3>Menu 1</h3>
-							<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+							<h3>Normal Post</h3>
+
+							<!--<p>Please post the title of you question</p>-->
+							<div class="form-group">
+							<label for="comment">Title*:</label>
+								<textarea class="form-control" rows="1" id="title"></textarea>
+							</div>
+
+							<div class="form-group">
+							<label for="comment">Comment*:</label>
+								<textarea class="form-control" rows="5" id="comment"></textarea>
+							</div>	
+
+							<div class="form-group">
+							<label for="comment">Tag</label>
+								<textarea class="form-control" rows="1" id="tag"></textarea>
+							</div>
+
 						</div>
 						<div id="menu2" class="tab-pane fade">
-							<h3>Menu 2</h3>
-							<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+							<h3>Link Post</h3>
+
+							<!--<p>Please post your linked questions</p>-->
+							<div class="form-group">
+							<label for="comment">Link*:</label>
+								<textarea class="form-control" rows="1" id="link"></textarea>
+							</div>	
+
+							<label for="comment">Title*:</label>
+								<textarea class="form-control" rows="1" id="title"></textarea>
+							</div>
+
+							<div class="form-group">
+							<label for="comment">Comment*:</label>
+								<textarea class="form-control" rows="5" id="comment"></textarea>
+							</div>	
+
+							<div class="form-group">
+							<label for="comment">Tag</label>
+								<textarea class="form-control" rows="1" id="tag"></textarea>
+							</div>
+
 						</div>
 						<div id="menu3" class="tab-pane fade">
-							<h3>Menu 3</h3>
-							<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+							<h3>Other</h3>
+
+							<!--<p>Please post your ~~~ question</p>-->
+							<div class="form-group">
+							<label for="comment">Title*:</label>
+								<textarea class="form-control" rows="1" id="title"></textarea>
+							</div>
+
+							<div class="form-group">
+							<label for="comment">Comment*:</label>
+								<textarea class="form-control" rows="5" id="comment"></textarea>
+							</div>	
+
+							<div class="form-group">
+							<label for="comment">Tag</label>
+								<textarea class="form-control" rows="1" id="tag"></textarea>
+							</div>
+
 						</div>
 					</div>
 				</div>
