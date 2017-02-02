@@ -299,6 +299,12 @@ a:hover,
   display: none;
 }
 
+/* Class Page */
+
+.star.yellow svg {
+  fill: #F0D355;
+}
+
 /* Footer */
 
 footer {

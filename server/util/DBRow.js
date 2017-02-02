@@ -67,7 +67,7 @@ exports.DBRow = function(table) {
 	 ** Note: if a row does not match this query, underfined will be returned and the promise is not rejected.
 	**/
 	this.query = function() {
-		var qs =  qb.query(table, currentRow) + returnLimit + querySort;
+		var qs =  qb.query(table, currentRow) + ' ' + querySort + ' ' + returnLimit;
 		log.log("QUERY with query string: '" + qs + "'");
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row) {
@@ -250,7 +250,7 @@ exports.DBRow = function(table) {
 		return rows.length;
 	}
 
-	/** count()
+	/** setLimit()
 	 ** limit: the number of rows you would like returned
 	 ** no return values
 	 **

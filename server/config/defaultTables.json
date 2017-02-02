@@ -343,9 +343,21 @@
 				"type": "int",
 				"default": "0"
 			},
+			"type":{
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
+			},
+			"type": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"dateSubscribed": {
+				"type": "timestamp",
+				"default": "CURRENT_TIMESTAMP"
 			}
 		}
 	},
@@ -353,6 +365,10 @@
 		"tablename": "saved",
 		"fields": {
 			"userID": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"type":{
 				"type": "string",
 				"constraint": "NOT NULL"
 			},
@@ -365,6 +381,31 @@
 				"primaryKey": "true"
 			},
 			"dateSaved": {
+				"type": "timestamp",
+				"default": "CURRENT_TIMESTAMP"
+			}
+		}
+	},
+	"11": {
+		"tablename": "contribution",
+		"fields": {
+			"userID": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"type": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"itemID": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			},
+			"date": {
 				"type": "timestamp",
 				"default": "CURRENT_TIMESTAMP"
 			}

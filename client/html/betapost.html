@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title> Eng Forum</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Eng Forum">
+	<meta name="author" content="Ayrton Foster">
+	<meta name="keywords" content="Queens University, Forum, Engineering">
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="../css/normalize.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+	<link rel="icon" href="../assets/qef.png">
+	<link rel="icon" href="../assets/favicon.ico">
+	<link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700&amp;subset=cyrillic" rel="stylesheet">
+	<script src="https://use.fontawesome.com/0063f48ece.js"></script>
+	<script type="text/javascript" src="/js/common.js"></script>
+	<script type="text/javascript" src="/js/svgConversion.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<header>
+			<div class="navbar sticky">
+				<a href="/" class="navbar-logo">
+					<img class="header-img" src="../assets/qef.png">
+				</a>
+				<div class="dropdown nav-profile">
+					<button class="btn btn-default dropdown-toggle transparent-background" type="button" id="menu1" data-toggle="dropdown">
+						<img id="profile" class="profile-image" src="/assets/profile.png">
+						<span class="caret inverted"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+						<a role="menuitem" tabindex="-1" href="/profile" class="dropdown-item"><li role="presentation">Profile</li></a>
+						<a role="menuitem" tabindex="-1" href="#" onclick="logout()" class="dropdown-item"><li role="presentation">Logout</li></a>
+					</ul>
+				</div>
+			</div>
+		</header>
+		<div class = "main-content">
+			<div class="info-block media">
+				<div class="container">
+					<h2>Post a question</h2>
+					<!--<p>MAKING TABS</p>-->
+					<!--<p>To make the tabs toggleable, add the data-toggle="tab" attribute to each link. Then add a .tab-pane class with a unique ID for every tab and wrap them inside a div element with class .tab-content.</p>-->
+
+					<!--<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#home">Home</a></li>
+						<li><a data-toggle="tab" href="#menu1">Menu 1</a></li>
+						<li><a data-toggle="tab" href="#menu2">Menu 2</a></li>
+						<li><a data-toggle="tab" href="#menu3">Menu 3</a></li>
+					</ul>-->
+
+					<div class="btn-group centered" role="group" aria-label="Basic example">
+						<button id="normal" type="button" class="btn btn-secondary" data-toggle="tab" href="#home">All</button>
+						<button id="link" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu2">link</button>
+						<button id="other" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu3">other</button>
+					</div>
+
+					<hr>	
+
+					<div class="tab-content">
+						<div id="home" class="tab-pane fade in active">
+							<h3>Normal Post</h3>
+
+							<!--<p>Please post the title of you question</p>-->
+							<div class="form-group">
+							<label for="title">Title*:</label>
+								<textarea class="form-control" rows="1" id="title"></textarea>
+							</div>
+
+							<div class="form-group">
+							<label for="comment">Comment*:</label>
+								<textarea class="form-control" rows="5" id="comment"></textarea>
+							</div>	
+
+							<div class="form-group">
+							<label for="tag">Tag</label>
+								<textarea class="form-control" rows="1" id="tag"></textarea>
+							</div>
+
+							<button type="button" class="btn btn-sm button">Comment</button>
+
+						</div>
+						<div id="menu2" class="tab-pane fade">
+							<h3>Link Post</h3>
+
+							<!--<p>Please post your linked questions</p>-->
+							<div class="form-group">
+							<label for="link">Link*:</label>
+								<textarea class="form-control" rows="1" id="link"></textarea>
+							</div>	
+
+							<label for="title">Title*:</label>
+								<textarea class="form-control" rows="1" id="title"></textarea>
+							</div>
+
+							<div class="form-group">
+							<label for="comment">Comment*:</label>
+								<textarea class="form-control" rows="5" id="comment2"></textarea>
+							</div>	
+
+							<div class="form-group">
+							<label for="tag ">Tag</label>
+								<textarea class="form-control" rows="1" id="tag2"></textarea>
+							</div>
+
+							<button id="submit" type="button" class="btn btn-secondary">Submit</button>
+
+						</div>
+
+						<!--<div id="menu3" class="tab-pane fade">
+							<h3>Other</h3>
+
+							<p>Please post your ~~~ question</p>
+							<div class="form-group">
+							<label for="comment">Title*:</label>
+								<textarea class="form-control" rows="1" id="title"></textarea>
+							</div>
+
+							<div class="form-group">
+							<label for="comment">Comment*:</label>
+								<textarea class="form-control" rows="5" id="comment"></textarea>
+							</div>	
+
+							<div class="form-group">
+							<label for="comment">Tag</label>
+								<textarea class="form-control" rows="1" id="tag"></textarea>
+							</div>
+
+						</div>-->
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+</body>
+<footer>
+	<div class="wrap">
+		<div class = "nav-font" style = "color: white">
+			<div class="row comment-list">
+				<a href="/about"><p>About</p></a>
+				<a href="https://engsoc.queensu.ca/"><p>Engineering Society Website</p></a>
+				<a href="/help"><p>Help</p></a>
+				<a href="/feedback"><p>Feedback</p></a>
+			</div>
+		</div>
+	</div>
+</footer>
+</html>
