@@ -3,82 +3,80 @@
  */
 
 "use strict";
-
+module.exports = {
 //fields names for multiple tables
-const fieldUpvotes = "upvotes";
-const fieldDownvotes = "downvotes";
-const fieldNetvotes = "netVotes";
-const fieldAuthor = "author";
-const fieldID = "id";
-const fieldContent = "content";
-const fieldTimestamp = "timestamp";
-const fieldUserID = "userID";
-const fieldTitle = "title";
-const fieldTags = "tags";
-const fieldSummary = "summary";
-const fieldItemID = "itemID";
-const fieldType = "type";
+    fieldUpvotes: "upvotes",
+    fieldDownvotes: "downvotes",
+    fieldNetvotes: "netVotes",
+    fieldAuthor: "author",
+    fieldID: "id",
+    fieldContent: "content",
+    fieldTimestamp: "timestamp",
+    fieldUserID: "userID",
+    fieldTitle: "title",
+    fieldTags: "tags",
+    fieldSummary: "summary",
+    fieldItemID: "itemID",
+    fieldType: "type",
 
 
-const postTable = "post";
-const fieldAnswered = "answered";
+    postTable: "post",
+    fieldAnswered: "answered",
 
-const commentTable = "comment";
-const fieldIsSolution = "isSolution";
-const fieldCommentLevel = "commentLevel";
-const fieldParentPost = "parentPost";
-const fieldParentComment = "parentComment";
+    commentTable: "comment",
+    fieldIsSolution: "isSolution",
+    fieldCommentLevel: "commentLevel",
+    fieldParentPost: "parentPost",
+    fieldParentComment: "parentComment",
 
-const userTable = "user";
-const fieldNetid = "netid";
-const fieldUsername = "username";
-const fieldTotalUpvotes = "totalUpvotes";
-const fieldTotalDownvotes = "totalDownvotes";
-const fieldTotalSolved = "totalSolved";
-const fieldReportCount = "reportCount";
-const fieldDateJoined = "dateJoined";
-const fieldAcceptedTerms = "acceptedTerms";
-const fieldPrivilege = "privilege";
+    userTable: "user",
+    fieldNetid: "netid",
+    fieldUsername: "username",
+    fieldTotalUpvotes: "totalUpvotes",
+    fieldTotalDownvotes: "totalDownvotes",
+    fieldTotalSolved: "totalSolved",
+    fieldReportCount: "reportCount",
+    fieldDateJoined: "dateJoined",
+    fieldAcceptedTerms: "acceptedTerms",
+    fieldPrivilege: "privilege",
 
-const reportTable = "report";
-const fieldReportReason = "reportReason";
-const fieldReport = "report";
-const fieldReportingUser = "reportingUser";
-const fieldReportedUser = "reportedUser";
-const fieldRelatedCommentOrPostID = "relatedCommentOrPostID";
+    reportTable: "report",
+    fieldReportReason: "reportReason",
+    fieldReport: "report",
+    fieldReportingUser: "reportingUser",
+    fieldReportedUser: "reportedUser",
+    fieldRelatedCommentOrPostID: "relatedCommentOrPostID",
 
-const tagTable = "tag";
-const fieldName = "name";
-const fieldRelatedTags = "relatedTags";
+    tagTable: "tag",
+    fieldName: "name",
+    fieldRelatedTags: "relatedTags",
 
-const voteTable = "vote";
-const fieldCommentOrPostID = "commentOrPostID";
-const fieldVoteValue = "voteValue";
+    voteTable: "vote",
+    fieldCommentOrPostID: "commentOrPostID",
+    fieldVoteValue: "voteValue",
 
-const sessionTable = "session";
-const fieldSessionStart = "sessionStart";
+    sessionTable: "session",
+    fieldSessionStart: "sessionStart",
 
-const classTable = "class";
-const fieldCourseCode = "courseCode";
-const fieldLongSummary = "longSummary";
+    classTable: "class",
+    fieldCourseCode: "courseCode",
+    fieldLongSummary: "longSummary",
 
-const linkTable = "link";
-const fieldLink = "link";
-const fieldTrusted = "trusted";
-const fieldDateAdded = "dateAdded";
-const fieldAddedBy = "addedBy";
+    linkTable: "link",
+    fieldLink: "link",
+    fieldTrusted: "trusted",
+    fieldDateAdded: "dateAdded",
+    fieldAddedBy: "addedBy",
 
-const subscriptionsTable = "subscriptions";
-const fieldLastNotified = "lastNotified";
-const fieldNumNotificationsMissed = "numNotificationsMissed";
-const fieldNumTimeNotified = "numTimesNotified";
-const fieldDateSubscribed = "dateSubscribed";
+    subscriptionsTable: "subscriptions",
+    fieldLastNotified: "lastNotified",
+    fieldNumNotificationsMissed: "numNotificationsMissed",
+    fieldNumTimeNotified: "numTimesNotified",
+    fieldDateSubscribed: "dateSubscribed",
 
-const savedTable = "saved";
-const fieldDateSaved = "dateSaved";
+    savedTable: "saved",
+    fieldDateSaved: "dateSaved",
 
-const contributionTable = "contribution";
-const fieldDate = "date";
-
-//allow all of these variables to be used outside of this file
-module.exports={};
+    contributionTable: "contribution",
+    fieldDate: "date"
+}
