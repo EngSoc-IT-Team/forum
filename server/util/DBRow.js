@@ -5,6 +5,7 @@ var db = require('./DatabaseManager');
 var qb = require('./QueryBuilder');
 var compare = require('./Compare');
 var generator = require('./IDGenerator');
+var literals = require('./StringLiterals.js');
 
 var dbm = new db.DatabaseManager();
 
@@ -34,11 +35,11 @@ exports.DBRow = function(table) {
 
 	/** getRow(systemId)
 	 ** systemID: the id of the row you want returned
-	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
+	 ** Resolves if the query is successful, rejects with the error if the query has an error
 	 **
 	 ** getRow() gets the single row from the table specified by using the ID of the row
 	 **
-	 ** Note: if a row does not match this ID, underfined will be returned and the promise is not rejected.
+	 ** Note: if a row does not match this ID, undefined will be returned and the promise is not rejected.
 	**/
 	this.getRow = function(systemId) {
 		log.log("GET for table '" + table + "' with id: '" + systemId + "'");
@@ -55,16 +56,16 @@ exports.DBRow = function(table) {
 				reject(err);
 			});
 		});
-	}
+	};
 
 	/** query()
 	 ** No input parameters
-	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
+	 ** Resolves if the query is successful, rejects with the error if the query has an error
 	 **
-	 ** Queries the databse are sets the result to the rows variable
+	 ** Queries the database are sets the result to the rows variable
 	 ** To access the rows, you must use the next() function to iterate
 	 **
-	 ** Note: if a row does not match this query, underfined will be returned and the promise is not rejected.
+	 ** Note: if a row does not match this query, undefined will be returned and the promise is not rejected.
 	**/
 	this.query = function() {
 		var qs =  qb.query(table, currentRow) + ' ' + querySort + ' ' + returnLimit;
@@ -80,15 +81,15 @@ exports.DBRow = function(table) {
 				reject(err);
 			});
 		});
-	}
+	};
 
 	/** directQuery()
 	 ** queryString: the query string to pass to the database
-	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
+	 ** Resolves if the query is successful, rejects with the error if the query has an error
 	 **
-	 ** Queries the databse are sets the result to the rows variable
+	 ** Queries the database are sets the result to the rows variable
 	 ** To access the rows, you must use the next() function to iterate
-	 ** Returns nothing if the query is sucessful, returns undefined if the query is unsucessful
+	 ** Returns nothing if the query is successful, returns undefined if the query is unsuccessful
 	 **
 	 ** THIS WILL BE DEPRECIATED AFTER SOME TIME: focus on using addQuery() and query() 
 	 ** This is super dangerous to ever expose to user input SO LET'S NEVER DO IT. Right gang? :D
@@ -104,7 +105,7 @@ exports.DBRow = function(table) {
 				reject(err);
 			});	
 		});
-	}
+	};
 
 	/** update()
 	 ** No input parameters
@@ -126,7 +127,7 @@ exports.DBRow = function(table) {
 				reject(err);
 			});	
 		});
-	}
+	};
 
 	/** insert()
 	 ** No input parameters
@@ -152,7 +153,7 @@ exports.DBRow = function(table) {
 				reject(err);
 			});	
 		});
-	}
+	};
 
 	/** delete()
 	 ** id: the system id of the row you want to delete
@@ -178,7 +179,7 @@ exports.DBRow = function(table) {
 				reject(err);
 			});	
 		});
-	}
+	};
 
 	/******************* Row Modification Methods *******************/
 
@@ -198,7 +199,7 @@ exports.DBRow = function(table) {
 		}
 		else
 			return log.error("No more than three arguments are allowed for the addQuery function");
-	}
+	};
 
 	/** orderBy(field, ascOrDesc)
 	 ** field: the field to order the result from the database by
@@ -206,14 +207,14 @@ exports.DBRow = function(table) {
 	 ** No return values
 	**/
 	this.orderBy = function(field, ascOrDesc) { 
-		if (!(ascOrDesc == "ASC" || ascOrDesc == "asc" || ascOrDesc == "DESC" || ascOrDesc == "desc" || ascOrDesc == undefined))
+		if (!(ascOrDesc == literals.ASC || ascOrDesc == literals.asc || ascOrDesc == literals.DESC || ascOrDesc == literals.desc || ascOrDesc == undefined))
 			return log.error("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
 		if (ascOrDesc == undefined)
-			ascOrDesc = "ASC";
+			ascOrDesc = literals.ASC;
 		
 		querySort = qb.escapeOrderBy(field, ascOrDesc);
-	}
+	};
 
 	/** getValue(property)
 	 ** property: the property to get the value in the current row for
@@ -221,7 +222,7 @@ exports.DBRow = function(table) {
 	**/
 	this.getValue = function(property) { //get the value of a column for the row, can be undefined!
 		return currentRow[property];
-	}
+	};
 
 	/** setValue(property, value)
 	 ** property: the field you would like to set
@@ -232,7 +233,7 @@ exports.DBRow = function(table) {
 	 ** and your row will not get inserted
 	**/
 	this.setValue = function(property, value, setRows) {
-		if (property == "id")
+		if (property == literals.fieldID)
 			log.warn("Once a row's ID has been set it SHOULD NOT be reset. Resetting ID for an update can cause query failures"); //will be removed eventually
 
 		currentRow[property] = value;
@@ -240,7 +241,7 @@ exports.DBRow = function(table) {
 			setRows = property + "=" + value;
 		else
 			setRows += "," + property + "='" + value + "'";
-	}
+	};
 
 	/** count()
 	 ** No input parameters
@@ -248,7 +249,7 @@ exports.DBRow = function(table) {
 	**/
 	this.count = function() {
 		return rows.length;
-	}
+	};
 
 	/** setLimit()
 	 ** limit: the number of rows you would like returned
@@ -258,7 +259,7 @@ exports.DBRow = function(table) {
 	**/
 	this.setLimit = function(limit) {
 		returnLimit = qb.escapeLimit(limit);
-	}
+	};
 
 	/** next()
 	 ** No input parameters
@@ -276,7 +277,7 @@ exports.DBRow = function(table) {
 		}
 		else 
 			return false;
-	}
+	};
 
 	/** resetIndex()
 	 ** No input parameters
@@ -286,16 +287,16 @@ exports.DBRow = function(table) {
 	**/
 	this.resetIndex = function() {
 		currentIndex = -1;
-	}
+	};
 
 	/** getRowJSON()
 	 ** No input parameters
 	 ** Returns the currentRow object
 	 **
 	 ** This is not the best way to interact with a row, but if you need to pass an entire row to the browser ...
-	 ** or somethning to the client. Not sure why you would do it this way but to each their own
+	 ** or something to the client. Not sure why you would do it this way but to each their own
 	**/
 	this.getRowJSON = function() {
 		return currentRow;
 	}
-}
+};

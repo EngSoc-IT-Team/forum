@@ -2,10 +2,11 @@
 
 var fs = require('fs');
 var path = require('path');
+var literals = require('./StringLiterals.js');
 
 var config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/config.json'), 'utf8'));
 
-var isInProduction = (config["production"] == 'true');
+var isInProduction = (config[literals.production] == literals.true);
 
 exports.log = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
@@ -14,7 +15,7 @@ exports.log = function(logString) {
 		writeToFile(logThis);
 	else
 		console.log(logThis);
-}
+};
 
 exports.warn = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
@@ -23,7 +24,7 @@ exports.warn = function(logString) {
 		writeToFile(logThis);
 	else
 		console.warn(logThis);
-}
+};
 
 exports.error = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
@@ -32,7 +33,7 @@ exports.error = function(logString) {
 		writeToFile(logThis);
 	else
 		console.error(logThis);
-}
+};
 
 exports.info = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
@@ -41,7 +42,7 @@ exports.info = function(logString) {
 		writeToFile(logThis);
 	else
 		console.log(logThis);
-}
+};
 
 function writeToFile(logString) {
 	var currentdate = new Date().toISOString();

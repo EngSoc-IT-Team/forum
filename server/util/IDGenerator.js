@@ -8,4 +8,4 @@ exports.generate = function() {
         identifier += allowedChars.charAt(Math.floor(Math.random() * allowedChars.length));
 
     return identifier;
-}
+};

@@ -4,7 +4,8 @@ var fs = require('fs');
 var path = require('path')
 var db = require('../DatabaseManager.js');
 var dbr = require('../DBRow.js');
-var log = require('../log.js')
+var log = require('../log.js');
+var literals = require('../StringLiterals.js');
 
 var possibleTypes = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/SQLDatatypes.json'), 'utf8')) 
 var defaults = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/defaultTables.json'), 'utf8')) 
@@ -20,7 +21,7 @@ exports.setupDatabase = function() {
 	numCreated = 0;
 
 	for (var prop in defaults) {
-		createTable(defaults[prop]["tablename"], defaults[prop]["fields"], totalLength, numCreated);
+		createTable(defaults[prop][literals.tablename], defaults[prop][literals.fields], totalLength, numCreated);
 	}
 }
 
@@ -29,7 +30,7 @@ exports.loadDemoData = function() {
 	var totalLength = Object.keys(demodata).length;
 	numCreated = 0;
 	for (var element in demodata) {
-		loadRow(demodata[element]["table"], demodata[element], totalLength, numCreated);
+		loadRow(demodata[element][literals.table], demodata[element], totalLength, numCreated);
 	}
 }
 
@@ -37,13 +38,13 @@ function loadRow(table, fields, numElementsToCreate, numberCreated) {
 	var newRow = new dbr.DBRow(table);
 	newRow.setId = false;
 	for (var field in fields) {
-		if (field == "table")
+		if (field == literals.table)
 			continue
 
 		newRow.addQuery(field, fields[field]);
 	}
 
-	var id = newRow.getValue("id");
+	var id = newRow.getValue(literals.fieldID);
 
 	newRow.insert().then(function() {
 		log.info("Example row no. " + numCreated + " created!");
@@ -67,13 +68,13 @@ function createTable(tableName, fields, numberTablesToCreate, numberCreated) { /
 
 	for (var field in fields) {
 		if(keyCount < Object.keys(fields).length-1) {
-			queryString += field + ' ' + possibleTypes[fields[field]["type"]];
-			if (fields[field]["default"]) { 
-				if (fields[field]["default"] == 'CURRENT_TIMESTAMP' || fields[field]["default"] == 'GETDATE()') {
-					queryString += " DEFAULT " + fields[field]["default"];
+			queryString += field + ' ' + possibleTypes[fields[field][literals.type]];
+			if (fields[field][literals.default]) {
+				if (fields[field][literals.default] == 'CURRENT_TIMESTAMP' || fields[field][literals.default] == 'GETDATE()') {
+					queryString += " DEFAULT " + fields[field][literals.default];
 				}
 				else {
-					queryString += " DEFAULT '" + fields[field]["default"] + "'";
+					queryString += " DEFAULT '" + fields[field][literals.default] + "'";
 				}
 			}
 
@@ -88,16 +89,16 @@ function createTable(tableName, fields, numberTablesToCreate, numberCreated) { /
 		}
 		else {
 			queryString += field + ' ' + possibleTypes[fields[field]["type"]];
-			if (fields[field]["default"]){ //make this better
-				if (fields[field]["default"] == 'CURRENT_TIMESTAMP' || fields[field]["default"] == 'GETDATE()') {
-					queryString += " DEFAULT " + fields[field]["default"];
+			if (fields[field][literals.default]){ //make this better
+				if (fields[field][literals.default] == 'CURRENT_TIMESTAMP' || fields[field][literals.default] == 'GETDATE()') {
+					queryString += " DEFAULT " + fields[field][literals.default];
 				}
 				else {
-					queryString += " DEFAULT '" + fields[field]["default"] + "'";
+					queryString += " DEFAULT '" + fields[field][literals.default] + "'";
 				}
 			}
 
-			if (fields[field]["primaryKey"])
+			if (fields[field][literals.primaryKey])
 				queryString += " PRIMARY KEY"
 			
 			queryString += ')';

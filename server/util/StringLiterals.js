@@ -4,7 +4,71 @@
 
 "use strict";
 module.exports = {
-//fields names for multiple tables
+
+    tablename: "tablename",
+    fields: "fields",
+    table: "table",
+    type: "type",
+    default: "default",
+    primaryKey: "primaryKey",
+    operator: "operator",
+    value: "value",
+    true: "true",
+    false: "false",
+    undefined: "undefined",
+    symbol: "symbol",
+    object: "object",
+    function: "function",
+    number: "number",
+    boolean: "boolean",
+    string: "string",
+    profile: "profile",
+    to: "to",
+    queensEmail: "@queensu.ca",
+    needLogin: "needLogin",
+
+    loginPage: "/login",
+    aboutPage: "/about",
+    newPage: "/new",
+    listPage: "/list",
+    profilePage: "/profile",
+    guidelinesPage: "/guidelines",
+    devPage: "/dev",
+    evalPage: "/eval",
+    helpPage: "/help",
+    classPage: "/class",
+    searchPage: "/search",
+    logoutPage: "/logout",
+    votePage: "/vote",
+    subscribePage: "/subscribe",
+    infoPage: "/info",
+    landingPage: "/",
+
+    zero: "0",
+    one: "1",
+
+    DESC: "DESC",
+    desc: "desc",
+    ASC: "ASC",
+    asc: "asc",
+
+    in: "in",
+    between: "between",
+    like: "like",
+
+    host: "host",
+    user: "user",
+    secret: "secret",
+    simpleSecret: "simplesecret",
+    database: "database",
+    maxConnections: "maxConnections",
+    production: "production",
+    databaseSetupNeeded: "databaseSetupNeeded",
+    loadMockData: "loadMockData",
+    utf8: "utf8",
+    admin: "admin",
+    userCookie: "usercookie",
+
     fieldUpvotes: "upvotes",
     fieldDownvotes: "downvotes",
     fieldNetvotes: "netVotes",
@@ -18,7 +82,6 @@ module.exports = {
     fieldSummary: "summary",
     fieldItemID: "itemID",
     fieldType: "type",
-
 
     postTable: "post",
     fieldAnswered: "answered",
@@ -62,8 +125,7 @@ module.exports = {
     fieldCourseCode: "courseCode",
     fieldLongSummary: "longSummary",
 
-    linkTable: "link",
-    fieldLink: "link",
+    link: "link",
     fieldTrusted: "trusted",
     fieldDateAdded: "dateAdded",
     fieldAddedBy: "addedBy",
@@ -78,5 +140,8 @@ module.exports = {
     fieldDateSaved: "dateSaved",
 
     contributionTable: "contribution",
-    fieldDate: "date"
+    fieldDate: "date",
+
+    sweeperCancelJob: "cancelJob",
+    sweep: "sweep"
 }

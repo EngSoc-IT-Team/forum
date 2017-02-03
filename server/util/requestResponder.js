@@ -6,6 +6,7 @@
 "use strict";
 
 var DBRow = require('./DBRow').DBRow;
+var literals = require('./StringLiterals.js');
 
 /*
 ** requestResponder is a functional utility interface to process requests that require results from the database
@@ -13,9 +14,9 @@ var DBRow = require('./DBRow').DBRow;
 */
 
 
-/* parseRequest(requestType, userCookie, requestJSON)
+/** parseRequest(requestType, userCookie, requestJSON)
 **
-** resquestType the type of request being made, corresponding to the information to be returned
+** requestType the type of request being made, corresponding to the information to be returned
 ** usercookie: The usercookie for the currently logged in user
 ** requestJSON: Further information provided by the client to aid sorting through information to be returned
 **
@@ -25,7 +26,7 @@ var DBRow = require('./DBRow').DBRow;
 exports.parseRequest = function(request) {
 	return new Promise(function(resolve, reject) {
 		switch (request.body.requested) {
-			case ("profile"):
+			case (literals.profile):
 				profileRequest(request).then(function(info) {
 					resolve(info);
 				}, function(err) {
@@ -37,11 +38,11 @@ exports.parseRequest = function(request) {
 				break;
 		}
 	})	
-}
+};
 
-/** Individual Request Type Processing Funcitons **/
+/** Individual Request Type Processing Functions **/
 
-/* profileRequest(cookie, isSelf)
+/** profileRequest(cookie, isSelf)
 **
 ** cookie: the usercookie of the currently signed in user
 ** isSelf: 
@@ -50,15 +51,15 @@ function profileRequest(request) {
 	return new Promise(function(resolve, reject) {
 		if (request.body.self) {
 			var userID = request.signedCookies.usercookie.userID;
-			var row = new DBRow('user');
+			var row = new DBRow(literals.userTable);
 			row.getRow(userID).then(function() {
 				if (row.count() < 1)
 					reject("No user found");
 				else {
-					var info = {profile: { username: row.getValue('username'),
-										upvotes: row.getValue('totalUpvotes'),
-										downvotes: row.getValue('totalDownvotes'),
-										dateJoined: row.getValue('dateJoined') } 
+					var info = {profile: { username: row.getValue(literals.fieldUsername),
+										upvotes: row.getValue(literals.fieldTotalUpvotes),
+										downvotes: row.getValue(literals.fieldTotalDownvotes),
+										dateJoined: row.getValue(literals.fieldDateJoined) }
 									};
 					aggregateOthers(row, info).then(function() {
 						resolve(info);
@@ -69,7 +70,7 @@ function profileRequest(request) {
 			})
 		}
 		else {
-			var user = new DBRow('user');
+			var user = new DBRow(literals.userTable);
 			for (var key in request.query)
 				user.addQuery(key, request.query[key]);
 
@@ -77,10 +78,10 @@ function profileRequest(request) {
 				if (!user.next())
 					reject("No user found");
 				else {
-					var info = {profile: { username: user.getValue('username'),
-										upvotes: user.getValue('totalUpvotes'),
-										downvotes: user.getValue('totalDownvotes'),
-										dateJoined: user.getValue('dateJoined') } 
+					var info = {profile: { username: user.getValue(literals.fieldUsername),
+										upvotes: user.getValue(literals.fieldTotalUpvotes),
+										downvotes: user.getValue(literals.fieldTotalDownvotes),
+										dateJoined: user.getValue(literals.fieldDateJoined) }
 									};
 					aggregateOthers(user, info).then(function() {
 						resolve(info);
@@ -97,17 +98,17 @@ function aggregateOthers(user, info) { // turn this into a file called aggregato
 	return new Promise(function(resolve, reject) {
 		info.profile.other = 0;
 
-		var posts = new DBRow('post');
-		posts.addQuery('author', user.getValue('username'));
+		var posts = new DBRow(literals.postTable);
+		posts.addQuery(literals.fieldAuthor, user.getValue(literals.fieldUsername));
 		posts.query().then(function() {
 			info.profile.posts = posts.count();
-			var comments = new DBRow('comment');
-			comments.addQuery('author', user.getValue('username'));
+			var comments = new DBRow(literals.commentTable);
+			comments.addQuery(literals.fieldAuthor, user.getValue(literals.fieldUsername));
 
 			comments.query().then(function() {
 				info.profile.comments = comments.count();
-				var links = new DBRow('link');
-				links.addQuery('addedBy', user.getValue('id'));
+				var links = new DBRow(literals.link);
+				links.addQuery(literals.fieldAddedBy, user.getValue(literals.fieldID));
 
 				links.query().then(function() {
 					info.profile.links = links.count();

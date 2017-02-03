@@ -7,6 +7,7 @@ var smtpTransport = require('nodemailer-smtp-transport');
 var log = require('./log.js');
 var dbr = require('./DBRow.js');
 var generator = require('./IDGenerator.js');
+var literals = require('./StringLiterals.js');
 
 //object that holds the mailing information - who sends it (and their authentication) and connection details
 var transport = nodeMailer.createTransport(smtpTransport({
@@ -29,10 +30,10 @@ var mailOptions = {
 
 function onSubscribed(contentID, userID) {
     //set in database all the information
-    var newRow = new dbr.DBRow('subscriptions');
-    newRow.setValue('userID', userID);
-    newRow.setValue('itemID', contentID);
-    newRow.setValue('id', generator.generate());
+    var newRow = new dbr.DBRow(literals.subscriptionsTable);
+    newRow.setValue(literals.fieldUserID, userID);
+    newRow.setValue(literals.fieldItemID, contentID);
+    newRow.setValue(literals.fieldID, generator.generate());
     //TODO set timestamp
     //insert info into database
     newRow.insert().then(function () {
@@ -77,7 +78,7 @@ function emailUsers(contentID) { //TODO use content ID to add info in email, lik
         }).then(function (netIDs) {
             //email users
             for (var i in netIDs) {
-                mailOptions['to'] = netIDs[i] + "@queensu.ca";
+                mailOptions[literals.to] = netIDs[i] + literals.queensEmail;
                 log.log("MAIL SENT");
                 // transport.sendMail(mailOptions);
             }
@@ -88,12 +89,12 @@ function emailUsers(contentID) { //TODO use content ID to add info in email, lik
 }
 
 function addToNotificationsMissed(contentID) {
-    var row = new dbr.DBRow('subscriptions');
-    row.addQuery('itemID', contentID);
+    var row = new dbr.DBRow(literals.subscriptionsTable);
+    row.addQuery(literals.fieldItemID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) {
-                row.setValue('numNotificationsMissed', row.getValue('numNotificationsMissed') + 1);
+                row.setValue(literals.fieldNumNotificationsMissed, row.getValue(literals.fieldNumNotificationsMissed) + 1);
                 row.update().then(function () {
                     resolve(contentID);
                 }, function (err) {
@@ -107,14 +108,14 @@ function addToNotificationsMissed(contentID) {
 }
 
 function setNotificationsMissedToZero(userIDs) {
-    var row = new dbr.DBRow('subscriptions');
+    var row = new dbr.DBRow(literals.subscriptionsTable);
     for (var i in userIDs) {
-        row.addQuery('userID', userIDs[i]);
+        row.addQuery(literals.fieldUserID, userIDs[i]);
     }
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) {
-                row.setValue('numNotificationsMissed', 0);
+                row.setValue(literals.fieldNumNotificationsMissed, 0);
                 row.update();
             }
             resolve(userIDs);
@@ -125,15 +126,15 @@ function setNotificationsMissedToZero(userIDs) {
 }
 
 function getParentContentID(contentID) {
-    var row = new dbr.DBRow('comment');
-    row.addQuery('id', contentID);
+    var row = new dbr.DBRow(literals.commentTable);
+    row.addQuery(literals.fieldID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             if (!row.next()) {
                 reject("got nothing back");
             }
-            (row.getValue('parentComment') == null) ? resolve(row.getValue('parentPost')) :
-                resolve(row.getValue('parentComment'));
+            (row.getValue(literals.fieldParentComment) == null) ? resolve(row.getValue(literals.fieldParentPost)) :
+                resolve(row.getValue(literals.fieldParentComment));
         }, function () {
             reject("No parent");
         });
@@ -142,12 +143,12 @@ function getParentContentID(contentID) {
 
 function getUserIDs(contentID) {
     var userIDs = [];
-    var row = new dbr.DBRow('subscriptions');
-    row.addQuery('itemID', contentID);
+    var row = new dbr.DBRow(literals.subscriptionsTable);
+    row.addQuery(literals.fieldItemID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) {
-                userIDs.push(row.getValue('userID'));
+                userIDs.push(row.getValue(literals.fieldUserID));
             }
             resolve(userIDs);
         }, function () {
@@ -159,14 +160,14 @@ function getUserIDs(contentID) {
 
 function getNetIDs(userIDs) {
     var netIDs = [];
-    var row = new dbr.DBRow('user');
+    var row = new dbr.DBRow(literals.userTable);
     return new Promise(function (resolve, reject) {
         for (var i in userIDs) {
-            row.addQuery('id', userIDs[i]);
+            row.addQuery(literals.fieldID, userIDs[i]);
         }
         row.query().then(function () {
             while (row.next()) {
-                netIDs.push(row.getValue('netid'));
+                netIDs.push(row.getValue(literals.fieldNetid));
             }
             resolve(netIDs);
         }, function (err) {
@@ -176,20 +177,20 @@ function getNetIDs(userIDs) {
 }
 
 function findUsersToEmail(userIDs) {
-    var row = new dbr.DBRow('subscriptions');
+    var row = new dbr.DBRow(literals.subscriptionsTable);
     var numNotificationsMissed;
     var lastNotified;
     var goodUserIDs = [];
     return new Promise(function (resolve, reject) {
         for (var i in userIDs) {
-            row.addQuery('userID', userIDs[i]);
+            row.addQuery(literals.fieldUserID, userIDs[i]);
         }
         row.query().then(function () {
             while (row.next()) {
-                numNotificationsMissed = row.getValue('numNotificationsMissed');
-                lastNotified = row.getValue('lastNotified');
+                numNotificationsMissed = row.getValue(literals.fieldNumNotificationsMissed);
+                lastNotified = row.getValue(literals.fieldLastNotified);
                 if (numNotificationsMissed > 0 && longEnoughAgo(lastNotified)) {
-                    goodUserIDs.push(row.getValue('userID'));
+                    goodUserIDs.push(row.getValue(literals.fieldUserID));
                 }
             }
             resolve(goodUserIDs);

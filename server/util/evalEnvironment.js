@@ -60,9 +60,9 @@ exports.Environment = function() {
 			})
 		})
 		
-	}
+	};
 
 	function log(str) {
 		logs.push(str);
 	}
-}
+};
