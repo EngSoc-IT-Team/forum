@@ -6,6 +6,7 @@
 "use strict";
 
 var DBRow = require('./DBRow').DBRow;
+var Aggregator = require('./aggregator');
 
 /*
 ** requestResponder is a functional utility interface to process requests that require results from the database
@@ -47,26 +48,48 @@ exports.parseRequest = function(request) {
 ** isSelf: 
 */
 function profileRequest(request) {
+	var info = {
+		profile: {},
+		tags: [],
+		items: {
+		subscribed: [],
+		saved: [],
+		contributions: []
+	}};
+
 	return new Promise(function(resolve, reject) {
 		if (request.body.self) {
 			var userID = request.signedCookies.usercookie.userID;
-			var row = new DBRow('user');
-			row.getRow(userID).then(function() {
-				if (row.count() < 1)
+			var user = new DBRow('user');
+			user.getRow(userID).then(function() {
+				if (user.count() < 1)
 					reject("No user found");
 				else {
-					var info = {profile: { username: row.getValue('username'),
-										upvotes: row.getValue('totalUpvotes'),
-										downvotes: row.getValue('totalDownvotes'),
-										dateJoined: row.getValue('dateJoined') } 
-									};
-					aggregateOthers(row, info).then(function() {
-						resolve(info);
+					info.profile.username = user.getValue('username');
+					info.profile.upvotes = user.getValue('totalUpvotes');
+					info.profile.downvotes = user.getValue('totalDownvotes');
+					info.profile.dateJoined = user.getValue('dateJoined');
+
+					Aggregator.aggregateProfileInfo(user, info).then(function() {
+						getSaved(user, info).then(function() {
+							getSubscribed(user, info).then(function() {
+								getContributions(user, info).then(function() {
+									resolve(info);
+								}, function(err) {
+									resolve(info);
+								});
+							}, function(err) {
+								resolve(info);
+							});
+							
+						}, function(err) {
+							resolve(info);
+						});
 					}, function() {
 						resolve(info);
-					})
+					});
 				}
-			})
+			});
 		}
 		else {
 			var user = new DBRow('user');
@@ -77,50 +100,124 @@ function profileRequest(request) {
 				if (!user.next())
 					reject("No user found");
 				else {
-					var info = {profile: { username: user.getValue('username'),
-										upvotes: user.getValue('totalUpvotes'),
-										downvotes: user.getValue('totalDownvotes'),
-										dateJoined: user.getValue('dateJoined') } 
-									};
-					aggregateOthers(user, info).then(function() {
-						resolve(info);
-					}, function() {
-						resolve(info);
-					})
+					info.profile.username = user.getValue('username');
+					info.profile.upvotes = user.getValue('totalUpvotes');
+					info.profile.downvotes = user.getValue('totalDownvotes');
+					info.profile.dateJoined = user.getValue('dateJoined');
+
+					Aggregator.aggregateProfileInfo(user, info).then(function() {
+						getContributions(user, info).then(function() {
+							resolve(info);
+						}, function(err) {
+							resolve(info);
+						});
+					}, function() { 
+						resolve(info); // return what we have at minimum
+					});
 				}
-			})
+			});
 		}
-	})
+	});
 }
 
-function aggregateOthers(user, info) { // turn this into a file called aggregator(table, matches [, more queries])
+
+
+function recursiveGet(resolve, reject, rows, list, getData) {
+	if (!rows.next())
+		resolve(list);
+	else {
+		var item = new DBRow(rows.getValue('type'));
+		item.getRow(rows.getValue('itemID')).then(function() {
+			list.push(getData(rows, item))
+			recursiveGet(resolve, reject, rows, list, getData)
+		}, function(err) {
+			reject(list);
+		});
+	}
+}
+
+function getSaved(user, info) {
 	return new Promise(function(resolve, reject) {
-		info.profile.other = 0;
+		var saved = new DBRow('saved');
+		saved.addQuery('userID', user.getValue('id'));
+		saved.setLimit(5);
+		saved.orderBy('dateSaved', 'DESC');
+		saved.query().then(function() {
+			recursiveGet(resolve, reject, saved, info.items.saved, savedInfo);
+		}, function(err) {
+			reject(err);
+		});
+	});
+}
 
-		var posts = new DBRow('post');
-		posts.addQuery('author', user.getValue('username'));
-		posts.query().then(function() {
-			info.profile.posts = posts.count();
-			var comments = new DBRow('comment');
-			comments.addQuery('author', user.getValue('username'));
+function getSubscribed(user, info) {
+	return new Promise(function(resolve, reject) {
+		var subscribed = new DBRow('subscriptions');
+		subscribed.addQuery('userID', user.getValue('id'));
+		subscribed.setLimit(5);
+		subscribed.orderBy('dateSubscribed', 'DESC');
+		subscribed.query().then(function() {
+			recursiveGet(resolve, reject, subscribed, info.items.subscribed, subscribedInfo)
+		}, function(err) {
 
-			comments.query().then(function() {
-				info.profile.comments = comments.count();
-				var links = new DBRow('link');
-				links.addQuery('addedBy', user.getValue('id'));
+		});
+	});
+}
 
-				links.query().then(function() {
-					info.profile.links = links.count();
-					resolve(info)
+function getContributions(user, info) {
+	return new Promise(function(resolve, reject) {
+		var contr = new DBRow('contribution');
+		contr.addQuery('userID', user.getValue('id'));
+		contr.setLimit(5);
+		contr.orderBy('date', 'DESC');
+		contr.query().then(function() {
+			recursiveGet(resolve, reject, contr, info.items.contributions, contributionInfo);
+		}, function(err) {
+			reject(err);
+		});
+	});
+}
 
-				}, function() {
-					reject();
-				})
-			}, function() {
-				reject()
-			})
-		}, function() {
-			reject();
-		})
-	})
+function recursiveGet(resolve, rowsToGet, list, getData) {
+	if (!rowsToGet.next())
+		resolve(list);
+	else {
+		var item = new DBRow(rowsToGet.getValue('type'));
+		item.getRow(rowsToGet.getValue('itemID')).then(function() {
+			console.log(item.getRowJSON())
+			list.push(getData(item))
+			recursiveGet(resolve, rowsToGet, list, getData);
+		});
+	}
+}
+
+function contributionInfo(row, item) {
+	return {
+		id: item.getValue('id'),
+		title: item.getValue('title'),
+		votes: item.getValue('netVotes'),
+		author: item.getValue('author'),
+		date: row.getValue('date'),
+		summary: item.getValue('content')
+	};
+}
+
+function subscribedInfo(row, item) {
+	return {
+		id: item.getValue('id'),
+		title: item.getValue('title'),
+		votes: item.getValue('netVotes'),
+		author: item.getValue('author'),
+		date: row.getValue('dateSubscribed') 
+	};
+}
+
+function savedInfo(row, item) {
+	return {
+		id: item.getValue('id'),
+		title: item.getValue('title'),
+		votes: item.getValue('netVotes'),
+		author: item.getValue('author'),
+		date: row.getValue('dateSaved') 
+	};
 }
