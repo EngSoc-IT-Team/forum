@@ -43,10 +43,10 @@ exports.parseRequest = function(request) {
 
 /** Individual Request Type Processing Functions **/
 
-/** profileRequest(cookie, isSelf)
+/* profileRequest(request)
 **
-** cookie: the usercookie of the currently signed in user
-** isSelf: 
+** request: the express request
+** return: the information necessary to populate the profile page
 */
 function profileRequest(request) {
 	var info = {
@@ -71,7 +71,6 @@ function profileRequest(request) {
 					info.profile.downvotes = user.getValue(literals.fieldTotalDownvotes);
 					info.profile.dateJoined = user.getValue(literals.fieldDateJoined);
 					Aggregator.aggregateProfileInfo(user, info).then(function() {
-						console.log('hi2')
 						getSaved(user, info).then(function() {
 							getSubscribed(user, info).then(function() {
 								getContributions(user, info).then(function() {
@@ -87,7 +86,6 @@ function profileRequest(request) {
 							resolve(info);
 						});
 					}, function(err) {
-						console.log(err)
 						resolve(info);
 					});
 				}
@@ -145,7 +143,6 @@ function getSaved(user, info) {
 		saved.setLimit(5);
 		saved.orderBy(literals.fieldDateSaved, literals.DESC);
 		saved.query().then(function() {
-			console.log('yo');
 			recursiveGet(resolve, reject, saved, info.items.saved, savedInfo);
 		}, function(err) {
 			reject(err);
@@ -160,7 +157,6 @@ function getSubscribed(user, info) {
 		subscribed.setLimit(5);
 		subscribed.orderBy(literals.fieldDateSubscribed, literals.DESC);
 		subscribed.query().then(function() {
-			console.log('o2');
 			recursiveGet(resolve, reject, subscribed, info.items.subscribed, subscribedInfo)
 		}, function(err) {
 
@@ -175,7 +171,6 @@ function getContributions(user, info) {
 		contr.setLimit(5);
 		contr.orderBy(literals.fieldDate, literals.DESC);
 		contr.query().then(function() {
-			console.log('03');
 			recursiveGet(resolve, reject, contr, info.items.contributions, contributionInfo);
 		}, function(err) {
 			reject(err);
