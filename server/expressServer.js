@@ -80,7 +80,7 @@ server.get(literals.newPage, function(request, response) { // newest questions b
 		response.redirect(literals.loginPage);
 		return;
 	}
-	response.sendFile(path.join(__dirname, '..', 'client/html/Post.html'));
+	response.sendFile(path.join(__dirname, '..', 'client/html/new.html'));
 });
 
 server.get(literals.listPage, function(request, response) { //return the a default most recent list of questions
