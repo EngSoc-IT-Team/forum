@@ -267,23 +267,23 @@ a:hover,
    clear: both;
 }
 
-.thumbs-up svg,
-.thumbs-down svg
+.thumbs-up svg path,
+.thumbs-down svg path
  {
   fill: #FF9200;
   width: 17px;
   cursor: pointer;
 }
 
-.thumbs-up svg:hover,
+.thumbs-up svg:hover path,
 .positive {
-  fill: green;
+  fill: green !important;
   color: green;
 }
 
-.thumbs-down svg:hover,
+.thumbs-down svg:hover path,
 .negative {
-  fill: red;
+  fill: red !important;
   color: red;
 }
 
@@ -305,8 +305,8 @@ a:hover,
 
 /* Class Page */
 
-.star.yellow svg {
-  fill: #F0D355;
+.star.yellow svg path {
+  fill: #F0D355 !important;
 }
 
 /* Footer */
@@ -319,36 +319,56 @@ footer {
 
 /* Profile */
 .badges {
-  width: 75%; 
-  height: 150px; 
+  width: 75%;
+  height: 150px;
   box-shadow: inset 0 1px 2px rgba(0,0,0,.75);
 }
 
 .vote-box {
-  width: 100%; 
-  height: 20px; 
-  box-shadow: 4px 4px 10px grey; 
-  position: relative; 
-  background-color: grey; 
+  width: 100%;
+  height: 20px;
+  box-shadow: 4px 4px 10px grey;
+  position: relative;
+  background-color: grey;
   border-radius: 10px;
 }
 
 .vote-box-positive {
-  height: 100%; 
-  width: 0%; 
-  left: 0; 
-  background-color: green; 
-  position: absolute; 
-  border-top-left-radius: 10px; 
+  height: 100%;
+  width: 0%;
+  left: 0;
+  background-color: green;
+  position: absolute;
+  border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
 
 .vote-box-negative {
-  height: 100%; 
-  width: 0%; 
-  right: 0; 
-  background-color: red; 
-  position: absolute; 
-  border-top-right-radius: 10px; 
+  height: 100%;
+  width: 0%;
+  right: 0;
+  background-color: red;
+  position: absolute;
+  border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+
+/* Class Page */
+
+.class-page .title {
+  display: inline-block;
+}
+
+.class-page .question-tag {
+  margin-top: 10px;
+}
+
+.class-page .instructor,
+.class-page .prerequisites,
+.class-page .course-description-title {
+  margin-bottom: 0px;
+}
+
+.class-page .description {
+  margin-top: 0px;
 }
