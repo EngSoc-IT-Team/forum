@@ -7,6 +7,7 @@
 
 var DBRow = require('./DBRow').DBRow;
 var literals = require('./StringLiterals.js');
+var Aggregator = require('./aggregator');
 
 /*
 ** requestResponder is a functional utility interface to process requests that require results from the database
@@ -48,26 +49,49 @@ exports.parseRequest = function(request) {
 ** isSelf: 
 */
 function profileRequest(request) {
+	var info = {
+		profile: {},
+		tags: [],
+		items: {
+			subscribed: [],
+			saved: [],
+			contributions: []
+	}};
+
 	return new Promise(function(resolve, reject) {
 		if (request.body.self) {
 			var userID = request.signedCookies.usercookie.userID;
-			var row = new DBRow(literals.userTable);
-			row.getRow(userID).then(function() {
-				if (row.count() < 1)
+			var user = new DBRow(literals.userTable);
+			user.getRow(userID).then(function() {
+				if (user.count() < 1)
 					reject("No user found");
 				else {
-					var info = {profile: { username: row.getValue(literals.fieldUsername),
-										upvotes: row.getValue(literals.fieldTotalUpvotes),
-										downvotes: row.getValue(literals.fieldTotalDownvotes),
-										dateJoined: row.getValue(literals.fieldDateJoined) }
-									};
-					aggregateOthers(row, info).then(function() {
+					info.profile.username = user.getValue(literals.fieldUsername);
+					info.profile.upvotes = user.getValue(literals.fieldTotalUpvotes);
+					info.profile.downvotes = user.getValue(literals.fieldTotalDownvotes);
+					info.profile.dateJoined = user.getValue(literals.fieldDateJoined);
+					Aggregator.aggregateProfileInfo(user, info).then(function() {
+						console.log('hi2')
+						getSaved(user, info).then(function() {
+							getSubscribed(user, info).then(function() {
+								getContributions(user, info).then(function() {
+									resolve(info);
+								}, function(err) {
+									resolve(info);
+								});
+							}, function(err) {
+								resolve(info);
+							});
+							
+						}, function(err) {
+							resolve(info);
+						});
+					}, function(err) {
+						console.log(err)
 						resolve(info);
-					}, function() {
-						resolve(info);
-					})
+					});
 				}
-			})
+			});
 		}
 		else {
 			var user = new DBRow(literals.userTable);
@@ -78,50 +102,114 @@ function profileRequest(request) {
 				if (!user.next())
 					reject("No user found");
 				else {
-					var info = {profile: { username: user.getValue(literals.fieldUsername),
-										upvotes: user.getValue(literals.fieldTotalUpvotes),
-										downvotes: user.getValue(literals.fieldTotalDownvotes),
-										dateJoined: user.getValue(literals.fieldDateJoined) }
-									};
-					aggregateOthers(user, info).then(function() {
-						resolve(info);
-					}, function() {
-						resolve(info);
-					})
+                    info.profile.username = user.getValue(literals.fieldUsername);
+                    info.profile.upvotes = user.getValue(literals.fieldTotalUpvotes);
+                    info.profile.downvotes = user.getValue(literals.fieldTotalDownvotes);
+                    info.profile.dateJoined = user.getValue(literals.fieldDateJoined);
+
+					Aggregator.aggregateProfileInfo(user, info).then(function() {
+						getContributions(user, info).then(function() {
+							resolve(info);
+						}, function(err) {
+							resolve(info);
+						});
+					}, function() { 
+						resolve(info); // return what we have at minimum
+					});
 				}
-			})
+			});
 		}
-	})
+	});
 }
 
-function aggregateOthers(user, info) { // turn this into a file called aggregator(table, matches [, more queries])
+
+
+function recursiveGet(resolve, reject, rows, list, getData) {
+	if (!rows.next())
+		resolve(list);
+	else {
+		var item = new DBRow(rows.getValue(literals.type));
+		item.getRow(rows.getValue(literals.fieldItemID)).then(function() {
+			list.push(getData(rows, item))
+			recursiveGet(resolve, reject, rows, list, getData)
+		}, function(err) {
+			reject(list);
+		});
+	}
+}
+
+function getSaved(user, info) {
 	return new Promise(function(resolve, reject) {
-		info.profile.other = 0;
+		var saved = new DBRow(literals.savedTable);
+		saved.addQuery(literals.fieldUserID, user.getValue(literals.fieldID));
+		saved.setLimit(5);
+		saved.orderBy(literals.fieldDateSaved, literals.DESC);
+		saved.query().then(function() {
+			console.log('yo');
+			recursiveGet(resolve, reject, saved, info.items.saved, savedInfo);
+		}, function(err) {
+			reject(err);
+		});
+	});
+}
 
-		var posts = new DBRow(literals.postTable);
-		posts.addQuery(literals.fieldAuthor, user.getValue(literals.fieldUsername));
-		posts.query().then(function() {
-			info.profile.posts = posts.count();
-			var comments = new DBRow(literals.commentTable);
-			comments.addQuery(literals.fieldAuthor, user.getValue(literals.fieldUsername));
+function getSubscribed(user, info) {
+	return new Promise(function(resolve, reject) {
+		var subscribed = new DBRow(literals.subscriptionsTable);
+		subscribed.addQuery(literals.fieldUserID, user.getValue(literals.fieldID));
+		subscribed.setLimit(5);
+		subscribed.orderBy(literals.fieldDateSubscribed, literals.DESC);
+		subscribed.query().then(function() {
+			console.log('o2');
+			recursiveGet(resolve, reject, subscribed, info.items.subscribed, subscribedInfo)
+		}, function(err) {
 
-			comments.query().then(function() {
-				info.profile.comments = comments.count();
-				var links = new DBRow(literals.link);
-				links.addQuery(literals.fieldAddedBy, user.getValue(literals.fieldID));
+		});
+	});
+}
 
-				links.query().then(function() {
-					info.profile.links = links.count();
-					resolve(info)
+function getContributions(user, info) {
+	return new Promise(function(resolve, reject) {
+		var contr = new DBRow(literals.contributionTable);
+		contr.addQuery(literals.fieldUserID, user.getValue(literals.fieldID));
+		contr.setLimit(5);
+		contr.orderBy(literals.fieldDate, literals.DESC);
+		contr.query().then(function() {
+			console.log('03');
+			recursiveGet(resolve, reject, contr, info.items.contributions, contributionInfo);
+		}, function(err) {
+			reject(err);
+		});
+	});
+}
 
-				}, function() {
-					reject();
-				})
-			}, function() {
-				reject()
-			})
-		}, function() {
-			reject();
-		})
-	})
+function contributionInfo(row, item) {
+	return {
+		id: item.getValue(literals.fieldID),
+		title: item.getValue(literals.fieldTitle),
+		votes: item.getValue(literals.fieldNetvotes),
+		author: item.getValue(literals.fieldAuthor),
+		date: row.getValue(literals.fieldDate),
+		summary: item.getValue(literals.fieldContent)
+	};
+}
+
+function subscribedInfo(row, item) {
+	return {
+        id: item.getValue(literals.fieldID),
+        title: item.getValue(literals.fieldTitle),
+        votes: item.getValue(literals.fieldNetvotes),
+        author: item.getValue(literals.fieldAuthor),
+		date: row.getValue(literals.fieldDateSubscribed)
+	};
+}
+
+function savedInfo(row, item) {
+	return {
+        id: item.getValue(literals.fieldID),
+        title: item.getValue(literals.fieldTitle),
+        votes: item.getValue(literals.fieldNetvotes),
+        author: item.getValue(literals.fieldAuthor),
+		date: row.getValue(literals.fieldDateSaved)
+	};
 }

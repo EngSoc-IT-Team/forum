@@ -1,5 +1,50 @@
 "use strict";
 
+
+var subscriptionTemplate = '<div class="item">\
+                                <span><img class="thumbs-up" src="../assets/thumbsUp.svg" /></span>\
+                                <span class="{0}">{1}</span>\
+                                <span><img class="thumbs-down" src="../assets/thumbsDown.svg" /></span>\
+                                <span><a href="/question/id={2}">{3}</a></span>\
+                                <div class="date">Subscribed on: {4}</div>\
+                                <div class="date">Author: <a href="/profile?username={5}">{6}</a></div>\
+                                <div class="links" style="font-size: .75em;">\
+                                    <a href="/question/id={8}" onclick="">View</a> | \
+                                    <a href="" onclick="unsubscribe({7})">Unsubscribe</a> | \
+                                    <a href="" onclick="report({9})">Report</a>\
+                                </div>\
+                                <hr>\
+                            </div>';
+var contributionTemplate = '<div class="item">\
+                                <span><img class="thumbs-up" src="../assets/thumbsUp.svg" /></span>\
+                                <span class="{0}">{1}</span>\
+                                <span><img class="thumbs-down" src="../assets/thumbsDown.svg" /></span>\
+                                <span><a href="/question/id={2}">{3}</a></span>\
+                                <div class="date">Posted on: {4}</div>\
+                                <p style="margin-bottom: 5px;">{5}</p>\
+                                <div class="links" style="font-size: .75em;">\
+                                    <a href="/question/id={6}" onclick="">View</a> | \
+                                    <a href="" onclick="save({7})">Save</a>\
+                                </div>\
+                                <hr>\
+                            </div>';
+var savedTemplate = '<div class="item">\
+                        <span><img class="thumbs-up" src="../assets/thumbsUp.svg" /></span>\
+                        <span class="{0}">{1}</span>\
+                        <span><img class="thumbs-down" src="../assets/thumbsDown.svg" /></span>\
+                        <span><a href="/question/id={2}">{3}</a></span>\
+                        <div class="date">Saved on: {4}</div>\
+                        <div class="date">Author: <a href="/profile?username={5}">{6}</a></div>\
+                        <div class="links" style="font-size: .75em;">\
+                            <a href="/question/id={8}" onclick="">View</a> | \
+                            <a href="" onclick="unsave({7})">Unsave</a> | \
+                            <a href="" onclick="report({9})">Report</a>\
+                        </div>\
+                        <hr>\
+                    </div>';
+
+var tag = '<button class="btn btn-sm question-tag" onclick="window.location = \'/list?tag={0}\'" type="submit">{1}</button>';
+
 function whenLoaded() {
 	var href;
     var content = {
@@ -28,9 +73,11 @@ function whenLoaded() {
                 $('#aProblemOccurred').modal('toggle');
                 return;
             }
-
+            
             animateVotingBar(data.profile.upvotes, data.profile.downvotes);
             fillInUserInfo(data.profile);
+            fillInPostInfo(data.items);
+            addTags(data.tags);
         }
         else {
             // at some point show "something went wrong" modal
@@ -77,4 +124,74 @@ function fillInUserInfo(profile) {
 	$(down)[0].innerHTML = "--" + profile.downvotes;
 	$(username)[0].innerHTML = profile.username;
 	$(joined)[0].innerHTML = "Date Joined: " + profile.dateJoined.slice(0, profile.dateJoined.indexOf('T'));
+}
+
+// TODO: url processing for comments in posts to get directly to the queried comment
+function fillInPostInfo(items) { 
+    var html;
+    if (items.subscribed.length != 0) {
+        $('#subscribed')[0].innerHTML = "";
+
+        for (var i = 0; i < items.subscribed.length; i++) {
+            html = $.parseHTML(fillSubscriptionTemplate(items.subscribed[i]))[0];
+            if (html)
+                $('#subscribed').append(html);
+        }
+    }
+
+    if (items.saved.length != 0) {
+        $('#saved')[0].innerHTML = "";
+
+        for (var i = 0; i < items.saved.length; i++) {
+            html = $.parseHTML(fillSavedTemplate(items.saved[i]))[0];
+            if (html)
+                $('#saved').append(html);
+        }
+    }
+
+    if (items.contributions.length != 0) {
+        $('#contributions')[0].innerHTML = "";
+        for (var i = 0; i < items.contributions.length; i++) {
+            html = $.parseHTML(fillContributionTemplate(items.contributions[i]))[0];
+            if (html)
+                $('#contributions').append(html);
+        }
+    }
+}
+
+function addTags(tags) {
+    var html = '';
+    for (var i=0; i< tags.length; i++){
+        html = $.parseHTML(fillTemplate(tag, tags[i], tags[i]))[0];
+        if (html)
+            $('#knowledge')[0].append(html)
+    }
+}
+
+function fillSubscriptionTemplate(subscr) {
+    if (subscr.votes >= 0)
+        return fillTemplate(subscriptionTemplate, "positive", subscr.votes, subscr.id, subscr.title, getDateString(subscr.date), subscr.author, subscr.author, subscr.id, subscr.id, subscr.id);
+    else
+        return fillTemplate(subscriptionTemplate, "negative", subscr.votes, subscr.id, subscr.title, getDateString(subscr.date), subscr.author, subscr.author, subscr.id, subscr.id, subscr.id);
+}
+
+function fillSavedTemplate(saved) {
+    if (saved.votes >= 0)
+        return fillTemplate(savedTemplate, "positive", saved.votes, saved.id, saved.title, getDateString(saved.date), saved.author, saved.author, saved.id, saved.id, saved.id);
+    else
+        return fillTemplate(savedTemplate, "negative", saved.votes, saved.id, saved.title, getDateString(saved.date), saved.author, saved.author, saved.id, saved.id, saved.id);
+}
+
+function fillContributionTemplate(contr) {
+    if (contr.votes >= 0)
+        return fillTemplate(contributionTemplate, "positive", contr.votes, contr.id, contr.title, getDateString(contr.date), contr.summary, contr.id, contr.id, contr.id);
+    else
+        return fillTemplate(contributionTemplate, "negative", contr.votes, contr.id, contr.title, getDateString(contr.date), contr.summary, contr.id, contr.id, contr.id);
+}
+
+function getDateString(date) {
+    if (!date)
+        return undefined;
+
+    return date.slice(0, date.indexOf('T'));
 }
