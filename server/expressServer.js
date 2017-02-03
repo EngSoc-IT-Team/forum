@@ -221,7 +221,6 @@ server.post(literals.evalPage, function(request, response) {
 
 			}, function(err) {
 				response.send(err);
-r
 			});
 		}, function(res) {
 			response.send("You are not authorized for this role");
