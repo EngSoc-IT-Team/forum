@@ -52,9 +52,9 @@ function profileRequest(request) {
 		profile: {},
 		tags: [],
 		items: {
-		subscribed: [],
-		saved: [],
-		contributions: []
+			subscribed: [],
+			saved: [],
+			contributions: []
 	}};
 
 	return new Promise(function(resolve, reject) {
@@ -69,8 +69,8 @@ function profileRequest(request) {
 					info.profile.upvotes = user.getValue('totalUpvotes');
 					info.profile.downvotes = user.getValue('totalDownvotes');
 					info.profile.dateJoined = user.getValue('dateJoined');
-
 					Aggregator.aggregateProfileInfo(user, info).then(function() {
+						console.log('hi2')
 						getSaved(user, info).then(function() {
 							getSubscribed(user, info).then(function() {
 								getContributions(user, info).then(function() {
@@ -85,7 +85,8 @@ function profileRequest(request) {
 						}, function(err) {
 							resolve(info);
 						});
-					}, function() {
+					}, function(err) {
+						console.log(err)
 						resolve(info);
 					});
 				}
@@ -143,6 +144,7 @@ function getSaved(user, info) {
 		saved.setLimit(5);
 		saved.orderBy('dateSaved', 'DESC');
 		saved.query().then(function() {
+			console.log('yo')
 			recursiveGet(resolve, reject, saved, info.items.saved, savedInfo);
 		}, function(err) {
 			reject(err);
@@ -157,6 +159,7 @@ function getSubscribed(user, info) {
 		subscribed.setLimit(5);
 		subscribed.orderBy('dateSubscribed', 'DESC');
 		subscribed.query().then(function() {
+			console.log('o2')
 			recursiveGet(resolve, reject, subscribed, info.items.subscribed, subscribedInfo)
 		}, function(err) {
 
@@ -171,24 +174,12 @@ function getContributions(user, info) {
 		contr.setLimit(5);
 		contr.orderBy('date', 'DESC');
 		contr.query().then(function() {
+			console.log('03')
 			recursiveGet(resolve, reject, contr, info.items.contributions, contributionInfo);
 		}, function(err) {
 			reject(err);
 		});
 	});
-}
-
-function recursiveGet(resolve, rowsToGet, list, getData) {
-	if (!rowsToGet.next())
-		resolve(list);
-	else {
-		var item = new DBRow(rowsToGet.getValue('type'));
-		item.getRow(rowsToGet.getValue('itemID')).then(function() {
-			console.log(item.getRowJSON())
-			list.push(getData(item))
-			recursiveGet(resolve, rowsToGet, list, getData);
-		});
-	}
 }
 
 function contributionInfo(row, item) {

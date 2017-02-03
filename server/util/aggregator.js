@@ -1,5 +1,7 @@
 "use strict";
 
+var DBRow = require('./DBRow').DBRow;
+
 exports.aggregateProfileInfo = function(user, info) {
 	return new Promise(function(resolve, reject) {
 		info.profile.other = 0; // TODO: other should mean something eventually
@@ -33,5 +35,5 @@ exports.aggregateProfileInfo = function(user, info) {
 }
 
 exports.Aggregator = function() {
-	
+
 }
