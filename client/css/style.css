@@ -13,6 +13,7 @@ a {
 a:hover,
 .fa {
   color: #FF9200;
+  text-decoration: none;
 }
 
 .btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
