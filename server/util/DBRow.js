@@ -3,7 +3,6 @@
 var log = require('./log');
 var db = require('./DatabaseManager');
 var qb = require('./QueryBuilder');
-var compare = require('./Compare');
 var generator = require('./IDGenerator');
 var lit = require('./Literals.js');
 
@@ -27,7 +26,7 @@ exports.DBRow = function(table) {
 	this.setId = true; // allows setting of rows manually
 
 	if (!table){
-		log.error("No table was specified for the DB row, all queries will fail!! Object instantiation terminated.");
+		log.error("No table was specified for the DBRow, all queries will fail!! Object instantiation terminated.");
 		return;
 	}
 
@@ -83,30 +82,6 @@ exports.DBRow = function(table) {
 		});
 	};
 
-	/** directQuery()
-	 ** queryString: the query string to pass to the database
-	 ** Resolves if the query is successful, rejects with the error if the query has an error
-	 **
-	 ** Queries the database are sets the result to the rows variable
-	 ** To access the rows, you must use the next() function to iterate
-	 ** Returns nothing if the query is successful, returns undefined if the query is unsuccessful
-	 **
-	 ** THIS WILL BE DEPRECIATED AFTER SOME TIME: focus on using addQuery() and query() 
-	 ** This is super dangerous to ever expose to user input SO LET'S NEVER DO IT. Right gang? :D
-	**/
-	this._directQuery = function(_queryString) {
-		return new Promise(function(resolve, reject) {
-			dbm.query(_queryString).then(function(row) {
-				rows = row;
-				resolve();
-			}, function(err) {
-				currentRow = {};
-				rows = [];
-				reject(err);
-			});	
-		});
-	};
-
 	/** update()
 	 ** No input parameters
 	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
@@ -119,7 +94,7 @@ exports.DBRow = function(table) {
 		log.log("UPDATE for table '" + table + "' with id: '" + currentRow.id + "'");
 		var qs = qb.update(table, currentRow);
 		return new Promise(function(resolve, reject) {
-			dbm.query(qs).then(function(row) {
+			dbm.query(qs).then(function() {
 				resolve();
 			}, function(err) {
 				currentRow = {};
@@ -145,7 +120,7 @@ exports.DBRow = function(table) {
 		log.log("INSERT for table '" + table + "' with id: '" + currentRow.id + "'");
 		var qs = qb.insert(table, currentRow);
 		return new Promise(function(resolve, reject) {
-			dbm.query(qs).then(function(row) {
+			dbm.query(qs).then(function() {
 				resolve();
 			}, function(err) {
 				currentRow = {};
@@ -157,11 +132,11 @@ exports.DBRow = function(table) {
 
 	/** delete()
 	 ** id: the system id of the row you want to delete
-	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
+	 ** Resolves if the query is successful, rejects with the error if the query has an error
 	 **
 	 ** DELETES the current row
 	 ** There is no recovering the row once the delete goes through
-	 ** it is STRONGLY discuraged to use this function unless completely neccesary
+	 ** it is STRONGLY discouraged to use this function unless completely necessary
 	 **
 	 ** Deleting a row results in issues where other rows refer back to that row... and they need to be deleted too
 	 ** thus, if you really want to delete a row you need to go through ALL tables and delete everything referring back to 
@@ -171,7 +146,7 @@ exports.DBRow = function(table) {
 		log.log("DELETE for table '" + table + "' with id: '" + id + "'");
 		var qs = qb.delete(table, id);
 		return new Promise(function(resolve, reject) {
-			dbm.query(qs).then(function(row) {
+			dbm.query(qs).then(function() {
 				resolve();
 			}, function(err) {
 				currentRow = {};
@@ -232,15 +207,11 @@ exports.DBRow = function(table) {
 	 ** Food for thought: if you set values to fields that don't exist in the table, you will cause errors
 	 ** and your row will not get inserted
 	**/
-	this.setValue = function(property, value, setRows) {
+	this.setValue = function(property, value) {
 		if (property == lit.FIELD_ID)
 			log.warn("Once a row's ID has been set it SHOULD NOT be reset. Resetting ID for an update can cause query failures"); //will be removed eventually
 
 		currentRow[property] = value;
-		if (!setRows)
-			setRows = property + "=" + value;
-		else
-			setRows += "," + property + "='" + value + "'";
 	};
 
 	/** count()
