@@ -47,9 +47,9 @@
 4. Click "Add Database" from the top left dropdown
 5. Make the database name "testing"
 6. Then run the `setup.js` file, and you should be good to go!
+
 ### Cross-platform way
 1. Open up the MySQL monitor
 2. Run `DROP DATABASE testing;`
 3. Run `CREATE DATABASE testing;`
 4. Then run the `setup.js` file, and you should be good to go!
-

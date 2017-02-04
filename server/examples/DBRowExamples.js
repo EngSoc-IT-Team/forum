@@ -12,7 +12,7 @@ var lit = require('../util/Literals.js');
 ** To run a function to try it out just copy its call somewhere in this document and run this file.
 */
 
-usingOrderBy()
+usingOrderBy();
 
 /* getARowExample()
 **
@@ -264,5 +264,24 @@ function alternateWildcardExample() { //TODO: Make this work if at all possible
 
 	}, function(err) {
 		console.log("There was an error")
+	})
+}
+
+/* resetIndexExample
+ *
+ * Shows how to use the resetIndex function to allow you to cycle through a set of rows
+ * more than once
+ */
+function resetIndexExample() {
+	var row = new dbr.DBRow(lit.COMMENT_TABLE);
+	row.addQuery(lit.FIELD_AUTHOR, "WizardPikachu");
+	row.query().then(function() {
+		while(row.next()) {
+			console.log(row.getValue(lit.FIELD_ID));
+		}
+		row.resetIndex();
+        while(row.next()) {
+            console.log(row.getValue(lit.FIELD_ID));
+        }
 	})
 }
