@@ -401,3 +401,7 @@ footer {
 .class-page .modal .star {
     cursor: pointer;
 }
+
+.class-page .course-rating .star.rating svg path {
+  fill: #34056D !important;
+}
