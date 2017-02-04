@@ -38,18 +38,28 @@ var mailOptions = {
  * @param userID The ID of the user who subscribed.
  */
 function onSubscribed(contentID, userID) {
-    //set in database all the information
-    var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-    newRow.setValue(lit.FIELD_USER_ID, userID);
-    newRow.setValue(lit.FIELD_ITEM_ID, contentID);
-    newRow.setValue(lit.FIELD_ID, generator.generate());
-    newRow.setValue(lit.TYPE, "type"); //TODO get proper type
-    //TODO add date joined field
+    //query comment table for content ID, if in there, set type to comment
+    //if not in there, then type is a post
+    var commentTable = new dbr.DBRow(lit.COMMENT_TABLE);
+    commentTable.addQuery(lit.FIELD_ID, contentID);
+    commentTable.query().then(function () {
+        //set in database all the information
+        var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+        if (!commentTable.next()) { //type is table
+            newRow.setValue(lit.TYPE, lit.POST_TABLE);
+        } else {
+            newRow.setValue(lit.TYPE, lit.COMMENT_TABLE);
+        }
 
-    newRow.insert().then(function () {
-    }, function (err) {
-        log.log('error:' + err);
-    })
+        newRow.setValue(lit.FIELD_USER_ID, userID);
+        newRow.setValue(lit.FIELD_ITEM_ID, contentID);
+        newRow.setValue(lit.FIELD_ID, generator.generate());
+        newRow.setValue(lit.FIELD_DATE_SUBSCRIBED, new Date().toISOString());
+
+        newRow.insert();
+    }).catch(function (err) {
+        log.log("onSubscribed error: " + err);
+    });
 }
 
 /**
