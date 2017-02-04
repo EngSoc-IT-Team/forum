@@ -3,7 +3,7 @@
  */
 
 "use strict";
-module.exports = { //TODO make it a constant object and then export that
+const literals = {
 
     //miscellaneous database table information
     TABLE_NAME: "tablename",
@@ -173,3 +173,5 @@ module.exports = { //TODO make it a constant object and then export that
     SWEEPER_CANCEL_JOB: "cancelJob",
     SWEEP: "sweep"
 };
+
+module.exports = literals;
