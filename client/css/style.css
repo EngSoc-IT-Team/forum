@@ -11,6 +11,7 @@ a {
 }
 
 a:hover,
+a:focus,
 .fa {
   color: #FF9200;
   text-decoration: none;
