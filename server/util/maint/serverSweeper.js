@@ -15,7 +15,7 @@
 var DBRow = require('../DBRow.js').DBRow;
 var events = require('events');
 var log = require('../log.js');
-var lit = require('../StringLiterals.js');
+var lit = require('../Literals.js');
 
 exports.Sweeper = function() {
 

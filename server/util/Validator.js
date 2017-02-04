@@ -3,7 +3,7 @@
 var DBRow = require('./DBRow').DBRow;
 var log = require('./log');
 var generator = require('./IDGenerator');
-var lit = require('./StringLiterals.js');
+var lit = require('./Literals.js');
 
 const allowedUserKeys = [lit.FIELD_ID, lit.FIELD_USERNAME];
 

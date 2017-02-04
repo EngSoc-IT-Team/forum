@@ -10,7 +10,7 @@ var compare = require('./util/Compare');
 var Environment = require('./util/evalEnvironment').Environment;
 var requestor = require('./util/requestResponder');
 var fs = require('fs');
-var lit = require('./util/StringLiterals.js');
+var lit = require('./util/Literals.js');
 
 const PORT = 8080;
 var server = express();

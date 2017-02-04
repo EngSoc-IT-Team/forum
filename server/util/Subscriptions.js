@@ -10,7 +10,7 @@ var smtpTransport = require('nodemailer-smtp-transport');
 var log = require('./log.js');
 var dbr = require('./DBRow.js');
 var generator = require('./IDGenerator.js');
-var lit = require('./StringLiterals.js');
+var lit = require('./Literals.js');
 
 //object that holds the mailing information - who sends it (and their authentication) and connection details
 var transport = nodeMailer.createTransport(smtpTransport({
@@ -264,7 +264,7 @@ function findUsersToEmail(userIDs) {
                 //both need to pass the compare to email the user
                 numNotificationsMissed = row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED);
                 lastNotified = row.getValue(lit.FIELD_LAST_NOTIFIED);
-                if (numNotificationsMissed > 0 && longEnoughAgo(lastNotified)) {
+                if (numNotificationsMissed > lit.minNumMissedNotifications && longEnoughAgo(lastNotified)) {
                     goodUserIDs.push(row.getValue(lit.FIELD_USER_ID));
                 }
             }

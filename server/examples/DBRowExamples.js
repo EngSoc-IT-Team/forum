@@ -5,7 +5,7 @@
 "use strict";
 var dbr = require('../util/DBRow');
 var generator = require('../util/IDGenerator');
-var lit = require('../util/StringLiterals.js');
+var lit = require('../util/Literals.js');
 
 /* A series of basic functions to help get your head around using the DBRow object
 ** each should be fairly self explanatory, but if there are questions let me know

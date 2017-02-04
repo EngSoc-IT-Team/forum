@@ -5,7 +5,7 @@ var db = require('./DatabaseManager');
 var qb = require('./QueryBuilder');
 var compare = require('./Compare');
 var generator = require('./IDGenerator');
-var lit = require('./StringLiterals.js');
+var lit = require('./Literals.js');
 
 var dbm = new db.DatabaseManager();
 

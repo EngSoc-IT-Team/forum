@@ -5,7 +5,7 @@ var path = require('path')
 var db = require('../DatabaseManager.js');
 var dbr = require('../DBRow.js');
 var log = require('../log.js');
-var lit = require('../StringLiterals.js');
+var lit = require('../Literals.js');
 
 var possibleTypes = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/SQLDatatypes.json'), 'utf8')) 
 var defaults = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/defaultTables.json'), 'utf8')) 

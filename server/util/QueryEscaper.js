@@ -5,7 +5,7 @@
 "use strict";
 
 var defaultTables = require('../config/defaultTables.json');
-var lit = require('./StringLiterals.js');
+var lit = require('./Literals.js');
 
 var validTables = getTables();
 

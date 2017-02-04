@@ -6,7 +6,7 @@
 "use strict";
 
 var DBRow = require('./DBRow').DBRow;
-var lit = require('./StringLiterals.js');
+var lit = require('./Literals.js');
 var Aggregator = require('./aggregator');
 
 /*

@@ -4,7 +4,7 @@ var dependencies = require('./util/setup/DependencyChecker.js');
 var dbsetup = require('./util/setup/SetupCoreDatabase.js');
 var dbr = require('./util/DBRow');
 var log = require('./util/log');
-var lit = require('./util/StringLiterals.js');
+var lit = require('./util/Literals.js');
 
 var fs = require('fs');
 var path = require('path');

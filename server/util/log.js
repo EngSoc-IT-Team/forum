@@ -2,7 +2,7 @@
 
 var fs = require('fs');
 var path = require('path');
-var lit = require('./StringLiterals.js');
+var lit = require('./Literals.js');
 
 var config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/config.json'), 'utf8'));
 

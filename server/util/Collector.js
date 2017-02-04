@@ -2,7 +2,7 @@
 
 var dbr = require('./DBRow');
 var log = require('./log');
-var lit = require('./StringLiterals.js');
+var lit = require('./Literals.js');
 
 exports.collectPost = function(id, currentUserID) {
 	return new Promise(function(resolve, reject) {

@@ -174,7 +174,10 @@ const literals = {
 
     //fields for sweeper class
     SWEEPER_CANCEL_JOB: "cancelJob",
-    SWEEP: "sweep"
+    SWEEP: "sweep",
+
+    //integer values
+    minNumMissedNotifications: 0
 };
 
 module.exports = literals;
