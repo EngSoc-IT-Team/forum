@@ -78,7 +78,7 @@ function createTable(tableName, fields, numberTablesToCreate, numberCreated) { /
 				}
 			}
 
-			if (fields[field]["PRIMARY_KEY"])
+			if (fields[field][lit.PRIMARY_KEY])
 				queryString += " PRIMARY KEY"
 
 			if (fields[field]["constraint"])
@@ -88,7 +88,7 @@ function createTable(tableName, fields, numberTablesToCreate, numberCreated) { /
 			keyCount++;
 		}
 		else {
-			queryString += field + ' ' + possibleTypes[fields[field]["TYPE"]];
+			queryString += field + ' ' + possibleTypes[fields[field][lit.TYPE]];
 			if (fields[field][lit.DEFAULT]){ //make this better
 				if (fields[field][lit.DEFAULT] == 'CURRENT_TIMESTAMP' || fields[field][lit.DEFAULT] == 'GETDATE()') {
 					queryString += " DEFAULT " + fields[field][lit.DEFAULT];
