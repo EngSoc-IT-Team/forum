@@ -15,15 +15,15 @@
 var DBRow = require('../DBRow.js').DBRow;
 var events = require('events');
 var log = require('../log.js');
-var literals = require('../StringLiterals.js');
+var lit = require('../StringLiterals.js');
 
 exports.Sweeper = function() {
 
 	var eventListener = new events.EventEmitter;
 	var cancelled = false;
 
-	eventListener.on(literals.SWEEPER_CANCEL_JOB, function(jobs) {
-		if (!jobs.includes(literals.SWEEP))
+	eventListener.on(lit.SWEEPER_CANCEL_JOB, function(jobs) {
+		if (!jobs.includes(lit.SWEEP))
 			return;
 
 		cancelled = true;
@@ -31,28 +31,28 @@ exports.Sweeper = function() {
 
 	this.sweepTable = function(table) {
 		switch(table) {
-			case (literals.USER_TABLE):
+			case (lit.USER_TABLE):
 				userCleanup();
 				break;
-			case (literals.LINK):
+			case (lit.LINK):
 				linkCleanup();
 				break;
-			case (literals.POST_TABLE):
+			case (lit.POST_TABLE):
 				postCleanup();
 				break;
-			case (literals.COMMENT_TABLE):
+			case (lit.COMMENT_TABLE):
 				commentCleanup();
 				break;
-			case (literals.REPORT_TABLE):
+			case (lit.REPORT_TABLE):
 				reportCleanup();
 				break;
-			case (literals.TAG_TABLE):
+			case (lit.TAG_TABLE):
 				tagCleanup();
 				break;
-			case (literals.CLASS_TABLE):
+			case (lit.CLASS_TABLE):
 				classCleanup();
 				break;
-			case (literals.SESSION_TABLE):
+			case (lit.SESSION_TABLE):
 				sessionCleanup();
 				break;
 			default:
@@ -89,12 +89,12 @@ exports.Sweeper = function() {
 	** Checks the link table to make sure links are still valid (lead to non-empty pages/404 errors)
 	*/
 	function linkCleanup() {
-		var links = new DBRow(literals.LINK);
+		var links = new DBRow(lit.LINK);
 		links.query().then(function() {
 			var href = "";
 
 			while(links.next()){
-				href = links.getValue(literals.LINK);
+				href = links.getValue(lit.LINK);
 				var isValid = true;//test link using something
 				if (isValid)
 					continue;

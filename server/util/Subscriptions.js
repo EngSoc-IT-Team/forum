@@ -1,22 +1,22 @@
 /**
  * Created by Carson on 15/01/2017.
  */
-
+//TODO document it
 var nodeMailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var log = require('./log.js');
 var dbr = require('./DBRow.js');
 var generator = require('./IDGenerator.js');
-var literals = require('./StringLiterals.js');
+var lit = require('./StringLiterals.js'); //TODO: Change literals to lit
 
 //object that holds the mailing information - who sends it (and their authentication) and connection details
 var transport = nodeMailer.createTransport(smtpTransport({
-    host: 'outlook.office.com',
+    HOST: 'outlook.office.com',
     secureConnection: false, //use SSL as this is not a secure connection
     port: 587,
     auth: {
         user: "do-not-reply-forum@engsoc.queensu.ca",
-        pass: "Forum1617" //TODO don't store in database
+        pass: "Forum1617" //TODO don't store here
     }
 }));
 
@@ -30,12 +30,13 @@ var mailOptions = {
 
 function onSubscribed(contentID, userID) {
     //set in database all the information
-    var newRow = new dbr.DBRow(literals.subscriptionsTable);
-    newRow.setValue(literals.fieldUserID, userID);
-    newRow.setValue(literals.fieldItemID, contentID);
-    newRow.setValue(literals.fieldID, generator.generate());
-    //TODO set timestamp
-    //insert info into database
+    var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+    newRow.setValue(lit.FIELD_USER_ID, userID);
+    newRow.setValue(lit.FIELD_ITEM_ID, contentID);
+    newRow.setValue(lit.FIELD_ID, generator.generate());
+    newRow.setValue(lit.TYPE, "type"); //TODO get proper type
+    //TODO add date joined field
+
     newRow.insert().then(function () {
     }, function (err) {
         log.log('error:' + err);
@@ -56,45 +57,61 @@ function onContentAddedOrChanged(childID) {
 }
 
 function onContentEdited(contentID) {
-    addToNotificationsMissed(contentID).then(function(contentID){
+    addToNotificationsMissed(contentID).then(function (contentID) {
         emailUsers(contentID);
     }).catch(function (error) {
         log.log("ERROR: " + error);
     });
 }
 
-function emailUsers(contentID) { //TODO use content ID to add info in email, like a URL
+function emailUsers(contentID) {
     return new Promise(function (resolve, reject) {
-        getUserIDs(contentID).then(function (userIDs) {
-            return userIDs;
-        }).then(function (userIDs) {
-            //get userIDs for those who should be emailed
-            return findUsersToEmail(userIDs);
-        }).then(function (userIDs) {
-            return setNotificationsMissedToZero(userIDs);
-        }).then(function (userIDs) {
-            //get net IDs from user IDs
-            return getNetIDs(userIDs);
-        }).then(function (netIDs) {
-            //email users
-            for (var i in netIDs) {
-                mailOptions[literals.to] = netIDs[i] + literals.queensEmail;
-                log.log("MAIL SENT");
-                // transport.sendMail(mailOptions);
-            }
-        }).catch(function (err) {
-            reject(err);
-        });
-    });
+            getUserIDs(contentID).then(function (userIDs) {
+                return userIDs;
+            }).then(function (userIDs) {
+                //get userIDs for those who should be emailed
+                return findUsersToEmail(userIDs);
+            }).then(function (userIDs) {
+                log.log("userIDs: "+userIDs);
+                return setNotificationsMissedToZero(userIDs);
+            }).then(function (userIDs) {
+                //get net IDs from user IDs
+                return getNetIDs(userIDs);
+            }).then(function (netIDs) {
+                log.log("here");
+                //email users
+                for (var i in netIDs) {
+                    //TODO add url to give info
+                    mailOptions[lit.TO] = netIDs[i] + lit.QUEENS_EMAIL;
+                    log.log("MAIL SENT");
+                    // transport.sendMail(mailOptions);
+                }
+                return netIDs;
+            }).then(function (netIDs) {
+                var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+                for (var i in netIDs) {
+                    row.addQuery(lit.FIELD_NETID, netIDs[i]);
+                }
+                row.query().then(function () {
+                    while (row.next()) {
+                        row.setValue(lit.FIELD_LAST_NOTIFIED, new Date().toISOString());
+                        row.update();
+                    }
+                });
+            }).catch(function (err) {
+                reject(err);
+            });
+        }
+    );
 }
 
 function addToNotificationsMissed(contentID) {
-    var row = new dbr.DBRow(literals.subscriptionsTable);
-    row.addQuery(literals.fieldItemID, contentID);
+    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+    row.addQuery(lit.FIELD_ITEM_ID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) {
-                row.setValue(literals.fieldNumNotificationsMissed, row.getValue(literals.fieldNumNotificationsMissed) + 1);
+                row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED) + 1);
                 row.update().then(function () {
                     resolve(contentID);
                 }, function (err) {
@@ -108,14 +125,14 @@ function addToNotificationsMissed(contentID) {
 }
 
 function setNotificationsMissedToZero(userIDs) {
-    var row = new dbr.DBRow(literals.subscriptionsTable);
+    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
     for (var i in userIDs) {
-        row.addQuery(literals.fieldUserID, userIDs[i]);
+        row.addQuery(lit.FIELD_USER_ID, userIDs[i]);
     }
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) {
-                row.setValue(literals.fieldNumNotificationsMissed, 0);
+                row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, 0);
                 row.update();
             }
             resolve(userIDs);
@@ -126,15 +143,15 @@ function setNotificationsMissedToZero(userIDs) {
 }
 
 function getParentContentID(contentID) {
-    var row = new dbr.DBRow(literals.commentTable);
-    row.addQuery(literals.fieldID, contentID);
+    var row = new dbr.DBRow(lit.COMMENT_TABLE);
+    row.addQuery(lit.FIELD_ID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             if (!row.next()) {
                 reject("got nothing back");
             }
-            (row.getValue(literals.fieldParentComment) == null) ? resolve(row.getValue(literals.fieldParentPost)) :
-                resolve(row.getValue(literals.fieldParentComment));
+            (row.getValue(lit.TYPE) == lit.POST_TABLE) ? resolve(row.getValue(lit.FIELD_PARENT_POST)) :
+                resolve(row.getValue(lit.FIELD_PARENT_COMMENT));
         }, function () {
             reject("No parent");
         });
@@ -143,12 +160,12 @@ function getParentContentID(contentID) {
 
 function getUserIDs(contentID) {
     var userIDs = [];
-    var row = new dbr.DBRow(literals.subscriptionsTable);
-    row.addQuery(literals.fieldItemID, contentID);
+    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+    row.addQuery(lit.FIELD_ITEM_ID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) {
-                userIDs.push(row.getValue(literals.fieldUserID));
+                userIDs.push(row.getValue(lit.FIELD_USER_ID));
             }
             resolve(userIDs);
         }, function () {
@@ -160,14 +177,14 @@ function getUserIDs(contentID) {
 
 function getNetIDs(userIDs) {
     var netIDs = [];
-    var row = new dbr.DBRow(literals.userTable);
+    var row = new dbr.DBRow(lit.USER_TABLE);
     return new Promise(function (resolve, reject) {
         for (var i in userIDs) {
-            row.addQuery(literals.fieldID, userIDs[i]);
+            row.addQuery(lit.FIELD_ID, userIDs[i]);
         }
         row.query().then(function () {
             while (row.next()) {
-                netIDs.push(row.getValue(literals.fieldNetid));
+                netIDs.push(row.getValue(lit.FIELD_NETID));
             }
             resolve(netIDs);
         }, function (err) {
@@ -177,20 +194,20 @@ function getNetIDs(userIDs) {
 }
 
 function findUsersToEmail(userIDs) {
-    var row = new dbr.DBRow(literals.subscriptionsTable);
+    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
     var numNotificationsMissed;
     var lastNotified;
     var goodUserIDs = [];
     return new Promise(function (resolve, reject) {
         for (var i in userIDs) {
-            row.addQuery(literals.fieldUserID, userIDs[i]);
+            row.addQuery(lit.FIELD_USER_ID, userIDs[i]);
         }
         row.query().then(function () {
             while (row.next()) {
-                numNotificationsMissed = row.getValue(literals.fieldNumNotificationsMissed);
-                lastNotified = row.getValue(literals.fieldLastNotified);
+                numNotificationsMissed = row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED);
+                lastNotified = row.getValue(lit.FIELD_LAST_NOTIFIED);
                 if (numNotificationsMissed > 0 && longEnoughAgo(lastNotified)) {
-                    goodUserIDs.push(row.getValue(literals.fieldUserID));
+                    goodUserIDs.push(row.getValue(lit.FIELD_USER_ID));
                 }
             }
             resolve(goodUserIDs);

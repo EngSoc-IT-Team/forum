@@ -5,7 +5,7 @@ var db = require('./DatabaseManager');
 var qb = require('./QueryBuilder');
 var compare = require('./Compare');
 var generator = require('./IDGenerator');
-var literals = require('./StringLiterals.js');
+var lit = require('./StringLiterals.js');
 
 var dbm = new db.DatabaseManager();
 
@@ -207,11 +207,11 @@ exports.DBRow = function(table) {
 	 ** No return values
 	**/
 	this.orderBy = function(field, ascOrDesc) { 
-		if (!(ascOrDesc == literals.ASC || ascOrDesc == literals.asc || ascOrDesc == literals.DESC || ascOrDesc == literals.desc || ascOrDesc == undefined))
+		if (!(ascOrDesc == lit.ASC || ascOrDesc == lit.asc || ascOrDesc == lit.DESC || ascOrDesc == lit.desc || ascOrDesc == undefined))
 			return log.error("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
 		if (ascOrDesc == undefined)
-			ascOrDesc = literals.ASC;
+			ascOrDesc = lit.ASC;
 		
 		querySort = qb.escapeOrderBy(field, ascOrDesc);
 	};
@@ -233,7 +233,7 @@ exports.DBRow = function(table) {
 	 ** and your row will not get inserted
 	**/
 	this.setValue = function(property, value, setRows) {
-		if (property == literals.fieldID)
+		if (property == lit.FIELD_ID)
 			log.warn("Once a row's ID has been set it SHOULD NOT be reset. Resetting ID for an update can cause query failures"); //will be removed eventually
 
 		currentRow[property] = value;

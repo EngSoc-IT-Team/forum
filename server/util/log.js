@@ -2,11 +2,11 @@
 
 var fs = require('fs');
 var path = require('path');
-var literals = require('./StringLiterals.js');
+var lit = require('./StringLiterals.js');
 
 var config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/config.json'), 'utf8'));
 
-var isInProduction = (config[literals.PRODUCTION] == literals.TRUE);
+var isInProduction = (config[lit.PRODUCTION] == lit.TRUE);
 
 exports.log = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');

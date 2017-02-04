@@ -5,7 +5,7 @@
 "use strict";
 
 var defaultTables = require('../config/defaultTables.json');
-var literals = require('./StringLiterals.js');
+var lit = require('./StringLiterals.js');
 
 var validTables = getTables();
 
@@ -39,7 +39,7 @@ exports.isValidField = function (tableName, fieldName) {
 function getTables() {
     var tables = {};
     for (var index in defaultTables) {
-        var tableName = defaultTables[index][literals.TABLE_NAME];
+        var tableName = defaultTables[index][lit.TABLE_NAME];
         tables[tableName] = getFieldNames(index);
     }
     return tables;

@@ -5,7 +5,7 @@
 "use strict";
 var dbr = require('../util/DBRow');
 var generator = require('../util/IDGenerator');
-var literals = require('../util/StringLiterals.js');
+var lit = require('../util/StringLiterals.js');
 
 /* A series of basic functions to help get your head around using the DBRow object
 ** each should be fairly self explanatory, but if there are questions let me know
@@ -26,13 +26,13 @@ usingOrderBy()
 ** to do work with it.
 */
 function getARowExample() {
-	var row = new dbr.DBRow(literals.USER_TABLE);
+	var row = new dbr.DBRow(lit.USER_TABLE);
 	row.getRow('c1t58gst8anhdpfe54h2fpiq9xvh7gy0').then(function() {
 		if (row.count() < 1) //an example of how to make sure you have a row when you use getRow()
 			return console.log("this means we didn't get a row back!");
 
-		console.log(row.getValue(literals.FIELD_NETID));
-		console.log(row.getValue(literals.FIELD_USERNAME));
+		console.log(row.getValue(lit.FIELD_NETID));
+		console.log(row.getValue(lit.FIELD_USERNAME));
 		// other code
 
 	}, function(err) {
@@ -50,13 +50,13 @@ function getARowExample() {
 ** It will only reject if there is an error in the database.
 */
 function insertARowExample() {
-	var newRow = new dbr.DBRow(literals.VOTE_TABLE);
+	var newRow = new dbr.DBRow(lit.VOTE_TABLE);
 	var userID = generator.generate();
 	var voteID = generator.generate();
-	newRow.setValue(literals.FIELD_VOTE_VALUE, literals.ZERO); // insert vote with vote value -1
-	newRow.setValue(literals.FIELD_COMMENT_OR_POST_ID, generator.generate());
-	newRow.setValue(literals.FIELD_USER_ID, userID);
-	newRow.setValue(literals.FIELD_ID, voteID);
+	newRow.setValue(lit.FIELD_VOTE_VALUE, lit.ZERO); // insert vote with vote value -1
+	newRow.setValue(lit.FIELD_COMMENT_OR_POST_ID, generator.generate());
+	newRow.setValue(lit.FIELD_USER_ID, userID);
+	newRow.setValue(lit.FIELD_ID, voteID);
 
 	newRow.insert().then(function() { // if we resolve the promise we go here
 		console.log("insert was successful");
@@ -83,14 +83,14 @@ function insertARowExample() {
 ** specific in the first place! Do everyone a favor and be as specific as you can when querying.
 */
 function queryARowExample() {
-	var row = new dbr.DBRow(literals.VOTE_TABLE);
-	row.addQuery(literals.FIELD_VOTE_VALUE, literals.ZERO); // let's look for votes with value 0 (display value -1)
+	var row = new dbr.DBRow(lit.VOTE_TABLE);
+	row.addQuery(lit.FIELD_VOTE_VALUE, lit.ZERO); // let's look for votes with value 0 (display value -1)
 
 	row.query().then(function() {
 		if (!row.next()) // go to the next row (the first one)
 			return console.log("If this returns false we got nothing back");
 
-		console.log(row.getValue(literals.FIELD_ID));
+		console.log(row.getValue(lit.FIELD_ID));
 
 		console.log(row.count()); // but id you're sneaky you'll notice we got more than one row back.. how do we see those too?
 								  // see the usingNext()
@@ -116,12 +116,12 @@ function queryARowExample() {
 ** don't do it.
 */
 function updateARow() {
-	var row = new dbr.DBRow(literals.VOTE_TABLE);
-	row.addQuery(literals.FIELD_VOTE_VALUE, literals.ZERO);
+	var row = new dbr.DBRow(lit.VOTE_TABLE);
+	row.addQuery(lit.FIELD_VOTE_VALUE, lit.ZERO);
 
 	row.query().then(function() {
 		row.next();
-		row.setValue(literals.FIELD_VOTE_VALUE, 1);
+		row.setValue(lit.FIELD_VOTE_VALUE, 1);
 		console.log("do stuff")
 		row.update().then(function(res) {
 			console.log("Successfully updated the row");
@@ -153,13 +153,13 @@ function updateARow() {
 ** deleted in this example. This would be especially important if a post, comment or user is deleted for some reason.
 */
 function deleteARowExample() {
-	var row = new dbr.DBRow(literals.VOTE_TABLE);
-	row.addQuery(literals.FIELD_VOTE_VALUE, literals.ZERO);
+	var row = new dbr.DBRow(lit.VOTE_TABLE);
+	row.addQuery(lit.FIELD_VOTE_VALUE, lit.ZERO);
 	row.query().then(function() {
 		if(!row.next())
 			return console.log("There are no votes with value 0 left! You've defeated all the negativity on the Forum!")
-		var idToDelete = row.getValue(literals.FIELD_ID);
-		var rowToDelete = new dbr.DBRow(literals.VOTE_TABLE);
+		var idToDelete = row.getValue(lit.FIELD_ID);
+		var rowToDelete = new dbr.DBRow(lit.VOTE_TABLE);
 		rowToDelete.delete(idToDelete).then(function() {
 			console.log("Successfully deleted the row");
 
@@ -186,12 +186,12 @@ function deleteARowExample() {
 ** do that).
 */
 function usingNext() {
-	var anotherRow = new dbr.DBRow(literals.VOTE_TABLE);
-	anotherRow.addQuery(literals.FIELD_VOTE_VALUE, '1'); //let's look for votes with value 1 (display value +1)
+	var anotherRow = new dbr.DBRow(lit.VOTE_TABLE);
+	anotherRow.addQuery(lit.FIELD_VOTE_VALUE, '1'); //let's look for votes with value 1 (display value +1)
 	anotherRow.query().then(function() {
 		console.log(anotherRow.count()); //
 		while(anotherRow.next()) // next() returns true as long as there's another row
-			console.log(anotherRow.getValue(literals.FIELD_ID));
+			console.log(anotherRow.getValue(lit.FIELD_ID));
 
 		console.log("done");
 
@@ -211,9 +211,9 @@ function usingNext() {
 ** descending ('DESC') order. orderBy() is capable of sorting by both alphabetic and numerical orders.
 */
 function usingOrderBy() {
-	var anotherRow = new dbr.DBRow(literals.VOTE_TABLE);
-	anotherRow.addQuery(literals.FIELD_VOTE_VALUE, literals.ONE); //let's look for votes with value 0 (display value -1)
-	anotherRow.orderBy(literals.FIELD_ID, literals.ASC);
+	var anotherRow = new dbr.DBRow(lit.VOTE_TABLE);
+	anotherRow.addQuery(lit.FIELD_VOTE_VALUE, lit.ONE); //let's look for votes with value 0 (display value -1)
+	anotherRow.orderBy(lit.FIELD_ID, lit.ASC);
 	anotherRow.query().then(function() {
 		while(anotherRow.next())
 			console.log(anotherRow.getValue('id'));
@@ -241,12 +241,12 @@ function usingOrderBy() {
 **
 */
 function usingWildcardsToFindAPattern() {
-	var row = new dbr.DBRow(literals.POST_TABLE);
-	row.addQuery(literals.FIELD_CONTENT, literals.LIKE, "%pls help%");
+	var row = new dbr.DBRow(lit.POST_TABLE);
+	row.addQuery(lit.FIELD_CONTENT, lit.LIKE, "%pls help%");
 	row.query().then(function() {
 		row.next();
-		console.log(row.getValue(literals.FIELD_TITLE))
-		console.log(row.getValue(literals.FIELD_CONTENT));
+		console.log(row.getValue(lit.FIELD_TITLE))
+		console.log(row.getValue(lit.FIELD_CONTENT));
 
 	}, function(err) {
 		console.log("There was an error")
@@ -254,13 +254,13 @@ function usingWildcardsToFindAPattern() {
 }
 
 function alternateWildcardExample() { //TODO: Make this work if at all possible
-	var row = new dbr.DBRow(literals.COMMENT_TABLE);
-	row.addQuery(literals.FIELD_CONTENT, literals.LIKE, "%taken this class%");
-	row.addQuery(literals.FIELD_AUTHOR, 'HotMuffin');
+	var row = new dbr.DBRow(lit.COMMENT_TABLE);
+	row.addQuery(lit.FIELD_CONTENT, lit.LIKE, "%taken this class%");
+	row.addQuery(lit.FIELD_AUTHOR, 'HotMuffin');
 	row.query().then(function() {
 		row.next();
-		console.log(row.getValue(literals.FIELD_AUTHOR) + " wrote:")
-		console.log(row.getValue(literals.FIELD_CONTENT));
+		console.log(row.getValue(lit.FIELD_AUTHOR) + " wrote:")
+		console.log(row.getValue(lit.FIELD_CONTENT));
 
 	}, function(err) {
 		console.log("There was an error")

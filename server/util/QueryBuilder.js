@@ -3,12 +3,12 @@
 var mysql = require('mysql');
 var log = require('./log');
 var escaper = require('./QueryEscaper');
-var literals = require('./StringLiterals.js');
+var lit = require('./StringLiterals.js');
 
 const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"] //TODO: implement 'in' and 'between' operators
 
 exports.update = function(table, dbObject) {
-	if (!dbObject[literals.FIELD_ID])
+	if (!dbObject[lit.FIELD_ID])
 		return log.warn("The field 'id' must be set in order to update a row");
 
 	if (!escaper.isValidTableName(table))
@@ -16,11 +16,11 @@ exports.update = function(table, dbObject) {
 
 	var base = "UPDATE " + table + " SET ";
 	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false, true, false, table);
-	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject[literals.FIELD_ID]) + ";";
+	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject[lit.FIELD_ID]) + ";";
 };
 
 exports.insert = function(table, dbObject) {
-	if (!dbObject[literals.FIELD_ID])
+	if (!dbObject[lit.FIELD_ID])
 		return log.warn("The field 'id' must be set in order to insert a row");
 
 	if (!escaper.isValidTableName(table))
@@ -124,8 +124,8 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 			if (!allowSettingId && prop == 'id') 
 				continue;
 
-			if (typeof obj[prop] == 'object' && obj[prop][literals.OPERATOR])
-				dbObjectString += prop + " " + checkOperator(obj[prop][literals.OPERATOR]) + " " + resolveObjectType(obj[prop][literals.VALUE]);
+			if (typeof obj[prop] == 'object' && obj[prop][lit.OPERATOR])
+				dbObjectString += prop + " " + checkOperator(obj[prop][lit.OPERATOR]) + " " + resolveObjectType(obj[prop][lit.VALUE]);
 			else
 				dbObjectString += prop + "=" + resolveObjectType(obj[prop]);
 
@@ -148,23 +148,23 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 
 function resolveObjectType(resolveThis) {
 	var objectType = typeof resolveThis;
-	if (objectType == literals.UNDEFINED || objectType == literals.SYMBOL || objectType == literals.FUNCTION || objectType == literals.OBJECT)
+	if (objectType == lit.UNDEFINED || objectType == lit.SYMBOL || objectType == lit.FUNCTION || objectType == lit.OBJECT)
 		return log.warn("Objects with type '" + objectType + "' are not currently implemented, please pass a number, boolean or string");
 
-	if (objectType == literals.NUMBER)
+	if (objectType == lit.NUMBER)
 		return resolveThis.toString();
 
 	if (!isNaN(resolveThis))
 		return resolveThis;
 
-	if (objectType == literals.BOOLEAN || resolveThis === literals.TRUE || resolveThis === literals.FALSE) {
-		if (resolveThis === true || resolveThis == literals.TRUE)
-			return literals.ONE;
+	if (objectType == lit.BOOLEAN || resolveThis === lit.TRUE || resolveThis === lit.FALSE) {
+		if (resolveThis === true || resolveThis == lit.TRUE)
+			return lit.ONE;
 		else
-			return literals.ZERO;
+			return lit.ZERO;
 	}
 
-	if (objectType == literals.STRING){
+	if (objectType == lit.STRING){
 		return mysql.escape(resolveThis);
 	}
 }
@@ -173,7 +173,7 @@ function checkOperator(op) {
 	if (allowedOperators.includes(op.toLowerCase()))
 		return op.toUpperCase();
 	else {
-		if (op.toLowerCase() == literals.IN || op.toLowerCase() == literals.BETWEEN)
+		if (op.toLowerCase() == lit.IN || op.toLowerCase() == lit.BETWEEN)
 			log.warn('The operator "' + op + '" has not yet been implemented... \n Using "=" instead.');
 		else
 			log.warn('An unacceptable operator was passed into the query, replacing with the equals operator');

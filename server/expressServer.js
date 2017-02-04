@@ -10,7 +10,7 @@ var compare = require('./util/Compare');
 var Environment = require('./util/evalEnvironment').Environment;
 var requestor = require('./util/requestResponder');
 var fs = require('fs');
-var literals = require('./util/StringLiterals.js');
+var lit = require('./util/StringLiterals.js');
 
 const PORT = 8080;
 var server = express();
@@ -21,13 +21,13 @@ server.use('/js', express.static('../client/js'));
 server.use('/assets', express.static('../client/assets'));
 
 // imports all the required middleware to express
-server.use(cp(literals.SIMPLE_SECRET)); //simple secret is an example password
+server.use(cp(lit.SIMPLE_SECRET)); //simple secret is an example password
 server.use(bp.json());
 
 //configuration information
-var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config/config.json'), literals.UTF8));
+var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config/config.json'), lit.UTF8));
 
-var isInProduction = (config.PRODUCTION == literals.TRUE);
+var isInProduction = (config.PRODUCTION == lit.TRUE);
 
 /* GET Requests
 **
@@ -37,18 +37,18 @@ var isInProduction = (config.PRODUCTION == literals.TRUE);
 ** call, http://localhost:8080/search corresponds to the server.get('/search', ...) call etc
 */
 
-server.get(literals.LANDING_PAGE, function(request, response) { // default link, delivers landing page
+server.get(lit.LANDING_PAGE, function(request, response) { // default link, delivers landing page
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LOGIN_PAGE);
+		response.redirect(lit.LOGIN_PAGE);
 		return;
 	}
 
 	response.sendFile(path.join(__dirname, '..', 'client/html/index.html'));
 });
 
-server.get(literals.SEARCH_PAGE, function(request, response) { // to search bar
+server.get(lit.SEARCH_PAGE, function(request, response) { // to search bar
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LOGIN_PAGE);
+		response.redirect(lit.LOGIN_PAGE);
 		return;
 	}
 
@@ -58,7 +58,7 @@ server.get(literals.SEARCH_PAGE, function(request, response) { // to search bar
 server.get('/question/id=\*', function(request, response) { // question page, queried by id
 	// validateSession(); // this needs to be at the beginning of every request
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LOGIN_PAGE);
+		response.redirect(lit.LOGIN_PAGE);
 		return;
 	}
 
@@ -66,26 +66,26 @@ server.get('/question/id=\*', function(request, response) { // question page, qu
 	response.sendFile(path.join(__dirname, '..', 'client/html/postAndComment.html'));
 });
 
-server.get(literals.ABOUT_PAGE, function(request, response) { //about page
+server.get(lit.ABOUT_PAGE, function(request, response) { //about page
 	if (Object.keys(request.signedCookies).length === 0) {
-		response.redirect(literals.LOGIN_PAGE);
+		response.redirect(lit.LOGIN_PAGE);
 		return;
 	}
 
 	response.sendFile(path.join(__dirname, '..', 'client/html/about.html'));
 });
 
-server.get(literals.NEW_PAGE, function(request, response) { // newest questions being asked in list view
+server.get(lit.NEW_PAGE, function(request, response) { // newest questions being asked in list view
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LOGIN_PAGE);
+		response.redirect(lit.LOGIN_PAGE);
 		return;
 	}
 	response.sendFile(path.join(__dirname, '..', 'client/html/new.html'));
 });
 
-server.get(literals.LIST_PAGE, function(request, response) { //return the a default most recent list of questions
+server.get(lit.LIST_PAGE, function(request, response) { //return the a default most recent list of questions
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LOGIN_PAGE);
+		response.redirect(lit.LOGIN_PAGE);
 		return;
 	}
 
@@ -94,16 +94,16 @@ server.get(literals.LIST_PAGE, function(request, response) { //return the a defa
 
 server.get('/list/filter?\*', function(request, response) { //return the list filtered by the passed parameters, active search must route here ordered by most positive votes
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LOGIN_PAGE);
+		response.redirect(lit.LOGIN_PAGE);
 		return;
 	}
 
 	response.sendFile(path.join(__dirname, '..', 'client/html/questionList.html'));
 });
 
-server.get(literals.PROFILE_PAGE, function(request, response) { //user home page
+server.get(lit.PROFILE_PAGE, function(request, response) { //user home page
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LOGIN_PAGE);
+		response.redirect(lit.LOGIN_PAGE);
 		return;
 	}
 	if (!compare.isEmpty(request.query)) {
@@ -120,19 +120,19 @@ server.get(literals.PROFILE_PAGE, function(request, response) { //user home page
 	}
 });
 
-server.get(literals.LOGIN_PAGE, function(request, response) { // mock login page
+server.get(lit.LOGIN_PAGE, function(request, response) { // mock login page
 	if (compare.isEmpty(request.signedCookies)) {
 		response.sendFile(path.join(__dirname, '..', 'client/html/login.html'));
 		return;
 	}
 	else {
-		response.redirect(literals.LANDING_PAGE);
+		response.redirect(lit.LANDING_PAGE);
 	}
 });
 
-server.get(literals.GUIDELINES_PAGE, function(request, response) { // mock login page
+server.get(lit.GUIDELINES_PAGE, function(request, response) { // mock login page
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LANDING_PAGE);
+		response.redirect(lit.LANDING_PAGE);
 		return;
 	}
 	else {
@@ -140,13 +140,13 @@ server.get(literals.GUIDELINES_PAGE, function(request, response) { // mock login
 	}
 });
 
-server.get(literals.DEV_PAGE, function(request, response) { // mock login page
+server.get(lit.DEV_PAGE, function(request, response) { // mock login page
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LANDING_PAGE);
+		response.redirect(lit.LANDING_PAGE);
 		return;
 	}
 	else {
-		validator.hasRole(request.signedCookies.usercookie.userID, literals.ADMIN).then(function(res) {
+		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/dev.html'));
 		}, function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
@@ -155,13 +155,13 @@ server.get(literals.DEV_PAGE, function(request, response) { // mock login page
 	}
 });
 
-server.get(literals.EVAL_PAGE, function(request, response) { //allows evaluation of server side code from the client
+server.get(lit.EVAL_PAGE, function(request, response) { //allows evaluation of server side code from the client
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LANDING_PAGE);
+		response.redirect(lit.LANDING_PAGE);
 		return;
 	}
 	else {
-		validator.hasRole(request.signedCookies.usercookie.userID, literals.ADMIN).then(function(res) {
+		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/eval.html'));
 		}, function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
@@ -169,18 +169,18 @@ server.get(literals.EVAL_PAGE, function(request, response) { //allows evaluation
 	}
 });
 
-server.get(literals.HELP_PAGE, function(request, response) { // user help page
+server.get(lit.HELP_PAGE, function(request, response) { // user help page
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LANDING_PAGE);
+		response.redirect(lit.LANDING_PAGE);
 		return;
 	}
 	
 	response.sendFile(path.join(__dirname, '..', 'client/html/help.html'));
 });
 
-server.get(literals.CLASS_PAGE, function(request, response) { // user help page
+server.get(lit.CLASS_PAGE, function(request, response) { // user help page
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LANDING_PAGE);
+		response.redirect(lit.LANDING_PAGE);
 		return;
 	}
 	
@@ -193,14 +193,14 @@ server.get(literals.CLASS_PAGE, function(request, response) { // user help page
 ** request to the corresponding link.
 */
 
-server.post(literals.LOGIN_PAGE, function(request, response) {
+server.post(lit.LOGIN_PAGE, function(request, response) {
 	if (!request.body) {
 		response.send(false);
 		return;
 	}
 
 	validator.loginAndCreateSession(request.body).then(function(result) {
-		response.cookie(literals.USER_COOKIE, result, {signed: true});
+		response.cookie(lit.USER_COOKIE, result, {signed: true});
     	response.send(true); // REDIRECT MUST OCCUR ON THE CLIENT AFTER A COOKIE IS SUCCESSFULLY SET
 
 	}, function(result) {
@@ -208,13 +208,13 @@ server.post(literals.LOGIN_PAGE, function(request, response) {
 	});
 });
 
-server.post(literals.EVAL_PAGE, function(request, response) {
+server.post(lit.EVAL_PAGE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LANDING_PAGE);
+		response.redirect(lit.LANDING_PAGE);
 		return;
 	}
 	else {
-		validator.hasRole(request.signedCookies.usercookie.userID, literals.ADMIN).then(function(res) {
+		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
 			var env = new Environment(); // a new disposable execution environment
 			env.execute(request.body.code).then(function(res) {
 				response.send(res);
@@ -228,15 +228,15 @@ server.post(literals.EVAL_PAGE, function(request, response) {
 	}
 });
 
-server.post(literals.LOGOUT_PAGE, function(request, response) { // a place to post exclusively for logout requests
+server.post(lit.LOGOUT_PAGE, function(request, response) { // a place to post exclusively for logout requests
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(literals.LOGIN_PAGE); //then there's nothing to sign out of
+		response.redirect(lit.LOGIN_PAGE); //then there's nothing to sign out of
 		return;
 	}
 
 	if (request.body.logout === true) {
 		validator.logout(request.signedCookies.usercookie).then(function(res) {
-			response.clearCookie(literals.USER_COOKIE);
+			response.clearCookie(lit.USER_COOKIE);
 			response.send(true);
 		}, function(res) {
 			response.send(false);
@@ -244,18 +244,18 @@ server.post(literals.LOGOUT_PAGE, function(request, response) { // a place to po
 	}
 });
 
-server.post(literals.VOTE_PAGE, function(request, response) {
+server.post(lit.VOTE_PAGE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies)){ // if not signed in, you can't vote
-		response.send(literals.NEED_LOGIN); //tell the client to tell the user they need to login
+		response.send(lit.NEED_LOGIN); //tell the client to tell the user they need to login
 		return;
 	}
 	//check if user has already voted here and the vote is the same as their previous vote
 	//reject if they have, allow if they haven't, regardless, increment count on the client
 });
 
-server.post(literals.SUBSCRIBE_PAGE, function(request, response) {
+server.post(lit.SUBSCRIBE_PAGE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies)) { //if you're not signed in you can't subscribe
-		response.send(literals.NEED_LOGIN); // tell them to log in
+		response.send(lit.NEED_LOGIN); // tell them to log in
 		return;
 	}
 
@@ -265,9 +265,9 @@ server.post(literals.SUBSCRIBE_PAGE, function(request, response) {
 
 });
 
-server.post(literals.INFO_PAGE, function(request, response) {
+server.post(lit.INFO_PAGE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies)) { //if you're not signed in you can't get information
-		response.send(literals.NEED_LOGIN); // tell them to log in
+		response.send(lit.NEED_LOGIN); // tell them to log in
 		return;
 	}
 	requestor.parseRequest(request).then(function(resultToReturn) {

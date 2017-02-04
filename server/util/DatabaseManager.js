@@ -4,17 +4,17 @@ var mysql = require('mysql');
 var fs = require('fs');
 var path = require('path');
 var log = require('./log');
-var literals = require('./StringLiterals.js');
+var lit = require('./StringLiterals.js');
 
 var databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/database.json'), 'utf8')) 
 
 exports.DatabaseManager = function() {
 	var pool = mysql.createPool({
-		host: databaseInformation[literals.HOST],
-		user: databaseInformation[literals.USER],
-		password: databaseInformation[literals.SECRET],
-		database: databaseInformation[literals.DATABASE],
-		connectionLimit: databaseInformation[literals.MAX_CONNECTIONS]
+		host: databaseInformation[lit.HOST],
+		user: databaseInformation[lit.USER],
+		password: databaseInformation[lit.SECRET],
+		database: databaseInformation[lit.DATABASE],
+		connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
 	});
 
 	this.query = function(queryString) {
