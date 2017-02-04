@@ -167,6 +167,12 @@ function setNotificationsMissedToZero(contentID) {
     });
 }
 
+/**
+ * Function that sets the lastNotified field for content that users have been emailed about.
+ * Field is set to the current date/time.
+ * @param contentID ID of content that was emailed for.
+ * No return because this is the last function called from the promise chain.
+ */
 function setLastNotifiedToNow(contentID) {
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
     row.addQuery(lit.FIELD_ITEM_ID, contentID);
