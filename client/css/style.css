@@ -206,6 +206,10 @@ a:hover,
   padding-bottom: 40px;
 }
 
+.main-content {
+  margin-top: 20px;
+}
+
 .info-block {
   height: 100%;
   background-color: white;
