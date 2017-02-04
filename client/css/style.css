@@ -1,9 +1,18 @@
 /* General */
 
+html {
+  height: 100%;
+}
+
 body {
   background-color: #34056D;
   font-family: 'Comfortaa', cursive;
   color: #FF9200;
+  min-height: 100%;
+}
+
+body .container-fluid {
+  height: 100%;
 }
 
 a {
@@ -19,6 +28,11 @@ a:focus,
 
 .btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
   outline: 0;
+}
+
+.main-content {
+  margin-bottom: 250px; /* Same height as footer */
+  position: relative;
 }
 
 /* Navbar */
@@ -205,7 +219,7 @@ a:focus,
 .wrap {
   padding-left: 40px;
   padding-right: 40px;
-  padding-bottom: 40px;
+  /*padding-bottom: 40px;*/
 }
 
 .main-content {
@@ -325,6 +339,29 @@ footer {
   margin-top: 100px;
   padding-top: 20px;
   background-color: #000;
+  position: relative;
+  width: 100%;
+  clear:both;
+  height: 250px;
+}
+
+footer .wrap {
+  padding-top: 40px;
+}
+
+footer .wrap div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.footer-logo {
+  float: right;
+  margin-top: 30px;
+  margin-right: 50px;
+}
+
+.footer-logo img {
+  width: 80px;
 }
 
 /* Profile */
