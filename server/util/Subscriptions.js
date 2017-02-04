@@ -67,6 +67,7 @@ function onSubscribed(contentID, userID) {
  * a child comment is added.
  * @param contentID ID of content added/edited.
  */
+onContentAddedOrChanged('3ntcfsbrqunk27yymvmtetdvkrg33es1');
 function onContentAddedOrChanged(contentID) {
     //get ID of content user actually subscribed to
     getParentContentID(contentID).then(function (contentID) {
@@ -76,7 +77,7 @@ function onContentAddedOrChanged(contentID) {
         //go through email logic
         return emailUsers(contentID);
     }).catch(function (error) {
-        log.log("ERROR: " + error);
+        log.log("onContentAddedOrChanged error: " + error);
     });
 }
 
@@ -95,9 +96,6 @@ function emailUsers(contentID) {
                 //get userIDs for those who should be emailed
                 return findUsersToEmail(userIDs);
             }).then(function (userIDs) {
-                log.log("userIDs: "+userIDs);
-                return setNotificationsMissedToZero(userIDs);
-            }).then(function (userIDs) {
                 //get net IDs from user IDs
                 return getNetIDs(userIDs);
             }).then(function (netIDs) {
@@ -106,21 +104,14 @@ function emailUsers(contentID) {
                     //TODO add url to give info
                     mailOptions[lit.TO] = netIDs[i] + lit.QUEENS_EMAIL;
                     log.log("MAIL SENT");
-                    // transport.sendMail(mailOptions);
+                    // transport.sendMail(mailOptions);//TODO uncomment
                 }
                 return netIDs;
-            }).then(function (netIDs) {
+            }).then(function () {
+                return setNotificationsMissedToZero(contentID);
+            }).then(function () {
                 //update last notified to current time
-                var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-                for (var i in netIDs) {
-                    row.addQuery(lit.FIELD_NETID, netIDs[i]);
-                }
-                row.query().then(function () {
-                    while (row.next()) {
-                        row.setValue(lit.FIELD_LAST_NOTIFIED, new Date().toISOString());
-                        row.update();
-                    }
-                });
+                setLastNotifiedToNow(contentID);
             }).catch(function (err) {
                 reject(err);
             });
@@ -142,34 +133,48 @@ function addToNotificationsMissed(contentID) {
         row.query().then(function () {
             while (row.next()) { //increment notifications missed for all users that subscribed to that content
                 row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED) + 1);
-                row.update().then(function () {
-                    resolve(contentID);
-                }, function (err) {
+                row.update().then(function (err) {
                     reject(err);
                 });
             }
+            resolve(contentID);
         }, function (err) {
             reject(err);
         });
     });
 }
 
-//TODO not user IDs, subscription IDs
-function setNotificationsMissedToZero(userIDs) {
+/**
+ * Sets numNotificationsMissed to 0 for all pieces of content that had an email sent out.
+ * @param contentID ID of the content that was emailed for, so any row with this
+ * itemID needs its notifications missed to be set to 0.
+ * @returns {Promise} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from caller method.
+ */
+function setNotificationsMissedToZero(contentID) {
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-    for (var i in userIDs) {
-        row.addQuery(lit.FIELD_USER_ID, userIDs[i]);
-    }
+    row.addQuery(lit.FIELD_ITEM_ID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) { //set notifications missed to zero for all users that subscribed to that content
                 row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, 0);
                 row.update();
             }
-            resolve(userIDs);
+            resolve(contentID);
         }, function (err) {
             reject(err);
         });
+    });
+}
+
+function setLastNotifiedToNow(contentID) {
+    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+    row.addQuery(lit.FIELD_ITEM_ID, contentID);
+    row.query().then(function () {
+        while (row.next()) {
+            row.setValue(lit.FIELD_LAST_NOTIFIED, new Date().toISOString());
+            row.update();
+        }
     });
 }
 
@@ -192,7 +197,7 @@ function getParentContentID(contentID) {
             }
             //if parent of the content is a post, send back that post's ID
             //else it is a comment, so send back that comment's ID
-            (row.getValue(lit.TYPE) == lit.POST_TABLE) ? resolve(row.getValue(lit.FIELD_PARENT_POST)) :
+            (row.getValue(lit.FIELD_PARENT_POST) != lit.UNDEFINED) ? resolve(row.getValue(lit.FIELD_PARENT_POST)) :
                 resolve(row.getValue(lit.FIELD_PARENT_COMMENT));
         }, function () {
             reject("No parent");
@@ -232,6 +237,11 @@ function getUserIDs(contentID) {
  * use promise to make it synchronous. Chained from  caller method.
  */
 function getNetIDs(userIDs) {
+    //check that userIDs can actually be used to find users
+    //if not (empty), stop this function and continue to next then chain
+    if (userIDs.length == 0) {
+        return userIDs;
+    }
     var netIDs = [];
     var row = new dbr.DBRow(lit.USER_TABLE);
     return new Promise(function (resolve, reject) {
@@ -259,6 +269,11 @@ function getNetIDs(userIDs) {
  * use promise to make it synchronous. Chained from  caller method.
  */
 function findUsersToEmail(userIDs) {
+    //check that userIDs can actually be used to find users
+    //if not (empty), stop this function and continue to next then chain
+    if (userIDs.length == 0) {
+        return userIDs;
+    }
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
     var numNotificationsMissed;
     var lastNotified;
@@ -274,7 +289,7 @@ function findUsersToEmail(userIDs) {
                 //both need to pass the compare to email the user
                 numNotificationsMissed = row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED);
                 lastNotified = row.getValue(lit.FIELD_LAST_NOTIFIED);
-                if (numNotificationsMissed > lit.minNumMissedNotifications && longEnoughAgo(lastNotified)) {
+                if (numNotificationsMissed > lit.MIN_NUM_MISSED_NOTIFICATIONS && longEnoughAgo(lastNotified)) {
                     goodUserIDs.push(row.getValue(lit.FIELD_USER_ID));
                 }
             }
