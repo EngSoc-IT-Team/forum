@@ -177,7 +177,8 @@ const literals = {
     SWEEP: "sweep",
 
     //integer values
-    MIN_NUM_MISSED_NOTIFICATIONS: 0
+    MIN_NUM_MISSED_NOTIFICATIONS: 0, //at least one missed notification needed
+    MIN_MS_TO_NOTIFY_AGAIN: 86400000 //one day in milliseconds
 };
 
 module.exports = literals;
