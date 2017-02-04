@@ -387,7 +387,7 @@ footer {
 
 .class-page .modal .star-container {
   text-align: center;
-  padding: 20px 0px; 
+  padding: 20px 0px;
 }
 
 .class-page .review-container {
@@ -396,4 +396,8 @@ footer {
 
 .class-page .modal-footer .button {
   margin-top: 0px;
+}
+
+.class-page .modal .star {
+    cursor: pointer;
 }
