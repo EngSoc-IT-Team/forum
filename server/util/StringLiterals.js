@@ -5,6 +5,7 @@
  */
 
 "use strict";
+
 const literals = {
 
     //miscellaneous database table information

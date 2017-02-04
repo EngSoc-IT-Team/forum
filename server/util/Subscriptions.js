@@ -1,13 +1,16 @@
 /**
  * Created by Carson on 15/01/2017.
+ * File to handle logic of users subscribing to posts/comments.
+ * Inserts information when a user subscribes,
+ * queries when content added/edited to see if email notification
+ * should be sent to users that are subscribed.
  */
-//TODO document it
 var nodeMailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var log = require('./log.js');
 var dbr = require('./DBRow.js');
 var generator = require('./IDGenerator.js');
-var lit = require('./StringLiterals.js'); //TODO: Change literals to lit
+var lit = require('./StringLiterals.js');
 
 //object that holds the mailing information - who sends it (and their authentication) and connection details
 var transport = nodeMailer.createTransport(smtpTransport({
@@ -28,6 +31,12 @@ var mailOptions = {
     text: 'There was a change to content you are subscribed to! Click here to see: ' //will add url here
 };
 
+/**
+ * Function to be called when a user clicks a subscribe button.
+ * Adds their information to the subscriptions table.
+ * @param contentID The ID of the post/comment the user subscribed to.
+ * @param userID The ID of the user who subscribed.
+ */
 function onSubscribed(contentID, userID) {
     //set in database all the information
     var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
@@ -43,9 +52,14 @@ function onSubscribed(contentID, userID) {
     })
 }
 
-function onContentAddedOrChanged(childID) {
+/**
+ * Function to be called when content edited or
+ * a child comment is added.
+ * @param contentID ID of content added/edited.
+ */
+function onContentAddedOrChanged(contentID) {
     //get ID of content user actually subscribed to
-    getParentContentID(childID).then(function (contentID) {
+    getParentContentID(contentID).then(function (contentID) {
         //add to number of notifications missed
         return addToNotificationsMissed(contentID);
     }).then(function (contentID) {
@@ -56,14 +70,13 @@ function onContentAddedOrChanged(childID) {
     });
 }
 
-function onContentEdited(contentID) {
-    addToNotificationsMissed(contentID).then(function (contentID) {
-        emailUsers(contentID);
-    }).catch(function (error) {
-        log.log("ERROR: " + error);
-    });
-}
-
+/**
+ * Function that emails users.
+ * Computes logic to see if an individual *should* be emailed as well.
+ * @param contentID ID of the content the user is to be emailed about.
+ * @returns {Promise} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from  caller method.
+ */
 function emailUsers(contentID) {
     return new Promise(function (resolve, reject) {
             getUserIDs(contentID).then(function (userIDs) {
@@ -78,7 +91,6 @@ function emailUsers(contentID) {
                 //get net IDs from user IDs
                 return getNetIDs(userIDs);
             }).then(function (netIDs) {
-                log.log("here");
                 //email users
                 for (var i in netIDs) {
                     //TODO add url to give info
@@ -88,6 +100,7 @@ function emailUsers(contentID) {
                 }
                 return netIDs;
             }).then(function (netIDs) {
+                //update last notified to current time
                 var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
                 for (var i in netIDs) {
                     row.addQuery(lit.FIELD_NETID, netIDs[i]);
@@ -105,12 +118,19 @@ function emailUsers(contentID) {
     );
 }
 
+/**
+ * Function that increments the number of edits/child content that have gone without
+ * an email to subscribed users.
+ * @param contentID ID of the content to increase numMissedNotifications for
+ * @returns {Promise} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from  caller method.
+ */
 function addToNotificationsMissed(contentID) {
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
     row.addQuery(lit.FIELD_ITEM_ID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
-            while (row.next()) {
+            while (row.next()) { //increment notifications missed for all users that subscribed to that content
                 row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED) + 1);
                 row.update().then(function () {
                     resolve(contentID);
@@ -124,6 +144,7 @@ function addToNotificationsMissed(contentID) {
     });
 }
 
+//TODO not user IDs, subscription IDs
 function setNotificationsMissedToZero(userIDs) {
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
     for (var i in userIDs) {
@@ -131,7 +152,7 @@ function setNotificationsMissedToZero(userIDs) {
     }
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
-            while (row.next()) {
+            while (row.next()) { //set notifications missed to zero for all users that subscribed to that content
                 row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, 0);
                 row.update();
             }
@@ -142,6 +163,15 @@ function setNotificationsMissedToZero(userIDs) {
     });
 }
 
+/**
+ * Function to get the parent content of added content.
+ * Added content is only ever comments, so an issue of a table
+ * not having parent content will never come up. Able to handle
+ * a top level comment and a child comment.
+ * @param contentID The ID of the content for which the parent is to be found.
+ * @returns {Promise} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from caller method.
+ */
 function getParentContentID(contentID) {
     var row = new dbr.DBRow(lit.COMMENT_TABLE);
     row.addQuery(lit.FIELD_ID, contentID);
@@ -150,6 +180,8 @@ function getParentContentID(contentID) {
             if (!row.next()) {
                 reject("got nothing back");
             }
+            //if parent of the content is a post, send back that post's ID
+            //else it is a comment, so send back that comment's ID
             (row.getValue(lit.TYPE) == lit.POST_TABLE) ? resolve(row.getValue(lit.FIELD_PARENT_POST)) :
                 resolve(row.getValue(lit.FIELD_PARENT_COMMENT));
         }, function () {
@@ -158,6 +190,13 @@ function getParentContentID(contentID) {
     });
 }
 
+/**
+ * Function that gets user IDs that have subscribed to a
+ * specified contentID.
+ * @param contentID ID of the content for which users are subscribed to.
+ * @returns {Promise} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from  caller method.
+ */
 function getUserIDs(contentID) {
     var userIDs = [];
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
@@ -175,6 +214,13 @@ function getUserIDs(contentID) {
     });
 }
 
+/**
+ * Gets net IDs from user IDs. The user IDs are ones that have been
+ * filtered so that these users are the ones to be emailed.
+ * @param userIDs Array of user IDs that need their net ID found.
+ * @returns {Promise} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from  caller method.
+ */
 function getNetIDs(userIDs) {
     var netIDs = [];
     var row = new dbr.DBRow(lit.USER_TABLE);
@@ -193,6 +239,15 @@ function getNetIDs(userIDs) {
     });
 }
 
+/**
+ * Function that filters through user IDs to find user IDs
+ * for those that should be emailed. They should be emailed
+ * if there is at least one missed notification and it has been
+ * long enough since the last email was sent.
+ * @param userIDs Array of all users that have subscribed to something.
+ * @returns {Promise} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from  caller method.
+ */
 function findUsersToEmail(userIDs) {
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
     var numNotificationsMissed;
@@ -204,6 +259,9 @@ function findUsersToEmail(userIDs) {
         }
         row.query().then(function () {
             while (row.next()) {
+                //compare number of missed notifications to preset minimum number needed to email user
+                //also check and make sure that it has been long enough since user was last emailed
+                //both need to pass the compare to email the user
                 numNotificationsMissed = row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED);
                 lastNotified = row.getValue(lit.FIELD_LAST_NOTIFIED);
                 if (numNotificationsMissed > 0 && longEnoughAgo(lastNotified)) {
