@@ -1,5 +1,7 @@
 /**
  * Created by Carson on 02/02/2017.
+ * String literals to be used for other files.
+ * Constant object is exported.
  */
 
 "use strict";
