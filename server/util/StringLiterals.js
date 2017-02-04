@@ -4,18 +4,22 @@
 
 "use strict";
 module.exports = { //TODO make it a constant object and then export that
-    //TODO re-organize and comment it out
 
+    //miscellaneous database table information
     TABLE_NAME: "tablename",
     FIELDS: "fields",
     TABLE: "table",
     TYPE: "type",
     DEFAULT: "default",
     PRIMARY_KEY: "primaryKey",
+
+    //miscellaneous user information
+    PROFILE: "profile",
+    QUEENS_EMAIL: "@queensu.ca",
+
+    //variable information, such as types, operations tec.
     OPERATOR: "operator",
     VALUE: "value",
-    TRUE: "true",
-    FALSE: "false",
     UNDEFINED: "undefined",
     SYMBOL: "symbol",
     OBJECT: "object",
@@ -23,11 +27,8 @@ module.exports = { //TODO make it a constant object and then export that
     NUMBER: "number",
     BOOLEAN: "boolean",
     STRING: "string",
-    PROFILE: "profile",
-    TO: "to",
-    QUEENS_EMAIL: "@queensu.ca",
-    NEED_LOGIN: "needLogin",
 
+    //web pages, with '/'
     LOGIN_PAGE: "/login",
     ABOUT_PAGE: "/about",
     NEW_PAGE: "/new",
@@ -45,20 +46,27 @@ module.exports = { //TODO make it a constant object and then export that
     INFO_PAGE: "/info",
     LANDING_PAGE: "/",
 
+    //values in string format: e.g. boolean value true as \'true\'
     ZERO: "0",
     ONE: "1",
+    TRUE: "true",
+    FALSE: "false",
 
     //NOTE: These literals do not follow the same
     //format because there are uppercase and lowercase instances
+    //sql sort commands
     DESC: "DESC",
     desc: "desc",
     ASC: "ASC",
     asc: "asc",
 
+    //words for string manipulations, sql strings
     IN: "in",
     BETWEEN: "between",
     LIKE: "like",
+    TO: "to",
 
+    //database configurations
     HOST: "host",
     USER: "user",
     SECRET: "secret",
@@ -69,9 +77,13 @@ module.exports = { //TODO make it a constant object and then export that
     DATABASE_SETUP_NEEDED: "databaseSetupNeeded",
     LOAD_MOCK_DATA: "loadMockData",
     UTF8: "utf8",
+
+    //session information
     ADMIN: "admin",
     USER_COOKIE: "usercookie",
+    NEED_LOGIN: "needLogin",
 
+    //fields common to more than one table
     FIELD_UPVOTES: "upvotes",
     FIELD_DOWNVOTES: "downvotes",
     FIELD_NETVOTES: "netVotes",
@@ -86,15 +98,18 @@ module.exports = { //TODO make it a constant object and then export that
     FIELD_ITEM_ID: "itemID",
     FIELD_TYPE: "type",
 
+    //fields for post table only
     POST_TABLE: "post",
     FIELD_ANSWERED: "answered",
 
+    //fields for comment table only
     COMMENT_TABLE: "comment",
     FIELD_IS_SOLUTION: "isSolution",
     FIELD_COMMENT_LEVEL: "commentLevel",
     FIELD_PARENT_POST: "parentPost",
     FIELD_PARENT_COMMENT: "parentComment",
 
+    //fields for user table only
     USER_TABLE: "user",
     FIELD_NETID: "netid",
     FIELD_USERNAME: "username",
@@ -106,6 +121,7 @@ module.exports = { //TODO make it a constant object and then export that
     FIELD_ACCEPTED_TERMS: "acceptedTerms",
     FIELD_PRIVILEGE: "privilege",
 
+    //fields for report table only
     REPORT_TABLE: "report",
     FIELD_REPORT_REASON: "reportReason",
     FIELD_REPORT: "report",
@@ -113,38 +129,47 @@ module.exports = { //TODO make it a constant object and then export that
     FIELD_REPORTED_USER: "reportedUser",
     FIELD_RELATED_COMMENT_OR_POST_ID: "relatedCommentOrPostID",
 
+    //fields for tag table only
     TAG_TABLE: "tag",
     FIELD_NAME: "name",
     FIELD_RELATED_TAGS: "relatedTags",
 
+    //fields for vote table only
     VOTE_TABLE: "vote",
     FIELD_COMMENT_OR_POST_ID: "commentOrPostID",
     FIELD_VOTE_VALUE: "voteValue",
 
+    //fields for session table only
     SESSION_TABLE: "session",
     FIELD_SESSION_START: "sessionStart",
 
+    //fields for class table only
     CLASS_TABLE: "class",
     FIELD_COURSE_CODE: "courseCode",
     FIELD_LONG_SUMMARY: "longSummary",
 
+    //fields for link table only
     LINK: "link",
     FIELD_TRUSTED: "trusted",
     FIELD_DATE_ADDED: "dateAdded",
     FIELD_ADDED_BY: "addedBy",
 
+    //fields for subscriptions table only
     SUBSCRIPTIONS_TABLE: "subscriptions",
     FIELD_LAST_NOTIFIED: "lastNotified",
     FIELD_NUM_NOTIFICATIONS_MISSED: "numNotificationsMissed",
     FIELD_NUM_TIME_NOTIFIED: "numTimesNotified",
     FIELD_DATE_SUBSCRIBED: "dateSubscribed",
 
+    //fields for saved table only
     SAVED_TABLE: "saved",
     FIELD_DATE_SAVED: "dateSaved",
 
+    //fields for contributions table only
     CONTRIBUTION_TABLE: "contribution",
     FIELD_DATE: "date",
 
+    //fields for sweeper class
     SWEEPER_CANCEL_JOB: "cancelJob",
     SWEEP: "sweep"
 };
