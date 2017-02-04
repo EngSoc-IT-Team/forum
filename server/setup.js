@@ -17,9 +17,9 @@ setup(); // let's set everything up
 function setup() {
 	dependencies.checkDependencies();
 
-	if (preferences[literals.databaseSetupNeeded])
+	if (preferences[literals.DATABASE_SETUP_NEEDED])
 		dbsetup.setupDatabase(); // setup all default tables
 
-	if (preferences[literals.loadMockData])
+	if (preferences[literals.LOAD_MOCK_DATA])
 		setTimeout(function() {dbsetup.loadDemoData()}, 1000); //wait for database to get set up before we try to insert mock data
 }

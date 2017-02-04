@@ -22,8 +22,8 @@ exports.Sweeper = function() {
 	var eventListener = new events.EventEmitter;
 	var cancelled = false;
 
-	eventListener.on(literals.sweeperCancelJob, function(jobs) {
-		if (!jobs.includes(literals.sweep))
+	eventListener.on(literals.SWEEPER_CANCEL_JOB, function(jobs) {
+		if (!jobs.includes(literals.SWEEP))
 			return;
 
 		cancelled = true;
@@ -31,28 +31,28 @@ exports.Sweeper = function() {
 
 	this.sweepTable = function(table) {
 		switch(table) {
-			case (literals.userTable):
+			case (literals.USER_TABLE):
 				userCleanup();
 				break;
-			case (literals.link):
+			case (literals.LINK):
 				linkCleanup();
 				break;
-			case (literals.postTable):
+			case (literals.POST_TABLE):
 				postCleanup();
 				break;
-			case (literals.commentTable):
+			case (literals.COMMENT_TABLE):
 				commentCleanup();
 				break;
-			case (literals.reportTable):
+			case (literals.REPORT_TABLE):
 				reportCleanup();
 				break;
-			case (literals.tagTable):
+			case (literals.TAG_TABLE):
 				tagCleanup();
 				break;
-			case (literals.classTable):
+			case (literals.CLASS_TABLE):
 				classCleanup();
 				break;
-			case (literals.sessionTable):
+			case (literals.SESSION_TABLE):
 				sessionCleanup();
 				break;
 			default:
@@ -89,12 +89,12 @@ exports.Sweeper = function() {
 	** Checks the link table to make sure links are still valid (lead to non-empty pages/404 errors)
 	*/
 	function linkCleanup() {
-		var links = new DBRow(literals.link);
+		var links = new DBRow(literals.LINK);
 		links.query().then(function() {
 			var href = "";
 
 			while(links.next()){
-				href = links.getValue(literals.link);
+				href = links.getValue(literals.LINK);
 				var isValid = true;//test link using something
 				if (isValid)
 					continue;

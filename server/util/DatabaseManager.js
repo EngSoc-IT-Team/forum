@@ -10,11 +10,11 @@ var databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 
 
 exports.DatabaseManager = function() {
 	var pool = mysql.createPool({
-		host: databaseInformation[literals.host],
-		user: databaseInformation[literals.user],
-		password: databaseInformation[literals.secret],
-		database: databaseInformation[literals.database],
-		connectionLimit: databaseInformation[literals.maxConnections]
+		host: databaseInformation[literals.HOST],
+		user: databaseInformation[literals.USER],
+		password: databaseInformation[literals.SECRET],
+		database: databaseInformation[literals.DATABASE],
+		connectionLimit: databaseInformation[literals.MAX_CONNECTIONS]
 	});
 
 	this.query = function(queryString) {

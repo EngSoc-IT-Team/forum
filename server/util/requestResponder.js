@@ -27,7 +27,7 @@ var Aggregator = require('./aggregator');
 exports.parseRequest = function(request) {
 	return new Promise(function(resolve, reject) {
 		switch (request.body.requested) {
-			case (literals.profile):
+			case (literals.PROFILE):
 				profileRequest(request).then(function(info) {
 					resolve(info);
 				}, function(err) {
@@ -61,15 +61,15 @@ function profileRequest(request) {
 	return new Promise(function(resolve, reject) {
 		if (request.body.self) {
 			var userID = request.signedCookies.usercookie.userID;
-			var user = new DBRow(literals.userTable);
+			var user = new DBRow(literals.USER_TABLE);
 			user.getRow(userID).then(function() {
 				if (user.count() < 1)
 					reject("No user found");
 				else {
-					info.profile.username = user.getValue(literals.fieldUsername);
-					info.profile.upvotes = user.getValue(literals.fieldTotalUpvotes);
-					info.profile.downvotes = user.getValue(literals.fieldTotalDownvotes);
-					info.profile.dateJoined = user.getValue(literals.fieldDateJoined);
+					info.PROFILE.username = user.getValue(literals.FIELD_USERNAME);
+					info.PROFILE.upvotes = user.getValue(literals.FIELD_TOTAL_UPVOTES);
+					info.PROFILE.downvotes = user.getValue(literals.FIELD_TOTAL_DOWNVOTES);
+					info.PROFILE.dateJoined = user.getValue(literals.FIELD_DATE_JOINED);
 					Aggregator.aggregateProfileInfo(user, info).then(function() {
 						getSaved(user, info).then(function() {
 							getSubscribed(user, info).then(function() {
@@ -92,7 +92,7 @@ function profileRequest(request) {
 			});
 		}
 		else {
-			var user = new DBRow(literals.userTable);
+			var user = new DBRow(literals.USER_TABLE);
 			for (var key in request.query)
 				user.addQuery(key, request.query[key]);
 
@@ -100,10 +100,10 @@ function profileRequest(request) {
 				if (!user.next())
 					reject("No user found");
 				else {
-                    info.profile.username = user.getValue(literals.fieldUsername);
-                    info.profile.upvotes = user.getValue(literals.fieldTotalUpvotes);
-                    info.profile.downvotes = user.getValue(literals.fieldTotalDownvotes);
-                    info.profile.dateJoined = user.getValue(literals.fieldDateJoined);
+                    info.PROFILE.username = user.getValue(literals.FIELD_USERNAME);
+                    info.PROFILE.upvotes = user.getValue(literals.FIELD_TOTAL_UPVOTES);
+                    info.PROFILE.downvotes = user.getValue(literals.FIELD_TOTAL_DOWNVOTES);
+                    info.PROFILE.dateJoined = user.getValue(literals.FIELD_DATE_JOINED);
 
 					Aggregator.aggregateProfileInfo(user, info).then(function() {
 						getContributions(user, info).then(function() {
@@ -126,8 +126,8 @@ function recursiveGet(resolve, reject, rows, list, getData) {
 	if (!rows.next())
 		resolve(list);
 	else {
-		var item = new DBRow(rows.getValue(literals.type));
-		item.getRow(rows.getValue(literals.fieldItemID)).then(function() {
+		var item = new DBRow(rows.getValue(literals.TYPE));
+		item.getRow(rows.getValue(literals.FIELD_ITEM_ID)).then(function() {
 			list.push(getData(rows, item))
 			recursiveGet(resolve, reject, rows, list, getData)
 		}, function(err) {
@@ -138,10 +138,10 @@ function recursiveGet(resolve, reject, rows, list, getData) {
 
 function getSaved(user, info) {
 	return new Promise(function(resolve, reject) {
-		var saved = new DBRow(literals.savedTable);
-		saved.addQuery(literals.fieldUserID, user.getValue(literals.fieldID));
+		var saved = new DBRow(literals.SAVED_TABLE);
+		saved.addQuery(literals.FIELD_USER_ID, user.getValue(literals.FIELD_ID));
 		saved.setLimit(5);
-		saved.orderBy(literals.fieldDateSaved, literals.DESC);
+		saved.orderBy(literals.FIELD_DATE_SAVED, literals.DESC);
 		saved.query().then(function() {
 			recursiveGet(resolve, reject, saved, info.items.saved, savedInfo);
 		}, function(err) {
@@ -152,10 +152,10 @@ function getSaved(user, info) {
 
 function getSubscribed(user, info) {
 	return new Promise(function(resolve, reject) {
-		var subscribed = new DBRow(literals.subscriptionsTable);
-		subscribed.addQuery(literals.fieldUserID, user.getValue(literals.fieldID));
+		var subscribed = new DBRow(literals.SUBSCRIPTIONS_TABLE);
+		subscribed.addQuery(literals.FIELD_USER_ID, user.getValue(literals.FIELD_ID));
 		subscribed.setLimit(5);
-		subscribed.orderBy(literals.fieldDateSubscribed, literals.DESC);
+		subscribed.orderBy(literals.FIELD_DATE_SUBSCRIBED, literals.DESC);
 		subscribed.query().then(function() {
 			recursiveGet(resolve, reject, subscribed, info.items.subscribed, subscribedInfo)
 		}, function(err) {
@@ -166,10 +166,10 @@ function getSubscribed(user, info) {
 
 function getContributions(user, info) {
 	return new Promise(function(resolve, reject) {
-		var contr = new DBRow(literals.contributionTable);
-		contr.addQuery(literals.fieldUserID, user.getValue(literals.fieldID));
+		var contr = new DBRow(literals.CONTRIBUTION_TABLE);
+		contr.addQuery(literals.FIELD_USER_ID, user.getValue(literals.FIELD_ID));
 		contr.setLimit(5);
-		contr.orderBy(literals.fieldDate, literals.DESC);
+		contr.orderBy(literals.FIELD_DATE, literals.DESC);
 		contr.query().then(function() {
 			recursiveGet(resolve, reject, contr, info.items.contributions, contributionInfo);
 		}, function(err) {
@@ -180,31 +180,31 @@ function getContributions(user, info) {
 
 function contributionInfo(row, item) {
 	return {
-		id: item.getValue(literals.fieldID),
-		title: item.getValue(literals.fieldTitle),
-		votes: item.getValue(literals.fieldNetvotes),
-		author: item.getValue(literals.fieldAuthor),
-		date: row.getValue(literals.fieldDate),
-		summary: item.getValue(literals.fieldContent)
+		id: item.getValue(literals.FIELD_ID),
+		title: item.getValue(literals.FIELD_TITLE),
+		votes: item.getValue(literals.FIELD_NETVOTES),
+		author: item.getValue(literals.FIELD_AUTHOR),
+		date: row.getValue(literals.FIELD_DATE),
+		summary: item.getValue(literals.FIELD_CONTENT)
 	};
 }
 
 function subscribedInfo(row, item) {
 	return {
-        id: item.getValue(literals.fieldID),
-        title: item.getValue(literals.fieldTitle),
-        votes: item.getValue(literals.fieldNetvotes),
-        author: item.getValue(literals.fieldAuthor),
-		date: row.getValue(literals.fieldDateSubscribed)
+        id: item.getValue(literals.FIELD_ID),
+        title: item.getValue(literals.FIELD_TITLE),
+        votes: item.getValue(literals.FIELD_NETVOTES),
+        author: item.getValue(literals.FIELD_AUTHOR),
+		date: row.getValue(literals.FIELD_DATE_SUBSCRIBED)
 	};
 }
 
 function savedInfo(row, item) {
 	return {
-        id: item.getValue(literals.fieldID),
-        title: item.getValue(literals.fieldTitle),
-        votes: item.getValue(literals.fieldNetvotes),
-        author: item.getValue(literals.fieldAuthor),
-		date: row.getValue(literals.fieldDateSaved)
+        id: item.getValue(literals.FIELD_ID),
+        title: item.getValue(literals.FIELD_TITLE),
+        votes: item.getValue(literals.FIELD_NETVOTES),
+        author: item.getValue(literals.FIELD_AUTHOR),
+		date: row.getValue(literals.FIELD_DATE_SAVED)
 	};
 }

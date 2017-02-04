@@ -5,12 +5,12 @@ var log = require('./log');
 var generator = require('./IDGenerator');
 var literals = require('./StringLiterals.js');
 
-const allowedUserKeys = [literals.fieldID, literals.fieldUsername];
+const allowedUserKeys = [literals.FIELD_ID, literals.FIELD_USERNAME];
 
 exports.validateSession = function(cookie) {
 	return new Promise(function(resolve, reject){
 		if (cookie){ //first of all you need to have a cookie for us to expend resources
-			var row = new DBRow(literals.sessionTable);
+			var row = new DBRow(literals.SESSION_TABLE);
 			row.getRow(cookie.sessionID).then(function(row){
 				resolve(); //allow user to continue
 
@@ -28,8 +28,8 @@ exports.validateSession = function(cookie) {
 exports.loginAndCreateSession = function(postResult) {
 	return new Promise(function(resolve, reject) {
 		if (postResult) {
-			var row = new DBRow(literals.userTable);
-			row.addQuery(literals.fieldNetid, postResult.username)
+			var row = new DBRow(literals.USER_TABLE);
+			row.addQuery(literals.FIELD_NETID, postResult.username)
 			// row.addQuery("secret", postResult.secret) // BUT WE DON'T KNOW THE PASSWORD _/(O.O)\_
 
 			row.query().then(function(result) {
@@ -37,13 +37,13 @@ exports.loginAndCreateSession = function(postResult) {
 					return reject(false);
 					
 				var date = new Date();
-				var newSession = new DBRow(literals.sessionTable);
+				var newSession = new DBRow(literals.SESSION_TABLE);
 				var sessionInfo = {sessionStart: date.toISOString().slice(0, date.toISOString().indexOf('T')), 
-									userID: row.getValue(literals.fieldID)};
+									userID: row.getValue(literals.FIELD_ID)};
 
-				newSession.setValue(literals.fieldUserID, sessionInfo.userID);
+				newSession.setValue(literals.FIELD_USER_ID, sessionInfo.userID);
 				newSession.insert().then(function(res) {
-					sessionInfo.sessionID = newSession.getValue(literals.fieldID);
+					sessionInfo.sessionID = newSession.getValue(literals.FIELD_ID);
 					resolve(sessionInfo);
 				}, function(res) {
 					reject(false);
@@ -63,7 +63,7 @@ exports.logout = function(cookie) {
 		if(!cookie)
 			reject(false);
 
-		var row = new DBRow(literals.sessionTable);
+		var row = new DBRow(literals.SESSION_TABLE);
 		row.delete(cookie.sessionID).then(function(res) {
 			resolve(true);
 
@@ -81,12 +81,12 @@ exports.hasRole = function(userID, role) {
 			return;
 		}
 
-		var user = new DBRow(literals.userTable);
+		var user = new DBRow(literals.USER_TABLE);
 		user.getRow(userID).then(function(res) {
 			if (user.count() == 0)
 				reject(false);
 
-			if(user.getValue(literals.fieldPrivilege).includes(role))
+			if(user.getValue(literals.FIELD_PRIVILEGE).includes(role))
 				resolve(true);
 			else
 				reject(false)
@@ -100,7 +100,7 @@ exports.hasRole = function(userID, role) {
 exports.validateUser = function(request) {
 	return new Promise(function(resolve, reject) {
 
-		var user = new DBRow(literals.userTable);
+		var user = new DBRow(literals.USER_TABLE);
 		for (var key in request.query) {
 			if (allowedUserKeys.includes(key)) // we do not allow searches for users by netid
 				user.addQuery(key, request.query[key]);

@@ -6,7 +6,7 @@ var literals = require('./StringLiterals.js');
 
 var config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/config.json'), 'utf8'));
 
-var isInProduction = (config[literals.production] == literals.true);
+var isInProduction = (config[literals.PRODUCTION] == literals.TRUE);
 
 exports.log = function(logString) {
 	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
