@@ -177,7 +177,7 @@ const literals = {
     SWEEP: "sweep",
 
     //integer values
-    minNumMissedNotifications: 0
+    MIN_NUM_MISSED_NOTIFICATIONS: 0
 };
 
 module.exports = literals;
