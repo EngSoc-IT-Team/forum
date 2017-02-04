@@ -37,7 +37,7 @@ var mailOptions = {
  * @param contentID The ID of the post/comment the user subscribed to.
  * @param userID The ID of the user who subscribed.
  */
-function onSubscribed(contentID, userID) {
+exports.onSubscribed = function (contentID, userID) {
     //query comment table for content ID, if in there, set type to comment
     //if not in there, then type is a post
     var commentTable = new dbr.DBRow(lit.COMMENT_TABLE);
@@ -60,15 +60,14 @@ function onSubscribed(contentID, userID) {
     }).catch(function (err) {
         log.log("onSubscribed error: " + err);
     });
-}
+};
 
 /**
  * Function to be called when content edited or
  * a child comment is added.
  * @param contentID ID of content added/edited.
  */
-onContentAddedOrChanged('3ntcfsbrqunk27yymvmtetdvkrg33es1');
-function onContentAddedOrChanged(contentID) {
+exports.onContentAddedOrChanged = function (contentID) {
     //get ID of content user actually subscribed to
     getParentContentID(contentID).then(function (contentID) {
         //add to number of notifications missed
@@ -79,7 +78,7 @@ function onContentAddedOrChanged(contentID) {
     }).catch(function (error) {
         log.log("onContentAddedOrChanged error: " + error);
     });
-}
+};
 
 /**
  * Function that emails users.
@@ -89,6 +88,7 @@ function onContentAddedOrChanged(contentID) {
  * use promise to make it synchronous. Chained from  caller method.
  */
 function emailUsers(contentID) {
+    var usersEmailed = [];
     return new Promise(function (resolve, reject) {
             getUserIDs(contentID).then(function (userIDs) {
                 return userIDs;
@@ -96,6 +96,7 @@ function emailUsers(contentID) {
                 //get userIDs for those who should be emailed
                 return findUsersToEmail(userIDs);
             }).then(function (userIDs) {
+                usersEmailed = userIDs; //save the user IDs for those who are being emailed
                 //get net IDs from user IDs
                 return getNetIDs(userIDs);
             }).then(function (netIDs) {
@@ -103,15 +104,16 @@ function emailUsers(contentID) {
                 for (var i in netIDs) {
                     //TODO add url to give info
                     mailOptions[lit.TO] = netIDs[i] + lit.QUEENS_EMAIL;
-                    log.log("MAIL SENT");
-                    // transport.sendMail(mailOptions);//TODO uncomment
+                    log.log("Mail sent for content: " + contentID);
+                    transport.sendMail(mailOptions);
                 }
-                return netIDs;
             }).then(function () {
-                return setNotificationsMissedToZero(contentID);
-            }).then(function () {
+                return getSubscriptionIDs(usersEmailed, contentID);
+            }).then(function (subIDs) {
+                return setNotificationsMissedToZero(subIDs);
+            }).then(function (subIDs) {
                 //update last notified to current time
-                setLastNotifiedToNow(contentID);
+                setLastNotifiedToNow(subIDs);
             }).catch(function (err) {
                 reject(err);
             });
@@ -146,21 +148,29 @@ function addToNotificationsMissed(contentID) {
 
 /**
  * Sets numNotificationsMissed to 0 for all pieces of content that had an email sent out.
- * @param contentID ID of the content that was emailed for, so any row with this
- * itemID needs its notifications missed to be set to 0.
- * @returns {Promise} Asynch tasks called/done from this function, so
- * use promise to make it synchronous. Chained from caller method.
+ * @param subIDs IDs of the subscriptions rows that were emailed for.
+ * @returns {*} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from caller method. Unless there is no
+ * work to be done with the parameter, in which case the function is just ended and the
+ * parameter is passed along the promise chain.
  */
-function setNotificationsMissedToZero(contentID) {
+function setNotificationsMissedToZero(subIDs) {
+    //check that subIDs can actually be used to find users emailed
+    //if not (empty), stop this function and continue to next then chain
+    if (subIDs.length == 0) {
+        return subIDs;
+    }
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-    row.addQuery(lit.FIELD_ITEM_ID, contentID);
+    for (var i in subIDs) {
+        row.addQuery(lit.FIELD_ID, subIDs[i]);
+    }
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) { //set notifications missed to zero for all users that subscribed to that content
                 row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, 0);
                 row.update();
             }
-            resolve(contentID);
+            resolve(subIDs);
         }, function (err) {
             reject(err);
         });
@@ -170,17 +180,60 @@ function setNotificationsMissedToZero(contentID) {
 /**
  * Function that sets the lastNotified field for content that users have been emailed about.
  * Field is set to the current date/time.
- * @param contentID ID of content that was emailed for.
+ * @param subIDs IDs of the subscriptions rows that were emailed for.
  * No return because this is the last function called from the promise chain.
  */
-function setLastNotifiedToNow(contentID) {
+function setLastNotifiedToNow(subIDs) {
+    //check that subIDs can actually be used to find users emailed
+    //if not (empty), stop this function and continue to next then chain
+    if (subIDs.length == 0) {
+        return;
+    }
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-    row.addQuery(lit.FIELD_ITEM_ID, contentID);
+    for (var i in subIDs) {
+        row.addQuery(lit.FIELD_ID, subIDs[i]);
+    }
     row.query().then(function () {
         while (row.next()) {
             row.setValue(lit.FIELD_LAST_NOTIFIED, new Date().toISOString());
             row.update();
         }
+    });
+}
+
+/**
+ * Function that gets the subscriptions table row IDs for users that are going to be emailed.
+ * Because users can subscribe to multiple content IDs, need to filter through the userIDs for
+ * the ones that are subscribed to the specific content.
+ * @param userIDs User IDs for those that will be emailed.
+ * @param contentID Content ID for the content that will be emailed for.
+ * @returns {*} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from  caller method. Unless there is no
+ * work to be done with the parameter, in which case the function is just ended and the
+ * parameter is passed along the promise chain.
+ */
+function getSubscriptionIDs(userIDs, contentID) {
+    //check that userIDs can actually be used to find users
+    //if not (empty), stop this function and continue to next then chain
+    if (userIDs.length == 0) {
+        return userIDs;
+    }
+    var subIDs = [];
+    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+    for (var i in userIDs) {
+        row.addQuery(lit.FIELD_USER_ID, userIDs[i]);
+    }
+    return new Promise(function (resolve, reject) {
+        row.query().then(function () {
+            while (row.next()) {
+                if (row.getValue(lit.FIELD_ITEM_ID) == contentID) { //ID of row that was emailed for
+                    subIDs.push(row.getValue(lit.FIELD_ID));
+                }
+            }
+            resolve(subIDs);
+        }, function (err) {
+            reject(err);
+        });
     });
 }
 
@@ -191,7 +244,9 @@ function setLastNotifiedToNow(contentID) {
  * a top level comment and a child comment.
  * @param contentID The ID of the content for which the parent is to be found.
  * @returns {Promise} Asynch tasks called/done from this function, so
- * use promise to make it synchronous. Chained from caller method.
+ * use promise to make it synchronous. Chained from caller method. Unless there is no
+ * work to be done with the parameter, in which case the function is just ended and the
+ * parameter is passed along the promise chain.
  */
 function getParentContentID(contentID) {
     var row = new dbr.DBRow(lit.COMMENT_TABLE);
@@ -239,8 +294,10 @@ function getUserIDs(contentID) {
  * Gets net IDs from user IDs. The user IDs are ones that have been
  * filtered so that these users are the ones to be emailed.
  * @param userIDs Array of user IDs that need their net ID found.
- * @returns {Promise} Asynch tasks called/done from this function, so
- * use promise to make it synchronous. Chained from  caller method.
+ * @returns {*} If userIdsAsynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from  caller method. Unless there is no
+ * work to be done with the parameter, in which case the function is just ended and the
+ * parameter is passed along the promise chain.
  */
 function getNetIDs(userIDs) {
     //check that userIDs can actually be used to find users
@@ -271,8 +328,10 @@ function getNetIDs(userIDs) {
  * if there is at least one missed notification and it has been
  * long enough since the last email was sent.
  * @param userIDs Array of all users that have subscribed to something.
- * @returns {Promise} Asynch tasks called/done from this function, so
- * use promise to make it synchronous. Chained from  caller method.
+ * @returns {*} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from  caller method. Unless there is no
+ * work to be done with the parameter, in which case the function is just ended and the
+ * parameter is passed along the promise chain.
  */
 function findUsersToEmail(userIDs) {
     //check that userIDs can actually be used to find users
@@ -281,8 +340,6 @@ function findUsersToEmail(userIDs) {
         return userIDs;
     }
     var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-    var numNotificationsMissed;
-    var lastNotified;
     var goodUserIDs = [];
     return new Promise(function (resolve, reject) {
         for (var i in userIDs) {
@@ -293,8 +350,8 @@ function findUsersToEmail(userIDs) {
                 //compare number of missed notifications to preset minimum number needed to email user
                 //also check and make sure that it has been long enough since user was last emailed
                 //both need to pass the compare to email the user
-                numNotificationsMissed = row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED);
-                lastNotified = row.getValue(lit.FIELD_LAST_NOTIFIED);
+                var numNotificationsMissed = row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED);
+                var lastNotified = row.getValue(lit.FIELD_LAST_NOTIFIED);
                 if (numNotificationsMissed > lit.MIN_NUM_MISSED_NOTIFICATIONS && longEnoughAgo(lastNotified)) {
                     goodUserIDs.push(row.getValue(lit.FIELD_USER_ID));
                 }
@@ -306,8 +363,17 @@ function findUsersToEmail(userIDs) {
     });
 }
 
+/**
+ * Function to determine if it has been long enough since last email to user to send another one.
+ * Currently the minimum time between emails is a day.
+ * Note that this is just for one piece of content.
+ * A user could be emailed multiple times in a day for different content.
+ * @param lastNotified Day/time the user was last emailed at.
+ * @returns {boolean} True if it has been long enough (one day), false if not.
+ */
 function longEnoughAgo(lastNotified) {
-    //TODO figure out logic for getting how long ago user was notified
-    return true;
+    lastNotified = Date.parse(lastNotified); //get lastNotified in MS form
+    var curMS = Date.parse(new Date().toISOString()); //get current time in MS form
+    return (curMS - Date.parse(lastNotified)) >= lit.MIN_MS_TO_NOTIFY_AGAIN; //at least a day since last email
 }
 
