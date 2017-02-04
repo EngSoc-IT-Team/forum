@@ -15,6 +15,10 @@ a:hover,
   color: #FF9200;
 }
 
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
+  outline: 0;
+}
+
 /* Navbar */
 
 .navbar {
@@ -370,5 +374,26 @@ footer {
 }
 
 .class-page .description {
+  margin-top: 0px;
+}
+
+.class-page .modal-title {
+  display: inline-block;
+}
+
+.class-page .modal {
+  color: #000;
+}
+
+.class-page .modal .star-container {
+  text-align: center;
+  padding: 20px 0px; 
+}
+
+.class-page .review-container {
+  text-align: center;
+}
+
+.class-page .modal-footer .button {
   margin-top: 0px;
 }
