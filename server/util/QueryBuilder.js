@@ -3,7 +3,7 @@
 var mysql = require('mysql');
 var log = require('./log');
 var escaper = require('./QueryEscaper');
-var lit = require('./StringLiterals.js');
+var lit = require('./Literals.js');
 
 const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"] //TODO: implement 'in' and 'between' operators
 
