@@ -9,9 +9,9 @@ var subscriptionTemplate = '<div class="item">\
                                 <div class="date">Subscribed on: {4}</div>\
                                 <div class="date">Author: <a href="/profile?username={5}">{6}</a></div>\
                                 <div class="links" style="font-size: .75em;">\
-                                    <a href="/question/id={8}" onclick="">View</a> | \
-                                    <a href="" onclick="unsubscribe({7})">Unsubscribe</a> | \
-                                    <a href="" onclick="report({9})">Report</a>\
+                                    <a href="/question/id={7}">View</a> | \
+                                    <a href="" onclick="subscribe(\'{8}\', \'{9}\', true)">Unsubscribe</a> | \
+                                    <a href="" onclick="report(\'{10}\')">Report</a>\
                                 </div>\
                                 <hr>\
                             </div>';
@@ -24,7 +24,7 @@ var contributionTemplate = '<div class="item">\
                                 <p style="margin-bottom: 5px;">{5}</p>\
                                 <div class="links" style="font-size: .75em;">\
                                     <a href="/question/id={6}" onclick="">View</a> | \
-                                    <a href="" onclick="save({7})">Save</a>\
+                                    <a href="" onclick="save(\'{7}\', \'{8}\', true)">Save</a>\
                                 </div>\
                                 <hr>\
                             </div>';
@@ -36,19 +36,20 @@ var savedTemplate = '<div class="item">\
                         <div class="date">Saved on: {4}</div>\
                         <div class="date">Author: <a href="/profile?username={5}">{6}</a></div>\
                         <div class="links" style="font-size: .75em;">\
-                            <a href="/question/id={8}" onclick="">View</a> | \
-                            <a href="" onclick="unsave({7})">Unsave</a> | \
-                            <a href="" onclick="report({9})">Report</a>\
+                            <a href="/question/id={7}">View</a> | \
+                            <a href="" onclick="save(\'{8}\', \'{9}\', true)">Unsave</a> | \
+                            <a href="" onclick="report(\'{10}\')">Report</a>\
                         </div>\
                         <hr>\
                     </div>';
 
 var tag = '<button class="btn btn-sm question-tag" onclick="window.location = \'/list?tag={0}\'" type="submit">{1}</button>';
+var uid;
 
 function whenLoaded() {
 	var href;
     var content = {
-		requested: "profile",
+		requested: "profile"
 	};
 
     if (window.location.href.includes("?")) {
@@ -58,7 +59,7 @@ function whenLoaded() {
     }
     else {
         content.self = true;
-        $(knowledge)[0].innerHTML = "I know about:"
+        $(knowledge)[0].innerHTML = "I know about:";
         href = '/info';
     }
 
@@ -116,6 +117,7 @@ function animateVotingBar(upvotes, downvotes) {
 }
 
 function fillInUserInfo(profile) {
+    uid = profile.id;
 	$(posts)[0].innerHTML = "Posts: " + profile.posts;
 	$(comments)[0].innerHTML = "Comments: " + profile.comments;
 	$(links)[0].innerHTML = "Links: " + profile.links;
@@ -126,7 +128,6 @@ function fillInUserInfo(profile) {
 	$(joined)[0].innerHTML = "Date Joined: " + profile.dateJoined.slice(0, profile.dateJoined.indexOf('T'));
 }
 
-// TODO: url processing for comments in posts to get directly to the queried comment
 function fillInPostInfo(items) { 
     var html;
     if (items.subscribed.length != 0) {
@@ -164,29 +165,29 @@ function addTags(tags) {
     for (var i=0; i< tags.length; i++){
         html = $.parseHTML(fillTemplate(tag, tags[i], tags[i]))[0];
         if (html)
-            $('#knowledge')[0].append(html)
+            $('#knowledge')[0].append(html);
     }
 }
 
 function fillSubscriptionTemplate(subscr) {
     if (subscr.votes >= 0)
-        return fillTemplate(subscriptionTemplate, "positive", subscr.votes, subscr.id, subscr.title, getDateString(subscr.date), subscr.author, subscr.author, subscr.id, subscr.id, subscr.id);
+        return fillTemplate(subscriptionTemplate, "positive", subscr.votes, subscr.id, subscr.title, getDateString(subscr.date), subscr.author, subscr.author, subscr.id, uid, subscr.id, subscr.id);
     else
-        return fillTemplate(subscriptionTemplate, "negative", subscr.votes, subscr.id, subscr.title, getDateString(subscr.date), subscr.author, subscr.author, subscr.id, subscr.id, subscr.id);
+        return fillTemplate(subscriptionTemplate, "negative", subscr.votes, subscr.id, subscr.title, getDateString(subscr.date), subscr.author, subscr.author, subscr.id, uid, subscr.id, subscr.id);
 }
 
 function fillSavedTemplate(saved) {
     if (saved.votes >= 0)
-        return fillTemplate(savedTemplate, "positive", saved.votes, saved.id, saved.title, getDateString(saved.date), saved.author, saved.author, saved.id, saved.id, saved.id);
+        return fillTemplate(savedTemplate, "positive", saved.votes, saved.id, saved.title, getDateString(saved.date), saved.author, saved.author, saved.id, uid, saved.id, saved.id);
     else
-        return fillTemplate(savedTemplate, "negative", saved.votes, saved.id, saved.title, getDateString(saved.date), saved.author, saved.author, saved.id, saved.id, saved.id);
+        return fillTemplate(savedTemplate, "negative", saved.votes, saved.id, saved.title, getDateString(saved.date), saved.author, saved.author, saved.id, uid, saved.id, uid, saved.id);
 }
 
 function fillContributionTemplate(contr) {
     if (contr.votes >= 0)
-        return fillTemplate(contributionTemplate, "positive", contr.votes, contr.id, contr.title, getDateString(contr.date), contr.summary, contr.id, contr.id, contr.id);
+        return fillTemplate(contributionTemplate, "positive", contr.votes, contr.id, contr.title, getDateString(contr.date), contr.summary, contr.id, uid, contr.id, contr.id);
     else
-        return fillTemplate(contributionTemplate, "negative", contr.votes, contr.id, contr.title, getDateString(contr.date), contr.summary, contr.id, contr.id, contr.id);
+        return fillTemplate(contributionTemplate, "negative", contr.votes, contr.id, contr.title, getDateString(contr.date), contr.summary, contr.id, uid, contr.id, contr.id);
 }
 
 function getDateString(date) {
