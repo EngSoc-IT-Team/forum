@@ -129,7 +129,7 @@ const literals = {
     FIELD_REPORT: "report",
     FIELD_REPORTING_USER: "reportingUser",
     FIELD_REPORTED_USER: "reportedUser",
-    FIELD_RELATED_COMMENT_OR_POST_ID: "relatedCommentOrPostID",
+    FIELD_RELATED_ITEM_ID: "relatedItemID",
 
     //fields for tag table only
     TAG_TABLE: "tag",
@@ -138,7 +138,6 @@ const literals = {
 
     //fields for vote table only
     VOTE_TABLE: "vote",
-    FIELD_COMMENT_OR_POST_ID: "commentOrPostID",
     FIELD_VOTE_VALUE: "voteValue",
 
     //fields for session table only

@@ -100,7 +100,7 @@
 	},
 	"12": {
 		"table": "vote",
-		"commentOrPostID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
+		"itemID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"id": "yy6e996fc2fqzadi8vsah8fhu9cgtsxk",
 		"voteValue": "1"
@@ -119,7 +119,7 @@
 	"14": {
 		"table": "vote",
 		"id": "g6p045fi4dxlzrlzmbte9hw7026ew5th",
-		"commentOrPostID": "kotkw12crnsvbldigyobt315r4e6tyj5",
+		"itemID": "kotkw12crnsvbldigyobt315r4e6tyj5",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"voteValue": "1"
 	},
@@ -136,7 +136,7 @@
 	},
 	"16": {
 		"table": "vote",
-		"commentOrPostID": "3ntcfsbrqunk27yymvmtetdvkrg33es1",
+		"itemID": "3ntcfsbrqunk27yymvmtetdvkrg33es1",
 		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
 		"id": "bt6qm5admkmme5bqr92j516kpk1nsuav",
 		"voteValue": "1"
@@ -156,20 +156,20 @@
 	"18": {
 		"table": "vote",
 		"id": "3suitlts01ph7qbul1j9wnd0c8tiv8km",
-		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"itemID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
 		"voteValue": "0"
 	},
 	"19": {
 		"table": "vote",
-		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"itemID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"id": "x380tpfwn3prfozzliceo0h6loetj4q5",
 		"voteValue": "0"
 	},
 	"20": {
 		"table": "vote",
-		"commentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"itemID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"id": "xme5ikh2sgwnvwsnd9twpc0zifcmnlw2",
 		"voteValue": "1"
@@ -180,7 +180,7 @@
 		"reportingUser": "CaptainUnicorn",
 		"reportedUser": "WizardPikachu",
 		"id": "64pradujn6vg26rsgk1epmz93fr2s25u",
-		"relatedCommentOrPostID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"relatedItemID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
 		"report": "This post is a waste of space."
 	},
 	"22": {
