@@ -39,7 +39,7 @@ var isInProduction = (config.production == lit.TRUE);
 
 server.get(lit.ROOT_ROUTE, function(request, response) { // default link, delivers landing page
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 
@@ -48,7 +48,7 @@ server.get(lit.ROOT_ROUTE, function(request, response) { // default link, delive
 
 server.get(lit.SEARCH_ROUTE, function(request, response) { // to search bar
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 
@@ -57,7 +57,7 @@ server.get(lit.SEARCH_ROUTE, function(request, response) { // to search bar
 
 server.get('/question/id=\*', function(request, response) { // question page, queried by id
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 
@@ -67,7 +67,7 @@ server.get('/question/id=\*', function(request, response) { // question page, qu
 
 server.get(lit.ABOUT_ROUTE, function(request, response) { //about page
 	if (Object.keys(request.signedCookies).length === 0) {
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 
@@ -76,7 +76,7 @@ server.get(lit.ABOUT_ROUTE, function(request, response) { //about page
 
 server.get(lit.NEW_ROUTE, function(request, response) { // newest questions being asked in list view
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 	response.sendFile(path.join(__dirname, '..', 'client/html/new.html'));
@@ -84,7 +84,7 @@ server.get(lit.NEW_ROUTE, function(request, response) { // newest questions bein
 
 server.get(lit.LIST_ROUTE, function(request, response) { //return the a default most recent list of questions
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 
@@ -93,7 +93,7 @@ server.get(lit.LIST_ROUTE, function(request, response) { //return the a default 
 
 server.get('/list/filter?\*', function(request, response) { //return the list filtered by the passed parameters, active search must route here ordered by most positive votes
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 
@@ -128,14 +128,14 @@ server.get(lit.LOGIN_ROUTE, function(request, response) { // mock login page
 
 server.get(lit.GUIDELINES_ROUTE, function(request, response) { // mock login page
 	if (compare.isEmpty(request.signedCookies))
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 	else
 		response.sendFile(path.join(__dirname, '..', 'client/html/guidelines.html'));
 });
 
 server.get(lit.DEV_ROUTE, function(request, response) { // mock login page
 	if (compare.isEmpty(request.signedCookies))
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/dev.html'));
@@ -148,7 +148,7 @@ server.get(lit.DEV_ROUTE, function(request, response) { // mock login page
 
 server.get(lit.EVAL_ROUTE, function(request, response) { //allows evaluation of server side code from the client
 	if (compare.isEmpty(request.signedCookies))
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/eval.html'));
@@ -160,7 +160,7 @@ server.get(lit.EVAL_ROUTE, function(request, response) { //allows evaluation of 
 
 server.get(lit.HELP_ROUTE, function(request, response) { // user help page
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 	
@@ -169,7 +169,7 @@ server.get(lit.HELP_ROUTE, function(request, response) { // user help page
 
 server.get(lit.CLASS_ROUTE, function(request, response) { // user help page
 	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 	
@@ -199,7 +199,7 @@ server.post(lit.LOGIN_ROUTE, function(request, response) {
 
 server.post(lit.EVAL_ROUTE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies))
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(lit.LOGIN_ROUTE);
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
 			var env = new Environment(); // a new disposable execution environment
@@ -254,7 +254,7 @@ server.post(lit.SUBSCRIBE_ROUTE, function(request, response) {
 
 server.post(lit.INFO_ROUTE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies)) { //if you're not signed in you can't get information
-		response.send(lit.NEED_LOGIN); // tell them to log in
+		response.redirect(lit.LOGIN_ROUTE); // tell them to log in
 		return;
 	}
 	requestor.parseRequest(request).then(function(resultToReturn) {
