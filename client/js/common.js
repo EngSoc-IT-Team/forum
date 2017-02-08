@@ -18,12 +18,12 @@ function logout() {
     });
 }
 
-function subscribe(userid, itemid) {
+function subscribe(userid, itemid, isSubscribed) {
     $.ajax({
-        url: '/subscribe',
+        url: '/action',
         type: 'POST',
         contentType: 'application/json', 
-        data: JSON.stringify({userId: userid, itemId: itemid})
+        data: JSON.stringify({userId: userid, itemId: itemid, subscribed: isSubscribed, action:"subscribe"})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success 
@@ -38,12 +38,32 @@ function subscribe(userid, itemid) {
     });
 }
 
-function vote(itemid, votevalue) {
+function save(userid, itemid, isSaved) {
     $.ajax({
-        url: '/vote',
+        url: '/action',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({itemId: itemid, voteValue: votevalue})
+        data: JSON.stringify({userId: userid, itemId: itemid, saved: isSaved, action:"save"})
+    }).done(function(data) {
+        if (data) {
+            // TODO: indicate the success
+            console.log("Successful save");
+        }
+        else {
+            // TODO: display some error message
+            console.log(data);
+        }
+    }).fail(function(err) {
+        console.error(err);
+    });
+}
+
+function vote(itemid, voteValue, hasVoted) {
+    $.ajax({
+        url: '/action',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({itemId: itemid, value: voteValue, voted: hasVoted, action:"vote"})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success

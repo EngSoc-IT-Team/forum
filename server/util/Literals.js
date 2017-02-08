@@ -44,8 +44,7 @@ const literals = {
     CLASS_ROUTE: "/class",
     SEARCH_ROUTE: "/search",
     LOGOUT_ROUTE: "/logout",
-    VOTE_ROUTE: "/vote",
-    SUBSCRIBE_ROUTE: "/subscribe",
+    ACTION_ROUTE: "/action",
     INFO_ROUTE: "/info",
     ROOT_ROUTE: "/",
 

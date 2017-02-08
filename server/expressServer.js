@@ -231,25 +231,16 @@ server.post(lit.LOGOUT_ROUTE, function(request, response) { // a place to post e
 	}
 });
 
-server.post(lit.VOTE_ROUTE, function(request, response) {
+server.post(lit.ACTION_ROUTE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies)){ // if not signed in, you can't vote
-		response.send(lit.NEED_LOGIN); //tell the client to tell the user they need to login
+		response.redirect(lit.LOGIN_ROUTE); //tell the client to tell the user they need to login
 		return;
 	}
+
+	response.send(true);
+
 	//check if user has already voted here and the vote is the same as their previous vote
 	//reject if they have, allow if they haven't, regardless, increment count on the client
-});
-
-server.post(lit.SUBSCRIBE_ROUTE, function(request, response) {
-	if (compare.isEmpty(request.signedCookies)) { //if you're not signed in you can't subscribe
-		response.send(lit.NEED_LOGIN); // tell them to log in
-		return;
-	}
-
-	// check if user is already subscribed
-	// subscribe them if they aren't
-	// you'll have request.body = { 'userId': 'useridentifyingid', 'itemId': 'itemidentifyingid' } to get information out of
-
 });
 
 server.post(lit.INFO_ROUTE, function(request, response) {
