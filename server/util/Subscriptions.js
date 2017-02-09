@@ -9,7 +9,6 @@ var nodeMailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var log = require('./log.js');
 var dbr = require('./DBRow.js');
-var generator = require('./IDGenerator.js');
 var lit = require('./Literals.js');
 
 //object that holds the mailing information - who sends it (and their authentication) and connection details
@@ -36,29 +35,85 @@ var mailOptions = {
  * Adds their information to the subscriptions table.
  * @param contentID The ID of the post/comment the user subscribed to.
  * @param userID The ID of the user who subscribed.
+ * @param type The type of content being subscribed to
  */
-exports.onSubscribed = function (contentID, userID) {
-    //query comment table for content ID, if in there, set type to comment
-    //if not in there, then type is a post
-    var commentTable = new dbr.DBRow(lit.COMMENT_TABLE);
-    commentTable.addQuery(lit.FIELD_ID, contentID);
-    commentTable.query().then(function () {
-        //set in database all the information
-        var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-        if (!commentTable.next()) { //type is table
-            newRow.setValue(lit.TYPE, lit.POST_TABLE);
-        } else {
-            newRow.setValue(lit.TYPE, lit.COMMENT_TABLE);
-        }
+exports.onSubscribed = function (contentID, userID, type) {
+    return new Promise(function(resolve, reject) {
+        exports.isSubscribed(contentID, userID).then(function(subscribed) {
+            if (!subscribed) {
+                var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+                newRow.setValue(lit.FIELD_USER_ID, userID);
+                newRow.setValue(lit.FIELD_ITEM_ID, contentID);
+                newRow.setValue(lit.FIELD_DATE_SUBSCRIBED, new Date().toISOString());
+                newRow.setValue(lit.FIELD_TYPE, type);
+                newRow.insert().then(function () {
+                    resolve(true);
+                }, function (err) {
+                    log.error("onSubscribed error: " + err);
+                    reject();
+                }).catch(function (err) {
+                    log.error("onSubscribed error: " + err);
+                    reject();
+                });
+            }
+            else
+                reject("Already subscribed");
+        });
 
-        newRow.setValue(lit.FIELD_USER_ID, userID);
-        newRow.setValue(lit.FIELD_ITEM_ID, contentID);
-        newRow.setValue(lit.FIELD_ID, generator.generate());
-        newRow.setValue(lit.FIELD_DATE_SUBSCRIBED, new Date().toISOString());
+    });
 
-        newRow.insert();
-    }).catch(function (err) {
-        log.log("onSubscribed error: " + err);
+};
+
+/**
+ * Function to be called when a user clicks a unsubscribe button.
+ * Removes their information to the subscriptions table.
+ * @param contentID The ID of the post/comment the user subscribed to.
+ * @param userID The ID of the user who subscribed.
+ */
+exports.cancelSubscription = function (contentID, userID) {
+    return new Promise(function(resolve, reject) {
+        var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+        row.addQuery(lit.FIELD_USER_ID, userID);
+        row.addQuery(lit.FIELD_ITEM_ID, contentID);
+        row.query().then(function() { // find the row that needs to be deleted by userId and contentId
+            if (!row.next())
+                reject();
+            else {
+                row.delete(row.getValue(lit.FIELD_ID)).then(function () { // delete it
+                    resolve();
+                }, function () {
+                    reject();
+                }).catch(function (err) {
+                    log.error("cancelSubscription error: " + err);
+                    reject(err);
+                })
+            }
+        });
+    });
+};
+
+/**
+ * Check to see if a user is already subscribed to a specific id
+ *
+ * @param contentID ID of content.
+ * @param userID The ID of the user who is (hopefully) already subscribed.
+ */
+
+exports.isSubscribed = function(contentID, userID) {
+    return new Promise(function(resolve) {
+        var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+        row.addQuery(lit.FIELD_USER_ID, userID);
+        row.addQuery(lit.FIELD_ITEM_ID, contentID);
+        row.query().then(function() { // find the row that needs to be deleted by userId and contentId
+            if (row.count())
+                resolve(true);
+            else
+                resolve(false);
+        }, function() {
+            resolve(false);
+        }).catch(function () {
+            resolve(false);
+        });
     });
 };
 
