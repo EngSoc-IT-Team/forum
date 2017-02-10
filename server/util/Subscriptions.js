@@ -38,8 +38,8 @@ var mailOptions = {
  * @param type The type of content being subscribed to
  */
 exports.onSubscribed = function (contentID, userID, type) {
-    return new Promise(function(resolve, reject) {
-        exports.isSubscribed(contentID, userID).then(function(subscribed) {
+    return new Promise(function (resolve, reject) {
+        exports.isSubscribed(contentID, userID).then(function (subscribed) {
             if (!subscribed) {
                 var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
                 newRow.setValue(lit.FIELD_USER_ID, userID);
@@ -71,11 +71,11 @@ exports.onSubscribed = function (contentID, userID, type) {
  * @param userID The ID of the user who subscribed.
  */
 exports.cancelSubscription = function (contentID, userID) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
         row.addQuery(lit.FIELD_USER_ID, userID);
         row.addQuery(lit.FIELD_ITEM_ID, contentID);
-        row.query().then(function() { // find the row that needs to be deleted by userId and contentId
+        row.query().then(function () { // find the row that needs to be deleted by userId and contentId
             if (!row.next())
                 reject();
             else {
@@ -99,17 +99,17 @@ exports.cancelSubscription = function (contentID, userID) {
  * @param userID The ID of the user who is (hopefully) already subscribed.
  */
 
-exports.isSubscribed = function(contentID, userID) {
-    return new Promise(function(resolve) {
+exports.isSubscribed = function (contentID, userID) {
+    return new Promise(function (resolve) {
         var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
         row.addQuery(lit.FIELD_USER_ID, userID);
         row.addQuery(lit.FIELD_ITEM_ID, contentID);
-        row.query().then(function() { // find the row that needs to be deleted by userId and contentId
+        row.query().then(function () { // find the row that needs to be deleted by userId and contentId
             if (row.count())
                 resolve(true);
             else
                 resolve(false);
-        }, function() {
+        }, function () {
             resolve(false);
         }).catch(function () {
             resolve(false);
