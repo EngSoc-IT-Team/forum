@@ -9,6 +9,7 @@ var validator = require('./util/Validator');
 var compare = require('./util/Compare');
 var Environment = require('./util/evalEnvironment').Environment;
 var requestor = require('./util/requestResponder');
+var action = require('./util/actionResponder');
 var fs = require('fs');
 var lit = require('./util/Literals.js');
 
@@ -236,11 +237,12 @@ server.post(lit.ACTION_ROUTE, function(request, response) {
 		response.redirect(lit.LOGIN_ROUTE); //tell the client to tell the user they need to login
 		return;
 	}
+	action.respond(request).then(function(res) {
+        response.send(res);
+	}, function(res) {
+        response.send(res);
+	});
 
-	response.send(true);
-
-	//check if user has already voted here and the vote is the same as their previous vote
-	//reject if they have, allow if they haven't, regardless, increment count on the client
 });
 
 server.post(lit.INFO_ROUTE, function(request, response) {
