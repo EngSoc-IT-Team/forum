@@ -16,17 +16,24 @@ var Aggregator = require('./aggregator');
 
 
 /** parseRequest(request)
-**
-** request the type of request being made, corresponding to the information to be returned
-**
-** Resolves the information necessary to fill in the page if successful
-** Rejects if there is an invalid request type or there is an error retrieving the information
-*/
+ **
+ **
+ * @param request: the express request
+ * @return {Promise}: Resolves the information necessary to fill in the page if successful,
+ * rejects if there is an invalid request type or there is an error retrieving the information
+ */
 exports.parseRequest = function(request) {
 	return new Promise(function(resolve, reject) {
 		switch (request.body.requested) {
 			case (lit.PROFILE):
 				profileRequest(request).then(function(info) {
+					resolve(info);
+				}, function(err) {
+					reject(err);
+				});
+				break;
+			case ("list"):
+				listRequest(request).then(function(info) {
 					resolve(info);
 				}, function(err) {
 					reject(err);
@@ -42,10 +49,12 @@ exports.parseRequest = function(request) {
 /** Individual Request Type Processing Functions **/
 
 /* profileRequest(request)
+** Handles requests from the profile page
 **
 ** request: the express request
 ** return: the information necessary to populate the profile page
 */
+
 function profileRequest(request) {
 	var info = {
 		profile: {},
@@ -68,8 +77,9 @@ function profileRequest(request) {
 					info.profile.upvotes = user.getValue(lit.FIELD_TOTAL_UPVOTES);
 					info.profile.downvotes = user.getValue(lit.FIELD_TOTAL_DOWNVOTES);
 					info.profile.dateJoined = user.getValue(lit.FIELD_DATE_JOINED);
+                    info.profile.id = user.getValue(lit.FIELD_ID);
 					Aggregator.aggregateProfileInfo(user, info).then(function() {
-						getSaved(user, info).then(function() {
+						getSaved(user, info).then(function() { // TODO: for each of these need to check if current user is subscribed, saved etc
 							getSubscribed(user, info).then(function() {
 								getContributions(user, info).then(function() {
 									resolve(info);
@@ -108,7 +118,7 @@ function profileRequest(request) {
 						}, function(err) {
                             resolve(info, err);
 						});
-					}, function() {
+					}, function(err) {
                         resolve(info, err); // return what we have at minimum
 					});
 				}
@@ -117,6 +127,32 @@ function profileRequest(request) {
 	});
 }
 
+/** listRequest(request)
+ * Handles requests from the list page
+ *
+ * @param request: the express request
+ * @returns {Promise}
+ */
+
+function listRequest(request) {
+	var info = [];
+	return new Promise(function(resolve, reject) {
+		request = "";
+		resolve(info);
+		reject();
+	});
+}
+
+
+/** recursiveGet(resolve, reject, rowsToGet, action, actionArgs)
+ * NOTE: the action function MUST be synchronous
+ *
+ * @param resolve: the resolve function of the calling function's promise
+ * @param reject: the reject function of the calling function's promise
+ * @param rowsToGet: the DBRow object containing ids of the rows to get
+ * @param action: the function to execute after each row is retrieved
+ * @param actionArgs: the function arguments, if any, that need to be passed to the action function
+ */
 
 function recursiveGet(resolve, reject, rowsToGet, action, actionArgs) {
 	if (!rowsToGet.next())
