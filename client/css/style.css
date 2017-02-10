@@ -448,3 +448,7 @@ footer .wrap div {
 .class-page .course-rating .star.rating svg path {
   fill: #34056D !important;
 }
+
+.question-colour {
+  color: purple;
+}
