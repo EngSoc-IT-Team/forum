@@ -124,7 +124,7 @@ exports.isSubscribed = function (contentID, userID) {
  */
 exports.onContentAddedOrChanged = function (contentID) {
     //get ID of content user actually subscribed to
-    getParentContentID(contentID).then(function (contentID) {
+    getSubscribedContentID(contentID).then(function (contentID) {
         //add to number of notifications missed
         return addToNotificationsMissed(contentID);
     }).then(function (contentID) {
@@ -293,23 +293,25 @@ function getSubscriptionIDs(userIDs, contentID) {
 }
 
 /**
- * Function to get the parent content of added content.
- * Added content is only ever comments, so an issue of a table
- * not having parent content will never come up. Able to handle
- * a top level comment and a child comment.
+ * Function to get the ID of the content the user has subscribed to.
+ * If a post is edited, the content ID is the subscribed one. If a post/comment has
+ * children added/changed, then the parent content ID is needed.
+ * If no row is received back, that means the contentID references
+ * a table, and the parent ID (the one the user is subscribed to) is the
+ * table.
  * @param contentID The ID of the content for which the parent is to be found.
  * @returns {Promise} Asynch tasks called/done from this function, so
  * use promise to make it synchronous. Chained from caller method. Unless there is no
  * work to be done with the parameter, in which case the function is just ended and the
  * parameter is passed along the promise chain.
  */
-function getParentContentID(contentID) {
+function getSubscribedContentID(contentID) {
     var row = new dbr.DBRow(lit.COMMENT_TABLE);
     row.addQuery(lit.FIELD_ID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             if (!row.next()) {
-                reject("got nothing back");
+                resolve(contentID); //
             }
             //if parent of the content is a post, send back that post's ID
             //else it is a comment, so send back that comment's ID
