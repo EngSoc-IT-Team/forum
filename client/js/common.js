@@ -18,12 +18,12 @@ function logout() {
     });
 }
 
-function subscribe(userid, itemid, isSubscribed) {
+function subscribe(userid, itemid, isSubscribed, type) {
     $.ajax({
         url: '/action',
         type: 'POST',
         contentType: 'application/json', 
-        data: JSON.stringify({userId: userid, itemId: itemid, subscribed: isSubscribed, action:"subscribe"})
+        data: JSON.stringify({userId: userid, itemId: itemid, subscribed: isSubscribed, action:"subscribe", contentType: type})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success 
@@ -38,12 +38,12 @@ function subscribe(userid, itemid, isSubscribed) {
     });
 }
 
-function save(userid, itemid, isSaved) {
+function save(userid, itemid, isSaved, type) {
     $.ajax({
         url: '/action',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({userId: userid, itemId: itemid, saved: isSaved, action:"save"})
+        data: JSON.stringify({userId: userid, itemId: itemid, saved: isSaved, action:"save", contentType: type})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success
@@ -78,6 +78,26 @@ function vote(itemid, voteValue, hasVoted) {
     });
 }
 
+function reply(parent, text, userid) {
+    var content = {requested:"add", type:"comment", parentId: parent, content: text, userId: userid};
+    $.ajax({
+        url: href,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(content)
+    }).done(function(data) {
+        if (data) {
+            console.log("success");
+        }
+        else {
+            // at some point show "something went wrong" modal
+            console.log('empty response');
+        }
+    }).fail(function(err) {
+        // at some point show "something went wrong" modal
+        console.log("Something went wrong");
+    });
+}
 
 /* fillTemplate(template [, strings, used, to, fill, template])
 **
