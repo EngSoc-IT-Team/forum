@@ -122,7 +122,8 @@ exports.isSubscribed = function (contentID, userID) {
  * a child comment is added.
  * @param contentID ID of content added/edited.
  */
-exports.onContentAddedOrChanged = function (contentID) {
+onContentAddedOrChanged('pn9tt4yqky3bsuvdb93y2b4ewe1b65g6');
+function onContentAddedOrChanged(contentID) {
     //get ID of content user actually subscribed to
     getSubscribedContentID(contentID).then(function (contentID) {
         //add to number of notifications missed
@@ -133,7 +134,8 @@ exports.onContentAddedOrChanged = function (contentID) {
     }).catch(function (error) {
         log.log("onContentAddedOrChanged error: " + error);
     });
-};
+    log.log("here");
+}
 
 /**
  * Function that emails users.
@@ -160,7 +162,7 @@ function emailUsers(contentID) {
                     //TODO add url to give info
                     mailOptions[lit.TO] = netIDs[i] + lit.QUEENS_EMAIL;
                     log.log("Mail sent for content: " + contentID);
-                    transport.sendMail(mailOptions);
+                    //transport.sendMail(mailOptions);
                 }
             }).then(function () {
                 return getSubscriptionIDs(usersEmailed, contentID);
@@ -168,7 +170,7 @@ function emailUsers(contentID) {
                 return setNotificationsMissedToZero(subIDs);
             }).then(function (subIDs) {
                 //update last notified to current time
-                setLastNotifiedToNow(subIDs);
+                return setLastNotifiedToNow(subIDs);
             }).catch(function (err) {
                 reject(err);
             });
@@ -248,11 +250,16 @@ function setLastNotifiedToNow(subIDs) {
     for (var i in subIDs) {
         row.addQuery(lit.FIELD_ID, subIDs[i]);
     }
-    row.query().then(function () {
-        while (row.next()) {
-            row.setValue(lit.FIELD_LAST_NOTIFIED, new Date().toISOString());
-            row.update();
-        }
+    return new Promise(function (resolve, reject) {
+        row.query().then(function () {
+            while (row.next()) {
+                row.setValue(lit.FIELD_LAST_NOTIFIED, new Date().toISOString());
+                row.update();
+            }
+            resolve();
+        }, function (err) {
+            reject(err);
+        });
     });
 }
 
