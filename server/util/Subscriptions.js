@@ -134,7 +134,6 @@ function onContentAddedOrChanged(contentID) {
     }).catch(function (error) {
         log.log("onContentAddedOrChanged error: " + error);
     });
-    log.log("here");
 }
 
 /**
@@ -162,7 +161,7 @@ function emailUsers(contentID) {
                     //TODO add url to give info
                     mailOptions[lit.TO] = netIDs[i] + lit.QUEENS_EMAIL;
                     log.log("Mail sent for content: " + contentID);
-                    //transport.sendMail(mailOptions);
+                    transport.sendMail(mailOptions);
                 }
             }).then(function () {
                 return getSubscriptionIDs(usersEmailed, contentID);
@@ -224,14 +223,33 @@ function setNotificationsMissedToZero(subIDs) {
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) { //set notifications missed to zero for all users that subscribed to that content
-                row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, 0);
-                row.update();
+                updateNotificationsMissed(row).then();
             }
             resolve(subIDs);
         }, function (err) {
             reject(err);
         });
     });
+}
+
+/**
+ * Helper function for setNotificationsMissedToZero. Actually sets the notifications missed
+ * to be 0. Forces the resolve() in setNotificationsMissedToZero to wait until updates are done,
+ * so that they actually get executed.
+ * @param row The row to set missed notifications missed to 0 for.
+ * @returns {Promise} Asynch tasks called/done from this function, so
+ * use promise to make it synchronous. Chained from  caller method.
+ */
+function updateNotificationsMissed(row) {
+    return new Promise(function (resolve, reject) {
+            row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, 0);
+            row.update().then(function () {
+                resolve();
+            }, function (err) {
+                reject(err);
+            })
+        }
+    );
 }
 
 /**
