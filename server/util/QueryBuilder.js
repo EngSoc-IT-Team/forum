@@ -4,6 +4,7 @@ var mysql = require('mysql');
 var log = require('./log');
 var escaper = require('./QueryEscaper');
 var lit = require('./Literals.js');
+var compare = require('./Compare');
 
 const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"] //TODO: implement 'in' and 'between' operators
 
@@ -46,9 +47,12 @@ exports.query = function(table, dbObject) {
 	if (!escaper.isValidTableName(table))
 		return log.warn("Invalid table name used for call to QUERY");
 
-	var base =  "SELECT * FROM " + table + " WHERE ";
-	var dboBrokenDown = breakdownDBObject(dbObject, false, true, true, false, true, table);
-	return base + dboBrokenDown;
+	var base =  "SELECT * FROM " + table;
+
+	if (!compare.isEmpty(dbObject))
+		return base + " WHERE " + breakdownDBObject(dbObject, false, true, true, false, true, table);
+	else
+		return base;
 	
 };
 
@@ -66,7 +70,7 @@ exports.escapeLimit = function(limitNum) {
 
 exports.escapeOrderBy = function(field, ascOrDesc) {
 	return "ORDER BY " + field + " " + ascOrDesc;
-}
+};
 
 exports.escapeID = function(idToEscape) {
 	return mysql.escape(idToEscape);
