@@ -126,7 +126,6 @@ exports.isSubscribed = function (contentID, userID) {
  * a child comment is added.
  * @param contentID ID of content added/edited.
  */
-onContentAddedOrChanged('pn9tt4yqky3bsuvdb93y2b4ewe1b65g6');
 function onContentAddedOrChanged(contentID) {
     //get ID of content user actually subscribed to
     getSubscribedContentID(contentID).then(function (contentID) {
