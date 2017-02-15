@@ -386,7 +386,7 @@
     "45": {
         "table": "post",
         "author": "CaptainUnicorn",
-        "timestamp": "2016-6-06",
+        "timestamp": "2016-06-06",
         "id": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
         "tags": "CMPE",
         "title": "HOw dO i h4ck ppl?",
@@ -398,7 +398,7 @@
     "46": {
         "table": "post",
         "author": "CaptainUnicorn",
-        "timestamp": "2016-6-08",
+        "timestamp": "2016-06-08",
         "id": "6z85epnzcpyp7zq8118xq8jf29uycwct",
         "tags": "ELEC",
         "title": "WTF are phasors anyways?",
@@ -410,7 +410,7 @@
     "47": {
         "table": "post",
         "author": "CaptainUnicorn",
-        "timestamp": "2016-6-09",
+        "timestamp": "2016-06-09",
         "id": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
         "tags": "ELEC",
         "title": "Guys I'm failing ELEC 252",
@@ -428,7 +428,7 @@
         "upvotes": "201",
         "netVotes": "201",
         "commentLevel": "0",
-        "timestamp": "2016-8-07"
+        "timestamp": "2016-08-07"
     },
     "49": {
         "table": "comment",
@@ -439,7 +439,7 @@
         "upvotes": "4",
         "netVotes": "4",
         "commentLevel": "0",
-        "timestamp": "2016-8-08"
+        "timestamp": "2016-08-08"
     },
     "50": {
         "table": "comment",
@@ -450,7 +450,7 @@
         "upvotes": "50",
         "netVotes": "40",
         "commentLevel": "0",
-        "timestamp": "2016-8-09"
+        "timestamp": "2016-08-09"
     },
     "51": {
         "table": "user",
@@ -559,6 +559,54 @@
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"itemID": "n95moisie3uedw0541fp5go2d0uk0x21",
 		"date": "2015-04-13",
+		"type": "post"
+	},
+	"63": {
+		"table": "contribution",
+		"id": "7c4fsiw4quwktnv2gtv8mes25bgvxlsw",
+		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+		"itemID": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
+		"date": "2016-6-06",
+		"type": "post"
+	},
+	"64": {
+		"table": "contribution",
+		"id": "iajij02gz3icq7zatdequeoddqaw8ozw",
+		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+		"itemID": "6z85epnzcpyp7zq8118xq8jf29uycwct",
+		"date": "2016-06-08",
+		"type": "post"
+	},
+	"65": {
+		"table": "contribution",
+		"id": "1yt09qf0a4i9civm4126h67alu39uduu",
+		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+		"itemID": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
+		"date": "2016-06-09",
+		"type": "post"
+	},
+	"66": {
+		"table": "contribution",
+		"id": "4o56dqqxtwoboohr5luqf40oblv0cvbt",
+		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+		"itemID": "uetr3602jnpxf6s98xbngn7blt5y3052",
+		"date": "2016-08-07",
+		"type": "post"
+	},
+	"67": {
+		"table": "contribution",
+		"id": "2vrh69cbnppxh7fzaofns3bnwgakmahj",
+		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+		"itemID": "tnxqkzn1ld4yeq9h8x0b6iiuheschp4r",
+		"date": "2016-08-08",
+		"type": "post"
+	},
+	"68": {
+		"table": "contribution",
+		"id": "izw29t19fwa6k1h7gjn4sed5vjoetbxi",
+		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+		"itemID": "3at1dqkbksaqmx3fc5nna4vy6qijz4lo",
+		"date": "2016-08-09",
 		"type": "post"
 	}
 }
