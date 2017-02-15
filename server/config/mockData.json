@@ -32,7 +32,7 @@
 		"table": "user",
 		"username": "CaptainUnicorn",
 		"netid": "14cdwc",
-		"id": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
+		"id": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
 		"dateJoined": "2016-12-01",
 		"privilege": "admin"
 	},
@@ -382,5 +382,123 @@
 		"itemID": "mjr3kgyf8qleexjt6a258dqa9e21f52v",
 		"date": "2016-1-01",
 		"type": "post"
-	}
+	},
+    "45": {
+        "table": "post",
+        "author": "CaptainUnicorn",
+        "timestamp": "2016-6-06",
+        "id": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
+        "tags": "CMPE",
+        "title": "HOw dO i h4ck ppl?",
+        "content": "im a h4k3rr",
+        "upvotes": "999",
+        "downvotes": "2",
+        "netVotes": "997"
+    },
+    "46": {
+        "table": "post",
+        "author": "CaptainUnicorn",
+        "timestamp": "2016-6-08",
+        "id": "6z85epnzcpyp7zq8118xq8jf29uycwct",
+        "tags": "ELEC",
+        "title": "WTF are phasors anyways?",
+        "content": "I don't even know how I passed 221",
+        "upvotes": "4",
+        "downvotes": "1",
+        "netVotes": "3"
+    },
+    "47": {
+        "table": "post",
+        "author": "CaptainUnicorn",
+        "timestamp": "2016-6-09",
+        "id": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
+        "tags": "ELEC",
+        "title": "Guys I'm failing ELEC 252",
+        "content": "Can I ride the curve?",
+        "upvotes": "594",
+        "downvotes": "23",
+        "netVotes": "571"
+    },
+    "48": {
+        "table": "comment",
+        "id": "uetr3602jnpxf6s98xbngn7blt5y3052",
+        "parentPost": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
+        "content": "If you go on the terminal and do rm -f . then you'll hack all the people.",
+        "author": "CaptainUnicorn",
+        "upvotes": "201",
+        "netVotes": "201",
+        "commentLevel": "0",
+        "timestamp": "2016-8-07"
+    },
+    "49": {
+        "table": "comment",
+        "id": "tnxqkzn1ld4yeq9h8x0b6iiuheschp4r",
+        "parentPost": "6z85epnzcpyp7zq8118xq8jf29uycwct",
+        "content": "A phasor contains some info and there are some complex numbers and stuff.",
+        "author": "CaptainUnicorn",
+        "upvotes": "4",
+        "netVotes": "4",
+        "commentLevel": "0",
+        "timestamp": "2016-8-08"
+    },
+    "50": {
+        "table": "comment",
+        "id": "3at1dqkbksaqmx3fc5nna4vy6qijz4lo",
+        "parentPost": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
+        "content": "Yeah, everyone rides the curve.",
+        "author": "CaptainUnicorn",
+        "upvotes": "50",
+        "netVotes": "40",
+        "commentLevel": "0",
+        "timestamp": "2016-8-09"
+    },
+    "51": {
+        "table": "user",
+        "username": "NotATroll",
+        "netid": "troll",
+        "id": "yc70e5nbc3wfvvhflg2cn1p6786p9632",
+        "dateJoined": "2016-12-01"
+    },
+    "52": {
+        "table": "report",
+        "reportReason": "0",
+        "reportingUser": "ijaialcxn1o2kfrmdn89j5sgubiut302",
+        "reportedUser": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+        "id": "ycoob05y70a3se19fc2el1wi97hqpd2g",
+        "relatedItemID": "tnxqkzn1ld4yeq9h8x0b6iiuheschp4r",
+        "report": "Doesn't answer anything."
+    },
+    "53": {
+        "table": "report",
+        "reportReason": "0",
+        "reportingUser": "ijaialcxn1o2kfrmdn89j5sgubiut302",
+        "reportedUser": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+        "id": "kp2dpwklzu2znsacbj0q4ojhw8y5olpr",
+        "relatedItemID": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
+        "report": "This is so dumb."
+    },
+    "54": {
+        "table": "subscriptions",
+        "id": "vqkulsvvwsbuv94yvqtq9izwcz8ldaiu",
+        "userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+        "netid": "14cdwc",
+        "itemID": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
+        "type": "post"
+    },
+    "55": {
+        "table": "subscriptions",
+        "id": "mxd739y91ocr2vj3fx3pp76d4j652e9b",
+        "userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+        "netid": "14cdwc",
+        "itemID": "6z85epnzcpyp7zq8118xq8jf29uycwct",
+        "type": "post"
+    },
+    "56": {
+        "table": "subscriptions",
+        "id": "h3gglgkajbsfwmgnwhhs2pp7huno4n96",
+        "userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+        "netid": "14cdwc",
+        "itemID": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
+        "type": "post"
+    }
 }
