@@ -95,7 +95,7 @@ function reply(parent, text, userid) {
         }
     }).fail(function(err) {
         // at some point show "something went wrong" modal
-        console.log("Something went wrong");
+        console.log(err);
     });
 }
 

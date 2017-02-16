@@ -37,6 +37,7 @@ const literals = {
     NEW_ROUTE: "/new",
     LIST_ROUTE: "/list",
     PROFILE_ROUTE: "/profile",
+    QUESTION_ROUTE: "/question",
     GUIDELINES_ROUTE: "/guidelines",
     DEV_ROUTE: "/dev",
     EVAL_ROUTE: "/eval",

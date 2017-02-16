@@ -56,13 +56,12 @@ server.get(lit.SEARCH_ROUTE, function(request, response) { // to search bar
 	response.sendFile(path.join(__dirname, '..', 'client/html/index.html'));
 });
 
-server.get('/question/id=\*', function(request, response) { // question page, queried by id
+server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, queried by id
 	if (compare.isEmpty(request.signedCookies)) {
 		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
 
-	var pertinentQuery = request.url.replace('/question/id=', '');
 	response.sendFile(path.join(__dirname, '..', 'client/html/postAndComment.html'));
 });
 
@@ -193,9 +192,12 @@ server.post(lit.LOGIN_ROUTE, function(request, response) {
 		response.cookie(lit.USER_COOKIE, result, {signed: true});
     	response.send(true); // REDIRECT MUST OCCUR ON THE CLIENT AFTER A COOKIE IS SUCCESSFULLY SET
 
-	}, function(result) {
+	}, function() {
 		response.send(false);
-	});
+	}).catch(function(err) {
+        log.error(err.message);
+        response.status(500).send("Internal Error");
+    });
 });
 
 server.post(lit.EVAL_ROUTE, function(request, response) {
@@ -212,7 +214,11 @@ server.post(lit.EVAL_ROUTE, function(request, response) {
 			});
 		}, function() {
 			response.send("You are not authorized for this role");
-		});
+
+		}).catch(function(err) {
+            log.error(err.message);
+            response.status(500).send("Internal Error");
+        });
 	}
 });
 
@@ -228,7 +234,10 @@ server.post(lit.LOGOUT_ROUTE, function(request, response) { // a place to post e
 			response.send(true);
 		}, function(res) {
 			response.send(false);
-		});
+		}).catch(function(err) {
+            log.error(err.message);
+            response.status(500).send("Internal Error");
+        });
 	}
 });
 
@@ -241,7 +250,10 @@ server.post(lit.ACTION_ROUTE, function(request, response) {
         response.send(res);
 	}, function(res) {
         response.send(res);
-	});
+	}).catch(function(err) {
+        log.error(err.message);
+        response.status(500).send("Internal Error");
+    });
 
 });
 
@@ -254,13 +266,13 @@ server.post(lit.INFO_ROUTE, function(request, response) {
 		response.send(resultToReturn);
 
 	}, function(err) {
-		response.send({res: "not found"});
+		log.error(err);
+		response.send({res: "not found", error: err});
 
 	}).catch(function(err) {
-		response.send(err);
-		
-	})
-
+        log.error(err);
+        response.status(500).send(err);
+    });
 });
 
 /* Use Links

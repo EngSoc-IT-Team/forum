@@ -2,41 +2,41 @@
 
 
 var subscriptionTemplate = '<div class="item">\
-                                <span><img class="thumbs-up" src="../assets/thumbsUp.svg" /></span>\
+                                <span><img class="thumbs-up" src="../assets/thumbsUp.svg"/></span>\
                                 <span class="{0}">{1}</span>\
-                                <span><img class="thumbs-down" src="../assets/thumbsDown.svg" /></span>\
-                                <span><a href="/question/id={2}">{3}</a></span>\
+                                <span><img class="thumbs-down" src="../assets/thumbsDown.svg"/></span>\
+                                <span><a href="/question?id={2}">{3}</a></span>\
                                 <div class="date">Subscribed on: {4}</div>\
                                 <div class="date">Author: <a href="/profile?username={5}">{6}</a></div>\
                                 <div class="links" style="font-size: .75em;">\
-                                    <a href="/question/id={7}">View</a> | \
+                                    <a href="/question?id={7}">View</a> | \
                                     <a href="" onclick="subscribe(\'{8}\', \'{9}\', true)">Unsubscribe</a> | \
                                     <a href="" onclick="report(\'{10}\')">Report</a>\
                                 </div>\
                                 <hr>\
                             </div>';
 var contributionTemplate = '<div class="item">\
-                                <span><img class="thumbs-up" src="../assets/thumbsUp.svg" /></span>\
+                                <span><img class="thumbs-up" src="../assets/thumbsUp.svg"/></span>\
                                 <span class="{0}">{1}</span>\
-                                <span><img class="thumbs-down" src="../assets/thumbsDown.svg" /></span>\
-                                <span><a href="/question/id={2}">{3}</a></span>\
+                                <span><img class="thumbs-down" src="../assets/thumbsDown.svg"/></span>\
+                                <span><a href="/question?id={2}">{3}</a></span>\
                                 <div class="date">Posted on: {4}</div>\
                                 <p style="margin-bottom: 5px;">{5}</p>\
                                 <div class="links" style="font-size: .75em;">\
-                                    <a href="/question/id={6}" onclick="">View</a> | \
+                                    <a href="/question?id={6}" onclick="">View</a> | \
                                     <a href="" onclick="save(\'{7}\', \'{8}\', true)">Save</a>\
                                 </div>\
                                 <hr>\
                             </div>';
 var savedTemplate = '<div class="item">\
-                        <span><img class="thumbs-up" src="../assets/thumbsUp.svg" /></span>\
+                        <span><img class="thumbs-up" src="../assets/thumbsUp.svg"/></span>\
                         <span class="{0}">{1}</span>\
-                        <span><img class="thumbs-down" src="../assets/thumbsDown.svg" /></span>\
-                        <span><a href="/question/id={2}">{3}</a></span>\
+                        <span><img class="thumbs-down" src="../assets/thumbsDown.svg"/></span>\
+                        <span><a href="/question?id={2}">{3}</a></span>\
                         <div class="date">Saved on: {4}</div>\
                         <div class="date">Author: <a href="/profile?username={5}">{6}</a></div>\
                         <div class="links" style="font-size: .75em;">\
-                            <a href="/question/id={7}">View</a> | \
+                            <a href="/question?id={7}">View</a> | \
                             <a href="" onclick="save(\'{8}\', \'{9}\', true)">Unsave</a> | \
                             <a href="" onclick="report(\'{10}\')">Report</a>\
                         </div>\
