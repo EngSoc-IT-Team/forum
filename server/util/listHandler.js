@@ -20,7 +20,7 @@ exports.handle = function(request) {
         for (var key in request.query)
             items.addQuery(key, request.query[key]);
 
-        items.orderBy(lit.FIELD_DATE, lit.ASC);
+        items.orderBy(lit.FIELD_DATE, lit.DESC);
         items.setLimit(10);
         items.query().then(function() {
             recursiveGet(resolve, reject, items, listInfo, [info]);
