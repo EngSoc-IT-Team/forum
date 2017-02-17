@@ -15,7 +15,7 @@
 ![](https://si.wsj.net/public/resources/images/BN-MT095_COSTUM_JV_20160223171342.jpg)
 
 # Server-Side Setup (Windows ONLY)
-1. Download and install with [MySQL installer](https://dev.mysql.com/downloads/installer/). Use the default options. **Make sure the port used is NOT 8080**
+1. Download and install with [MySQL installer](https://dev.mysql.com/downloads/installer/). Use the default options except click start server on startup. **Make sure the port used is NOT 8080**
 2. The installer may have requirements that are not filled, such as your computer does not have python installed. However, these requirements are only used when working with that specific language, so as long as you have the language you want to use installed, you are good to go
 3. Set the root password when prompted in the installer
 4. Go to start > all programs > MySQL > MySQL 5.7 Command Line Client and enter the root password
