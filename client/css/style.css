@@ -453,3 +453,9 @@ footer .wrap div {
 .question-colour {
   color: purple;
 }
+
+/* Modal */
+
+.modal {
+  color: #000;
+}

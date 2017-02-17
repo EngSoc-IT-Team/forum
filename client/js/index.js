@@ -11,3 +11,7 @@ function showOptions() {
     $('#toggle').addClass('hidden');
     $('#options').fadeIn();
 }
+
+$(window).ready(function(){
+    $('#myModal').modal('show');
+});
