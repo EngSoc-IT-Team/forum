@@ -1,6 +1,9 @@
 "use strict";
 
-
+/*
+* Profile.js
+* Created by Michael Albinson 2/15/17
+ */
 var subscriptionTemplate = '<div class="item">\
                                 <span><img class="thumbs-up" src="../assets/thumbsUp.svg"/></span>\
                                 <span class="{0}">{1}</span>\
@@ -79,6 +82,7 @@ function whenLoaded() {
             fillInUserInfo(data.profile);
             fillInPostInfo(data.items);
             addTags(data.tags);
+            svgConverter();
         }
         else {
             // at some point show "something went wrong" modal

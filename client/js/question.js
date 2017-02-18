@@ -1,5 +1,9 @@
 "use strict";
 
+/* Question.js
+ ** Created by Michael Albinson 2/15/17
+ */
+
 var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick="window.location = \'/list?tag={0}\'">{1}</button>';
 
 var questionTemplate = '<div class="info-block row">\
@@ -47,7 +51,6 @@ var level2CommentTemplate = '<div class="info-block comment-block media">\
                                 </span>\
                                 <span class="date">{2} by <a href="/profile?username={3}">{4}</a></span>\
                                 <p class="description">{5}</p>\
-                                <a class="btn btn-sm button" href="/question/id=tobecreated">Reply</a>\
                                 <a class="btn btn-sm button" href="/question/id=tobecreated">Save</a>\
                                 <a class="btn btn-sm button" href="/question/id=tobecreated">Report</a>\
                                 <hr />\
@@ -73,6 +76,7 @@ function whenLoaded() {
         if (data) {
             fillInQuestionHeader(data.question);
             addComments(data.comments);
+            svgConverter();
         }
         else {
             // at some point show "something went wrong" modal

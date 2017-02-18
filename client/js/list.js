@@ -1,5 +1,10 @@
 "use strict";
 
+/*
+* List.js
+* Created by Michael Albinson 2/15/17
+ */
+
 var postTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
                         <h2 class="title"><a href="/question?id={0}">{1}</a></h2>\
                         <span class="thumbs-up">\
@@ -35,6 +40,7 @@ function whenLoaded() {
     }).done(function(data) {
         if (data) {
             buildList(data[0]);
+            svgConverter();
         }
         else {
             // at some point show "something went wrong" modal
