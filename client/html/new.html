@@ -40,6 +40,7 @@
 			<div class="info-block media">
 				<div class="container">
 					<h2>Post a question</h2>
+					<hr>
 
 					<div class="btn-group centered" role="group" aria-label="Basic example">
 						<button id="normal" type="button" class="btn btn-secondary" data-toggle="tab" href="#home">All</button>
@@ -50,8 +51,9 @@
 					<hr>
 
 					<div class="tab-content">
-						<div id="home" class="tab-pane fade in active">
+						<div id="home" class="tab-pane fade">
 							<h3>Normal Post</h3>
+							<p>* indicates this field must be filled out</p>
 
 							<!--<p>Please post the title of you question</p>-->
 							<div class="form-group">
@@ -69,11 +71,12 @@
 								<textarea class="form-control" rows="1" id="tag"></textarea>
 							</div>
 
-							<button type="button" class="btn btn-sm button">Comment</button>
+							<button type="button" class="btn btn-sm button">Submit</button>
 
 						</div>
 						<div id="menu2" class="tab-pane fade">
 							<h3>Link Post</h3>
+							<p>* indicates this field must be filled out</p>
 
 							<!--<p>Please post your linked questions</p>-->
 							<div class="form-group">
@@ -91,16 +94,17 @@
 							</div>
 
 							<div class="form-group">
-							<label for="tag ">Tag</label>
+							<label for="tag ">Tag:</label>
 								<textarea class="form-control" rows="1" id="tag2"></textarea>
 							</div>
 
-							<button id="submit" type="button" class="btn btn-secondary">Submit</button>
+							<button type="button" class="btn btn-sm button">Submit</button>							
 
 						</div>
 
-						<!--<div id="menu3" class="tab-pane fade">
+						<div id="menu3" class="tab-pane fade">
 							<h3>Other</h3>
+							<p>* indicates this field must be filled out</p>
 
 							<p>Please post your ~~~ question</p>
 							<div class="form-group">
@@ -118,7 +122,9 @@
 								<textarea class="form-control" rows="1" id="tag"></textarea>
 							</div>
 
-						</div>-->
+							<button type="button" class="btn btn-sm button">Submit</button>	
+
+						</div>
 					</div>
 				</div>
 			</div>

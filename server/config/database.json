@@ -1,7 +1,7 @@
 {
 	"host": "localhost",
 	"user": "root",
-	"secret": "simple",
+	"secret": "newfoundlander_oreo",
 	"database": "testing",
 	"maxConnections": "50"
 }
