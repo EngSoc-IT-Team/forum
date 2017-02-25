@@ -65,7 +65,6 @@ exports.onSubscribed = function (contentID, userID, type) {
             else
                 reject("Already subscribed");
         });
-
     });
 };
 
