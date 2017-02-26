@@ -1,8 +1,14 @@
+/*
+* Validator.js
+* Written by Michael Albinson 11/24/16
+*
+* Multi-tool that validates common things in the database.
+ */
+
 "use strict";
 
 var DBRow = require('./DBRow').DBRow;
 var log = require('./log');
-var generator = require('./IDGenerator');
 var lit = require('./Literals.js');
 
 const allowedUserKeys = [lit.FIELD_ID, lit.FIELD_USERNAME];
@@ -11,10 +17,10 @@ exports.validateSession = function(cookie) {
 	return new Promise(function(resolve, reject){
 		if (cookie){ //first of all you need to have a cookie for us to expend resources
 			var row = new DBRow(lit.SESSION_TABLE);
-			row.getRow(cookie.sessionID).then(function(row){
+			row.getRow(cookie.sessionID).then(function(){
 				resolve(); //allow user to continue
 
-			}, function(err) {
+			}, function() {
 				resolve(); //no session found, redirect user to login
 
 			});
@@ -29,12 +35,12 @@ exports.loginAndCreateSession = function(postResult) {
 	return new Promise(function(resolve, reject) {
 		if (postResult) {
 			var row = new DBRow(lit.USER_TABLE);
-			row.addQuery(lit.FIELD_NETID, postResult.username)
+			row.addQuery(lit.FIELD_NETID, postResult.username);
 			// row.addQuery("secret", postResult.secret) // BUT WE DON'T KNOW THE PASSWORD _/(O.O)\_
 
 			row.query().then(function(result) {
 				if (!row.next())
-					return reject(false);
+					return reject(result);
 					
 				var date = new Date();
 				var newSession = new DBRow(lit.SESSION_TABLE);
@@ -42,14 +48,16 @@ exports.loginAndCreateSession = function(postResult) {
 									userID: row.getValue(lit.FIELD_ID)};
 
 				newSession.setValue(lit.FIELD_USER_ID, sessionInfo.userID);
-				newSession.insert().then(function(res) {
+				newSession.insert().then(function() {
 					sessionInfo.sessionID = newSession.getValue(lit.FIELD_ID);
 					resolve(sessionInfo);
-				}, function(res) {
+				}, function(err) {
+					log.error(err);
 					reject(false);
 				});
 
 			}, function(err){
+                log.error(err);
 				reject(false); // no matching user found - indicate failure
 			});
 		}
@@ -64,10 +72,11 @@ exports.logout = function(cookie) {
 			reject(false);
 
 		var row = new DBRow(lit.SESSION_TABLE);
-		row.delete(cookie.sessionID).then(function(res) {
+		row.delete(cookie.sessionID).then(function() {
 			resolve(true);
 
-		}, function(res) {
+		}, function(err) {
+            log.error(err);
 			reject(false);
 
 		});
@@ -82,9 +91,9 @@ exports.hasRole = function(userID, role) {
 		}
 
 		var user = new DBRow(lit.USER_TABLE);
-		user.getRow(userID).then(function(res) {
+		user.getRow(userID).then(function() {
 			if (user.count() == 0)
-				reject(false);
+                return reject(false);
 
 			if(user.getValue(lit.FIELD_PRIVILEGE).includes(role))
 				resolve(true);
@@ -92,6 +101,7 @@ exports.hasRole = function(userID, role) {
 				reject(false)
 			
 		}, function(res) {
+			log.error(res);
 			reject(false);
 		});
 	});
@@ -102,17 +112,21 @@ exports.validateUser = function(request) {
 
 		var user = new DBRow(lit.USER_TABLE);
 		for (var key in request.query) {
+			if (!request.query.hasOwnProperty(key))
+				continue;
+
 			if (allowedUserKeys.includes(key)) // we do not allow searches for users by netid
 				user.addQuery(key, request.query[key]);
 		}
 
-		user.query().then(function(res) {
+		user.query().then(function() {
 			if (user.count() == 0)
 				reject(false);
 			else
 				resolve(true);
 			
-		}, function(res) {
+		}, function(err) {
+            log.error(err);
 			reject(false);
 		});
 	});

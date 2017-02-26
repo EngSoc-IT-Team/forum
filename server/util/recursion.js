@@ -1,3 +1,11 @@
+/*
+ * recursion.js
+ * Written by Michael Albinson 2/15/17
+ *
+ * A (hopefully growing) collection of recursive promise functions to
+ * ease getting large numbers of rows and doing the same things to them.
+ */
+
 "use strict";
 
 var DBRow = require('./DBRow').DBRow;

@@ -1,3 +1,8 @@
+/*
+ * profileHandler.js
+ * Written by Micahel Albinson 2/15/17
+ */
+
 "use strict";
 
 var Aggregator = require('./aggregator');

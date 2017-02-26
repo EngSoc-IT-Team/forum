@@ -1,3 +1,9 @@
+/*
+ * Collector.js
+ * Written by Michael Albinson 12/1/16
+ * THIS FILE IS NOT USED, subject to deletion
+ */
+
 "use strict";
 
 var dbr = require('./DBRow');
@@ -30,7 +36,7 @@ exports.collectPost = function(id, currentUserID) {
 					});
 				}
 			}, function(res) {
-				log.log("Failed to retrieve any rows matching query")
+				log.log("Failed to retrieve any rows matching query");
 				reject(false);
 			})
 
@@ -39,7 +45,7 @@ exports.collectPost = function(id, currentUserID) {
 			reject(false);
 		})
 	})
-}
+};
 
 exports.collectCommentList = function(userId) {
     return new Promise(function (resolve, reject) {
@@ -67,7 +73,7 @@ exports.collectCommentList = function(userId) {
             reject(false);
         })
     });
-}
+};
 
 function extractCommentInfo(comment, currentUserID) {
 	return new Promise(function(resolve, reject) {

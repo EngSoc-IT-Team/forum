@@ -1,9 +1,10 @@
-"use strict"
-
 /**
- ** This is a snadboxing file I use for testing stuff, don't worry about it ;)
+ ** This is a sandbox file I use for testing stuff, don't worry about it ;)
  ** unless of course you want to know what I'm up to
-**/
+ **/
+
+"use strict";
+
 var dbr = require('./util/DBRow');
 var lit = require('./util/Literals.js');
 

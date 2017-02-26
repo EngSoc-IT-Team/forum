@@ -1,4 +1,12 @@
-"use strict"
+/*
+ * log.js
+ * Written by Michael Albinson 11/19/16
+ *
+ * Logging utility for the forum. Logs to the terminal if not in production.
+ * Logs to a logfile if it is in production.
+ */
+
+"use strict";
 
 var fs = require('fs');
 var path = require('path');

@@ -1,3 +1,10 @@
+/*
+ * DBRow.js
+ * Written by Michael Albinson 11/19/16
+ *
+ * The cornerstone of the forum
+ */
+
 "use strict";
 
 var log = require('./log');

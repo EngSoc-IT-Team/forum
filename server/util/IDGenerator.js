@@ -1,4 +1,12 @@
-"use strict"
+/*
+ * Generator.js
+ * Written by Michael Albinson 11/19/16
+ *
+ * Functional interface for generating random things
+ * TODO: add username generation
+ */
+
+"use strict";
 
 exports.generate = function() {
 	var identifier = "";

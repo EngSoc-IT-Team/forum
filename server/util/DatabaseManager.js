@@ -1,3 +1,10 @@
+/*
+ * DatabaseManager.js
+ * Written by Michael Albinson 11/19/16
+ *
+ *
+ */
+
 "use strict";
 
 var mysql = require('mysql');
@@ -6,7 +13,7 @@ var path = require('path');
 var log = require('./log');
 var lit = require('./Literals.js');
 
-var databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/database.json'), 'utf8')) 
+var databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/database.json'), 'utf8'));
 
 exports.DatabaseManager = function() {
 	var pool = mysql.createPool({
@@ -25,7 +32,7 @@ exports.DatabaseManager = function() {
 					return reject(err);
 				}
 
-				connection.query(queryString, function(err, rows, fields) {
+				connection.query(queryString, function(err, rows) {
 					if (err) {
 						log.error(err.message);
 						return reject(err);
@@ -37,4 +44,4 @@ exports.DatabaseManager = function() {
 			});
 		})
 	}
-}
+};

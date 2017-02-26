@@ -1,5 +1,3 @@
-"use strict";
-
 /* Voter
  *
  * Written by Michael Albinson, 2/8/17
@@ -8,6 +6,8 @@
  * TODO: should be able to eventually get vote values through here efficiently
  *
  */
+
+"use strict";
 
 var DBRow = require('./DBRow').DBRow;
 var lit = require('./Literals');
