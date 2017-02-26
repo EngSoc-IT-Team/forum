@@ -1,3 +1,7 @@
+/* login.js
+** Created by Michael Albinson 11/24/16
+*/
+
 "use strict";
 
 function getLoginContent() {

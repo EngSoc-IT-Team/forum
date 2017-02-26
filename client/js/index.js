@@ -1,4 +1,9 @@
+/* index.js
+** Created by Michael Albinson 1/26/17
+*/
+
 "use strict";
+
 var currentButton = "#all";
 function toggleSelection(button) {
     $('#toggle').addClass('hidden');

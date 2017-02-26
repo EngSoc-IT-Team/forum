@@ -1,3 +1,10 @@
+/*
+* Validator.js
+* Written by Michael Albinson 11/24/16
+*
+* Multi-tool that validates common things in the database.
+ */
+
 "use strict";
 
 var DBRow = require('./DBRow').DBRow;

@@ -1,3 +1,8 @@
+/*
+ * Aggregator.js
+ * Written by Michael Albinson 2/2/17
+ */
+
 "use strict";
 
 var DBRow = require('./DBRow').DBRow;

@@ -1,7 +1,16 @@
+/*
+ * questionHandler.js
+ * Written by Michael Albinson 2/15/17
+ *
+ * Handles requests from the question page.
+ */
+
 "use strict";
 
 var DBRow = require('./DBRow').DBRow;
 var lit = require('./Literals.js');
+
+//TODO: add duplicate handling
 
 exports.handle = function(request) {
     var info = {question: {}, comments: []};

@@ -1,8 +1,14 @@
-"use strict"
+/*
+* Setup.js
+* Written by Michael Albinson 11/19/16
+*
+* Setup routine to ensure the service can be run and building the core database.
+ */
+
+"use strict";
 
 var dependencies = require('./util/setup/DependencyChecker.js');
 var dbsetup = require('./util/setup/SetupCoreDatabase.js');
-var dbr = require('./util/DBRow');
 var log = require('./util/log');
 var lit = require('./util/Literals.js');
 

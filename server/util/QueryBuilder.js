@@ -1,3 +1,11 @@
+/*
+ * QueryBuilder.js
+ * Written by Michael Albinson  11/22/16
+ *
+ * Functional interface for building queries and ensuring they are escaped and valid before
+ * being sent to the database.
+ */
+
 "use strict";
 
 var mysql = require('mysql');

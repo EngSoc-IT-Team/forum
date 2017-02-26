@@ -1,3 +1,10 @@
+/*
+* DependencyChecker.js
+* Written by Michael Albinson 11/19/16
+*
+* Checks that all required dependencies have been installed.
+ */
+
 "use strict";
 
 var log = require('../log');
