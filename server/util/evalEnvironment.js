@@ -32,11 +32,10 @@ var withoutResolve = "(function a() {\
 					})";
 
 
-
 exports.Environment = function() {
 	var DBRow = require('./DBRow').DBRow;
 	var Janitor = require('./maint/janitor').Janitor;
-
+	require = function() {throw new Error("Requiring is not permitted in eval mode")};
 	var logs = [];
 
 	this.execute = function(script) {
