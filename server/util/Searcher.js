@@ -17,18 +17,6 @@
  * 10,000 calls. However, for free, 5K credits are given each month, so on a small scale it is still free.
  */
 
-var input = "A purely peer-to-peer version of electronic cash would allow online payments to be sent directly" +
-    " from one party to another without going through a financial institution. Digital signatures provide part of " +
-    "the solution, but the main benefits are lost if a trusted third party is still required to prevent double-spending. " +
-    "We propose a solution to the double-spending problem using a peer-to-peer network. The network timestamps " +
-    "transactions by hashing them into an ongoing chain of hash-based proof-of-work, forming a record that " +
-    "cannot be changed without redoing the proof-of-work. The longest chain not only serves as proof of the " +
-    "sequence of events witnessed, but proof that it came from the largest pool of CPU power. As long as a majority " +
-    "of CPU power is controlled by nodes that are not cooperating to attack the network, they'll generate the longest " +
-    "chain and outpace attackers. The network itself requires minimal structure. Messages are broadcast on a best effort" +
-    " basis, and nodes can leave and rejoin the network at will, accepting the longest proof-of-work chain as proof " +
-    "of what happened while they were gone.";
-
 var natural = require("natural");
 var algorithmia = require("algorithmia");
 var lit = require('./Literals.js');
@@ -36,22 +24,21 @@ var log = require('./log.js');
 var dbr = require('./DBRow.js');
 
 var TfIdf = natural.TfIdf;
-var tfidf = new TfIdf();
+var wordRelater = new TfIdf();
 
 //main function that ties it all together
 function searchForContent(inputSearch) {
     getKeyTerms(inputSearch).then(function (keyTerms) {
         return searchForPosts(keyTerms);
-    })
-        .catch(function (error) {
-            log.log("searchDatabase error: " + error);
-        });
+    }).catch(function (error) {
+        log.log("searchDatabase error: " + error);
+    });
 }
 
 //get the key parts of the search
 function getKeyTerms(inputSearch) {
     return new Promise(function (resolve, reject) {
-        algorithmia.client(lit.AUTO_TAG_API_KEY).algo(lit.AUTO_TAG_ALGORITHM).pipe(input)
+        algorithmia.client(lit.AUTO_TAG_API_KEY).algo(lit.AUTO_TAG_ALGORITHM).pipe(inputSearch)
             .then(function (response) {
                 resolve(response.get());
             }, function (err) {
@@ -63,39 +50,66 @@ function getKeyTerms(inputSearch) {
 //get the course numbers manually
 
 //search through a post and get list of related ones, sorted as it's built
-var arr = ["install"];
-searchForPosts(arr);
 function searchForPosts(keyTerms) {
-    var sortedPosts = [];
-    var documentIndices = [];
     var documentIDs = [];
-    var documentMeasures=[];
-    var terms = "";
-    for (var index in keyTerms) {
-        terms += keyTerms[index];
-    }
-    //add all post title and content to the tfidf as separate documents
+    var documentMeasures = [];
     var documentsRow = new dbr.DBRow(lit.POST_TABLE);
-    documentsRow.query().then(function () {
-        while (documentsRow.next()) {
-            var doc = documentsRow.getValue(lit.FIELD_TITLE) + "\n" + documentsRow.getValue(lit.FIELD_CONTENT);
-            documentIDs.push(documentsRow.getValue(lit.FIELD_ID));
-            tfidf.addDocument(doc);
-        }
-    }).then(function () {
-        tfidf.tfidfs(terms, function (i, measure) {
-            //sort array as it's built
-            if (documentMeasures.length == 0 || measure <= documentMeasures[documentIndices.length - 1]) {
-                documentMeasures.push(measure);
-                documentIndices.push(i);
-            } else {
-                documentMeasures.unshift(measure);
-                documentIndices.unshift(i);
+    return new Promise(function (resolve, reject) {
+        documentsRow.query().then(function () {
+            while (documentsRow.next()) {
+                var doc = documentsRow.getValue(lit.FIELD_TITLE) + "\n" + documentsRow.getValue(lit.FIELD_CONTENT); //search the post content and title
+                wordRelater.addDocument(doc);
+                //add a row in the arrays for each document
+                documentIDs.push(documentsRow.getValue(lit.FIELD_ID));
+                documentMeasures.push(0);
             }
+        }).then(function () {
+            for (var termIndex in keyTerms) {
+                wordRelater.tfidfs(keyTerms[termIndex], function (docIndex, measure) {
+                    documentMeasures[docIndex] += measure;
+                });
+            }
+            var trimmedDocInfo = removeLowRelations(documentMeasures, documentIDs);
+            documentMeasures = trimmedDocInfo[0];
+            documentIDs = trimmedDocInfo[1];
+            resolve(sortDocumentsByRelation(documentMeasures,documentIDs));
+        }).catch(function (error) {
+            reject(error);
         });
-        for (var index in documentIndices){
-            sortedPosts[index]=documentIDs[documentIndices[index]];
-        }
     });
+}
 
+function sortDocumentsByRelation(documentMeasures, documentIDs) {
+    var sortedPosts = [];
+    var biggestMeasure = 0;
+    var biggestIndex = -1;
+    while (documentMeasures.length > 0) {
+        for (var i in documentMeasures) {
+            if (documentMeasures[i] > biggestMeasure) {
+                biggestMeasure = documentMeasures[i];
+                biggestIndex = i;
+            }
+        }
+        sortedPosts.push(documentIDs[i]);
+        documentMeasures.splice(i, 1);
+        documentIDs.splice(i, 1);
+    }
+    return sortedPosts;
+}
+
+function removeLowRelations(documentMeasures, documentIDs) {
+    var i = 0;
+    while (i < documentMeasures.length) {
+        if (documentMeasures[i] < lit.MIN_RELATION_MEASURE) { //remove the posts that aren't related enough
+            documentMeasures.splice(i, 1);
+            documentIDs.splice(i, 1);
+            //counter auto continued because the array decreased one size
+        } else {
+            i++;
+        }
+    }
+    var retArr = [];
+    retArr[0] = documentMeasures;
+    retArr[1] = documentIDs;
+    return retArr;
 }

@@ -178,6 +178,7 @@ const literals = {
     //integer values
     MIN_NUM_MISSED_NOTIFICATIONS: 0, //at least one missed notification needed
     MIN_MS_TO_NOTIFY_AGAIN: 86400000, //one day in milliseconds
+    MIN_RELATION_MEASURE: 1,
 
     //API keys/information
     AUTO_TAG_API_KEY: "sim/u46ka7/UoVlIZFYomudRRxO1",
