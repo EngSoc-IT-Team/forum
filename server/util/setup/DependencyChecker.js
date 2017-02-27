@@ -9,7 +9,7 @@
 
 var log = require('../log');
 
-const dependencies = ['mysql', 'express', 'path', 'fs', 'cookie-parser', 'body-parser', 'nodemailer', 'nodemailer-smtp-transport'];
+const dependencies = ['mysql', 'express', 'path', 'fs', 'cookie-parser', 'body-parser', 'nodemailer', 'nodemailer-smtp-transport', 'algorithmia', 'natural'];
 
 exports.checkDependencies = function() {
 	log.info("~~~~~~~~~~~~~~~~Module Check~~~~~~~~~~~~~~~~~");
