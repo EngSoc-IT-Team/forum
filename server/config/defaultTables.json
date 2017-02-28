@@ -20,7 +20,7 @@
 			},
 			"upvotes": {
 				"type": "mediumint",
-				"default": "0"
+				"default": "1"
 			},
 			"downvotes": {
 				"type": "mediumint",
@@ -28,9 +28,13 @@
 			},
 			"netVotes": {
 				"type": "mediumint",
-				"default": "0"
+				"default": "1"
 			},
 			"answered": {
+				"type": "boolean",
+				"default": "0"
+			},
+			"duplicate": {
 				"type": "boolean",
 				"default": "0"
 			},
@@ -64,7 +68,7 @@
 			},
 			"upvotes": {
 				"type": "mediumint",
-				"default": "0"
+				"default": "1"
 			},
 			"downvotes": {
 				"type": "mediumint",
@@ -72,7 +76,7 @@
 			},
 			"netVotes": {
 				"type": "mediumint",
-				"default": "0"
+				"default": "1"
 			},
 			"isSolution": {
 				"type": "boolean",
@@ -253,21 +257,25 @@
 				"type": "string",
 				"constraint": "NOT NULL"
 			},
-			"upvotes": {
+			"ratings": {
 				"type": "mediumint",
 				"default": "0"
 			},
-			"downvotes": {
-				"type": "mediumint",
-				"default": "0"
-			},
-			"netVotes": {
-				"type": "mediumint",
-				"default": "0"
+			"averageRating": {
+				"type": "tinyint",
+				"default": "3"
 			},
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
+			},
+			"duplicate": {
+				"type": "boolean",
+				"default": "0"
+			},
+			"addedBy": {
+				"type": "uniqueidentifier",
+				"constraints": "NOT NULL"
 			}
 		}
 	},
@@ -292,7 +300,7 @@
 			},
 			"upvotes": {
 				"type": "mediumint",
-				"default": "0"
+				"default": "1"
 			},
 			"downvotes": {
 				"type": "mediumint",
@@ -300,7 +308,7 @@
 			},
 			"netVotes": {
 				"type": "mediumint",
-				"default": "0"
+				"default": "1"
 			},
 			"trusted": {
 				"type": "boolean",
@@ -317,6 +325,10 @@
 			"addedBy": {
 				"type": "uniqueidentifier",
 				"default": "NOT NULL"
+			},
+			"duplicate": {
+				"type": "boolean",
+				"default": "0"
 			}
 		}
 	},
@@ -408,6 +420,24 @@
 			"date": {
 				"type": "timestamp",
 				"default": "CURRENT_TIMESTAMP"
+			}
+		}
+	},
+	"12": {
+		"tablename": "rating",
+		"fields": {
+			"itemID": {
+				"type": "uniqueidentifier"
+			},
+			"userID": {
+				"type": "uniqueidentifier"
+			},
+			"voteValue": {
+				"type": "tinyint"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
 			}
 		}
 	}
