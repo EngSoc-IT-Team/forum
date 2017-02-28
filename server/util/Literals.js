@@ -100,6 +100,7 @@ const literals = {
     FIELD_SUMMARY: "summary",
     FIELD_ITEM_ID: "itemID",
     FIELD_TYPE: "type",
+    FIELD_DUPLICATE: "duplicate",
 
     //fields for post table only
     POST_TABLE: "post",
@@ -148,7 +149,8 @@ const literals = {
     //fields for class table only
     CLASS_TABLE: "class",
     FIELD_COURSE_CODE: "courseCode",
-    FIELD_LONG_SUMMARY: "longSummary",
+    FIELD_PREREQS: "prereqs",
+    FIELD_AVERAGE_RATING: "averageRating",
 
     //fields for link table only
     LINK_TABLE: "link",

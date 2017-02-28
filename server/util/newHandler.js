@@ -45,6 +45,7 @@ function createClass(body, user, resolve, reject) {
 
     c.insert().then(function() {
         vote(user, c, resolve); // if we make it this far we will always resolve
+        generateContribution(c, user, "class"); // we can get away with creating the contribution in parallel in this case
     }, function(err) {
         log.error(err);
         reject("Error entering the new class");
@@ -60,9 +61,9 @@ function createLink(body, user, resolve, reject) { // check if this link should 
     l.setValue(lit.FIELD_LINK, body.href); // get this
     l.setValue(lit.FIELD_TAGS, body.tags);
     l.setValue(lit.FIELD_ADDED_BY, user.getValue(lit.FIELD_USERNAME));
-    console.log(l.getRowJSON())
     l.insert().then(function() {
         vote(user, l, resolve); // if we make it this far we will always resolve
+        generateContribution(l, user, "link"); // we can get away with creating the contribution in parallel in this case
     }, function(err) {
         log.error(err);
         reject("Error entering the new link");
@@ -80,6 +81,7 @@ function createQuestion(body, user, resolve, reject) { // also create a vote
 
     q.insert().then(function() {
         vote(user, q, resolve); // if we make it this far we will always resolve
+        generateContribution(q, user, "post"); // we can get away with creating the contribution in parallel in this case
     }, function(err) {
         log.error(err);
         reject("Error entering the new question");
@@ -97,5 +99,17 @@ function vote(user, item, resolve) {
     }, function(err) {
         log.error(err);
         resolve({'id': item.getValue(lit.FIELD_ID)});
+    })
+}
+
+function generateContribution(item, user, type) {
+    var contr = new DBRow(lit.CONTRIBUTION_TABLE);
+    contr.setValue(lit.FIELD_TYPE, type);
+    contr.setValue(lit.FIELD_USER_ID, user.getValue(lit.FIELD_ID));
+    contr.setValue(lit.FIELD_ITEM_ID, item.getValue(lit.FIELD_ID));
+    contr.insert().then(function() {
+
+    }, function(err) {
+        log.error(err);
     })
 }
