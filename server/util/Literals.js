@@ -151,8 +151,9 @@ const literals = {
     FIELD_LONG_SUMMARY: "longSummary",
 
     //fields for link table only
-    LINK: "link",
+    LINK_TABLE: "link",
     FIELD_TRUSTED: "trusted",
+    FIELD_LINK: "link",
     FIELD_DATE_ADDED: "dateAdded",
     FIELD_ADDED_BY: "addedBy",
 
