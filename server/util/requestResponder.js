@@ -8,6 +8,7 @@
 var questionHandler = require('./questionHandler');
 var listHandler = require('./listHandler');
 var profileHandler = require('./profileHandler');
+var newHandler = require('./newHandler');
 var lit = require('./Literals.js');
 
 /*
@@ -46,7 +47,14 @@ exports.parseRequest = function(request) {
 					reject(err);
 				});
 				break;
-			default:
+			case('new'):
+                newHandler.handle(request).then(function(info) {
+					resolve(info);
+				}, function (err) {
+					reject(err);
+                });
+				break;
+			default: // TODO: class, link
 				reject("Invalid request type");
 				break;
 		}

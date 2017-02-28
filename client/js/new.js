@@ -53,7 +53,7 @@ function getContent(type) {
         return {
             title: $('#classTitle').val(),
             courseCode: $('#courseCode').val(),
-            summary: $('#classSummary')[0].innerHTML,
+            summary: $('#classSummary').val(),
             tags: getTags('#classTags')
             // preRequirements: $('#preReqs').val() // should get implemented later
         };
