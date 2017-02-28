@@ -1,8 +1,8 @@
-"use strict";
+/* question.js
+** Created by Michael Albinson 2/15/17
+*/
 
-/* Question.js
- ** Created by Michael Albinson 2/15/17
- */
+"use strict";
 
 var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick="window.location = \'/list?tag={0}\'">{1}</button>';
 
@@ -37,6 +37,7 @@ var level1CommentTemplate = '<div class="col-sm-12">\
                                 <p class="description">{5}</p>\
                                 <a class="btn btn-sm button" href="/question/id=tobecreated">Reply</a>\
                                 <a class="btn btn-sm button" href="/question/id=tobecreated">Save</a>\
+                                <a class="btn btn-sm button" href="/question/id=tobecreated">Subscribe</a>\
                                 <a class="btn btn-sm button" href="/question/id=tobecreated">Report</a>\
                                 <hr/>\
                              </div>';
@@ -52,6 +53,7 @@ var level2CommentTemplate = '<div class="info-block comment-block media">\
                                 <span class="date">{2} by <a href="/profile?username={3}">{4}</a></span>\
                                 <p class="description">{5}</p>\
                                 <a class="btn btn-sm button" href="/question/id=tobecreated">Save</a>\
+                                <a class="btn btn-sm button" href="/question/id=tobecreated">Subscribe</a>\
                                 <a class="btn btn-sm button" href="/question/id=tobecreated">Report</a>\
                                 <hr />\
                             </div>';
