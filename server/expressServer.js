@@ -74,7 +74,7 @@ server.get(lit.ABOUT_ROUTE, function(request, response) { //about page
 	response.sendFile(path.join(__dirname, '..', 'client/html/about.html'));
 });
 
-server.get(lit.NEW_ROUTE, function(request, response) { // newest questions being asked in list view
+server.get(lit.NEW_ROUTE, function(request, response) { // place where new things can be added
 	if (compare.isEmpty(request.signedCookies)) {
 		response.redirect(lit.LOGIN_ROUTE);
 		return;
