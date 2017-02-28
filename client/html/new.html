@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title> Eng Forum</title>
+	<title>EngSoc Forum - New</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Eng Forum">
@@ -16,6 +16,7 @@
 	<link rel="icon" href="../assets/favicon.ico">
 	<link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700&amp;subset=cyrillic" rel="stylesheet">
 	<script type="text/javascript" src="/js/common.js"></script>
+	<script type="text/javascript" src="/js/new.js"></script>
 </head>
 <body>
 	<div class="container-fluid">
@@ -39,90 +40,105 @@
 		<div class = "main-content">
 			<div class="info-block media">
 				<div class="container">
-					<h2>Post a question</h2>
+					<h2>What would you like to add?</h2>
 					<hr>
-
-					<div class="btn-group centered" role="group" aria-label="Basic example">
-						<button id="normal" type="button" class="btn btn-secondary" data-toggle="tab" href="#home">All</button>
-						<button id="link" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu2">link</button>
-						<button id="other" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu3">other</button>
+					<div class="centered">
+						<div class="btn-group" role="group" aria-label="Basic example">
+							<button id="normal" type="button" class="btn btn-secondary" data-toggle="tab" href="#home" onclick="toggleSelection('question')">Question</button>
+							<button id="link" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu2" onclick="toggleSelection('link')">Link</button>
+							<button id="class" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu3" onclick="toggleSelection('class')">Class</button>
+						</div>
 					</div>
 
 					<hr>
 
 					<div class="tab-content">
 						<div id="home" class="tab-pane fade">
-							<h3>Normal Post</h3>
-							<p>* indicates this field must be filled out</p>
+							<h3>New Question</h3>
 
 							<!--<p>Please post the title of you question</p>-->
 							<div class="form-group">
-							<label for="title">Title*:</label>
-								<textarea class="form-control" rows="1" id="title"></textarea>
+								<label class="help" for="questionTitle" data-toggle="tooltip" title="A one line summary of your question">Title<b class="negative inline">*</b></label>
+								<input class="form-control" id="questionTitle">
 							</div>
 
 							<div class="form-group">
-							<label for="comment">Comment*:</label>
-								<textarea class="form-control" rows="5" id="comment"></textarea>
+								<label class="help" for="details" data-toggle="tooltip" title="More information to help others better understand your question">Question Details<b class="negative inline">*</b></label>
+								<textarea class="form-control" rows="5" id="details"></textarea>
 							</div>
 
 							<div class="form-group">
-							<label for="tag">Tag</label>
-								<textarea class="form-control" rows="1" id="tag"></textarea>
+								<label class="help" for="questionTags" data-toggle="tooltip" title="Adding tags helps other people help you faster!">Tags</label>
+								<input class="form-control" id="questionTags">
 							</div>
 
-							<button type="button" class="btn btn-sm button">Submit</button>
+							<div id="warning-target-question" class="negative warning"></div>
+
+							<p><b class="negative inline">*</b> Indicates a required field</p>
+
+							<button id="question-button" type="button" class="btn btn-sm button" onclick="submitItem('question')">Submit</button>
 
 						</div>
 						<div id="menu2" class="tab-pane fade">
-							<h3>Link Post</h3>
-							<p>* indicates this field must be filled out</p>
+							<h3>New Link</h3>
 
 							<!--<p>Please post your linked questions</p>-->
 							<div class="form-group">
-							<label for="link">Link*:</label>
-								<textarea class="form-control" rows="1" id="link"></textarea>
-							</div>
-
-							<div><label for="title">Title*:</label>
-								<textarea class="form-control" rows="1" id="title"></textarea>
+								<label class="help" for="url" data-toggle="tooltip" title="Copy the link URL here">URL<b class="negative inline">*</b></label>
+								<input class="form-control" id="url">
 							</div>
 
 							<div class="form-group">
-							<label for="comment">Comment*:</label>
-								<textarea class="form-control" rows="5" id="comment2"></textarea>
+								<label class="help" for="linkTitle" data-toggle="tooltip" title="A one line summary of what your link is for">Title<b class="negative inline">*</b></label>
+								<input class="form-control" id="linkTitle">
 							</div>
 
 							<div class="form-group">
-							<label for="tag ">Tag:</label>
-								<textarea class="form-control" rows="1" id="tag2"></textarea>
+								<label class="help" for="linkSummary" data-toggle="tooltip" title="A summary of what information the link leads to">Summary<b class="negative inline">*</b></label>
+								<textarea class="form-control" rows="5" id="linkSummary"></textarea>
 							</div>
 
-							<button type="button" class="btn btn-sm button">Submit</button>							
+							<div class="form-group">
+								<label class="help" for="linkTags" data-toggle="tooltip" title="Adding tags helps other people find this faster!">Tags</label>
+								<input class="form-control" id="linkTags">
+							</div>
+
+							<div id="warning-target-link" class="negative warning"></div>
+
+							<p><b class="negative inline">*</b> Indicates a required field</p>
+
+							<button id="link-button" type="button" class="btn btn-sm button" onclick="submitItem('link')">Submit</button>
 
 						</div>
 
 						<div id="menu3" class="tab-pane fade">
-							<h3>Other</h3>
-							<p>* indicates this field must be filled out</p>
+							<h3>New Class</h3>
 
-							<p>Please post your ~~~ question</p>
 							<div class="form-group">
-							<label for="comment">Title*:</label>
-								<textarea class="form-control" rows="1" id="title"></textarea>
+								<label class="help" for="courseCode" data-toggle="tooltip" title="The course code (i.e. MECH340, APSC100 etc.)">Course Code<b class="negative inline">*</b></label>
+								<input class="form-control" id="courseCode">
 							</div>
 
 							<div class="form-group">
-							<label for="comment">Comment*:</label>
-								<textarea class="form-control" rows="5" id="comment"></textarea>
+								<label class="help" for="classTitle" data-toggle="tooltip" title="The title of the course">Title<b class="negative inline">*</b></label>
+								<input class="form-control" id="classTitle">
 							</div>
 
 							<div class="form-group">
-							<label for="comment">Tag</label>
-								<textarea class="form-control" rows="1" id="tag"></textarea>
+								<label class="help" for="classSummary" data-toggle="tooltip" title="A summary of the course topics">Comment<b class="negative inline">*</b></label>
+								<textarea class="form-control" rows="5" id="classSummary"></textarea>
 							</div>
 
-							<button type="button" class="btn btn-sm button">Submit</button>	
+							<div class="form-group">
+								<label class="help" for="classTags" data-toggle="tooltip" title="Adding tags helps other people find this faster!">Tags</label>
+								<input class="form-control" id="classTags">
+							</div>
+
+							<div id="warning-target-class" class="negative warning"></div>
+
+							<p><b class="negative inline">*</b> Indicates a required field</p>
+
+							<button id="class-button" type="button" class="btn btn-sm button" onclick="submitItem('class')">Submit</button>
 
 						</div>
 					</div>
