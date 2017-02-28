@@ -247,10 +247,10 @@
 				"constraint": "NOT NULL"
 			},
 			"summary": {
-				"type": "string",
+				"type": "postText",
 				"constraint": "NOT NULL"
 			},
-			"longSummary": {
+			"prereqs": {
 				"type": "postText"
 			},
 			"tags": {

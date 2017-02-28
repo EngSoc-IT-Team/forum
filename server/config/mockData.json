@@ -205,7 +205,7 @@
 		"courseCode": "MECH328",
 		"title": "Dynamics and Vibrations",
 		"summary": "A class covering the physics of dynamic rigid bodies and vibrations.",
-		"longSummary": "A longer summary would go here",
+		"prereqs": "A longer summary would go here",
 		"tags": "MECH328, MECH, MECH GENERAL"
 	},
 	"25": {
