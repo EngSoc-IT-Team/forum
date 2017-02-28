@@ -42,7 +42,7 @@ a:focus,
   background-color: #000;
   padding-left: 40px;
   padding-right: 40px;
-  border-radius: 0px
+  border-radius: 0;
 }
 
 .navbar a:hover {
@@ -52,9 +52,8 @@ a:focus,
 .navbar-logo p,
 .nav-profile p {
   font-size: 20px;
-  margin: 0px;
+  margin: 15px 0 0;
   display: inline-block;
-  margin-top: 15px;
 }
 
 .navbar-logo {
@@ -123,12 +122,12 @@ a:focus,
 /* Main Page */
 
 .row {
-  margin-left: 0px;
-  margin-right: 0px;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .container-fluid {
-  padding: 0px;
+  padding: 0;
 }
 
 .main-search {
@@ -259,7 +258,7 @@ a:focus,
 }
 
 .description {
-  margin: 10px 0px;
+  margin: 10px 0;
 }
 
 .button {
@@ -282,7 +281,7 @@ a:focus,
 
 .comment-block .media {
   padding-left: 30px;
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .clearfix:after {
@@ -383,7 +382,7 @@ footer .wrap div {
 
 .vote-box-positive {
   height: 100%;
-  width: 0%;
+  width: 0;
   left: 0;
   background-color: green;
   position: absolute;
@@ -393,7 +392,7 @@ footer .wrap div {
 
 .vote-box-negative {
   height: 100%;
-  width: 0%;
+  width: 0;
   right: 0;
   background-color: red;
   position: absolute;
@@ -414,11 +413,11 @@ footer .wrap div {
 .class-page .instructor,
 .class-page .prerequisites,
 .class-page .course-description-title {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .class-page .description {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .class-page .modal-title {
@@ -431,7 +430,7 @@ footer .wrap div {
 
 .class-page .modal .star-container {
   text-align: center;
-  padding: 20px 0px;
+  padding: 20px 0;
 }
 
 .class-page .review-container {
@@ -439,7 +438,7 @@ footer .wrap div {
 }
 
 .class-page .modal-footer .button {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .class-page .modal .star {
@@ -458,4 +457,13 @@ footer .wrap div {
 
 .modal {
   color: #000;
+}
+/* Forms */
+
+.help {
+  cursor: help;
+}
+
+.warning {
+  font-weight: bold;
 }
