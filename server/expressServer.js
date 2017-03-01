@@ -91,15 +91,6 @@ server.get(lit.LIST_ROUTE, function(request, response) { //return the a default 
 	response.sendFile(path.join(__dirname, '..', 'client/html/questionList.html'));
 });
 
-server.get('/list/filter?\*', function(request, response) { //return the list filtered by the passed parameters, active search must route here ordered by most positive votes
-	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
-
-	response.sendFile(path.join(__dirname, '..', 'client/html/questionList.html'));
-});
-
 server.get(lit.PROFILE_ROUTE, function(request, response) { //user home page
 	if (compare.isEmpty(request.signedCookies)) {
 		response.redirect(lit.LOGIN_ROUTE);
@@ -109,12 +100,12 @@ server.get(lit.PROFILE_ROUTE, function(request, response) { //user home page
 		validator.validateUser(request).then(function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
 
-		}, function(err) {
+		}, function() {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
 
 		});
 	}
-	else{
+	else {
 		response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
 	}
 });
@@ -139,7 +130,7 @@ server.get(lit.DEV_ROUTE, function(request, response) { // mock login page
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/dev.html'));
-		}, function(res) {
+		}, function() {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
 		});
 		
@@ -152,7 +143,7 @@ server.get(lit.EVAL_ROUTE, function(request, response) { //allows evaluation of 
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
 			response.sendFile(path.join(__dirname, '..', 'client/html/eval.html'));
-		}, function(res) {
+		}, function() {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
 		});
 	}
@@ -163,7 +154,7 @@ server.get(lit.HELP_ROUTE, function(request, response) { // user help page
 		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
-	
+
 	response.sendFile(path.join(__dirname, '..', 'client/html/help.html'));
 });
 
@@ -172,8 +163,23 @@ server.get(lit.CLASS_ROUTE, function(request, response) { // user help page
 		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
-	
-	response.sendFile(path.join(__dirname, '..', 'client/html/class.html'));
+
+    if (!compare.isEmpty(request.query))
+		response.sendFile(path.join(__dirname, '..', 'client/html/class.html'));
+    else
+    	response.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+});
+
+server.get(lit.LINK_ROUTE, function(request, response) { // user help page
+    if (compare.isEmpty(request.signedCookies)) {
+        response.redirect(lit.LOGIN_ROUTE);
+        return;
+    }
+
+	if (!compare.isEmpty(request.query))
+    	response.sendFile(path.join(__dirname, '..', 'client/html/link.html'));
+    else
+    	response.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
 });
 
 /* POST Requests
