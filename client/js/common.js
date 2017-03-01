@@ -23,12 +23,12 @@ function logout() {
     });
 }
 
-function subscribe(userid, itemid, isSubscribed, type) {
+function subscribe(itemid, isSubscribed, type) {
     $.ajax({
         url: '/action',
         type: 'POST',
         contentType: 'application/json', 
-        data: JSON.stringify({userId: userid, itemId: itemid, subscribed: isSubscribed, action:"subscribe", contentType: type})
+        data: JSON.stringify({itemId: itemid, subscribed: isSubscribed, action:"subscribe", contentType: type})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success 
@@ -43,12 +43,12 @@ function subscribe(userid, itemid, isSubscribed, type) {
     });
 }
 
-function save(userid, itemid, isSaved, type) {
+function save(itemid, isSaved, type) {
     $.ajax({
         url: '/action',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({userId: userid, itemId: itemid, saved: isSaved, action:"save", contentType: type})
+        data: JSON.stringify({itemId: itemid, saved: isSaved, action:"save", contentType: type})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success
@@ -159,6 +159,5 @@ function svgConverter() {
             // Replace image with new SVG
             $img.replaceWith($svg);
         });
-
     });
 }
