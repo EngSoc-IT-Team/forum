@@ -9,6 +9,8 @@ var questionHandler = require('./questionHandler');
 var listHandler = require('./listHandler');
 var profileHandler = require('./profileHandler');
 var newHandler = require('./newHandler');
+var linkHandler = require('./linkHandler');
+var classHandler = require('./classHandler');
 var lit = require('./Literals.js');
 
 /*
@@ -52,6 +54,20 @@ exports.parseRequest = function(request) {
 					resolve(info);
 				}, function (err) {
 					reject(err);
+                });
+				break;
+			case('class'):
+                classHandler.handle(request).then(function(info) {
+                    resolve(info);
+                }, function (err) {
+                    reject(err);
+                });
+				break;
+			case('link'):
+                linkHandler.handle(request).then(function(info) {
+                    resolve(info);
+                }, function (err) {
+                    reject(err);
                 });
 				break;
 			default: // TODO: class, link
