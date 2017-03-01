@@ -48,6 +48,7 @@ const literals = {
     ACTION_ROUTE: "/action",
     INFO_ROUTE: "/info",
     ROOT_ROUTE: "/",
+    LINK_ROUTE: "/link",
 
     //values in string format: e.g. boolean value true as \'true\'
     ZERO: "0",
