@@ -19,6 +19,30 @@ var postTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
                         <a class="btn btn-sm button" href="/question?id={8}">Read More</a>\
                         {9}</div>';
 
+//TODO: Make this a thing
+var linkTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
+                        <h2 class="title"><a href="{0}">{1}</a></h2>\
+                        <span class="thumbs-up">\
+                            <img src="../assets/thumbsUp.svg" class="svg" />\
+                        </span>\
+                        <span class="{2}">{3}</span>\
+                        <span class="thumbs-down">\
+                            <img src="../assets/thumbsDown.svg" class="svg" />\
+                        </span>\
+                        <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
+                        <p class="description">{7}</p>\
+                        <a class="btn btn-sm button" href="/link?id={8}">Read More</a>\
+                        {9}</div>';
+
+//TODO: Make this a thing
+var classTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
+                        <h2 class="title"><a href="/class?id={0}">{1}: {2}</a></h2>\
+                        {3}\
+                        <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
+                        <p class="description">{7}</p>\
+                        <a class="btn btn-sm button" href="/class?id={8}">Read More</a>\
+                        {9}</div>';
+
 var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick="window.location = \'/list?tag={0}\'">{1}</button>';
 
 function whenLoaded() {
@@ -83,11 +107,13 @@ function fillPostTemplate(post) {
 }
 
 function fillLinkTemplate(li) {
-    return fillTemplate();
+    return fillTemplate(linkTemplate, li.url, li.title, positiveOrNegative(li.votes), li.votes, getDateString(li.date),
+        li.author, li.author, li.summary, li.id, getTags(li.tags));
 }
 
 function fillClassTemplate(cl) {
-    return fillTemplate();
+    return fillTemplate(classTemplate, cl.id, cl.courseCode, cl.title, getRating(cl.rating), getDateString(cl.date),
+        cl.author, cl.author, cl.summary, cl.id, getTags(cl.tags));
 }
 
 function getTags(tagArray) {
@@ -118,6 +144,14 @@ function getDateString(date) {
         return undefined;
 
     return date.slice(0, date.indexOf('T'));
+}
+
+function getRating(rating) {
+    var star = '<span class="star rating">\
+                    <img src="../assets/{0}.svg" class="svg" />\
+                </span>';
+    return fillTemplate(star, 'yellow-star').repeat(rating) + fillTemplate(star, 'star').repeat(5-rating);
+
 }
 
 whenLoaded();
