@@ -51,11 +51,13 @@ function getPressed() {
 function getContent(type) {
     if (type == "class")
         return {
-            title: $('#classTitle').val(),
+            title: $('#classTitle').val(), //TODO: need to reflect things actually allowed to be inputted on the class table
             courseCode: $('#courseCode').val(),
             summary: $('#classSummary').val(),
-            tags: getTags('#classTags')
-            // preRequirements: $('#preReqs').val() // should get implemented later
+            tags: getTags('#classTags'),
+            instructor: $('#instructor').val(),
+            credit: $('#credit').val(),
+            prereqs: $('#prerequisites').val()
         };
     else if (type == "link")
         return {
@@ -101,7 +103,7 @@ $(function () {
 * Form handling and checking
  */
 
-const reqClass = ['#courseCode', '#classTitle', '#classSummary'];
+const reqClass = ['#courseCode', '#classTitle', '#classSummary', '#instructor', '#credit'];
 const reqLink = ['#url', '#linkTitle', '#linkSummary'];
 const reqQ = ['#questionTitle', '#details'];
 function allFieldsFilled(type) {
@@ -138,7 +140,7 @@ function checkFields(fields, type) {
     }
 
     if (warnAbout) {
-        $('#warning-target-' + type).text('Please fill out the following field(s):' + warnAbout);
+        $('#warning-target-' + type).text('Please fill out the following required field(s):' + warnAbout);
         return false;
     }
     else {

@@ -39,6 +39,9 @@ function createClass(body, user, resolve, reject) {
     var c = new DBRow(lit.CLASS_TABLE);
     c.setValue(lit.FIELD_TITLE, body.title);
     c.setValue(lit.FIELD_COURSE_CODE, body.courseCode);
+    c.setValue(lit.FIELD_INSTRUCTOR, body.instructor);
+    c.setValue(lit.FIELD_PREREQS, body.prereqs);
+    c.setValue(lit.FIELD_CREDIT, body.credit);
     c.setValue(lit.FIELD_SUMMARY, body.summary);
     c.setValue(lit.FIELD_TAGS, body.tags);
     c.setValue(lit.FIELD_ADDED_BY, user.getValue(lit.FIELD_USERNAME));
