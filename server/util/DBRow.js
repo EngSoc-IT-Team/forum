@@ -276,5 +276,5 @@ exports.DBRow = function(table) {
 	**/
 	this.getRowJSON = function() {
 		return currentRow;
-	}
+	};
 };
