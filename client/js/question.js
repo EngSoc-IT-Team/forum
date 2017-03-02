@@ -99,6 +99,13 @@ function fillInQuestionHeader(details) {
 
 function addComments(comments) {
     var template;
+
+    if (comments.length == 0) {
+        $('#getMore').hide();
+        $('#foot').append("<h6 class='info-block'>Nothing here yet!</h6>");
+        return;
+    }
+
     for (var comment in comments) {
         if (!comments.hasOwnProperty(comment))
             continue;
