@@ -152,6 +152,8 @@ const literals = {
     FIELD_COURSE_CODE: "courseCode",
     FIELD_PREREQS: "prereqs",
     FIELD_AVERAGE_RATING: "averageRating",
+    FIELD_INSTRUCTOR: "instructor",
+    FIELD_CREDIT: "credit",
 
     //fields for link table only
     LINK_TABLE: "link",

@@ -250,9 +250,6 @@
 				"type": "postText",
 				"constraint": "NOT NULL"
 			},
-			"prereqs": {
-				"type": "postText"
-			},
 			"tags": {
 				"type": "string",
 				"constraint": "NOT NULL"
@@ -264,6 +261,18 @@
 			"averageRating": {
 				"type": "tinyint",
 				"default": "3"
+			},
+			"prereqs": {
+				"type": "string",
+				"default": "Unknown"
+			},
+			"instructor": {
+				"type": "string",
+				"default": "Staff"
+			},
+			"credit": {
+				"type": "string",
+				"default": "Unknown"
 			},
 			"id": {
 				"type": "uniqueidentifier",
