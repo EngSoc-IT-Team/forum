@@ -60,7 +60,8 @@
 6. Then run the `setup.js` file, and you should be good to go!
 
 ### Cross-platform way
-1. Open up the MySQL monitor
-2. Run `DROP DATABASE testing;`
+1. Open up MySQL Workbench
+2. Navigate to the query script editor - to do this you open up a database connection
+2. Run `DROP DATABASE testing;` (click the lightning bolt to run the query)
 3. Run `CREATE DATABASE testing;`
-4. Then run the `setup.js` file, and you should be good to go!
+4. Then run the `setup.js` file in the terminal, and you should be good to go!
