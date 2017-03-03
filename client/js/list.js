@@ -151,7 +151,7 @@ function getDateString(date) {
 }
 
 function getRating(rating) {
-    return fillTemplate(star, 'yellow-star').repeat(rating) + fillTemplate(starTemplate, 'star').repeat(5-rating);
+    return fillTemplate(starTemplate, 'yellow-star').repeat(rating) + fillTemplate(starTemplate, 'star').repeat(5-rating);
 }
 
 whenLoaded();
