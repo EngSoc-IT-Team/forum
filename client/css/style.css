@@ -1,6 +1,7 @@
 /* General */
 
-html {
+html,
+body {
   height: 100%;
 }
 
@@ -8,11 +9,6 @@ body {
   background-color: #34056D;
   font-family: 'Comfortaa', cursive;
   color: #FF9200;
-  min-height: 100%;
-}
-
-body .container-fluid {
-  height: 100%;
 }
 
 a {
@@ -33,6 +29,16 @@ a:focus,
 .main-content {
   margin-bottom: 250px; /* Same height as footer */
   position: relative;
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -250px;
+  /* Pad bottom by footer height */
+  padding: 0 0 250px;
 }
 
 /* Navbar */
@@ -336,10 +342,8 @@ a:focus,
 /* Footer */
 
 footer {
-  margin-top: 100px;
   padding-top: 20px;
   background-color: #000;
-  position: relative;
   width: 100%;
   clear:both;
   height: 250px;
