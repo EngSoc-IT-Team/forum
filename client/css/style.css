@@ -489,3 +489,29 @@ footer .wrap div {
 #home-page .row.featured-content {
   padding-bottom: 250px;
 }
+
+
+/* List Page */
+
+#list-page .title {
+  margin-bottom: 0px;
+  margin-top: 0px;
+  font-size: 24px;
+  display: inline-block;
+}
+
+#list-page .votes-and-dates {
+  margin-bottom: 0px;
+}
+
+#list-page p.description {
+  margin: 0px;
+}
+
+#list-page .button.comments {
+  margin: 0px;
+}
+
+#list-page .see-more {
+  padding-bottom: 20px;
+}
