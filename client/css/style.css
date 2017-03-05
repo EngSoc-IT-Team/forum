@@ -471,3 +471,9 @@ footer .wrap div {
 .pointer {
   cursor: pointer;
 }
+
+/* Home Page */
+
+#home-page .row.featured-content {
+  padding-bottom: 250px;
+}
