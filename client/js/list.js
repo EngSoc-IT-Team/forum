@@ -22,6 +22,7 @@ var postTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
                         <p class="description">{7}</p>\
                         <a class="btn btn-sm button" href="/question?id={8}">Read More</a>\
                         {9}\
+                        <hr>\
                      </div>';
 
 var linkTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
@@ -37,6 +38,7 @@ var linkTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
                         <p class="description">{7}</p>\
                         <a class="btn btn-sm button" href="/link?id={8}">Read More</a>\
                         {9}\
+                        <hr>\
                      </div>';
 
 var classTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
@@ -46,6 +48,7 @@ var classTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
                         <p class="description">{7}</p>\
                         <a class="btn btn-sm button" href="/class?id={8}">Read More</a>\
                         {9}\
+                        <hr>\
                       </div>';
 
 var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick="window.location = \'/list?tag={0}\'">{1}</button>';
