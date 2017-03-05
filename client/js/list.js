@@ -6,46 +6,47 @@
  */
 
 var starTemplate = '<span class="star rating">\
-                    <img src="../assets/{0}.svg" class="svg" />\
-                </span>';
+                        <img src="../assets/{0}.svg" class="svg" />\
+                    </span>';
 
 var postTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
                         <h2 class="title"><a href="/question?id={0}">{1}</a></h2>\
-                        <span class="thumbs-up">\
+                        <span class="thumbs-up pointer">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
                         </span>\
                         <span class="{2}">{3}</span>\
-                        <span class="thumbs-down">\
+                        <span class="thumbs-down pointer">\
                             <img src="../assets/thumbsDown.svg" class="svg" />\
                         </span>\
                         <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         <p class="description">{7}</p>\
                         <a class="btn btn-sm button" href="/question?id={8}">Read More</a>\
-                        {9}</div>';
+                        {9}\
+                     </div>';
 
-//TODO: Make this a thing
 var linkTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
-                        <h2 class="title"><a href="{0}">{1}</a></h2>\
-                        <span class="thumbs-up">\
+                        <h2 class="title"><a href="{0}" target="_blank">{1}</a></h2>\
+                        <span class="thumbs-up pointer">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
                         </span>\
                         <span class="{2}">{3}</span>\
-                        <span class="thumbs-down">\
+                        <span class="thumbs-down pointer">\
                             <img src="../assets/thumbsDown.svg" class="svg" />\
                         </span>\
                         <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
                         <p class="description">{7}</p>\
                         <a class="btn btn-sm button" href="/link?id={8}">Read More</a>\
-                        {9}</div>';
+                        {9}\
+                     </div>';
 
-//TODO: Make this a thing
 var classTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
                         <h2 class="title"><a href="/class?id={0}">{1}: {2}</a></h2>\
                         {3}\
                         <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         <p class="description">{7}</p>\
                         <a class="btn btn-sm button" href="/class?id={8}">Read More</a>\
-                        {9}</div>';
+                        {9}\
+                      </div>';
 
 var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick="window.location = \'/list?tag={0}\'">{1}</button>';
 
@@ -88,6 +89,10 @@ function buildList(items) {
             continue;
 
         var it = items[item];
+        if (!it)
+            continue;
+
+
         if (it.type == "post")
             filledTemplate = fillPostTemplate(it);
         else if (it.type == "link")

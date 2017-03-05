@@ -467,3 +467,7 @@ footer .wrap div {
 .warning {
   font-weight: bold;
 }
+
+.pointer {
+  cursor: pointer;
+}
