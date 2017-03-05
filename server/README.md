@@ -25,7 +25,18 @@
 # Moving Forward - The javascript
 1. Make sure your nodejs is up to date (Version 7.0.0 or up please)
 2. Make sure you have npm installed ([try this ](http://blog.npmjs.org/post/85484771375/how-to-install-npm) if you need to install both node and npm)
-3. Now that you have npm, you'll need to run `npm install mysql`, `npm install cookie-parser`, `npm install body-parser`, `npm install nodemailer`, `npm install nodemailer-smtp-transport` and `npm install express` so that you have all the dependencies we need to get our server up and running (this list will be added to over time)
+3. Now that you have npm, you'll need to run:
+
+  * `npm install mysql`
+  * `npm install cookie-parser`
+  * `npm install body-parser`
+  * `npm install nodemailer`
+  * `npm install nodemailer-smtp-transport`
+  * `npm install express`
+  * `npm install natural`
+  * `npm install algorithmia`
+
+  so that you have all the dependencies we need to get our server up and running (this list will be added to over time)
 4. In your mysql client add a database called `testing`
 5. Navigate to the forum/server directory using your terminal or shell
 6. Navigate to the config directory and run `git update-index --assume-unchanged config.json` and `git update-index --assume-unchanged database.json`. This prevents your local changes to this file from being pushed back to master.
@@ -49,7 +60,8 @@
 6. Then run the `setup.js` file, and you should be good to go!
 
 ### Cross-platform way
-1. Open up the MySQL monitor
-2. Run `DROP DATABASE testing;`
+1. Open up MySQL Workbench
+2. Navigate to the query script editor - to do this you open up a database connection
+2. Run `DROP DATABASE testing;` (click the lightning bolt to run the query)
 3. Run `CREATE DATABASE testing;`
-4. Then run the `setup.js` file, and you should be good to go!
+4. Then run the `setup.js` file in the terminal, and you should be good to go!
