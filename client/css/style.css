@@ -515,3 +515,16 @@ footer .wrap div {
 #list-page .see-more {
   padding-bottom: 20px;
 }
+
+#list-page .read-more {
+  color: #FF9200;
+  font-size: 12px;
+}
+
+#list-page .read-more:hover {
+  color: #cc7e15;
+}
+
+#list-page hr {
+  margin-top: 5px;
+}

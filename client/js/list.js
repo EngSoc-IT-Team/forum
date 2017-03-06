@@ -23,7 +23,7 @@ var postTemplate = '<div class="col-sm-12">\
                         <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
-                        <a class="btn btn-sm button comments" href="/question?id={8}">Read More</a>\
+                        <a class="read-more" href="/question?id={8}">Read More</a>\
                         <hr>\
                      </div>';
 
@@ -41,7 +41,7 @@ var linkTemplate = '<div class="col-sm-12">\
                         <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
-                        <a class="btn btn-sm button comments" href="/link?id={8}">Read More</a>\
+                        <a class="read-more" href="/link?id={8}">Read More</a>\
                         <hr>\
                      </div>';
 
@@ -53,7 +53,7 @@ var classTemplate = '<div class="col-sm-12">\
                         <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
-                        <a class="btn btn-sm button comments" href="/class?id={8}">Read More</a>\
+                          <a class="read-more" href="/class?id={8}">Read More</a>\
                         <hr>\
                       </div>';
 
