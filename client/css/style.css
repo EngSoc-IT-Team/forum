@@ -156,6 +156,12 @@ a:focus {
   padding-bottom: 250px;
 }
 
+#home-page .modal .modal-header .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
 .main-search {
   text-align: center;
   padding-top: 200px;
