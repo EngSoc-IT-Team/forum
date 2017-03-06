@@ -26,7 +26,7 @@ var postTemplate = '<div class="col-sm-12">\
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
-                        <a href="/question?id={8}">Read More</a>\
+                        <a href="/question?id={8}">View</a>\
                         <a href="#">Subscribe</a>\
                         <a href="#">Save</a>\
                         <a href="#">Report</a>\
@@ -51,7 +51,7 @@ var linkTemplate = '<div class="col-sm-12">\
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
-                        <a href="/link?id={8}">Read More</a>\
+                        <a href="/link?id={8}">View</a>\
                         <a href="#">Subscribe</a>\
                         <a href="#">Save</a>\
                         <a href="#">Report</a>\
@@ -70,7 +70,7 @@ var classTemplate = '<div class="col-sm-12">\
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
-                          <a href="/class?id={8}">Read More</a>\
+                          <a href="/class?id={8}">View</a>\
                           <a href="#">Subscribe</a>\
                           <a href="#">Save</a>\
                           <a href="#">Report</a>\
