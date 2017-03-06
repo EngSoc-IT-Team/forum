@@ -522,17 +522,19 @@ footer .wrap div {
 }
 
 #list-page .action-links a {
-  color: #FF9200;
+  color: rgba(52, 5, 109, 0.52);
+  font-weight: bolder;
   font-size: 12px;
   margin-right: 15px;
 }
 
 #list-page .action-links a:hover {
-  color: #cc7e15;
+  color: #34056D;
 }
 
 #list-page hr {
-  margin-top: 5px;
+  margin-top: 4px;
+  margin-bottom: 8px;
   border-width: 3px;
 }
 
