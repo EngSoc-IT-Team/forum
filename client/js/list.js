@@ -9,8 +9,33 @@ var starTemplate = '<span class="star rating">\
                         <img src="../assets/{0}.svg" class="svg" />\
                     </span>';
 
-var postTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
+var postTemplate = '<div class="col-sm-12">\
+                        <div class="ratings">\
+                        <span class="thumbs-up pointer">\
+                            <img src="../assets/thumbsUp.svg" class="svg" />\
+                        </span>\
+                        <span class="{2}">{3}</span>\
+                        <span class="thumbs-down pointer">\
+                            <img src="../assets/thumbsDown.svg" class="svg" />\
+                        </span>\
+                        </div>\
                         <h2 class="title"><a href="/question?id={0}">{1}</a></h2>\
+                        {9}\
+                        <p class="date-and-user">\
+                        <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
+                        </p>\
+                        <p class="description">{7}</p>\
+                        <div class="action-links">\
+                        <a href="/question?id={8}">Read More</a>\
+                        <a href="#">Subscribe</a>\
+                        <a href="#">Save</a>\
+                        <a href="#">Report</a>\
+                        </div>\
+                        <hr>\
+                     </div>';
+
+var linkTemplate = '<div class="col-sm-12">\
+                        <div class="ratings">\
                         <span class="thumbs-up pointer">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
                         </span>\
@@ -18,36 +43,38 @@ var postTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
                         <span class="thumbs-down pointer">\
                             <img src="../assets/thumbsDown.svg" class="svg" />\
                         </span>\
-                        <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
-                        <p class="description">{7}</p>\
-                        <a class="btn btn-sm button" href="/question?id={8}">Read More</a>\
-                        {9}\
-                        <hr>\
-                     </div>';
-
-var linkTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
+                        </div>\
                         <h2 class="title"><a href="{0}" target="_blank">{1}</a></h2>\
-                        <span class="thumbs-up pointer">\
-                            <img src="../assets/thumbsUp.svg" class="svg" />\
-                        </span>\
-                        <span class="{2}">{3}</span>\
-                        <span class="thumbs-down pointer">\
-                            <img src="../assets/thumbsDown.svg" class="svg" />\
-                        </span>\
-                        <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
-                        <p class="description">{7}</p>\
-                        <a class="btn btn-sm button" href="/link?id={8}">Read More</a>\
                         {9}\
+                        <p class="date-and-user">\
+                        <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
+                        </p>\
+                        <p class="description">{7}</p>\
+                        <div class="action-links">\
+                        <a href="/link?id={8}">Read More</a>\
+                        <a href="#">Subscribe</a>\
+                        <a href="#">Save</a>\
+                        <a href="#">Report</a>\
+                        </div>\
                         <hr>\
                      </div>';
 
-var classTemplate = '<div class="col-sm-12" style="padding-bottom: 10px;">\
+var classTemplate = '<div class="col-sm-12">\
+                        <div class="class-rating">\
+                          {3}\
+                        </div>\
                         <h2 class="title"><a href="/class?id={0}">{1}: {2}</a></h2>\
-                        {3}\
-                        <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
-                        <p class="description">{7}</p>\
-                        <a class="btn btn-sm button" href="/class?id={8}">Read More</a>\
                         {9}\
+                        <p class="date-and-user">\
+                        <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
+                        </p>\
+                        <p class="description">{7}</p>\
+                        <div class="action-links">\
+                          <a href="/class?id={8}">Read More</a>\
+                          <a href="#">Subscribe</a>\
+                          <a href="#">Save</a>\
+                          <a href="#">Report</a>\
+                        </div>\
                         <hr>\
                       </div>';
 
