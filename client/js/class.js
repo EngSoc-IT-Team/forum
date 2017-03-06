@@ -163,7 +163,7 @@ function getRating(rating, mainColor) {
 }
 
 function fillInClassHeader(cl) {
-    var tmp = fillTemplate(classTemplate, cl.id, cl.courseCode, cl.title, getTags(cl.tags), getRating(cl.rating, 'purple-star'),
+    var tmp = fillTemplate(classTemplate, cl.id, cl.courseCode, cl.title, getTags(cl.tags), getRating(cl.rating, 'red-star'),
         cl.instructor, cl.credit, cl.prereqs, cl.summary);
     $('#classHead').append(tmp);
 }
