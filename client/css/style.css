@@ -501,8 +501,12 @@ footer .wrap div {
   font-weight: bold;
 }
 
-#list-page .votes-and-dates {
+#list-page .date-and-user {
   margin-bottom: 0px;
+}
+
+#list-page .date-and-user .date {
+  margin-left: 0px;
 }
 
 #list-page p.description {
@@ -530,4 +534,17 @@ footer .wrap div {
 #list-page hr {
   margin-top: 5px;
   border-width: 3px;
+}
+
+#list-page .ratings,
+#list-page .class-rating {
+  display: inline-block;
+}
+
+#list-page .class-rating {
+  margin-right: 10px;
+}
+
+#list-page .ratings {
+  width: 80px;
 }

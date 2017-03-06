@@ -10,9 +10,7 @@ var starTemplate = '<span class="star rating">\
                     </span>';
 
 var postTemplate = '<div class="col-sm-12">\
-                        <h2 class="title"><a href="/question?id={0}">{1}</a></h2>\
-                        {9}\
-                        <p class="votes-and-dates">\
+                        <div class="ratings">\
                         <span class="thumbs-up pointer">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
                         </span>\
@@ -20,6 +18,10 @@ var postTemplate = '<div class="col-sm-12">\
                         <span class="thumbs-down pointer">\
                             <img src="../assets/thumbsDown.svg" class="svg" />\
                         </span>\
+                        </div>\
+                        <h2 class="title"><a href="/question?id={0}">{1}</a></h2>\
+                        {9}\
+                        <p class="date-and-user">\
                         <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
@@ -33,9 +35,7 @@ var postTemplate = '<div class="col-sm-12">\
                      </div>';
 
 var linkTemplate = '<div class="col-sm-12">\
-                        <h2 class="title"><a href="{0}" target="_blank">{1}</a></h2>\
-                        {9}\
-                        <p class="votes-and-dates">\
+                        <div class="ratings">\
                         <span class="thumbs-up pointer">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
                         </span>\
@@ -43,6 +43,10 @@ var linkTemplate = '<div class="col-sm-12">\
                         <span class="thumbs-down pointer">\
                             <img src="../assets/thumbsDown.svg" class="svg" />\
                         </span>\
+                        </div>\
+                        <h2 class="title"><a href="{0}" target="_blank">{1}</a></h2>\
+                        {9}\
+                        <p class="date-and-user">\
                         <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
@@ -56,10 +60,12 @@ var linkTemplate = '<div class="col-sm-12">\
                      </div>';
 
 var classTemplate = '<div class="col-sm-12">\
+                        <div class="class-rating">\
+                          {3}\
+                        </div>\
                         <h2 class="title"><a href="/class?id={0}">{1}: {2}</a></h2>\
                         {9}\
-                        <p class="votes-and-dates">\
-                        {3}\
+                        <p class="date-and-user">\
                         <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
