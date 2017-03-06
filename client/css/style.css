@@ -16,8 +16,7 @@ a {
 }
 
 a:hover,
-a:focus,
-.fa {
+a:focus {
   color: #FF9200;
   text-decoration: none;
 }
@@ -39,6 +38,15 @@ a:focus,
   margin: 0 auto -250px;
   /* Pad bottom by footer height */
   padding: 0 0 250px;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.container-fluid {
+  padding: 0;
 }
 
 /* Navbar */
@@ -77,8 +85,7 @@ a:focus,
 
 .date a:hover,
 .description a:hover,
-.media a:hover,
-.button:hover {
+.media a:hover {
   color: #cc7e15;
 }
 
@@ -137,15 +144,16 @@ a:focus,
   color: black;
 }
 
-/* Main Page */
-
-.row {
-  margin-left: 0;
-  margin-right: 0;
+.nav-profile {
+  float: right;
+  padding-top: 5px;
+  margin-right: -40px;
 }
 
-.container-fluid {
-  padding: 0;
+/* Home Page */
+
+#home-page .row.featured-content {
+  padding-bottom: 250px;
 }
 
 .main-search {
@@ -176,12 +184,6 @@ a:focus,
   outline: none;
 }
 
-.nav-profile {
-  float: right;
-  padding-top: 5px;
-  margin-right: -40px;
-}
-
 .featured-content {
   margin-top: 100px;
   padding-left: 40px;
@@ -204,11 +206,15 @@ a:focus,
 }
 
 .featured-item p:hover {
-  background-color: #FF9200;
+  background-color: #957db3;
+}
+
+.button:hover {
+  color: #957db3;
 }
 
 .eng-text {
-    margin: 1em;
+  margin: 1em;
 }
 
 .header-img {
@@ -236,7 +242,6 @@ a:focus,
 .wrap {
   padding-left: 40px;
   padding-right: 40px;
-  /*padding-bottom: 40px;*/
 }
 
 .main-content {
@@ -309,14 +314,6 @@ a:focus,
    clear: both;
 }
 
-.thumbs-up svg path,
-.thumbs-down svg path
- {
-  fill: #FF9200;
-  width: 17px;
-  cursor: pointer;
-}
-
 .thumbs-up svg:hover path,
 .positive {
   fill: green !important;
@@ -351,36 +348,8 @@ a:focus,
   fill: #F0D355 !important;
 }
 
-/* Footer */
-
-footer {
-  padding-top: 20px;
-  background-color: #000;
-  width: 100%;
-  clear:both;
-  height: 250px;
-}
-
-footer .wrap {
-  padding-top: 40px;
-}
-
-footer .wrap div {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.footer-logo {
-  float: right;
-  margin-top: 30px;
-  margin-right: 50px;
-}
-
-.footer-logo img {
-  width: 80px;
-}
-
 /* Profile */
+
 .badges {
   width: 75%;
   height: 150px;
@@ -484,13 +453,6 @@ footer .wrap div {
   cursor: pointer;
 }
 
-/* Home Page */
-
-#home-page .row.featured-content {
-  padding-bottom: 250px;
-}
-
-
 /* List Page */
 
 #list-page .title {
@@ -549,4 +511,37 @@ footer .wrap div {
 
 #list-page .ratings {
   width: 80px;
+}
+
+/* Footer */
+
+footer {
+  padding-top: 20px;
+  background-color: #000;
+  width: 100%;
+  clear:both;
+  height: 250px;
+}
+
+footer .wrap {
+  padding-top: 40px;
+}
+
+footer .wrap div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.footer-logo {
+  float: right;
+  margin-top: 30px;
+  margin-right: 50px;
+}
+
+.footer-logo img {
+  width: 80px;
+}
+
+footer .menu-items a:hover {
+  color: #cc7e15;
 }
