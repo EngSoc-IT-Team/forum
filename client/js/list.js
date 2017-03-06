@@ -23,7 +23,12 @@ var postTemplate = '<div class="col-sm-12">\
                         <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
-                        <a class="read-more" href="/question?id={8}">Read More</a>\
+                        <div class="action-links">\
+                        <a href="/question?id={8}">Read More</a>\
+                        <a href="#">Subscribe</a>\
+                        <a href="#">Save</a>\
+                        <a href="#">Report</a>\
+                        </div>\
                         <hr>\
                      </div>';
 
@@ -41,7 +46,12 @@ var linkTemplate = '<div class="col-sm-12">\
                         <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
-                        <a class="read-more" href="/link?id={8}">Read More</a>\
+                        <div class="action-links">\
+                        <a href="/link?id={8}">Read More</a>\
+                        <a href="#">Subscribe</a>\
+                        <a href="#">Save</a>\
+                        <a href="#">Report</a>\
+                        </div>\
                         <hr>\
                      </div>';
 
@@ -53,7 +63,12 @@ var classTemplate = '<div class="col-sm-12">\
                         <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
-                          <a class="read-more" href="/class?id={8}">Read More</a>\
+                        <div class="action-links">\
+                          <a href="/class?id={8}">Read More</a>\
+                          <a href="#">Subscribe</a>\
+                          <a href="#">Save</a>\
+                          <a href="#">Report</a>\
+                        </div>\
                         <hr>\
                       </div>';
 
