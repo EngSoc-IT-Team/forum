@@ -8,13 +8,15 @@
  * and do not require information to be returned from the server, other than if the action was
  * successful or not.
  *
+ * Implementations for each action can be found in the actions directory.
+ *
  * i.e. votes, subscriptions, saves, reports etc.
  */
 
 var log = require('./log');
-var saver = require('./Saver');
-var subscriber = require('./Subscriptions');
-var voter = require('./Voter');
+var saver = require('./actions/Saver');
+var subscriber = require('./actions/Subscriptions');
+var voter = require('./actions/Voter');
 var DBRow = require('./DBRow').DBRow;
 
 

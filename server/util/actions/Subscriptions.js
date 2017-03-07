@@ -7,9 +7,9 @@
  */
 var nodeMailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
-var log = require('./log.js');
-var dbr = require('./DBRow.js');
-var lit = require('./Literals.js');
+var log = require('./../log.js');
+var dbr = require('./../DBRow.js');
+var lit = require('./../Literals.js');
 
 //object that holds the mailing information - who sends it (and their authentication) and connection details
 var transport = nodeMailer.createTransport(smtpTransport({

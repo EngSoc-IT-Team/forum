@@ -1,22 +1,24 @@
 /*
 ** requestResponder.js
 ** Created by Michael Albinson 1/15/17
+*
+** requestResponder is a functional utility interface to process requests that require results from the database
+** Essentially it is used to call down to other processes to remove logic from the expressServer file
+*
+* Implementations for handlers can be found in the handlers directory.
 */
 
 "use strict";
 
-var questionHandler = require('./questionHandler');
-var listHandler = require('./listHandler');
-var profileHandler = require('./profileHandler');
-var newHandler = require('./newHandler');
-var linkHandler = require('./linkHandler');
-var classHandler = require('./classHandler');
+var questionHandler = require('./handlers/questionHandler');
+var listHandler = require('./handlers/listHandler');
+var profileHandler = require('./handlers/profileHandler');
+var newHandler = require('./handlers/newHandler');
+var linkHandler = require('./handlers/linkHandler');
+var classHandler = require('./handlers/classHandler');
 var lit = require('./Literals.js');
 
-/*
-** requestResponder is a functional utility interface to process requests that require results from the database
-** Essentially it is used to call down to other processes to remove logic from the expressServer file
-*/
+
 
 /** parseRequest(request)
  **

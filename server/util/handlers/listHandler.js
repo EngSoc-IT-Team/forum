@@ -7,10 +7,10 @@
 
 "use strict";
 
-var DBRow = require('./DBRow').DBRow;
-var lit = require('./Literals.js');
-var log = require('./log');
-var recursiveGet = require('./recursion').recursiveGet;
+var DBRow = require('./../DBRow').DBRow;
+var lit = require('./../Literals.js');
+var log = require('./../log');
+var recursiveGet = require('./../recursion').recursiveGet;
 
 
 /** listRequest(request)

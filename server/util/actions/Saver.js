@@ -8,9 +8,9 @@
  *
  */
 
-var DBRow = require('./DBRow').DBRow;
-var lit = require('./Literals');
-var log = require('./log');
+var DBRow = require('./../DBRow').DBRow;
+var lit = require('./../Literals');
+var log = require('./../log');
 
 /*
  * Saves the specified item for a user

@@ -4,10 +4,10 @@
 
 "use strict";
 
-var log = require('./log');
-var DBRow = require('./DBRow').DBRow;
-var lit = require('./Literals');
-var voter = require('./Voter');
+var log = require('./../log');
+var DBRow = require('./../DBRow').DBRow;
+var lit = require('./../Literals');
+var voter = require('./../actions/Voter');
 
 exports.handle = function(request) {
     return new Promise(function(resolve, reject) {

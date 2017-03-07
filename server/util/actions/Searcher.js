@@ -19,9 +19,9 @@
 
 var natural = require("natural");
 var algorithmia = require("algorithmia");
-var lit = require('./Literals.js');
-var log = require('./log.js');
-var dbr = require('./DBRow.js');
+var lit = require('./../Literals.js');
+var log = require('./../log.js');
+var dbr = require('./../DBRow.js');
 
 var TfIdf = natural.TfIdf;
 var wordRelater = new TfIdf();

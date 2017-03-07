@@ -9,9 +9,9 @@
 
 "use strict";
 
-var DBRow = require('./DBRow').DBRow;
-var lit = require('./Literals');
-var log = require('./log');
+var DBRow = require('./../DBRow').DBRow;
+var lit = require('./../Literals');
+var log = require('./../log');
 
 /*
  * Adds the vote to the specified item

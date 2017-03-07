@@ -5,10 +5,10 @@
 
 "use strict";
 
-var Aggregator = require('./aggregator');
-var DBRow = require('./DBRow').DBRow;
-var lit = require('./Literals.js');
-var recursiveGet = require('./recursion').recursiveGet;
+var Aggregator = require('./../aggregator');
+var DBRow = require('./../DBRow').DBRow;
+var lit = require('./../Literals.js');
+var recursiveGet = require('./../recursion').recursiveGet;
 
 /* profileRequest(request)
  ** Handles requests from the profile page

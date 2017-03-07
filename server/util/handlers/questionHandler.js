@@ -7,9 +7,9 @@
 
 "use strict";
 
-var DBRow = require('./DBRow').DBRow;
-var lit = require('./Literals.js');
-var subComments = require('./subcommentGetter');
+var DBRow = require('./../DBRow').DBRow;
+var lit = require('./../Literals.js');
+var subComments = require('./../subcommentGetter');
 
 //TODO: add duplicate handling
 
