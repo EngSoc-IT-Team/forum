@@ -12,7 +12,14 @@ var log = require('./log');
 var lit = require('./Literals.js');
 
 const allowedUserKeys = [lit.FIELD_ID, lit.FIELD_USERNAME];
+const urlTableMap = {'/question': lit.POST_TABLE, '/class': lit.CLASS_TABLE, '/link': lit.LINK_TABLE, '/profile': lit.USER_TABLE};
 
+/* validateSession(cookie)
+ *
+ * Validates that the current user has a valid session.
+ *
+ * @param cookie the usercookie containing the id of the session to be validated
+ */
 exports.validateSession = function(cookie) {
 	return new Promise(function(resolve, reject){
 		if (cookie){ //first of all you need to have a cookie for us to expend resources
@@ -31,6 +38,15 @@ exports.validateSession = function(cookie) {
 };
 
 // TODO: figure out how the hell the SSO works with this because this first query will have to change
+/* loginAndCreateSession(postResult)
+ *
+ * Logs the user in and creates a corresponding session, resolves the session info to be appended to the usercookie
+ *
+ * @param postResult: the information passed to the served on a POST to the login route.
+ * returns: the session info if the insert is successful, rejects false
+ *
+ * TODO: NOTE: The implementation of this function will change when SSO access is granted
+ */
 exports.loginAndCreateSession = function(postResult) {
 	return new Promise(function(resolve, reject) {
 		if (postResult) {
@@ -38,9 +54,9 @@ exports.loginAndCreateSession = function(postResult) {
 			row.addQuery(lit.FIELD_NETID, postResult.username);
 			// row.addQuery("secret", postResult.secret) // BUT WE DON'T KNOW THE PASSWORD _/(O.O)\_
 
-			row.query().then(function(result) {
+			row.query().then(function() {
 				if (!row.next())
-					return reject(result);
+					return reject(false);
 					
 				var date = new Date();
 				var newSession = new DBRow(lit.SESSION_TABLE);
@@ -66,6 +82,14 @@ exports.loginAndCreateSession = function(postResult) {
 	})
 };
 
+
+/* logout(cookie)
+ *
+ * Logs the current user out by deleting the corresponding user session.
+ *
+ * @param cookie the usercookie containing the id of the session to be deleted
+ * returns true if the delete is successful, false if it fails
+ */
 exports.logout = function(cookie) {
 	return new Promise(function(resolve, reject) {
 		if(!cookie)
@@ -83,6 +107,14 @@ exports.logout = function(cookie) {
 	});
 };
 
+/* hasRole(userID, role)
+ *
+ * Checks if the current user has the permissions required to perform an action or view a page
+ *
+ * @param userID the id of user to check the roles of
+ * @param role the role to check if the current user
+ * returns: true if the user has the requested privilege, false if they don't
+ */
 exports.hasRole = function(userID, role) {
 	return new Promise(function(resolve, reject) {
 		if (!userID) {
@@ -107,6 +139,13 @@ exports.hasRole = function(userID, role) {
 	});
 };
 
+/* validateUser(request)
+ *
+ * Validates that the user given in the request id exists
+ *
+ * @param request The express request passed to the server
+ * returns true if the user exists, false if they do not
+ */
 exports.validateUser = function(request) {
 	return new Promise(function(resolve, reject) {
 
@@ -115,7 +154,7 @@ exports.validateUser = function(request) {
 			if (!request.query.hasOwnProperty(key))
 				continue;
 
-			if (allowedUserKeys.includes(key)) // we do not allow searches for users by netid
+			if (allowedUserKeys.includes(key)) // we do not allow searches for users by several fields
 				user.addQuery(key, request.query[key]);
 		}
 
@@ -130,4 +169,26 @@ exports.validateUser = function(request) {
 			reject(false);
 		});
 	});
+};
+
+/* validateItemExistence(request)
+ *
+ * Validates that the item given in the request id exists
+ *
+ * @param request The express request passed to the server
+ * returns true if the item exists, false if it doesn't
+ */
+exports.validateItemExistence = function(request) {
+    return new Promise(function(resolve, reject) {
+        var item = new DBRow(urlTableMap[request.path]); // get the correct table name from the urlTableMap
+		item.getRow(request.query.id).then(function() {
+			if (item.count() == 0)
+				reject();
+			else
+				resolve();
+		}).catch(function (err) {
+			log.error(err);
+			reject();
+		});
+    });
 };

@@ -61,8 +61,11 @@ server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, q
 		response.redirect(lit.LOGIN_ROUTE);
 		return;
 	}
-
-	response.sendFile(path.join(__dirname, '..', 'client/html/postAndComment.html'));
+	validator.validateItemExistence(request).then(function() {
+        response.sendFile(path.join(__dirname, '..', 'client/html/postAndComment.html'));
+	}).catch(function() {
+        response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+	});
 });
 
 server.get(lit.ABOUT_ROUTE, function(request, response) { //about page
@@ -164,10 +167,11 @@ server.get(lit.CLASS_ROUTE, function(request, response) { // user help page
 		return;
 	}
 
-    if (!compare.isEmpty(request.query))
-		response.sendFile(path.join(__dirname, '..', 'client/html/class.html'));
-    else
-    	response.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+    validator.validateItemExistence(request).then(function() {
+        response.sendFile(path.join(__dirname, '..', 'client/html/class.html'));
+    }).catch(function() {
+        response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+    });
 });
 
 server.get(lit.LINK_ROUTE, function(request, response) { // user help page
@@ -176,10 +180,11 @@ server.get(lit.LINK_ROUTE, function(request, response) { // user help page
         return;
     }
 
-	if (!compare.isEmpty(request.query))
-    	response.sendFile(path.join(__dirname, '..', 'client/html/link.html'));
-    else
-    	response.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+    validator.validateItemExistence(request).then(function() {
+        response.sendFile(path.join(__dirname, '..', 'client/html/link.html'));
+    }).catch(function() {
+        response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+    });
 });
 
 /* POST Requests
