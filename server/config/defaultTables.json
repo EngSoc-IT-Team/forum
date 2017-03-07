@@ -184,7 +184,8 @@
 		"tablename": "tag",
 		"fields": {
 			"name": {
-				"type": "string"
+				"type": "string",
+				"constraint": "UNIQUE"
 			},
 			"relatedTags": {
 				"type": "string"
