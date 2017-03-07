@@ -41,7 +41,10 @@ exports.add = function(tagName) { //TODO: add related tags
     return new Promise(function(resolve, reject) {
         var tag = new DBRow(lit.TAG_TABLE);
         tag.setValue(lit.FIELD_NAME, tagName);
-        tag.insert().then(function () {resolve()}, function(){reject()});
+        tag.insert().then(function () {
+            resolve();
+            exports.updateTagArray(); // TODO: May want the janitor to auto update instead of updating every time a tag is added
+        }, function(){reject()});
     });
 };
 
