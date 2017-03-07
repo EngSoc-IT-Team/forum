@@ -191,8 +191,7 @@
 				"type": "string"
 			},
 			"summary": {
-				"type": "string",
-				"constraint": "NOT NULL"
+				"type": "string"
 			},
 			"id": {
 				"type": "uniqueidentifier",
