@@ -17,6 +17,7 @@ var log = require('./log');
 var saver = require('./actions/Saver');
 var subscriber = require('./actions/Subscriptions');
 var voter = require('./actions/Voter');
+var tagger = require('./actions/Tagger');
 var DBRow = require('./DBRow').DBRow;
 
 
@@ -36,6 +37,9 @@ exports.respond = function(request) {
                break;
             case("report"):
                 use = report;
+                break;
+            case("tag"):
+                use = tag;
                 break;
            default:
                 log.error("Attempt access an invalid action: '" + action + "'");
@@ -92,5 +96,18 @@ function report(request) {
         else
             reporter.sendReport(request.body.reportId)
                 .then(function() {resolve(true)}, function() {reject(false)});
+    });
+}
+
+function tag(request) {
+    return new Promise(function(resolve, reject){
+        if (request.body.sub == "getArray")
+            tagger.getArray().then(function(tags) {resolve(tags)}, function() {reject(false)});
+        else if (request.body.sub == "getTag")
+            tagger.getTag(request.body.id).then(function(tag) {resolve(tag)}, function() {reject(false)});
+        else if (request.body.sub == "add")
+            tagger.add(request.body.tagName).then(function() {resolve(true)}, function() {reject(false)});
+        else
+            log.error("Invalid request for tags");
     });
 }

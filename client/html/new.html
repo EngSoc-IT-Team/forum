@@ -11,10 +11,12 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="../css/normalize.css" />
-	<link rel="stylesheet" href="../css/style.css" />
 	<link rel="icon" href="../assets/qef.png">
 	<link rel="icon" href="../assets/favicon.ico">
 	<link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700&amp;subset=cyrillic" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+	<link rel="stylesheet" href="../css/style.css" />
 	<script type="text/javascript" src="/js/common.js"></script>
 	<script type="text/javascript" src="/js/new.js"></script>
 </head>
@@ -44,7 +46,7 @@
 					<hr>
 					<div class="centered">
 						<div class="btn-group" role="group" aria-label="Basic example">
-							<button id="post" type="button" class="btn btn-secondary" data-toggle="tab" href="#home" onclick="toggleSelection('post')">Question</button>
+							<button id="question" type="button" class="btn btn-secondary" data-toggle="tab" href="#home" onclick="toggleSelection('question')">Question</button>
 							<button id="link" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu2" onclick="toggleSelection('link')">Link</button>
 							<button id="class" type="button" class="btn btn-secondary" data-toggle="tab" href="#menu3" onclick="toggleSelection('class')">Class</button>
 						</div>
@@ -69,7 +71,9 @@
 
 							<div class="form-group">
 								<label class="help" for="questionTags" data-toggle="tooltip" title="Adding tags helps other people help you faster!">Tags</label>
-								<input class="form-control" id="questionTags">
+								<div>
+									<select id="questionTags" class="form-control" style="width: 100%;" multiple="multiple"></select>
+								</div>
 							</div>
 
 							<div id="warning-target-question" class="negative warning"></div>
@@ -100,7 +104,9 @@
 
 							<div class="form-group">
 								<label class="help" for="linkTags" data-toggle="tooltip" title="Adding tags helps other people find this faster!">Tags</label>
-								<input class="form-control" id="linkTags">
+								<div>
+									<select class="form-control" style="width: 100%;" id="linkTags" multiple="multiple"></select>
+								</div>
 							</div>
 
 							<div id="warning-target-link" class="negative warning"></div>
@@ -146,7 +152,9 @@
 
 							<div class="form-group">
 								<label class="help" for="classTags" data-toggle="tooltip" title="Adding tags helps other people find this faster!">Tags</label>
-								<input class="form-control" id="classTags">
+								<div>
+									<select class="form-control" style="width: 100%;" id="classTags" multiple="multiple"></select>
+								</div>
 							</div>
 
 							<div id="warning-target-class" class="negative warning"></div>

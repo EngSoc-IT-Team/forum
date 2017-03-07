@@ -551,3 +551,12 @@ footer .wrap div {
 footer .menu-items a:hover {
   color: #cc7e15;
 }
+
+/* Select2 */
+.select2-results__option {
+  color: black;
+}
+
+.select2:not(.select2-container--focus) .select2-selection--multiple {
+  border-color: rgba(0,0,0,.15) !important;
+}

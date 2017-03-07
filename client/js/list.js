@@ -22,7 +22,8 @@ var postTemplate = '<div class="col-sm-12">\
                         <h2 class="title"><a href="/question?id={0}">{1}</a></h2>\
                         {9}\
                         <p class="date-and-user">\
-                        <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
+                            <span class="positive date">[post]</span>\
+                            <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
@@ -47,7 +48,8 @@ var linkTemplate = '<div class="col-sm-12">\
                         <h2 class="title"><a href="{0}" target="_blank">{1}</a></h2>\
                         {9}\
                         <p class="date-and-user">\
-                        <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
+                            <span class="negative date">[link]</span>\
+                            <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
@@ -66,7 +68,8 @@ var classTemplate = '<div class="col-sm-12">\
                         <h2 class="title"><a href="/class?id={0}">{1}: {2}</a></h2>\
                         {9}\
                         <p class="date-and-user">\
-                        <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
+                            <span class="date" style="color: blue">[class]</span>\
+                            <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\

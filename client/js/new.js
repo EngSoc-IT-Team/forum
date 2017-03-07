@@ -5,8 +5,43 @@
 * Created by Michael Albinson 2/18/17
  */
 
-function submitItem() {
+var select2Options = {data: [], tags: true, tokenSeparators: [',', ' '], width: 'resolve',
+    theme: "classic",  maximumSelectionLength: 3, forcebelow: true};
 
+var tagArray = [];
+
+function getTagArray() {
+    var content = {
+        action: "tag",
+        sub: "getArray"
+    };
+
+    $.ajax({
+        url: 'action',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(content)
+    }).done(function(data) {
+        if (data) { // if we don't get here that's ok,
+            tagArray = data;
+            select2Options.data = data;
+            $('#questionTags').select2(select2Options);
+            $('#classTags').select2(select2Options);
+            $('#linkTags').select2(select2Options);
+
+        }
+
+        else { // otherwise we need to let the user know something went wrong
+            // we just let ourselves know that tags
+            console.error("Couldn't get tags");
+        }
+    }).fail(function(err) {
+        // at some point show "something went wrong" modal
+        console.log(err);
+    });
+}
+
+function submitItem() {
     var content = {
         requested: "new",
         type: getPressed().replace('#', ''), //class, question, link
@@ -15,6 +50,8 @@ function submitItem() {
 
     if (!allFieldsFilled(content.type))
         return;
+
+    addMissingTags(content.content.rawTags);
 
     var buttonName = '#' + content.type + '-button'; //once we've cleared the check to make sure required fields are filled, disable the button until we receive a response
     $(buttonName).prop('disabled', true);
@@ -43,35 +80,75 @@ function submitItem() {
     });
 }
 
+function addMissingTags(tags) {
+    for (var tag in tags) {
+        if (!tags.hasOwnProperty(tag))
+            continue;
+
+        if (!tagArray.includes(tags[tag]))
+            addTag(tags[tag]);
+    }
+}
+
+function addTag(tagName) {
+    var content = {
+        tagName: tagName,
+        action: "tag",
+        sub: "add"
+    };
+
+    $.ajax({
+        url: 'action',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(content)
+    }).done(function() {
+        console.log("Tag '" + tagName + "' added"); //We don't really need to wait for this to happen
+    }).fail(function(err) {
+        // at some point show "something went wrong" modal
+        console.log(err);
+    });
+}
+
 // get the current item type that will
 function getPressed() {
     return currentButton;
 }
 
 function getContent(type) {
-    if (type == "class")
+    var tags;
+    if (type == "class") {
+        tags = getTags('#classTags');
         return {
-            title: $('#classTitle').val(), //TODO: need to reflect things actually allowed to be inputted on the class table
+            title: $('#classTitle').val(),
             courseCode: $('#courseCode').val(),
             summary: $('#classSummary').val(),
-            tags: getTags('#classTags'),
             instructor: $('#instructor').val(),
             credit: $('#credit').val(),
-            prereqs: $('#prerequisites').val()
+            prereqs: $('#prerequisites').val(),
+            tags: tags[1],
+            rawTags: tags[0]
         };
-    else if (type == "link")
+    }
+    else if (type == "link") {
+        tags = getTags('#linkTags');
         return {
             title: $('#linkTitle').val(),
             summary: $('#linkSummary').val(),
             href: $('#url').val(),
-            tags: getTags('#linkTags')
+            tags: tags[1],
+            rawTags: tags[0]
         };
-    else if (type == "question")
+    }
+    else if (type == "question") {
+        tags = getTags('#questionTags');
         return {
             title: $('#questionTitle').val(),
             summary: $('#details').val(),
-            tags: getTags('#questionTags')
+            tags: tags[1],
+            rawTags: tags[0]
         };
+    }
     else {
         console.error('invalid request type');
         return undefined;
@@ -81,8 +158,15 @@ function getContent(type) {
 // gets the content of the tag field and structures them properly for the database
 function getTags(id) {
     var tags = $(id).val();
-    tags = tags.replace(new RegExp(' ', 'g'), ', ');
-    return tags;
+    var neat = "";
+    for (var i = 0; i < tags.length; i++) {
+        neat += tags[i].toUpperCase();
+
+        if (i < tags.length - 1)
+            neat += ", ";
+    }
+
+    return [tags, neat];
 }
 
 /*
@@ -158,3 +242,18 @@ function removeWarning(field) {
     field.removeClass('form-control-danger');
     field.parent().removeClass('has-danger');
 }
+
+function suggestTag(parent) {
+    parent = $(parent);
+    if (tagArray.includes(parent.val())) {
+        parent[0].innerHTML = tagArray[tagArray.indexOf(parent.val())];
+        console.log(tagArray[tagArray.indexOf(parent.val())]);
+    }
+}
+
+$(document).ready(function() {
+    getTagArray();
+});
+
+
+
