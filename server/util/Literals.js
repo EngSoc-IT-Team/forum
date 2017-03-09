@@ -159,7 +159,6 @@ const literals = {
     LINK_TABLE: "link",
     FIELD_TRUSTED: "trusted",
     FIELD_LINK: "link",
-    FIELD_DATE_ADDED: "dateAdded",
     FIELD_ADDED_BY: "addedBy",
 
     //fields for subscriptions table only
@@ -167,15 +166,15 @@ const literals = {
     FIELD_LAST_NOTIFIED: "lastNotified",
     FIELD_NUM_NOTIFICATIONS_MISSED: "numNotificationsMissed",
     FIELD_NUM_TIME_NOTIFIED: "numTimesNotified",
-    FIELD_DATE_SUBSCRIBED: "dateSubscribed",
 
     //fields for saved table only
     SAVED_TABLE: "saved",
-    FIELD_DATE_SAVED: "dateSaved",
 
-    //fields for contributions table only
+    //fields for contribution table only
     CONTRIBUTION_TABLE: "contribution",
-    FIELD_DATE: "date",
+
+    //fields for item table only
+    ITEM_TABLE: "item",
 
     //fields for sweeper class
     SWEEPER_CANCEL_JOB: "cancelJob",

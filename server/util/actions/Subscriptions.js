@@ -44,7 +44,7 @@ exports.onSubscribed = function (contentID, userID, type) {
                 var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
                 newRow.setValue(lit.FIELD_USER_ID, userID);
                 newRow.setValue(lit.FIELD_ITEM_ID, contentID);
-                newRow.setValue(lit.FIELD_DATE_SUBSCRIBED, new Date().toISOString());
+                newRow.setValue(lit.FIELD_TIMESTAMP, new Date().toISOString());
                 newRow.setValue(lit.FIELD_TYPE, type);
                 //get user net ID
                 var userRow = new dbr.DBRow(lit.USER_TABLE);

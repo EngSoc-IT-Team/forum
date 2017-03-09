@@ -137,7 +137,8 @@
 				"primaryKey": "true"
 			},
 			"dateJoined": {
-				"type": "date"
+				"type": "datetime",
+				"default": "CURRENT_TIMESTAMP"
 			},
 			"acceptedTerms": {
 				"type": "boolean",
@@ -327,8 +328,8 @@
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
 			},
-			"dateAdded": {
-				"type": "timestamp",
+			"datetime": {
+				"type": "datetime",
 				"default": "CURRENT_TIMESTAMP"
 			},
 			"addedBy": {
@@ -345,7 +346,7 @@
 		"tablename": "subscriptions",
 		"fields": {
 			"userID": {
-				"type": "string",
+				"type": "uniqueidentifier",
 				"constraint": "NOT NULL"
 			},
 			"netid": {
@@ -353,7 +354,7 @@
 				"constraint": "NOT NULL"
 			},
 			"itemID": {
-				"type": "string",
+				"type": "uniqueidentifier",
 				"constraint": "NOT NULL"
 			},
 			"lastNotified": {
@@ -376,9 +377,9 @@
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
 			},
-			"dateSubscribed": {
-				"type": "string",
-				"default": "0"
+			"timestamp": {
+				"type": "datetime",
+				"default": "CURRENT_TIMESTAMP"
 			}
 		}
 	},
@@ -386,7 +387,7 @@
 		"tablename": "saved",
 		"fields": {
 			"userID": {
-				"type": "string",
+				"type": "uniqueidentifier",
 				"constraint": "NOT NULL"
 			},
 			"type":{
@@ -394,15 +395,15 @@
 				"constraint": "NOT NULL"
 			},
 			"itemID": {
-				"type": "string",
+				"type": "uniqueidentifier",
 				"constraint": "NOT NULL"
 			},
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
 			},
-			"dateSaved": {
-				"type": "timestamp",
+			"timestamp": {
+				"type": "datetime",
 				"default": "CURRENT_TIMESTAMP"
 			}
 		}
@@ -411,7 +412,7 @@
 		"tablename": "contribution",
 		"fields": {
 			"userID": {
-				"type": "string",
+				"type": "uniqueidentifier",
 				"constraint": "NOT NULL"
 			},
 			"type": {
@@ -419,16 +420,19 @@
 				"constraint": "NOT NULL"
 			},
 			"itemID": {
-				"type": "string",
-				"constraint": "NOT NULL"
+				"type": "uniqueidentifier",
+				"constraint": "UNIQUE"
 			},
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
 			},
-			"date": {
-				"type": "timestamp",
+			"timestamp": {
+				"type": "datetime",
 				"default": "CURRENT_TIMESTAMP"
+			},
+			"tags": {
+				"type": "string"
 			}
 		}
 	},
@@ -447,6 +451,34 @@
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
+			}
+		}
+	},
+	"13": {
+		"tablename": "item",
+		"fields": {
+			"userID": {
+				"type": "uniqueidentifier",
+				"constraint": "NOT NULL"
+			},
+			"type": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"itemID": {
+				"type": "uniqueidentifier",
+				"constraint": "UNIQUE"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			},
+			"timestamp": {
+				"type": "datetime",
+				"default": "CURRENT_TIMESTAMP"
+			},
+			"tags": {
+				"type": "string"
 			}
 		}
 	}

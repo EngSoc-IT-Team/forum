@@ -11,31 +11,32 @@
 ** user-provided scripts.
 */
 
-var withResolve = "(function a() {\
-						return new Promise(function(resolve, reject) {\
-							try { {0} \nresolve();}\
-							catch(err) {\
-								log('there was an error during execution');\
-								reject(err.message);\
-							}\
-						})\
+var withResolve = "(function a() {\n\
+						return new Promise(function(resolve, reject) {\n\
+							try { {0} \nresolve();}\n\
+							catch(err) {\n\
+								log('there was an error during execution');\n\
+								reject(err.message);\n\
+							}\n\
+						})\n\
 					})";
 
-var withoutResolve = "(function a() {\
-						return new Promise(function(resolve, reject) {\
-							try { {0} }\
-							catch(err) {\
-								log('there was an error during execution');\
-								reject(err.message);\
-							}\
-						})\
+var withoutResolve = "(function a() {\n\
+						return new Promise(function(resolve, reject) {\n\
+							try { {0} }\n\
+							catch(err) {\n\
+								log('there was an error during execution');\n\
+								reject(err.message);\n\
+							}\n\
+						})\n\
 					})";
 
 
 exports.Environment = function() {
 	var DBRow = require('./DBRow').DBRow;
 	var Janitor = require('./maint/janitor').Janitor;
-	require = function() {throw new Error("Requiring is not permitted in eval mode")};
+	var util = require('./evalUtil');
+	// require = function() {throw new Error("Requiring is not permitted in eval mode")};
 	var logs = [];
 
 	this.execute = function(script) {

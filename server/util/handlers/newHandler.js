@@ -36,7 +36,7 @@ exports.handle = function(request) {
 function createClass(body, user, resolve, reject) {
     getTagsIfNotPresent(body);
 
-    var c = new DBRow(lit.CLASS_TABLE);
+    var c = new DBRow(lit.CLASS_TABLE);//TODO: Make this not hate you when you don't have prereqs or tags
     c.setValue(lit.FIELD_TITLE, body.title);
     c.setValue(lit.FIELD_COURSE_CODE, body.courseCode);
     c.setValue(lit.FIELD_INSTRUCTOR, body.instructor);
@@ -48,7 +48,8 @@ function createClass(body, user, resolve, reject) {
 
     c.insert().then(function() {
         vote(user, c, resolve); // if we make it this far we will always resolve
-        generateContribution(c, user, "class"); // we can get away with creating the contribution in parallel in this case
+        generateContribution(c, user, lit.CLASS_TABLE); // we can get away with creating the contribution in parallel in this case
+        generateItem(c, user, lit.CLASS_TABLE); //ditto the item
     }, function(err) {
         log.error(err);
         reject("Error entering the new class");
@@ -66,7 +67,8 @@ function createLink(body, user, resolve, reject) { // check if this link should 
     l.setValue(lit.FIELD_ADDED_BY, user.getValue(lit.FIELD_USERNAME));
     l.insert().then(function() {
         vote(user, l, resolve); // if we make it this far we will always resolve
-        generateContribution(l, user, "link"); // we can get away with creating the contribution in parallel in this case
+        generateContribution(l, user, lit.LINK_TABLE); // we can get away with creating the contribution in parallel in this case
+        generateItem(l, user, lit.LINK_TABLE); // ditto the item
     }, function(err) {
         log.error(err);
         reject("Error entering the new link");
@@ -84,7 +86,8 @@ function createQuestion(body, user, resolve, reject) { // also create a vote
 
     q.insert().then(function() {
         vote(user, q, resolve); // if we make it this far we will always resolve
-        generateContribution(q, user, "post"); // we can get away with creating the contribution in parallel in this case
+        generateContribution(q, user, lit.POST_TABLE); // we can get away with creating the contribution in parallel in this case
+        generateItem(q, user, lit.POST_TABLE); //ditto the item
     }, function(err) {
         log.error(err);
         reject("Error entering the new question");
@@ -110,7 +113,21 @@ function generateContribution(item, user, type) {
     contr.setValue(lit.FIELD_TYPE, type);
     contr.setValue(lit.FIELD_USER_ID, user.getValue(lit.FIELD_ID));
     contr.setValue(lit.FIELD_ITEM_ID, item.getValue(lit.FIELD_ID));
+    contr.setValue(lit.FIELD_TAGS, item.getValue(lit.FIELD_TAGS));
     contr.insert().then(function() {
+
+    }, function(err) {
+        log.error(err);
+    })
+}
+
+function generateItem(item, user, type) {
+    var it = new DBRow(lit.ITEM_TABLE);
+    it.setValue(lit.FIELD_TYPE, type);
+    it.setValue(lit.FIELD_USER_ID, user.getValue(lit.FIELD_ID));
+    it.setValue(lit.FIELD_ITEM_ID, item.getValue(lit.FIELD_ID));
+    it.setValue(lit.FIELD_TAGS, item.getValue(lit.FIELD_TAGS));
+    it.insert().then(function() {
 
     }, function(err) {
         log.error(err);

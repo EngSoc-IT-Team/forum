@@ -34,7 +34,7 @@ exports.handle = function(request) {
 function getLinkInfo(link, info) {
     info.link.title = link.getValue(lit.FIELD_TITLE);
     info.link.url = link.getValue(lit.FIELD_LINK);
-    info.link.date = link.getValue(lit.FIELD_DATE_ADDED);
+    info.link.date = link.getValue(lit.FIELD_TIMESTAMP);
     info.link.author = link.getValue(lit.FIELD_ADDED_BY);
     info.link.tags = link.getValue(lit.FIELD_TAGS);
     info.link.summary = link.getValue(lit.FIELD_SUMMARY);

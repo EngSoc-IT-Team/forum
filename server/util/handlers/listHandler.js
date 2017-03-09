@@ -29,8 +29,8 @@ exports.handle = function(request) {
         for (var key in request.query)
             items.addQuery(key, request.query[key]);
 
-        items.orderBy(lit.FIELD_DATE, lit.DESC);
-        items.setLimit(10);
+        items.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
+        items.setLimit(20);
         items.query().then(function() {
             recursiveGet(resolve, reject, items, listInfo, [info]);
         }).catch(function(err) {
@@ -49,7 +49,7 @@ function listInfo(row, item, list) {
                 title: item.getValue(lit.FIELD_TITLE),
                 votes: item.getValue(lit.FIELD_NETVOTES),
                 author: item.getValue(lit.FIELD_AUTHOR),
-                date: row.getValue(lit.FIELD_DATE),
+                date: row.getValue(lit.FIELD_TIMESTAMP),
                 summary: item.getValue(lit.FIELD_CONTENT),
                 type: row.getValue(lit.FIELD_TYPE),
                 tags: item.getValue(lit.FIELD_TAGS)
@@ -61,7 +61,7 @@ function listInfo(row, item, list) {
                 title: item.getValue(lit.FIELD_TITLE),
                 votes: item.getValue(lit.FIELD_NETVOTES),
                 author: item.getValue(lit.FIELD_ADDED_BY),
-                date: row.getValue(lit.FIELD_DATE),
+                date: row.getValue(lit.FIELD_TIMESTAMP),
                 summary: item.getValue(lit.FIELD_SUMMARY),
                 type: row.getValue(lit.FIELD_TYPE),
                 tags: item.getValue(lit.FIELD_TAGS),
@@ -75,7 +75,7 @@ function listInfo(row, item, list) {
                 courseCode: item.getValue(lit.FIELD_COURSE_CODE),
                 rating: item.getValue(lit.FIELD_AVERAGE_RATING),
                 author: item.getValue(lit.FIELD_ADDED_BY),
-                date: row.getValue(lit.FIELD_DATE),
+                date: row.getValue(lit.FIELD_TIMESTAMP),
                 summary: item.getValue(lit.FIELD_SUMMARY),
                 type: row.getValue(lit.FIELD_TYPE),
                 tags: item.getValue(lit.FIELD_TAGS)

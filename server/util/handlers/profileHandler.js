@@ -96,7 +96,7 @@ function getSaved(user, info) {
         var saved = new DBRow(lit.SAVED_TABLE);
         saved.addQuery(lit.FIELD_USER_ID, user.getValue(lit.FIELD_ID));
         saved.setLimit(5);
-        saved.orderBy(lit.FIELD_DATE_SAVED, lit.DESC);
+        saved.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         saved.query().then(function() {
             recursiveGet(resolve, reject, saved, savedInfo, [info.items.saved]);
         }, function(err) {
@@ -110,7 +110,7 @@ function getSubscribed(user, info) {
         var subscribed = new DBRow(lit.SUBSCRIPTIONS_TABLE);
         subscribed.addQuery(lit.FIELD_USER_ID, user.getValue(lit.FIELD_ID));
         subscribed.setLimit(5);
-        subscribed.orderBy(lit.FIELD_DATE_SUBSCRIBED, lit.DESC);
+        subscribed.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         subscribed.query().then(function() {
             recursiveGet(resolve, reject, subscribed, subscribedInfo, [info.items.subscribed]);
         }, function(err) {
@@ -124,7 +124,7 @@ function getContributions(user, info) {
         var contr = new DBRow(lit.CONTRIBUTION_TABLE);
         contr.addQuery(lit.FIELD_USER_ID, user.getValue(lit.FIELD_ID));
         contr.setLimit(5);
-        contr.orderBy(lit.FIELD_DATE, lit.DESC);
+        contr.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         contr.query().then(function() {
             recursiveGet(resolve, reject, contr, contributionInfo, [info.items.contributions]);
         }, function(err) {
@@ -140,7 +140,7 @@ function subscribedInfo(row, item, list) {
         title: item.getValue(lit.FIELD_TITLE),
         votes: item.getValue(lit.FIELD_NETVOTES),
         author: item.getValue(lit.FIELD_AUTHOR),
-        date: row.getValue(lit.FIELD_DATE_SUBSCRIBED)
+        date: row.getValue(lit.FIELD_TIMESTAMP)
     };
     list[0].push(data);
 }
@@ -151,7 +151,7 @@ function savedInfo(row, item, list) {
         title: item.getValue(lit.FIELD_TITLE),
         votes: item.getValue(lit.FIELD_NETVOTES),
         author: item.getValue(lit.FIELD_AUTHOR),
-        date: row.getValue(lit.FIELD_DATE_SAVED)
+        date: row.getValue(lit.FIELD_TIMESTAMP)
     };
     list[0].push(data);
 }
@@ -162,7 +162,7 @@ function contributionInfo(row, item, list) {
         title: item.getValue(lit.FIELD_TITLE),
         votes: item.getValue(lit.FIELD_NETVOTES),
         author: item.getValue(lit.FIELD_AUTHOR),
-        date: row.getValue(lit.FIELD_DATE),
+        date: row.getValue(lit.FIELD_TIMESTAMP),
         summary: item.getValue(lit.FIELD_CONTENT)
     };
     list[0].push(data);
