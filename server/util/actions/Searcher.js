@@ -35,10 +35,14 @@ function searchForContent(inputSearch) {
     });
 }
 
-//get the key parts of the search
-function getKeyTerms(inputSearch) {
+/**
+ * Gets the key terms from an input String using Algoithmia Auto Tag API.
+ * @param input String to get key terms from.
+ * @returns {Promise} Promise as API is asynchronous. Eventually gets a String array of the key terms.
+ */
+function getKeyTerms(input) {
     return new Promise(function (resolve, reject) {
-        algorithmia.client(lit.AUTO_TAG_API_KEY).algo(lit.AUTO_TAG_ALGORITHM).pipe(inputSearch)
+        algorithmia.client(lit.AUTO_TAG_API_KEY).algo(lit.AUTO_TAG_ALGORITHM).pipe(input)
             .then(function (response) {
                 resolve(response.get());
             }, function (err) {
@@ -70,7 +74,7 @@ function searchForPosts(keyTerms) {
                     documentInfo[docIndex][lit.KEY_MEASURE] += measure;
                 });
             }
-            documentInfo = removeLowRelations(documentInfo);
+            documentInfo = removeLowMeasures(documentInfo);
             resolve(sortByMeasure(documentInfo));
         }).catch(function (error) {
             log.log("searchForPosts error: " + error);
@@ -79,7 +83,12 @@ function searchForPosts(keyTerms) {
     });
 }
 
-function removeLowRelations(documentInfo) {
+/**
+ * Removes documents from search consideration that have too low of a measure.
+ * @param documentInfo Documents being considered.
+ * @returns {*} Array with low measures moved.
+ */
+function removeLowMeasures(documentInfo) {
     var i = 0;
     while (i < documentInfo.length) {
         if (documentInfo[i][lit.KEY_MEASURE] < lit.MIN_RELATION_MEASURE) { //remove the posts that aren't related enough
@@ -92,6 +101,11 @@ function removeLowRelations(documentInfo) {
     return documentInfo;
 }
 
+/**
+ * Sorts document info by measure, and then returns an array of the document IDs in the same order.
+ * @param documentInfo document array to sort by measure.
+ * @returns {Array} Sorted document IDs.
+ */
 function sortByMeasure(documentInfo) {
     documentInfo = mergeSort(documentInfo);
     var sortedIDs = [];
@@ -102,20 +116,28 @@ function sortByMeasure(documentInfo) {
     return sortedIDs;
 }
 
+/**
+ * Partitions the array being sorted by the Merge Sort algorithm.
+ * @param arr Array to be sorted.
+ * @returns {*} Sorted Array.
+ */
 function mergeSort(arr) {
     if (arr.length < 2)
         return arr;
-
     var middle = parseInt(arr.length / 2);
     var left = arr.slice(0, middle);
     var right = arr.slice(middle, arr.length);
-
     return merge(mergeSort(left), mergeSort(right));
 }
 
+/**
+ * Merges partial arrays made by Merge Sort algorithm.
+ * @param left Left array.
+ * @param right Right array.
+ * @returns {Array} Merged array. Eventually the fully sorted array.
+ */
 function merge(left, right) {
     var result = [];
-
     while (left.length && right.length) {
         if (left[0][lit.KEY_MEASURE] <= right[0][lit.KEY_MEASURE]) {
             result.push(left.shift());
@@ -123,12 +145,9 @@ function merge(left, right) {
             result.push(right.shift());
         }
     }
-
     while (left.length)
         result.push(left.shift());
-
     while (right.length)
         result.push(right.shift());
-
     return result;
 }
