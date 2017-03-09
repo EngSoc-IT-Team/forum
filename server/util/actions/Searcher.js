@@ -31,7 +31,7 @@ function searchForContent(inputSearch) {
     getKeyTerms(inputSearch).then(function (keyTerms) {
         return searchForPosts(keyTerms);
     }).catch(function (error) {
-        log.log("searchDatabase error: " + error);
+        log.log("searchForContent error: " + error);
     });
 }
 
@@ -50,66 +50,100 @@ function getKeyTerms(inputSearch) {
 //get the course numbers manually
 
 //search through a post and get list of related ones, sorted as it's built
+var arr = ["install"];
+searchForPosts(arr);
 function searchForPosts(keyTerms) {
-    var documentIDs = [];
-    var documentMeasures = [];
-    var documentsRow = new dbr.DBRow(lit.POST_TABLE);
+    var documentInfo = [];
+    var row = new dbr.DBRow(lit.POST_TABLE);
     return new Promise(function (resolve, reject) {
-        documentsRow.query().then(function () {
-            while (documentsRow.next()) {
-                var doc = documentsRow.getValue(lit.FIELD_TITLE) + "\n" + documentsRow.getValue(lit.FIELD_CONTENT); //search the post content and title
+        row.query().then(function () {
+            while (row.next()) {
+                //search the post content and title
+                var doc = row.getValue(lit.FIELD_TITLE) + "\n" + row.getValue(lit.FIELD_CONTENT);
                 wordRelater.addDocument(doc);
+                var docID = row.getValue(lit.FIELD_ID);
+                var oneDoc = {measure: 0, id: docID};
                 //add a row in the arrays for each document
-                documentIDs.push(documentsRow.getValue(lit.FIELD_ID));
-                documentMeasures.push(0);
+                documentInfo.push(oneDoc);
             }
         }).then(function () {
             for (var termIndex in keyTerms) {
                 wordRelater.tfidfs(keyTerms[termIndex], function (docIndex, measure) {
-                    documentMeasures[docIndex] += measure;
+                    documentInfo[docIndex][lit.KEY_MEASURE] += measure;
                 });
             }
-            var trimmedDocInfo = removeLowRelations(documentMeasures, documentIDs);
-            documentMeasures = trimmedDocInfo[0];
-            documentIDs = trimmedDocInfo[1];
-            resolve(sortDocumentsByRelation(documentMeasures,documentIDs));
+            var out="";
+            for (var i =0;i<documentInfo.length;i++){
+                out+=documentInfo[i][lit.KEY_MEASURE]+", ";
+            }
+            log.log(out);
+            documentInfo = removeLowRelations(documentInfo);
+            resolve(sortDocumentsByRelation(documentInfo));
         }).catch(function (error) {
+            log.log("searchForPosts error: " + error);
             reject(error);
         });
     });
 }
 
-function sortDocumentsByRelation(documentMeasures, documentIDs) {
+function sortDocumentsByRelation(documentInfo) {
     var sortedPosts = [];
     var biggestMeasure = 0;
     var biggestIndex = -1;
-    while (documentMeasures.length > 0) {
-        for (var i in documentMeasures) {
-            if (documentMeasures[i] > biggestMeasure) {
-                biggestMeasure = documentMeasures[i];
+    while (documentInfo.length > 0) {
+        for (var i in documentInfo) {
+            if (documentInfo[i][lit.KEY_MEASURE] > biggestMeasure) {
+                biggestMeasure = documentInfo[i][lit.KEY_MEASURE];
                 biggestIndex = i;
             }
         }
-        sortedPosts.push(documentIDs[i]);
-        documentMeasures.splice(i, 1);
-        documentIDs.splice(i, 1);
+        sortedPosts.push(documentInfo[i][lit.FIELD_ID]);
+        documentInfo.splice(i, 1);
     }
+    log.log(sortedPosts);
     return sortedPosts;
 }
 
-function removeLowRelations(documentMeasures, documentIDs) {
+function removeLowRelations(documentInfo) {
     var i = 0;
-    while (i < documentMeasures.length) {
-        if (documentMeasures[i] < lit.MIN_RELATION_MEASURE) { //remove the posts that aren't related enough
-            documentMeasures.splice(i, 1);
-            documentIDs.splice(i, 1);
+    while (i < documentInfo.length) {
+        if (documentInfo[i][lit.KEY_MEASURE] < lit.MIN_RELATION_MEASURE) { //remove the posts that aren't related enough
+            documentInfo.splice(i, 1);
             //counter auto continued because the array decreased one size
         } else {
             i++;
         }
     }
-    var retArr = [];
-    retArr[0] = documentMeasures;
-    retArr[1] = documentIDs;
-    return retArr;
+    return documentInfo;
+}
+
+function mergeSort(arr) {
+    if (arr.length < 2)
+        return arr;
+
+    var middle = parseInt(arr.length / 2);
+    var left = arr.slice(0, middle);
+    var right = arr.slice(middle, arr.length);
+
+    return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right) {
+    var result = [];
+
+    while (left.length && right.length) {
+        if (left[0] <= right[0]) {
+            result.push(left.shift());
+        } else {
+            result.push(right.shift());
+        }
+    }
+
+    while (left.length)
+        result.push(left.shift());
+
+    while (right.length)
+        result.push(right.shift());
+
+    return result;
 }

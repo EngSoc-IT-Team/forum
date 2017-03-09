@@ -186,6 +186,9 @@ const literals = {
     MIN_MS_TO_NOTIFY_AGAIN: 86400000, //one day in milliseconds
     MIN_RELATION_MEASURE: 1,
 
+    //keys for objects
+    KEY_MEASURE: "measure",
+
     //API keys/information
     AUTO_TAG_API_KEY: "sim/u46ka7/UoVlIZFYomudRRxO1",
     AUTO_TAG_ALGORITHM: "algo://nlp/AutoTag/1.0.1"
