@@ -243,14 +243,16 @@
 		"id": "kggqu1euyscbeqtfxztx03ydn2d89qow",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH328"
 	},
 	"30": {
 		"table": "contribution",
 		"id": "jdrbsi4nretrevaroy48fwkkpaya7a42",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH321, STATICS, PHYSICS, MECH"
 	},
 	"31": {
 		"table": "post",
@@ -294,7 +296,8 @@
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "f3cvq8a0pd6dhunpdomok54fbr7ww8rm",
 		"timestamp": "2016-09-04",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH"
 	},
 	"35": {
 		"table": "contribution",
@@ -302,7 +305,8 @@
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "x08xgvqluzo4n8qo8iga7yxndzpezfj7",
 		"timestamp": "2014-10-04",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH321"
 	},
 	"36": {
 		"table": "contribution",
@@ -310,7 +314,8 @@
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "3qpd8kmnbvht2jr93q6xy3xn6zy9m11f",
 		"timestamp": "2016-01-01",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH"
 	},
 	"37": {
 		"table": "saved",
@@ -381,7 +386,8 @@
 		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
 		"itemID": "mjr3kgyf8qleexjt6a258dqa9e21f52v",
 		"timestamp": "2016-01-01",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH"
 	},
     "45": {
         "table": "post",
@@ -519,7 +525,8 @@
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"itemID": "379p7oq36oz5s39l65lpt1cl6xhrtzpf",
 		"timestamp": "2015-07-03",
-		"type": "post"
+		"type": "post",
+		"tags": "COMP"
 	},
 	"59": {
 		"table": "post",
@@ -539,7 +546,8 @@
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"itemID": "fp3bgj6vvkz9taxinioks2qigyrqyivp",
 		"timestamp": "2015-04-13",
-		"type": "post"
+		"type": "post",
+		"tags": "COMP"
 	},
 	"61": {
 		"table": "post",
@@ -559,7 +567,8 @@
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"itemID": "n95moisie3uedw0541fp5go2d0uk0x21",
 		"timestamp": "2015-04-13",
-		"type": "post"
+		"type": "post",
+		"tags": "COMP"
 	},
 	"63": {
 		"table": "contribution",
@@ -567,7 +576,8 @@
 		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
 		"itemID": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
 		"timestamp": "2016-6-06",
-		"type": "post"
+		"type": "post",
+		"tags": "CMPE"
 	},
 	"64": {
 		"table": "contribution",
@@ -575,7 +585,8 @@
 		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
 		"itemID": "6z85epnzcpyp7zq8118xq8jf29uycwct",
 		"timestamp": "2016-06-08",
-		"type": "post"
+		"type": "post",
+		"tags": "ELEC"
 	},
 	"65": {
 		"table": "contribution",
@@ -583,7 +594,8 @@
 		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
 		"itemID": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
 		"timestamp": "2016-06-09",
-		"type": "post"
+		"type": "post",
+		"tags": "ELEC"
 	},
 	"66": {
 		"table": "contribution",
@@ -614,14 +626,16 @@
 		"id": "kggqu1euyscbeqtfxztx03ydn2d89qow",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH328"
 	},
 	"70": {
 		"table": "item",
 		"id": "jdrbsi4nretrevaroy48fwkkpaya7a42",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH321, STATICS, PHYSICS, MECH"
 	},
 	"71": {
 		"table": "item",
@@ -629,7 +643,8 @@
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "f3cvq8a0pd6dhunpdomok54fbr7ww8rm",
 		"timestamp": "2016-09-04",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH"
 	},
 	"72": {
 		"table": "item",
@@ -637,7 +652,8 @@
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "x08xgvqluzo4n8qo8iga7yxndzpezfj7",
 		"timestamp": "2014-10-04",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH321"
 	},
 	"73": {
 		"table": "item",
@@ -645,7 +661,8 @@
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "3qpd8kmnbvht2jr93q6xy3xn6zy9m11f",
 		"timestamp": "2016-01-01",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH"
 	},
 	"74": {
 		"table": "item",
@@ -653,7 +670,8 @@
 		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
 		"itemID": "mjr3kgyf8qleexjt6a258dqa9e21f52v",
 		"timestamp": "2016-01-01",
-		"type": "post"
+		"type": "post",
+		"tags": "MECH"
 	},
 	"75": {
 		"table": "item",
@@ -661,7 +679,8 @@
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"itemID": "379p7oq36oz5s39l65lpt1cl6xhrtzpf",
 		"timestamp": "2015-07-03",
-		"type": "post"
+		"type": "post",
+		"tags": "COMP"
 	},
 	"76": {
 		"table": "item",
@@ -669,7 +688,8 @@
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"itemID": "fp3bgj6vvkz9taxinioks2qigyrqyivp",
 		"timestamp": "2015-04-13",
-		"type": "post"
+		"type": "post",
+		"tags": "COMP"
 	},
 	"77": {
 		"table": "item",
@@ -677,7 +697,8 @@
 		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
 		"itemID": "n95moisie3uedw0541fp5go2d0uk0x21",
 		"timestamp": "2015-04-13",
-		"type": "post"
+		"type": "post",
+		"tags": "COMP"
 	},
 	"78": {
 		"table": "item",
@@ -685,7 +706,8 @@
 		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
 		"itemID": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
 		"timestamp": "2016-6-06",
-		"type": "post"
+		"type": "post",
+		"tags": "CMPE"
 	},
 	"79": {
 		"table": "item",
@@ -693,7 +715,8 @@
 		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
 		"itemID": "6z85epnzcpyp7zq8118xq8jf29uycwct",
 		"timestamp": "2016-06-08",
-		"type": "post"
+		"type": "post",
+		"tags": "ELEC"
 	},
 	"80": {
 		"table": "item",
@@ -701,20 +724,23 @@
 		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
 		"itemID": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
 		"timestamp": "2016-06-09",
-		"type": "post"
+		"type": "post",
+		"tags": "ELEC"
 	},
 	"81": {
 		"table": "item",
 		"id": "zfzblaxa2neh80diuae4js8ky3ailzzz",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "j0mg989m6mca6g53cpdw8xos0dsv874w",
-		"type": "link"
+		"type": "link",
+		"tags": "MECH328, MECH"
 	},
 	"82": {
 		"table": "contribution",
 		"id": "r1788ecc4gyw45eoex3aats5hx9nm1d7",
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "j0mg989m6mca6g53cpdw8xos0dsv874w",
-		"type": "link"
+		"type": "link",
+		"tags": "MECH328, MECH"
 	}
 }
