@@ -190,7 +190,7 @@
 		"id": "j0mg989m6mca6g53cpdw8xos0dsv874w",
 		"summary": "A list of mass moments of inertia from Wikipedia.",
 		"link": "https://en.wikipedia.org/wiki/List_of_moments_of_inertia",
-		"addedBy": "ufs6jhhbjavxymgt0m8a1x024pcj7khx"
+		"addedBy": "WizardPikachu"
 	},
 	"23": {
 		"table": "tag",
@@ -610,25 +610,111 @@
 		"type": "comment"
 	},
 	"69": {
-		"table":"post",
-		"content":"eee",
-		"title":"hhh",
-		"id":"u1dhfw9qbv3a2zyohvto7gocek53siun",
-		"author":"WizardPikachu",
-		"upvotes":1,
-		"downvotes":0,
-		"netVotes":1,
-		"answered":0,
-		"duplicate":0,
-		"timestamp":"2017-03-07",
-		"tags":"MECH, MECH GENERAL"
+		"table": "item",
+		"id": "kggqu1euyscbeqtfxztx03ydn2d89qow",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "pn9tt4yqky3bsuvdb93y2b4ewe1b65g6",
+		"type": "post"
 	},
 	"70": {
-		"table":"contribution",
-		"userID":"ufs6jhhbjavxymgt0m8a1x024pcj7khx",
-		"type":"post",
-		"itemID":"u1dhfw9qbv3a2zyohvto7gocek53siun",
-		"id":"w8ugpul7eyk3emfehrk12i2glddkkr6s",
-		"timestamp":"2017-03-07"
+		"table": "item",
+		"id": "jdrbsi4nretrevaroy48fwkkpaya7a42",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
+		"type": "post"
+	},
+	"71": {
+		"table": "item",
+		"id": "xbtfawwessqpb9r1ua3gir6a4mluq9u2",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "f3cvq8a0pd6dhunpdomok54fbr7ww8rm",
+		"timestamp": "2016-09-04",
+		"type": "post"
+	},
+	"72": {
+		"table": "item",
+		"id": "nvom6fsiatbv7d3tyl47x9y1ktk892r1",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "x08xgvqluzo4n8qo8iga7yxndzpezfj7",
+		"timestamp": "2014-10-04",
+		"type": "post"
+	},
+	"73": {
+		"table": "item",
+		"id": "4wecfmgro5cvkmbyv0jvfkl0qp848sa4",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "3qpd8kmnbvht2jr93q6xy3xn6zy9m11f",
+		"timestamp": "2016-01-01",
+		"type": "post"
+	},
+	"74": {
+		"table": "item",
+		"id": "fwcv2lvxijbsooevlzvdw14ywu65kgti",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"itemID": "mjr3kgyf8qleexjt6a258dqa9e21f52v",
+		"timestamp": "2016-01-01",
+		"type": "post"
+	},
+	"75": {
+		"table": "item",
+		"id": "ipynxe8u52d0spw40czemkpxt0mwzbwy",
+		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
+		"itemID": "379p7oq36oz5s39l65lpt1cl6xhrtzpf",
+		"timestamp": "2015-07-03",
+		"type": "post"
+	},
+	"76": {
+		"table": "item",
+		"id": "p2dnpehs5o7sjot8c7m8gvko2mmizb30",
+		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
+		"itemID": "fp3bgj6vvkz9taxinioks2qigyrqyivp",
+		"timestamp": "2015-04-13",
+		"type": "post"
+	},
+	"77": {
+		"table": "item",
+		"id": "8a6hwlmhgy4x6zl835prkpbnm7ru47yk",
+		"userID": "bamvvh3lasj8s881oltoqcwuvvukzi8g",
+		"itemID": "n95moisie3uedw0541fp5go2d0uk0x21",
+		"timestamp": "2015-04-13",
+		"type": "post"
+	},
+	"78": {
+		"table": "item",
+		"id": "7c4fsiw4quwktnv2gtv8mes25bgvxlsw",
+		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+		"itemID": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
+		"timestamp": "2016-6-06",
+		"type": "post"
+	},
+	"79": {
+		"table": "item",
+		"id": "iajij02gz3icq7zatdequeoddqaw8ozw",
+		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+		"itemID": "6z85epnzcpyp7zq8118xq8jf29uycwct",
+		"timestamp": "2016-06-08",
+		"type": "post"
+	},
+	"80": {
+		"table": "item",
+		"id": "1yt09qf0a4i9civm4126h67alu39uduu",
+		"userID": "42w2s5c3a6iqv6ijhnlf3s7wn7p2bbg1",
+		"itemID": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
+		"timestamp": "2016-06-09",
+		"type": "post"
+	},
+	"81": {
+		"table": "item",
+		"id": "zfzblaxa2neh80diuae4js8ky3ailzzz",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "j0mg989m6mca6g53cpdw8xos0dsv874w",
+		"type": "link"
+	},
+	"82": {
+		"table": "contribution",
+		"id": "r1788ecc4gyw45eoex3aats5hx9nm1d7",
+		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
+		"itemID": "j0mg989m6mca6g53cpdw8xos0dsv874w",
+		"type": "link"
 	}
 }
