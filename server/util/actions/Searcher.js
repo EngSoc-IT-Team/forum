@@ -50,7 +50,7 @@ function getKeyTerms(inputSearch) {
 //get the course numbers manually
 
 //search through a post and get list of related ones, sorted as it's built
-var arr = ["install"];
+var arr = ["module"];
 searchForPosts(arr);
 function searchForPosts(keyTerms) {
     var documentInfo = [];
@@ -87,7 +87,7 @@ function searchForPosts(keyTerms) {
 }
 
 function sortDocumentsByRelation(documentInfo) {
-    var sortedPosts = [];
+   /* var sortedPosts = [];
     var biggestMeasure = 0;
     var biggestIndex = -1;
     while (documentInfo.length > 0) {
@@ -101,7 +101,13 @@ function sortDocumentsByRelation(documentInfo) {
         documentInfo.splice(i, 1);
     }
     log.log(sortedPosts);
-    return sortedPosts;
+    return sortedPosts;*/
+   documentInfo=mergeSort(documentInfo);
+   var output="";
+   for (var i =0;i<documentInfo.length;i++){
+       output+=documentInfo[i][lit.KEY_MEASURE]+", ";
+   }
+   log.log(output);
 }
 
 function removeLowRelations(documentInfo) {
@@ -132,7 +138,7 @@ function merge(left, right) {
     var result = [];
 
     while (left.length && right.length) {
-        if (left[0] <= right[0]) {
+        if (left[0][lit.KEY_MEASURE] <= right[0][lit.KEY_MEASURE]) {
             result.push(left.shift());
         } else {
             result.push(right.shift());
