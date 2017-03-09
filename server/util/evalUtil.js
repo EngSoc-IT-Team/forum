@@ -45,7 +45,6 @@ exports.getMockData = function(url) {
                         return resolve(returnString);
 
                     returnString += fillTemplate(mockDataTemplate, getRowData(itemRow, lit.ITEM_TABLE));
-                    console.log(returnString);
                     resolve(returnString);
                 });
             });
