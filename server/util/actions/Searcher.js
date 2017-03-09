@@ -17,6 +17,12 @@
  * 10,000 calls. However, for free, 5K credits are given each month, so on a small scale it is still free.
  */
 
+//TODO more versatile search - e.g. tables, comments etc.
+//TODO auto tag posts on insertion
+//TODO get course numbers to search tags
+
+//No go on better algorithm for using how important a key term is within the search, wordRelater always splits importance evenly
+
 var natural = require("natural");
 var algorithmia = require("algorithmia");
 var lit = require('./../Literals.js');
@@ -26,7 +32,6 @@ var dbr = require('./../DBRow.js');
 var TfIdf = natural.TfIdf;
 var wordRelater = new TfIdf();
 
-//main function that ties it all together
 function searchForContent(inputSearch) {
     getKeyTerms(inputSearch).then(function (keyTerms) {
         return searchForPosts(keyTerms);
@@ -51,9 +56,12 @@ function getKeyTerms(input) {
     });
 }
 
-//get the course numbers manually
-
-//search through a post and get list of related ones, sorted as it's built
+/**
+ * Method that searches for posts related to the parameter key terms, likely off of a user search.
+ * @param keyTerms Terms that post should be check for relation to.
+ * @returns {Promise} Promise as querying database is asynchronous. Eventually returns an array of post IDs,
+ * sorted by most relation to the terms.
+ */
 function searchForPosts(keyTerms) {
     var documentInfo = [];
     var row = new dbr.DBRow(lit.POST_TABLE);
@@ -110,9 +118,9 @@ function sortByMeasure(documentInfo) {
     documentInfo = mergeSort(documentInfo);
     var sortedIDs = [];
     for (var index in documentInfo) {
+        log.log(documentInfo[index][lit.KEY_MEASURE]);
         sortedIDs.push(documentInfo[index][lit.FIELD_ID]);
     }
-    log.log(sortedIDs);
     return sortedIDs;
 }
 
