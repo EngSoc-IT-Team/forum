@@ -25,7 +25,7 @@ var recursiveGet = require('./../recursion').recursiveGet;
 exports.handle = function(request) {
     var info = [];
     return new Promise(function(resolve, reject) {
-        var items = new DBRow(lit.CONTRIBUTION_TABLE);
+        var items = new DBRow(lit.ITEM_TABLE);
         for (var key in request.query)
             items.addQuery(key, request.query[key]);
 
