@@ -50,8 +50,6 @@ function getKeyTerms(inputSearch) {
 //get the course numbers manually
 
 //search through a post and get list of related ones, sorted as it's built
-var arr = ["module"];
-searchForPosts(arr);
 function searchForPosts(keyTerms) {
     var documentInfo = [];
     var row = new dbr.DBRow(lit.POST_TABLE);
@@ -72,42 +70,13 @@ function searchForPosts(keyTerms) {
                     documentInfo[docIndex][lit.KEY_MEASURE] += measure;
                 });
             }
-            var out="";
-            for (var i =0;i<documentInfo.length;i++){
-                out+=documentInfo[i][lit.KEY_MEASURE]+", ";
-            }
-            log.log(out);
             documentInfo = removeLowRelations(documentInfo);
-            resolve(sortDocumentsByRelation(documentInfo));
+            resolve(sortByMeasure(documentInfo));
         }).catch(function (error) {
             log.log("searchForPosts error: " + error);
             reject(error);
         });
     });
-}
-
-function sortDocumentsByRelation(documentInfo) {
-   /* var sortedPosts = [];
-    var biggestMeasure = 0;
-    var biggestIndex = -1;
-    while (documentInfo.length > 0) {
-        for (var i in documentInfo) {
-            if (documentInfo[i][lit.KEY_MEASURE] > biggestMeasure) {
-                biggestMeasure = documentInfo[i][lit.KEY_MEASURE];
-                biggestIndex = i;
-            }
-        }
-        sortedPosts.push(documentInfo[i][lit.FIELD_ID]);
-        documentInfo.splice(i, 1);
-    }
-    log.log(sortedPosts);
-    return sortedPosts;*/
-   documentInfo=mergeSort(documentInfo);
-   var output="";
-   for (var i =0;i<documentInfo.length;i++){
-       output+=documentInfo[i][lit.KEY_MEASURE]+", ";
-   }
-   log.log(output);
 }
 
 function removeLowRelations(documentInfo) {
@@ -121,6 +90,16 @@ function removeLowRelations(documentInfo) {
         }
     }
     return documentInfo;
+}
+
+function sortByMeasure(documentInfo) {
+    documentInfo = mergeSort(documentInfo);
+    var sortedIDs = [];
+    for (var index in documentInfo) {
+        sortedIDs.push(documentInfo[index][lit.FIELD_ID]);
+    }
+    log.log(sortedIDs);
+    return sortedIDs;
 }
 
 function mergeSort(arr) {
