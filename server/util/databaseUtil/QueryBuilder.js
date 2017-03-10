@@ -9,10 +9,10 @@
 "use strict";
 
 var mysql = require('mysql');
-var log = require('./log');
+var log = require('./../log');
 var escaper = require('./QueryEscaper');
-var lit = require('./Literals.js');
-var compare = require('./Compare');
+var lit = require('./../Literals.js');
+var compare = require('./../Compare');
 
 const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"] //TODO: implement 'in' and 'between' operators
 

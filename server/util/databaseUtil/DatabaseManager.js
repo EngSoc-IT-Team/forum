@@ -10,10 +10,10 @@
 var mysql = require('mysql');
 var fs = require('fs');
 var path = require('path');
-var log = require('./log');
-var lit = require('./Literals.js');
+var log = require('./../log');
+var lit = require('./../Literals.js');
 
-var databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/database.json'), 'utf8'));
+var databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/database.json'), 'utf8'));
 
 exports.DatabaseManager = function() {
 	var pool = mysql.createPool({

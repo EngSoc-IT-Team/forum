@@ -8,8 +8,8 @@
 "use strict";
 
 var log = require('./log');
-var db = require('./DatabaseManager');
-var qb = require('./QueryBuilder');
+var db = require('./databaseUtil/DatabaseManager');
+var qb = require('./databaseUtil/QueryBuilder');
 var generator = require('./IDGenerator');
 var lit = require('./Literals.js');
 

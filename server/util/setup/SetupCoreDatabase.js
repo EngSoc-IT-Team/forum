@@ -10,7 +10,7 @@
 
 var fs = require('fs');
 var path = require('path');
-var db = require('../DatabaseManager.js');
+var db = require('../databaseUtil/DatabaseManager.js');
 var dbr = require('../DBRow.js');
 var log = require('../log.js');
 var lit = require('../Literals.js');
