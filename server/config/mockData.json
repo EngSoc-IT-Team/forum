@@ -873,7 +873,269 @@
 		"id": "gffrcvq2e2wivinqeglk91l4t0mt75g8",
 		"timestamp": "2017-03-11",
 		"tags": "ENGINEERING"
+	},
+	"95": {
+		"table": "class",
+		"courseCode": "APSC 174",
+		"title": "Introduction to Linear Algebra",
+		"summary": "Vectors, dot and cross products, lines and planes, projections. Vectors in n-space. Systems of Linear Equations. Matrix Algebra and linear transformations, inverses. Spaces and subspaces. Linear independence, basis and coordinates, dimension, rank. Determinants, Cramer's Rule. Eigenvectors, eigenvalues and diagonalization with applications. Orthonormal bases and symmetric matrices.",
+		"tags": "MATH, ALGEBRA",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "None",
+		"instructor": "Abdol-Reza Mansouri",
+		"credit": "3.5",
+		"id": "gbn20rvl18boglxa1s16vrhxvk6kqkva",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"96": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "gbn20rvl18boglxa1s16vrhxvk6kqkva",
+		"id": "pwhgsizvifnpu5k6wttknj3o1n3jdjtm",
+		"timestamp": "2017-03-11",
+		"tags": "MATH, ALGEBRA"
+	},
+	"97": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "gbn20rvl18boglxa1s16vrhxvk6kqkva",
+		"id": "4vyawknwesdo90usmy0u7kq699ufynkw",
+		"timestamp": "2017-03-11",
+		"tags": "MATH, ALGEBRA"
+	},
+	"98": {
+		"table": "class",
+		"courseCode": "APSC 172",
+		"title": "Calculus II",
+		"summary": "Functions of several variables, partial derivatives, differentials, gradient, maxima and minima. Double and triple integrals, polar and cylindrical coordinates; applications to mass, center of mass, moment, etc. Series, Ratio test, power series; Taylor polynomial approximations.",
+		"tags": "CALCULUS, MATH",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "APSC 171",
+		"instructor": "Peter Taylor",
+		"credit": "3.5",
+		"id": "p880rx9dj4662p7skc25pq1qaib5g9wv",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"99": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "p880rx9dj4662p7skc25pq1qaib5g9wv",
+		"id": "7oe8do8puff295s4hglrjwhfku941f8h",
+		"timestamp": "2017-03-11",
+		"tags": "CALCULUS, MATH"
+	},
+	"100": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "p880rx9dj4662p7skc25pq1qaib5g9wv",
+		"id": "6xs5topn4mh7em3hjesgi5menie7fcta",
+		"timestamp": "2017-03-11",
+		"tags": "CALCULUS, MATH"
+	},
+	"101": {
+		"table": "class",
+		"courseCode": "APSC 142",
+		"title": "Computer Programming for Engineers",
+		"summary": "This course introduces concepts, theory and practice of computer programming using C as the working language.  Programming practice is enhanced in the laboratory through the use of Lego robots programmed with RobotC and in the studio and independent work through the use of a robot simulator.",
+		"tags": "COMPUTERS",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "None",
+		"instructor": "Unknown",
+		"credit": "3",
+		"id": "7zhngog925o1ui8jovr17kxd8fn0h5xf",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"102": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "7zhngog925o1ui8jovr17kxd8fn0h5xf",
+		"id": "wc7p02fpfkpicloion5ul6lpfwg6qr40",
+		"timestamp": "2017-03-11",
+		"tags": "COMPUTERS"
+	},
+	"103": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "7zhngog925o1ui8jovr17kxd8fn0h5xf",
+		"id": "631vr2azbld3hwl617vwuk57exvo0smd",
+		"timestamp": "2017-03-11",
+		"tags": "COMPUTERS"
+	},
+	"104": {
+		"table": "class",
+		"courseCode": "APSC 132",
+		"title": "Chemistry and its Applications",
+		"summary": "This course combines fundamentals of chemistry with the engineering issues associated with them. Areas of study are:  entropy and the second law of thermodynamics; thermodynamics; chemical equilibrium; electrochemistry; chemical kinetics; and organic chemistry. Environmental issues associated with each of these topics will be discussed where appropriate.",
+		"tags": "CHEMISTRY",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "APSC 131",
+		"instructor": "William Newstead",
+		"credit": "3.5",
+		"id": "r34dy0unpnmpa90dn2cfkvs0ylq07hjw",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"105": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "r34dy0unpnmpa90dn2cfkvs0ylq07hjw",
+		"id": "5t7kveat097tnwt75wajv0xxmbrrgcot",
+		"timestamp": "2017-03-11",
+		"tags": "CHEMISTRY"
+	},
+	"106": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "r34dy0unpnmpa90dn2cfkvs0ylq07hjw",
+		"id": "ndrg1c0r1c11tf9prsy8ilcw6ja6os3m",
+		"timestamp": "2017-03-11",
+		"tags": "CHEMISTRY"
+	},
+	"107": {
+		"table": "class",
+		"courseCode": "APSC 112",
+		"title": "Electricity and Magnetism",
+		"summary": "Lecture topics include rotational kinematics, dynamics, and oscillations, electric field and potential, electric current and resistance, DC circuits, magnetic fields and electromagnetic induction.",
+		"tags": "PHYSICS",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "APSC 111 and APSC 171",
+		"instructor": "James Stotz",
+		"credit": "3.5",
+		"id": "dvr9ntd1gy9691kmstehy1l4iw6keb4t",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"108": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "dvr9ntd1gy9691kmstehy1l4iw6keb4t",
+		"id": "bmf18q7y8ohm57fdumqch0vqnzumhqmr",
+		"timestamp": "2017-03-11",
+		"tags": "PHYSICS"
+	},
+	"109": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "dvr9ntd1gy9691kmstehy1l4iw6keb4t",
+		"id": "gfiw9h4790g4x5xs8eqb26eiwyjtwm1d",
+		"timestamp": "2017-03-11",
+		"tags": "PHYSICS"
+	},
+	"110": {
+		"table": "class",
+		"courseCode": "APSC 171",
+		"title": "Calculus I",
+		"summary": "Parametric curves in two and three dimensions, velocity, acceleration, derivatives of trigonometric and inverse trigonometric functions, differentiation techniques, applications to science, linear approximation, integration and anti-differentiation, method of substitution, applications of integration to area, volume and work, integration by parts, partial fractions, approximations of integrals, improper integrals, exponential growth, harmonic motion, and separable differential equations. ",
+		"tags": "CALCULUS, MATH",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "None",
+		"instructor": "Alan Ableson",
+		"credit": "3.5",
+		"id": "9srfsnfdhcekhy51azjjo746jd99omaw",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"111": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "9srfsnfdhcekhy51azjjo746jd99omaw",
+		"id": "z7lr7xwqc574cjl7go7ickyqynw2zdg1",
+		"timestamp": "2017-03-11",
+		"tags": "CALCULUS, MATH"
+	},
+	"112": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "9srfsnfdhcekhy51azjjo746jd99omaw",
+		"id": "881z4go9hmv9nxnyn7cpwck5ihvsb9p6",
+		"timestamp": "2017-03-11",
+		"tags": "CALCULUS, MATH"
+	},
+	"113": {
+		"table": "class",
+		"courseCode": "APSC 161",
+		"title": "Basic Engineering Graphics",
+		"summary": "The principal objective of this course is to develop the ability to visualize and communicate three dimensional shapes. Topics covered are orthographic projection, isometric sketching, auxiliary and section views as well as dimensioning and working drawings.  Modern Computer Aided Design software is used to create solid models of the parts and assemblies as well as to generate dimensioned drawings.  Students apply their learning in a project where they design their own version of a consumer product. Students learn by hands-on exercises in free-hand sketching and computer-based drawing.",
+		"tags": "GRAPHICS",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "None",
+		"instructor": "Gene Zak",
+		"credit": "3.5",
+		"id": "7vuwgv01dc8zs8sdy99glz5ypru6kpyt",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"114": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "7vuwgv01dc8zs8sdy99glz5ypru6kpyt",
+		"id": "oq41lz43ycu9jouf391aitypckbrjea9",
+		"timestamp": "2017-03-11",
+		"tags": "GRAPHICS"
+	},
+	"115": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "7vuwgv01dc8zs8sdy99glz5ypru6kpyt",
+		"id": "el9vqtd5u2i4vpkpx8cbmfkorsnpypkh",
+		"timestamp": "2017-03-11",
+		"tags": "GRAPHICS"
+	},
+	"116": {
+		"table": "class",
+		"courseCode": "APSC 151",
+		"title": "Earth Systems and Engineering",
+		"summary": "This course provides an introduction to the complex Earth System (which encompasses the solid earth, hydrosphere, atmosphere, and biosphere), and our interactions with it. Using the Earth System as a framework, and coupled with the over-arching theme of sustainability, key concepts/issues relevant to engineers are dealt with, including:  population demographics and resource usage; geopolitics; modeling of \"fuzzy\" systems; risk assessment and risk management; local- and global-scale impacts of engineering works on the government; short- and long-term natural and anthropogenic changes (including global warming); moral and ethical considerations. ",
+		"tags": "GEOLOGY",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "None",
+		"instructor": "John Hanes",
+		"credit": "4",
+		"id": "0k0b2ih839uiudy6rta785scg4pmavzn",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"117": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "0k0b2ih839uiudy6rta785scg4pmavzn",
+		"id": "3x37zz5pn9wm5ay5ssh6h4pke6hizx22",
+		"timestamp": "2017-03-11",
+		"tags": "GEOLOGY"
+	},
+	"118": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "0k0b2ih839uiudy6rta785scg4pmavzn",
+		"id": "d44g8o4d2gtl32iyp9khqqoog90heq81",
+		"timestamp": "2017-03-11",
+		"tags": "GEOLOGY"
 	}
-
-
 }
