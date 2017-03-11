@@ -774,5 +774,51 @@
 		"id": "faubm56dp7xf6mp3nhffw8zf6pnw4rpf",
 		"timestamp": "2017-03-11",
 		"tags": "PHYSICS, APSC100, APSC111"
+	},
+	"86": {
+		"table": "class",
+		"courseCode": "APSC 131",
+		"title": "Chemistry and Materials",
+		"summary": "This course combines fundamentals of chemistry and uses these fundamentals to gain an understanding of why materials have the characteristics they do. Areas of study are:  gases and their behaviour; three states of matter and their properties; water and aqueous solutions; chemical bonding; quantum mechanics and atomic structure; solids; thermodynamic processes and thermo chemistry; and introduction to materials science.",
+		"tags": "CHEMISTRY",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "None",
+		"instructor": "Michael Mombourquette",
+		"credit": "3.5",
+		"id": "wl2096b3653kylg491du46d8lu45fryq",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"87": {
+		"table": "class",
+		"courseCode": "APSC 111",
+		"title": "Mechanics",
+		"summary": "An introduction to Newtonian mechanics - a subject which is applicable to everyday engineering problems. Lecture topics are:  vectors, motion of a particle, particle dynamics, work and energy, statics of rigid bodies, oscillations, waves, conservation of energy, momentum, and collisions.",
+		"tags": "PHYSICS",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "None",
+		"instructor": "Tony Noble",
+		"credit": "3.5",
+		"id": "3g56nsdg37axjai0jhdg9zqc3ot9dq49",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
+	},
+	"88": {
+		"table": "class",
+		"courseCode": "APSC 100",
+		"title": "Practical Engineering Modules",
+		"summary": "This course provides the laboratory experience and professional skills fundamental to the practice of engineering. It consists of three modules:  Module 1, Complex problem solving; Module 2, Laboratory Skills; Module 3, Engineering Design Project. The course provides an introduction to personal learning styles, team dynamics, oral and written presentation skills, laboratory data collection, analysis and presentation, design methodologies, project management, information literacy, and workplace safety.",
+		"tags": "ENGINEERING",
+		"ratings": 0,
+		"averageRating": 3,
+		"prereqs": "None",
+		"instructor": "Brian Frank",
+		"credit": "11",
+		"id": "v0dr16xjojfylk4cyeppvqxgg823bx4z",
+		"duplicate": 0,
+		"addedBy": "HotMuffin"
 	}
+
 }
