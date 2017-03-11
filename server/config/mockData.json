@@ -791,6 +791,24 @@
 		"addedBy": "HotMuffin"
 	},
 	"87": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "wl2096b3653kylg491du46d8lu45fryq",
+		"id": "vlkj3e4nx1ggyi3ahnuzbn21w1jyayu3",
+		"timestamp": "2017-03-11",
+		"tags": "CHEMISTRY"
+	},
+	"88": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "wl2096b3653kylg491du46d8lu45fryq",
+		"id": "gffrcvq5e2wivinqeglk91l4t0mt75g8",
+		"timestamp": "2017-03-11",
+		"tags": "CHEMISTRY"
+	},
+	"89": {
 		"table": "class",
 		"courseCode": "APSC 111",
 		"title": "Mechanics",
@@ -805,7 +823,25 @@
 		"duplicate": 0,
 		"addedBy": "HotMuffin"
 	},
-	"88": {
+	"90": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "3g56nsdg37axjai0jhdg9zqc3ot9dq49",
+		"id": "vlkj3e4ns1ggyi3ah3u9bn21w1jyayu3",
+		"timestamp": "2017-03-11",
+		"tags": "PHYSICS"
+	},
+	"91": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "3g56nsdg37axjai0jhdg9zqc3ot9dq49",
+		"id": "gffrcvq2e2wivinqedlk91l4t0mt75g8",
+		"timestamp": "2017-03-11",
+		"tags": "PHYSICS"
+	},
+	"92": {
 		"table": "class",
 		"courseCode": "APSC 100",
 		"title": "Practical Engineering Modules",
@@ -819,6 +855,25 @@
 		"id": "v0dr16xjojfylk4cyeppvqxgg823bx4z",
 		"duplicate": 0,
 		"addedBy": "HotMuffin"
+	},
+	"93": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "v0dr16xjojfylk4cyeppvqxgg823bx4z",
+		"id": "vlkj3e4ns1ggyi3ahnuzbn21w1jyayu3",
+		"timestamp": "2017-03-11",
+		"tags": "ENGINEERING"
+	},
+	"94": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "class",
+		"itemID": "v0dr16xjojfylk4cyeppvqxgg823bx4z",
+		"id": "gffrcvq2e2wivinqeglk91l4t0mt75g8",
+		"timestamp": "2017-03-11",
+		"tags": "ENGINEERING"
 	}
+
 
 }
