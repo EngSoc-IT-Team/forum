@@ -49,7 +49,7 @@ var linkTemplate = '<div class="col-sm-12">\
                         {9}\
                         <p class="date-and-user">\
                             <span class="negative date">[link]</span>\
-                            <span class="date">Added on {4} by <a href="/profile?username={5}">{6}</a></span>\
+                            <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
@@ -81,7 +81,7 @@ var classTemplate = '<div class="col-sm-12">\
                         <hr>\
                       </div>';
 
-var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick="window.location = \'/list?tag={0}\'">{1}</button>';
+var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick="window.location = \'/list?tags={0}\'">{1}</button>';
 
 function whenLoaded() {
     var href;
