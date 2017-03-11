@@ -742,5 +742,37 @@
 		"itemID": "j0mg989m6mca6g53cpdw8xos0dsv874w",
 		"type": "link",
 		"tags": "MECH328, MECH"
+	},
+	"83": {
+		"table": "post",
+		"content": "What are the three laws of motion Newton came up with? I hear they were the basis for classical mechanics (whatever that is...).",
+		"title": "What are Newton's three laws of motion?",
+		"id": "nuet6adknuoaads8kliaht7vlqrwns1b",
+		"author": "HotMuffin",
+		"upvotes": 1,
+		"downvotes": 0,
+		"netVotes": 1,
+		"answered": 0,
+		"duplicate": 0,
+		"timestamp": "2017-03-11",
+		"tags": "PHYSICS, APSC100, APSC111"
+	},
+	"84": {
+		"table": "contribution",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "post",
+		"itemID": "nuet6adknuoaads8kliaht7vlqrwns1b",
+		"id": "81sppgv9h3ffni0ooi4ou3w2kl6c0zxe",
+		"timestamp": "2017-03-11",
+		"tags": "PHYSICS, APSC100, APSC111"
+	},
+	"85": {
+		"table": "item",
+		"userID": "cctb6p164pkq86zsw4uydqmltpllf7jf",
+		"type": "post",
+		"itemID": "nuet6adknuoaads8kliaht7vlqrwns1b",
+		"id": "faubm56dp7xf6mp3nhffw8zf6pnw4rpf",
+		"timestamp": "2017-03-11",
+		"tags": "PHYSICS, APSC100, APSC111"
 	}
 }
