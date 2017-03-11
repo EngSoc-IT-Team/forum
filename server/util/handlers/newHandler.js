@@ -40,11 +40,18 @@ function createClass(body, user, resolve, reject) {
     c.setValue(lit.FIELD_TITLE, body.title);
     c.setValue(lit.FIELD_COURSE_CODE, body.courseCode);
     c.setValue(lit.FIELD_INSTRUCTOR, body.instructor);
-    c.setValue(lit.FIELD_PREREQS, body.prereqs);
     c.setValue(lit.FIELD_CREDIT, body.credit);
     c.setValue(lit.FIELD_SUMMARY, body.summary);
-    c.setValue(lit.FIELD_TAGS, body.tags);
+
     c.setValue(lit.FIELD_ADDED_BY, user.getValue(lit.FIELD_USERNAME));
+
+    if (body.prereqs)
+        c.setValue(lit.FIELD_PREREQS, body.prereqs);
+
+    if (!body.tags)
+        c.setValue(lit.FIELD_TAGS, 'DEFAULT');
+    else
+        c.setValue(lit.FIELD_TAGS, body.tags);
 
     c.insert().then(function() {
         vote(user, c, resolve); // if we make it this far we will always resolve
