@@ -27,14 +27,13 @@ exports.handle = function(request) {
     return new Promise(function(resolve, reject) {
         var items = new DBRow(lit.ITEM_TABLE);
         for (var key in request.query)
-            items.addQuery(key, request.query[key]);
+            items.addQuery(key, lit.LIKE, '%' + request.query[key] + '%'); //TODO: Fix tag handling (should be able to get post by tag for any item)
 
         items.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         items.setLimit(20);
         items.query().then(function() {
             recursiveGet(resolve, reject, items, listInfo, [info]);
-        }).catch(function(err) {
-            log.error(err.message);
+        }).catch(function() {
             reject(false);
         });
     });
