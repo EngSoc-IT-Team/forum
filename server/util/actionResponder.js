@@ -18,6 +18,7 @@ var saver = require('./actions/Saver');
 var subscriber = require('./actions/Subscriptions');
 var voter = require('./actions/Voter');
 var tagger = require('./actions/Tagger');
+var commenter = require('./actions/Commenter');
 var DBRow = require('./DBRow').DBRow;
 
 
@@ -40,6 +41,9 @@ exports.respond = function(request) {
                 break;
             case("tag"):
                 use = tag;
+                break;
+            case('comment'):
+                use = comment;
                 break;
            default:
                 log.error("Attempt access an invalid action: '" + action + "'");
@@ -90,7 +94,7 @@ function vote(request) {
 
 function report(request) {
     return new Promise(function(resolve, reject) {
-        if (request.body.subsction == 'enter')
+        if (request.body.sub == 'enter')
             reporter.sendReport(request.body.userId, request.body.itemId, request.body.reportReason, request.body.content)
                 .then(function() {resolve(true)}, function() {reject(false)});
         else
@@ -109,5 +113,18 @@ function tag(request) {
             tagger.add(request.body.tagName).then(function() {resolve(true)}, function() {reject(false)});
         else
             log.error("Invalid request for tags");
+    });
+}
+
+function comment(request) {
+    return new Promise(function(resolve, reject){
+        if (request.body.sub == "add")
+            commenter.addComment(request).then(function() {resolve(true)}, function() {reject(false)});
+        else if (request.body.sub == "edit")
+            commenter.editComment(request).then(function() {resolve(true)}, function() {reject(false)});
+        else if (request.body.sub == "delete")
+            commenter.deleteComment(request).then(function() {resolve(true)}, function() {reject(false)});
+        else
+            log.error("Invalid request for commenting");
     });
 }

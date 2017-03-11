@@ -3,7 +3,6 @@
  * Written by Michael Albinson, 2/8/17
  *
  * Methods and logic that carries out actions on votes
- * TODO: should be able to eventually get vote values through here efficiently
  *
  */
 
@@ -52,6 +51,24 @@ exports.changeVote = function(userId, itemId, newVoteValue) {
                     reject(err);
                 });
             }
+        });
+    });
+};
+
+/*
+ * Gets the vote for the user and item specified
+ */
+
+exports.getVote = function(userId, itemId) {
+    return new Promise(function(resolve, reject) {
+        var vote = new DBRow(lit.VOTE_TABLE);
+        vote.addQuery(lit.FIELD_USER_ID, userId);
+        vote.addQuery(lit.FIELD_ITEM_ID, itemId);
+        vote.query().then(function() {
+            if (!vote.next())
+                return resolve(-1);
+
+            resolve(vote.getValue(lit.FIELD_VOTE_VALUE));
         });
     });
 };

@@ -1,16 +1,73 @@
 /*
- * subcommentGetter.js
- * Written by Michael Albinson 2/28/17
+ * Commenter.js
  *
- * Used by many of the requestResponder subclasses to get their subcomments
+ * Written by Michael Albinson 3/10/17
+ *
+ * Action handler responsible for adding, getting, and modifying comments
+ *
  */
 
 "use strict";
 
-var DBRow = require('./DBRow').DBRow;
-var lit = require('./Literals.js');
+var DBRow = require('./../DBRow').DBRow;
+var lit = require('./../Literals');
+var log = require('./../log');
+var voter = require('./Voter');
 
-exports.get = function(comment, item, resolve, info) {
+exports.addComment = function (request) {
+    return new Promise(function(resolve, reject) {
+        var comment = new DBRow(lot.COMMENT_TABLE);
+        comment.setValue(lit.FIELD_AUTHOR, request.body.author);
+        comment.setValue(lit.FIELD_PARENT_POST, request.body.parent);
+        comment.setValue(lit.FIELD_PARENT_COMMENT, request.body.parentComment);
+        comment.setValue(lit.FIELD_CONTENT, request.body.content);
+        comment.setValue(lit.FIELD_USER_ID, request.body.userID);
+        comment.insert().then(function () {
+            voter.vote(request.signedCookies.usercookie.userID, comment.getValue(lit.FIELD_ID), 1); // don't need to wait for this to complete
+            resolve();
+        }, function (err) {
+            reject(err);
+        });
+    });
+};
+
+exports.editComment = function (request) {
+    return new Promise(function(resolve, reject) {
+        var comment = new DBRow(lit.COMMENT_TABLE);
+        comment.getRow(request.body.id).then(function() {
+            if (!comment.count())
+                reject("No comment to edit found");
+
+            comment.setValue(lit.FIELD_CONTENT, request.body.content); // once a comment is inserted, we only need update its content
+            comment.update().then(function() {
+                resolve();
+            }, function(err) {
+                reject(err)
+            });
+        });
+    });
+};
+
+exports.deleteComment = function(request) {
+    return new Promise(function(resolve, reject) {
+        var comment = new DBRow(lit.COMMENT_TABLE);
+        comment.getRow(request.body.id).then(function() {
+            if (!comment.count())
+                reject("No comment to delete found");
+
+            comment.delete().then(function () {
+                resolve();
+            }, function(err) {
+                reject(err);
+            });
+        });
+    });
+};
+
+/*
+* Used by many of the requestResponder subclasses to get their subComments
+*/
+exports.getSubComments = function(comment, item, resolve, info) {
     var commentCount = comment.count();
     var complete = 0;
     if(commentCount < 1) { // if there are no comments just resolve with the question information

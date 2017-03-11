@@ -9,7 +9,7 @@
 
 var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals.js');
-var subComments = require('./../subcommentGetter');
+var commenter = require('./../actions/Commenter');
 
 //TODO: add duplicate handling
 
@@ -26,7 +26,7 @@ exports.handle = function(request) {
                 comments.orderBy(lit.FIELD_NETVOTES, lit.DESC);
                 comments.setLimit(10);
                 comments.query().then(function() {
-                    subComments.get(comments, question, resolve, info);
+                    commenter.getSubComments(comments, question, resolve, info);
                 });
             }
             else

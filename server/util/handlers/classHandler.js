@@ -7,7 +7,7 @@
 
 var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals.js');
-var subComments = require('./../subcommentGetter');
+var commenter = require('./../actions/Commenter');
 
 exports.handle = function(request) {
     var info = {class: {}, reviews: []};
@@ -22,7 +22,7 @@ exports.handle = function(request) {
                 reviews.orderBy(lit.FIELD_NETVOTES, lit.DESC);
                 reviews.setLimit(10);
                 reviews.query().then(function() {
-                    subComments.get(reviews, cl, resolve, info);
+                    commenter.getSubComments(reviews, cl, resolve, info);
                 });
             }
             else
