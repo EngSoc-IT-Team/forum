@@ -50,8 +50,8 @@ var level2ReviewTemplate = '<div class="info-block comment-block media">\
                             </div>';
 
 var starTemplate = '<span class="star rating">\
-                    <img src="../assets/{0}.svg" class="svg" />\
-                </span>';
+                      <img src="../assets/{0}.svg" class="svg" />\
+                    </span>';
 
 function whenLoaded() {
     var href;
@@ -86,75 +86,49 @@ function whenLoaded() {
 
 jQuery(document).ready(function() {
 
-$('.modal #star-1').hover(
-  function() {
-    $('.modal .star').removeClass('yellow');
-    $('#star-1').addClass('yellow');
-  },
-  function() {
-    $('#star-1').removeClass('yellow');
-  }
-);
+// Class Rating Stars
 
-$('.modal #star-2').hover(
-  function() {
-    $('.modal .star').removeClass('yellow');
-    $('#star-1').addClass('yellow');
-    $('#star-2').addClass('yellow');
-  },
-  function() {
-    $('#star-1').removeClass('yellow');
-    $('#star-2').removeClass('yellow');
-  }
-);
 
-$('.modal #star-3').hover(
-  function() {
-    $('.modal .star').removeClass('yellow');
-    $('#star-1').addClass('yellow');
-    $('#star-2').addClass('yellow');
-    $('#star-3').addClass('yellow');
-  },
-  function() {
-    $('#star-1').removeClass('yellow');
-    $('#star-2').removeClass('yellow');
-    $('#star-3').removeClass('yellow');
-  }
-);
 
-$('.modal #star-4').hover(
-  function() {
-    $('.modal .star').removeClass('yellow');
-    $('#star-1').addClass('yellow');
-    $('#star-2').addClass('yellow');
-    $('#star-3').addClass('yellow');
-    $('#star-4').addClass('yellow');
-  },
-  function() {
-    $('#star-1').removeClass('yellow');
-    $('#star-2').removeClass('yellow');
-    $('#star-3').removeClass('yellow');
-    $('#star-4').removeClass('yellow');
-  }
-);
+{
+  //Retains the current star rating
+  var starRating = 0;
 
-$('.modal #star-5').hover(
-  function() {
-    $('.modal .star').removeClass('yellow');
-    $('#star-1').addClass('yellow');
-    $('#star-2').addClass('yellow');
-    $('#star-3').addClass('yellow');
-    $('#star-4').addClass('yellow');
-    $('#star-5').addClass('yellow');
-  },
-  function() {
-    $('#star-1').removeClass('yellow');
-    $('#star-2').removeClass('yellow');
-    $('#star-3').removeClass('yellow');
-    $('#star-4').removeClass('yellow');
-    $('#star-5').removeClass('yellow');
-  }
-);
+  $(".star-ratings .star").hover(
+    function(e) {
+      //Add yellow colour to current and previous stars
+      var hoveredStars = $(this).prevAll().add(this);
+      hoveredStars.addClass("hovered");
+
+      //Remove yellow caused by rated stars so that the hovering shows the new potential rating
+      var allStars = $(this).siblings().add(this);
+      allStars.removeClass("rated-star");
+    },
+    function(e) {
+      //Remove all yellow caused by hovering
+      var allStars = $(this).siblings().add(this);
+      allStars.removeClass("hovered unhovered");
+
+      //Add back yellow caused by rated stars to the correct number of rated stars
+      allStars.slice(0, starRating).addClass("rated-star");
+    }
+  );
+
+  $(".star-ratings .star").on("click", function(e) {
+
+    //Removes the rated-star class from all stars in case a rating was provided earlier
+    var allStars = $(this).siblings().add(this);
+    allStars.removeClass("rated-star");
+
+    //Adds the the rated-star class to the stars corresponding with the clicked rating
+    var hoveredStars = $(this).prevAll().add(this);
+    hoveredStars.addClass("rated-star");
+
+    //Update the starRating variable with the new rating
+    starRating = hoveredStars.length;
+  });
+}
+
 
 });
 

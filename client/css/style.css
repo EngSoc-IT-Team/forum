@@ -348,12 +348,6 @@ a:focus {
   display: inline-block;
 }
 
-/* Class Page */
-
-.star.yellow svg path {
-  fill: #F0D355 !important;
-}
-
 /* Profile */
 
 .badges {
@@ -391,7 +385,7 @@ a:focus {
   border-bottom-right-radius: 10px;
 }
 
-/* Class Page */
+/* Class Page ****************************/
 
 .class-page .title {
   display: inline-block;
@@ -438,6 +432,31 @@ a:focus {
 
 .question-colour {
   color: purple;
+}
+
+/* Star Ratings */
+
+.star svg {
+  fill-rule: evenodd;
+  clip-rule: evenodd;
+  stroke-linejoin: round;
+  stroke-miterlimit: 1.41421;
+}
+
+.star path.star-border {
+  fill: rgb(65,64,66);
+  fill-opacity: 0.1;
+  fill-rule: nonzero;
+}
+
+.star path.star-body {
+  fill: rgb(202, 202, 202);
+  fill-rule: nonzero;
+}
+
+.star.hovered path.star-body,
+.star.rated-star path.star-body {
+  fill: rgb(240,211,85);
 }
 
 /* Modal */
