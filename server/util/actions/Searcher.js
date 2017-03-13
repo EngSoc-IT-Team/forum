@@ -17,11 +17,8 @@
  * 10,000 calls. However, for free, 5K credits are given each month, so on a small scale it is still free.
  */
 
-//TODO more versatile search - e.g. tables, comments etc.
 //TODO auto tag posts on insertion
 //TODO get course numbers to search tags
-
-//No go on better algorithm for using how important a key term is within the search, wordRelater always splits importance evenly
 
 var natural = require("natural");
 var algorithmia = require("algorithmia");
@@ -32,13 +29,103 @@ var dbr = require('./../DBRow.js');
 var TfIdf = natural.TfIdf;
 var wordRelater = new TfIdf();
 
-function searchForContent(inputSearch) {
-    getKeyTerms(inputSearch).then(function (keyTerms) {
-        return searchForPosts(keyTerms);
-    }).catch(function (error) {
-        log.log("searchForContent error: " + error);
-    });
+/**
+ * Searches a given table's given fields for data related to a given search. Does not allow searches with bad
+ * search terms/tables/fields to be conducted.
+ * @param inputSearch Search inputted by user.
+ * @param table Array of tables to be searched.
+ * @param fields Array of fields to be searched.
+ */
+function searchForContent(inputSearch, table, fields) {
+    //check terms are legit, if they are continue with search
+    if (goodInputs(inputSearch, table, fields)) {
+        getKeyTerms(inputSearch).then(function (keyTerms) {
+            return searchTable(keyTerms,table,fields);
+        }).catch(function (error) {
+            log.log("searchForContent error: " + error);
+        });
+    } else {
+        log.log("your input terms didn't work for a search!");
+    }
 }
+
+/**
+ * Sanitizes search input.
+ * @param inputSearch The search term attempted.
+ * @param table The table attempted to be searched.
+ * @param fields The table fields attempted to be searched.
+ * @returns {boolean} True if all inputs are legitimate, else false.
+ */
+function goodInputs(inputSearch, table, fields) {
+    if (!(typeof inputSearch == lit.STRING) || inputSearch == undefined || inputSearch == "") {
+        return false;
+    } else {
+        return goodTableInputs(table, fields);
+    }
+}
+
+/**
+ * Checks to make sure that the search terms for the table information (which table and fields) are legitimate.
+ * Hardcoded which table/fields because it is a case by case basis, and should never be that large.
+ * @param table The tables attempting to be searched.
+ * @param fields The fields attempting to be searched.
+ * @returns {boolean} True if the information is all searchable, else false.
+ */
+function goodTableInputs(table, fields) {
+    if (!(typeof table == lit.STRING)) {
+        return false;
+    }
+    //only allow tables that should be searched to be searched (and eliminate non tables)
+    //and only search fields from that table that should be searched
+    var goodFields = [];
+
+    switch (table[i]) {
+        case lit.CLASS_TABLE:
+            goodFields.push(lit.FIELD_COURSE_CODE);
+            goodFields.push(lit.FIELD_TITLE);
+            goodFields.push(lit.FIELD_SUMMARY);
+            goodFields.push(lit.FIELD_LONG_SUMMARY);
+            return matchFields(goodFields, fields);
+        case lit.POST_TABLE:
+            goodFields.push(lit.FIELD_TITLE);
+            goodFields.push(lit.FIELD_CONTENT);
+            return matchFields(goodFields, fields);
+        case lit.COMMENT_TABLE:
+            goodFields.push(lit.FIELD_CONTENT);
+            return matchFields(goodFields, fields);
+        case lit.LINK_TABLE:
+            goodFields.push(lit.FIELD_TITLE);
+            goodFields.push(lit.FIELD_SUMMARY);
+            return matchFields(goodFields, fields);
+        case lit.TAG_TABLE:
+            goodFields.push(lit.FIELD_SUMMARY);
+            goodFields.push(lit.FIELD_RELATED_TAGS);
+            goodFields.push(lit.FIELD_NAME);
+            return matchFields(goodFields, fields);
+        case lit.USER_TABLE:
+            goodFields.push(lit.FIELD_USERNAME);
+            return matchFields(goodFields, fields);
+        default:
+            return false;
+    }
+}
+
+/**
+ * Sanitizes fields to be searched so that it is a searchable field for a given table.
+ * @param goodFields The searchable fields.
+ * @param inputFields The fields attempted to being searched.
+ * @returns {boolean} True if all of the attempted fields are searchable, else false.
+ */
+function matchFields(goodFields, inputFields) {
+    for (var i in inputFields) {
+        if (!(typeof inputFields[i] == lit.STRING) || !goodFields.includes(inputFields[i])) {
+            log.log(inputFields[i]);
+            return false;
+        }
+    }
+    return true;
+}
+
 
 /**
  * Gets the key terms from an input String using Algoithmia Auto Tag API.
@@ -57,20 +144,26 @@ function getKeyTerms(input) {
 }
 
 /**
- * Method that searches for posts related to the parameter key terms, likely off of a user search.
- * @param keyTerms Terms that post should be check for relation to.
- * @returns {Promise} Promise as querying database is asynchronous. Eventually returns an array of post IDs,
- * sorted by most relation to the terms.
+ * Function that takes data out of the database, finds its relation to the key terms of the search, eliminates lowly
+ * related data and then then returns an array of the IDs of the data left, sorted by relation.
+ * @param keyTerms Terms that data relation is found relative to.
+ * @param table The table being searched.
+ * @param fields The table fields being searched.
+ * @returns {Promise} Promise as database query is asynchronous. Eventually returns an array of data IDs, sorted
+ * by relation to keyTerms.
  */
-function searchForPosts(keyTerms) {
+function searchTable(keyTerms, table, fields) {
     var documentInfo = [];
-    var row = new dbr.DBRow(lit.POST_TABLE);
+    var row = new dbr.DBRow(table);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) {
                 //search the post content and title
-                var doc = row.getValue(lit.FIELD_TITLE) + "\n" + row.getValue(lit.FIELD_CONTENT);
-                wordRelater.addDocument(doc);
+                var docData = "";
+                for (var i in fields) {
+                    docData += row.getValue(fields[i]) + "\n";
+                }
+                wordRelater.addDocument(docData);
                 var docID = row.getValue(lit.FIELD_ID);
                 var oneDoc = {measure: 0, id: docID};
                 //add a row in the arrays for each document
@@ -118,7 +211,6 @@ function sortByMeasure(documentInfo) {
     documentInfo = mergeSort(documentInfo);
     var sortedIDs = [];
     for (var index in documentInfo) {
-        log.log(documentInfo[index][lit.KEY_MEASURE]);
         sortedIDs.push(documentInfo[index][lit.FIELD_ID]);
     }
     return sortedIDs;
