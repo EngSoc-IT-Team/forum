@@ -150,6 +150,7 @@ const literals = {
     //fields for class table only
     CLASS_TABLE: "class",
     FIELD_COURSE_CODE: "courseCode",
+    FIELD_LONG_SUMMARY: "longSummary",
     FIELD_PREREQS: "prereqs",
     FIELD_AVERAGE_RATING: "averageRating",
     FIELD_INSTRUCTOR: "instructor",
@@ -175,6 +176,9 @@ const literals = {
 
     //fields for item table only
     ITEM_TABLE: "item",
+
+    //fields for rating table only
+    RATING_TABLE: "rating",
 
     //fields for sweeper class
     SWEEPER_CANCEL_JOB: "cancelJob",
