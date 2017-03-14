@@ -17,8 +17,8 @@
  * 10,000 calls. However, for free, 5K credits are given each month, so on a small scale it is still free.
  */
 
-//TODO auto tag posts on insertion
 //TODO get course numbers to search tags
+//TODO search multiple tables at once
 
 var natural = require("natural");
 var algorithmia = require("algorithmia");
@@ -29,6 +29,28 @@ var dbr = require('./../DBRow.js');
 var TfIdf = natural.TfIdf;
 var wordRelater = new TfIdf();
 
+//TODO talk with michael about how to do this
+//can an object be passed in here? object with each newPost field in it
+//for tags, just throwing in a string of them separated by commas?
+function tagPosts(newPostContent) {
+    return new Promise(function (resolve, reject) {
+            getKeyTerms(newPostContent).then(function (keyTerms) {
+                var tags = "";
+                for (var i in keyTerms) {
+                    tags += keyTerms[i];
+                    if (i < keyTerms.length - 1) {
+                        tags += ", ";
+                    }
+                }
+                resolve(tags); //string of all tags to be put into field for the new post
+            }).catch(function (error) {
+                log.log("tagPosts error: " + error);
+                reject(error);
+            });
+        }
+    );
+}
+
 /**
  * Searches a given table's given fields for data related to a given search. Does not allow searches with bad
  * search terms/tables/fields to be conducted.
@@ -36,11 +58,15 @@ var wordRelater = new TfIdf();
  * @param table Array of tables to be searched.
  * @param fields Array of fields to be searched.
  */
+searchForContent("install a module",lit.POST_TABLE,[lit.FIELD_CONTENT,lit.FIELD_TITLE]);
 function searchForContent(inputSearch, table, fields) {
     //check terms are legit, if they are continue with search
     if (goodInputs(inputSearch, table, fields)) {
         getKeyTerms(inputSearch).then(function (keyTerms) {
-            return searchTable(keyTerms,table,fields);
+            return searchTable(keyTerms, table, fields);
+        }).then(function (documentInfo) {
+            documentInfo = removeLowMeasures(documentInfo);
+            return sortByMeasure(documentInfo);
         }).catch(function (error) {
             log.log("searchForContent error: " + error);
         });
@@ -78,8 +104,7 @@ function goodTableInputs(table, fields) {
     //only allow tables that should be searched to be searched (and eliminate non tables)
     //and only search fields from that table that should be searched
     var goodFields = [];
-
-    switch (table[i]) {
+    switch (table) {
         case lit.CLASS_TABLE:
             goodFields.push(lit.FIELD_COURSE_CODE);
             goodFields.push(lit.FIELD_TITLE);
@@ -144,13 +169,12 @@ function getKeyTerms(input) {
 }
 
 /**
- * Function that takes data out of the database, finds its relation to the key terms of the search, eliminates lowly
- * related data and then then returns an array of the IDs of the data left, sorted by relation.
+ * Function that takes data out of the database and finds its relation to the key terms of the search.
  * @param keyTerms Terms that data relation is found relative to.
  * @param table The table being searched.
  * @param fields The table fields being searched.
- * @returns {Promise} Promise as database query is asynchronous. Eventually returns an array of data IDs, sorted
- * by relation to keyTerms.
+ * @returns {Promise} Promise as database query is asynchronous. Eventually returns an array of objects holding
+ * content IDs and their relation to the key terms.
  */
 function searchTable(keyTerms, table, fields) {
     var documentInfo = [];
@@ -175,8 +199,7 @@ function searchTable(keyTerms, table, fields) {
                     documentInfo[docIndex][lit.KEY_MEASURE] += measure;
                 });
             }
-            documentInfo = removeLowMeasures(documentInfo);
-            resolve(sortByMeasure(documentInfo));
+            resolve(documentInfo);
         }).catch(function (error) {
             log.log("searchForPosts error: " + error);
             reject(error);
@@ -213,6 +236,7 @@ function sortByMeasure(documentInfo) {
     for (var index in documentInfo) {
         sortedIDs.push(documentInfo[index][lit.FIELD_ID]);
     }
+    log.log(sortedIDs);
     return sortedIDs;
 }
 
