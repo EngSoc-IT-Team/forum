@@ -20,6 +20,7 @@ var questionTemplate = '<div class="info-block row">\
                                 <p class="description">{7}</p>\
                                 <div class="clearfix">\
                                     <button type="button" class="btn btn-sm button" data-toggle="modal" data-target="#myModal">Comment</button>\
+                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#demo">Collapsible</button>\
                                     {8}\
                                 </div>\
                             </div>\
