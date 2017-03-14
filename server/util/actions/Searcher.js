@@ -18,7 +18,6 @@
  */
 
 //TODO get course numbers to search tags
-//TODO search multiple tables at once
 
 var natural = require("natural");
 var algorithmia = require("algorithmia");
@@ -52,18 +51,19 @@ function tagPosts(newPostContent) {
 }
 
 /**
- * Searches a given table's given fields for data related to a given search. Does not allow searches with bad
- * search terms/tables/fields to be conducted.
+ * Searches a given array of table for data related to a given search. Fields are chosen for you, as the fields
+ * that should be searched. Does not allow searches with bad search terms/tables to be conducted.
  * @param inputSearch Search inputted by user.
  * @param table Array of tables to be searched.
  * @param fields Array of fields to be searched.
  */
-searchForContent("install a module",lit.POST_TABLE,[lit.FIELD_CONTENT,lit.FIELD_TITLE]);
-function searchForContent(inputSearch, table, fields) {
-    //check terms are legit, if they are continue with search
-    if (goodInputs(inputSearch, table, fields)) {
+searchForContent("install a module", lit.POST_TABLE);
+//check terms are legit, if they are continue with search
+function searchForContent(inputSearch, table) {
+    if (goodInputs(inputSearch, table)) {
         getKeyTerms(inputSearch).then(function (keyTerms) {
-            return searchTable(keyTerms, table, fields);
+            var fields = getSearchableFields(table);
+            return searchTable(keyTerms, table, fields)
         }).then(function (documentInfo) {
             documentInfo = removeLowMeasures(documentInfo);
             return sortByMeasure(documentInfo);
@@ -79,78 +79,55 @@ function searchForContent(inputSearch, table, fields) {
  * Sanitizes search input.
  * @param inputSearch The search term attempted.
  * @param table The table attempted to be searched.
- * @param fields The table fields attempted to be searched.
  * @returns {boolean} True if all inputs are legitimate, else false.
  */
-function goodInputs(inputSearch, table, fields) {
+function goodInputs(inputSearch, table) {
     if (!(typeof inputSearch == lit.STRING) || inputSearch == undefined || inputSearch == "") {
         return false;
     } else {
-        return goodTableInputs(table, fields);
+        //check that table is actually a table name
+        return !(!(typeof table == lit.STRING) || (table != lit.CLASS_TABLE && table != lit.POST_TABLE && table != lit.COMMENT_TABLE &&
+        table != lit.LINK_TABLE && table != lit.TAG_TABLE && table != lit.USER_TABLE));
     }
 }
 
 /**
- * Checks to make sure that the search terms for the table information (which table and fields) are legitimate.
- * Hardcoded which table/fields because it is a case by case basis, and should never be that large.
- * @param table The tables attempting to be searched.
- * @param fields The fields attempting to be searched.
- * @returns {boolean} True if the information is all searchable, else false.
+ * Returns an array of fields to be searched for each table. Hardcoded because there's not that many fields to
+ * search and not that many tables that are searched.
+ * @param table The table being searched.
+ * @returns {Array} Array of the fields to be searched.
  */
-function goodTableInputs(table, fields) {
-    if (!(typeof table == lit.STRING)) {
-        return false;
-    }
-    //only allow tables that should be searched to be searched (and eliminate non tables)
-    //and only search fields from that table that should be searched
-    var goodFields = [];
+function getSearchableFields(table) {
+    var searchableFields = [];
     switch (table) {
         case lit.CLASS_TABLE:
-            goodFields.push(lit.FIELD_COURSE_CODE);
-            goodFields.push(lit.FIELD_TITLE);
-            goodFields.push(lit.FIELD_SUMMARY);
-            goodFields.push(lit.FIELD_LONG_SUMMARY);
-            return matchFields(goodFields, fields);
+            searchableFields.push(lit.FIELD_COURSE_CODE);
+            searchableFields.push(lit.FIELD_TITLE);
+            searchableFields.push(lit.FIELD_SUMMARY);
+            searchableFields.push(lit.FIELD_LONG_SUMMARY);
+            break;
         case lit.POST_TABLE:
-            goodFields.push(lit.FIELD_TITLE);
-            goodFields.push(lit.FIELD_CONTENT);
-            return matchFields(goodFields, fields);
+            searchableFields.push(lit.FIELD_TITLE);
+            searchableFields.push(lit.FIELD_CONTENT);
+            break;
         case lit.COMMENT_TABLE:
-            goodFields.push(lit.FIELD_CONTENT);
-            return matchFields(goodFields, fields);
+            searchableFields.push(lit.FIELD_CONTENT);
+            break;
         case lit.LINK_TABLE:
-            goodFields.push(lit.FIELD_TITLE);
-            goodFields.push(lit.FIELD_SUMMARY);
-            return matchFields(goodFields, fields);
+            searchableFields.push(lit.FIELD_TITLE);
+            searchableFields.push(lit.FIELD_SUMMARY);
+            break;
         case lit.TAG_TABLE:
-            goodFields.push(lit.FIELD_SUMMARY);
-            goodFields.push(lit.FIELD_RELATED_TAGS);
-            goodFields.push(lit.FIELD_NAME);
-            return matchFields(goodFields, fields);
+            searchableFields.push(lit.FIELD_SUMMARY);
+            searchableFields.push(lit.FIELD_RELATED_TAGS);
+            searchableFields.push(lit.FIELD_NAME);
+            break;
         case lit.USER_TABLE:
-            goodFields.push(lit.FIELD_USERNAME);
-            return matchFields(goodFields, fields);
-        default:
-            return false;
+            searchableFields.push(lit.FIELD_USERNAME);
+            break;
     }
+    return searchableFields;
 }
-
-/**
- * Sanitizes fields to be searched so that it is a searchable field for a given table.
- * @param goodFields The searchable fields.
- * @param inputFields The fields attempted to being searched.
- * @returns {boolean} True if all of the attempted fields are searchable, else false.
- */
-function matchFields(goodFields, inputFields) {
-    for (var i in inputFields) {
-        if (!(typeof inputFields[i] == lit.STRING) || !goodFields.includes(inputFields[i])) {
-            log.log(inputFields[i]);
-            return false;
-        }
-    }
-    return true;
-}
-
 
 /**
  * Gets the key terms from an input String using Algoithmia Auto Tag API.
@@ -201,7 +178,7 @@ function searchTable(keyTerms, table, fields) {
             }
             resolve(documentInfo);
         }).catch(function (error) {
-            log.log("searchForPosts error: " + error);
+            log.log("searchTable error: " + error);
             reject(error);
         });
     });
