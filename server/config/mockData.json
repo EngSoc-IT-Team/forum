@@ -1137,5 +1137,102 @@
 		"id": "d44g8o4d2gtl32iyp9khqqoog90heq81",
 		"timestamp": "2017-03-11",
 		"tags": "GEOLOGY"
-	}
+	},
+	"119": {
+		"table": "post",
+		"content": "I don't understand circuits, someone plz explain",
+		"title": "How do I pass 112?",
+		"id": "xdocmkz3d8slnjeajavmr1uxkwdq0tau",
+		"author": "BilboSwaggings",
+		"upvotes": 1,
+		"downvotes": 0,
+		"netVotes": 1,
+		"answered": 0,
+		"duplicate": 0,
+		"timestamp": "2017-03-12",
+		"tags": "MECH328"
+	},
+	"120": {
+		"table": "contribution",
+		"userID": "ui0bec9abmg4zmxgfjhz4jzdgam0ale2",
+		"type": "post",
+		"itemID": "xdocmkz3d8slnjeajavmr1uxkwdq0tau",
+		"id": "quhiaw2xgt7g8sjs9uuwc1fggjdyfzdk",
+		"timestamp": "2017-03-12",
+		"tags": "MECH328"
+	},
+	"121": {
+		"table": "item",
+		"userID": "ui0bec9abmg4zmxgfjhz4jzdgam0ale2",
+		"type": "post",
+		"itemID": "xdocmkz3d8slnjeajavmr1uxkwdq0tau",
+		"id": "p31gz6hgz7qmh534el2j5nnx5a5zmaxh",
+		"timestamp": "2017-03-12",
+		"tags": "MECH328"
+	},
+	"122": {
+		"table": "post",
+		"content": "Hello I am in APSC-132 currently and am wondering what equations / formulas are the most important to learn in APSC-132? I want to know this so I may be able to better use these equations and practice them.",
+		"title": "What Are the most important equations/formulas to know for APSC-131?",
+		"id": "fjgi0wpdoitlcer7geqleulpk021n5xk",
+		"author": "BilboSwaggings",
+		"upvotes": 1,
+		"downvotes": 0,
+		"netVotes": 1,
+		"answered": 0,
+		"duplicate": 0,
+		"timestamp": "2017-03-13",
+		"tags": "FIRST-YEAR, APSC-131"
+	},
+	"123": {
+		"table": "contribution",
+		"userID": "ui0bec9abmg4zmxgfjhz4jzdgam0ale2",
+		"type": "post",
+		"itemID": "fjgi0wpdoitlcer7geqleulpk021n5xk",
+		"id": "osq97cx1fqvs1criw5c35qmemrrko2e1",
+		"timestamp": "2017-03-13",
+		"tags": "FIRST-YEAR, APSC-131"
+	},
+	"124": {
+		"table": "item",
+		"userID": "ui0bec9abmg4zmxgfjhz4jzdgam0ale2",
+		"type": "post",
+		"itemID": "fjgi0wpdoitlcer7geqleulpk021n5xk",
+		"id": "huip72qsr7fjht4318ea456gzvjfuqv1",
+		"timestamp": "2017-03-13",
+		"tags": "FIRST-YEAR, APSC-131"
+	},
+	"125": {
+		"table": "post",
+		"content": "This question applies for APSC-112. So I am slightly confused when it comes to simplification the resistors in circuits. How do they differ i they are in parallel, compared to series? Any help would be appreciated, thanks! ",
+		"title": "How do you simplify the resistance of several different resistors in a circuit? ",
+		"id": "5z6f3i5bfqrmg3nybf6ahc8ojy2od7bb",
+		"author": "BilboSwaggings",
+		"upvotes": 1,
+		"downvotes": 0,
+		"netVotes": 1,
+		"answered": 0,
+		"duplicate": 0,
+		"timestamp": "2017-03-13",
+		"tags": "FIRST-YEAR, APSC-112"
+	},
+	"126": {
+		"table": "contribution",
+		"userID": "ui0bec9abmg4zmxgfjhz4jzdgam0ale2",
+		"type": "post",
+		"itemID": "5z6f3i5bfqrmg3nybf6ahc8ojy2od7bb",
+		"id": "m86xqi7r4247xb0w6iot6rmf7s50p34c",
+		"timestamp": "2017-03-13",
+		"tags": "FIRST-YEAR, APSC-112"
+	},
+	"127": {
+		"table": "item",
+		"userID": "ui0bec9abmg4zmxgfjhz4jzdgam0ale2",
+		"type": "post",
+		"itemID": "5z6f3i5bfqrmg3nybf6ahc8ojy2od7bb",
+		"id": "l3e7hkuxgf8lcl3lwqq8b590rp7h0n7l",
+		"timestamp": "2017-03-13",
+		"tags": "FIRST-YEAR, APSC-112"
+	},
+
 }
