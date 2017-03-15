@@ -45,7 +45,7 @@ It serves as the central hub of our website and all portions of the site should 
 #### Question Page
 ##### Owner: Ayrton Foster
 ##### Status: Design-Complete
-##### Filename: [`postAndComment.html`](https://github.com/EngSoc-IT-Team/forum/blob/master/client/html/postAndComment.html)
+##### Filename: [`question.html`](https://github.com/EngSoc-IT-Team/forum/blob/master/client/html/question.html)
 ##### Website Route: [`/question?id=somevalidquestionid`](http://localhost:8080/question?id=somevalidquestionid) 
 ##### Page Type: Dynamic
 ##### Purpose:
@@ -62,13 +62,15 @@ The page used for displaying and commenting on questions posted by forum users
 ##### Purpose: 
  This page is used by a user to view their own metrics (votes, contributions, badges, etc.) and to view items that they have saved or subscribed to across the site. 
  They should be able to filter through their recent contributions, subscriptions and saves to easily undo or delete those actions, if necessary.
+ Additionally, other users should be able to be found on the profile page by using `/profile?username=ValidUsername` or 
+ `/profile?id=validuserid`. When viewing another user's profile, the viewing user should not see the other person's saved or subscribed items.
  
 ----
 
 #### List Page
 ##### Owner: Robert Cooper
 ##### Status: Design-Complete
-##### Filename: [`questionList.html`](https://github.com/EngSoc-IT-Team/forum/blob/master/client/html/questionList.html)
+##### Filename: [`list.html`](https://github.com/EngSoc-IT-Team/forum/blob/master/client/html/list.html)
 ##### Website Route: [`/list`](http://localhost:8080/list) 
 ##### Page Type: Dynamic
 ##### Purpose: 

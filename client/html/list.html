@@ -14,6 +14,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="../css/style.css" />
   <link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700&amp;subset=cyrillic" rel="stylesheet">
+  <script type="text/javascript" src="/js/templating.js"></script>
   <script type="text/javascript" src="/js/common.js"></script>
   <script type="text/javascript" src="/js/list.js"></script>
 </head>
@@ -44,6 +45,13 @@
     </header>
     <div class="main-content">
       <div class="info-block row" id="listHead">
+        <div class="hidden">
+          Search By:
+          <div class="btn-group centered" role="group" aria-label="Search Options">
+            <button id="new" type="button" class="btn btn-secondary active" onclick="toggleSelection('new')">New</button>
+            <button id="best" type="button" class="btn btn-secondary" onclick="toggleSelection('best')">Best</button>
+          </div>
+        </div>
       </div>
       <div class="centered media see-more">
         <a href="#" onclick="getMore()">v See More v</a>

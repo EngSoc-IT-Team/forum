@@ -1,7 +1,5 @@
 "use strict";
 
-var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick="window.location = \'/list?tag={0}\'">{1}</button>';
-
 var classTemplate = '<div class="info-block clearfix">\
                             <div class="col-sm-12">\
                                 <div class="clearfix">\
@@ -31,27 +29,25 @@ var classTemplate = '<div class="info-block clearfix">\
                             </div>\
                         </div>';
 
-var level1ReviewTemplate = '<div class="col-sm-12">\
-                                {0}\
-                                <span class="date">{1} by <a href="profile/id={2}">{3}</a></span>\
-                                <p class="description">{4}</p>\
-                                <button class="btn btn-sm button" onclick="save({5}, {6})">Save</button>\
-                                <button class="btn btn-sm button" onclick="report({7})">Report</button>\
+var level1ReviewTemplate = '<div class="col-sm-12" id="{0}">\
+                                {1}\
+                                <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
+                                <p class="description">{5}</p>\
+                                <button class="btn btn-sm button" onclick="save(this)">Save</button>\
+                                <button class="btn btn-sm button" onclick="report(this)">Report</button>\
                                 <hr />\
                             </div>';
 
-var level2ReviewTemplate = '<div class="info-block comment-block media">\
-                                {stars-yellow}\
-                                <span class="date">{date} by <a href="profile/id={author}">{author}</a></span>\
+var level2ReviewTemplate = '<div class="info-block comment-block media" id="{0}">\
+                                {1}\
+                                <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
                                 <p class="description">{summ}</p>\
-                                <button class="btn btn-sm button" href="/question/id=tobecreated">Save</button>\
-                                <button class="btn btn-sm button" href="/question/id=tobecreated">Report</button>\
+                                <button class="btn btn-sm button" onclick="save(this)">Save</button>\
+                                <button class="btn btn-sm button" onclick="report(this)">Report</button>\
                                 <hr />\
                             </div>';
 
-var starTemplate = '<span class="star rating">\
-                      <img src="../assets/{0}.svg" class="svg" />\
-                    </span>';
+var classID;
 
 function whenLoaded() {
     var href;
@@ -71,6 +67,7 @@ function whenLoaded() {
         data: JSON.stringify(content)
     }).done(function(data) {
         if (data) {
+            classID = data.class.id;
             fillInClassHeader(data.class);
             addReviews(data.reviews);
         }
@@ -84,17 +81,12 @@ function whenLoaded() {
     });
 }
 
-jQuery(document).ready(function() {
-
-// Class Rating Stars
-
-
-
+jQuery(document).ready(function() { // Class Rating Stars
 {
   //Retains the current star rating
   var starRating = 0;
-
-  $(".star-ratings .star").hover(
+  var stars = $(".star-ratings .star");
+    stars.hover(
     function(e) {
       //Add yellow colour to current and previous stars
       var hoveredStars = $(this).prevAll().add(this);
@@ -114,7 +106,7 @@ jQuery(document).ready(function() {
     }
   );
 
-  $(".star-ratings .star").on("click", function(e) {
+    stars.on("click", function(e) {
 
     //Removes the rated-star class from all stars in case a rating was provided earlier
     var allStars = $(this).siblings().add(this);
@@ -142,26 +134,26 @@ function fillInClassHeader(cl) {
     $('#classHead').append(tmp);
 }
 
-function addReviews(comments) {
+function addReviews(reviews) {
     var template;
-    if (comments.length == 0) {
+    if (reviews.length == 0) {
         $('#getMore').hide();
         $('#foot').append("<h6 class='info-block'>Nothing here yet!</h6>");
         return;
     }
 
-    for (var comment in comments) {
-        if (!comments.hasOwnProperty(comment))
+    for (var review in reviews) {
+        if (!reviews.hasOwnProperty(review))
             continue;
 
-        template = fillReviewLevel1Template(comments[comment]);
+        template = fillReviewLevel1Template(reviews[review]);
 
-        if (comments[comment].children) {
-            for (var child in comments[comment].children) {
-                if (!comments[comment].children.hasOwnProperty(child))
+        if (reviews[review].children) {
+            for (var child in reviews[review].children) {
+                if (!reviews[review].children.hasOwnProperty(child))
                     continue;
 
-                template += fillReviewLevel2Template(comments[comment].children[child]);
+                template += fillReviewLevel2Template(reviews[review].children[child]);
             }
         }
 
@@ -169,41 +161,14 @@ function addReviews(comments) {
     }
 }
 
-function fillReviewLevel1Template(comment) {
-    return fillTemplate(level1ReviewTemplate, positiveOrNegative(comment.votes), comment.votes,
-        getDateString(comment.date), comment.author, comment.author, comment.summary);
+function fillReviewLevel1Template(review) {
+    return fillTemplate(level1ReviewTemplate, positiveOrNegative(review.votes), review.votes,
+        getDateString(review.date), review.author, review.author, review.summary);
 }
 
-function fillReviewLevel2Template(comment) {
-    return fillTemplate(level2ReviewTemplate, positiveOrNegative(comment.votes), comment.votes,
-        getDateString(comment.date), comment.author, comment.author, comment.summary);
-}
-
-function getTags(tagArray) {
-    var tags = '';
-    tagArray = tagArray.split(', ');
-    for (var tag in tagArray) {
-        if(!tagArray.hasOwnProperty(tag))
-            continue;
-
-        tags += fillTemplate(tagTemplate, tagArray[tag], tagArray[tag]) + '\n';
-    }
-
-    return tags;
-}
-
-function positiveOrNegative(num) {
-    if (num >= 0)
-        return "positive";
-    else
-        return "negative";
-}
-
-function getDateString(date) {
-    if (!date)
-        return undefined;
-
-    return date.slice(0, date.indexOf('T'));
+function fillReviewLevel2Template(review) {
+    return fillTemplate(level2ReviewTemplate, positiveOrNegative(review.votes), review.votes,
+        getDateString(review.date), review.author, review.author, review.summary);
 }
 
 whenLoaded();

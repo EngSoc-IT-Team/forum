@@ -62,7 +62,7 @@ server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, q
 		return;
 	}
 	validator.validateItemExistence(request).then(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/postAndComment.html'));
+        response.sendFile(path.join(__dirname, '..', 'client/html/question.html'));
 	}).catch(function() {
         response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
 	});
@@ -91,7 +91,7 @@ server.get(lit.LIST_ROUTE, function(request, response) { //return the a default 
 		return;
 	}
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/questionList.html'));
+	response.sendFile(path.join(__dirname, '..', 'client/html/list.html'));
 });
 
 server.get(lit.PROFILE_ROUTE, function(request, response) { //user home page

@@ -81,8 +81,6 @@ var classTemplate = '<div class="col-sm-12">\
                         <hr>\
                       </div>';
 
-var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick="window.location = \'/list?tags={0}\'">{1}</button>';
-
 function whenLoaded() {
     var href;
     var content = {
@@ -125,7 +123,6 @@ function buildList(items) {
         if (!it)
             continue;
 
-
         if (it.type == "post")
             filledTemplate = fillPostTemplate(it);
         else if (it.type == "link")
@@ -158,38 +155,11 @@ function fillClassTemplate(cl) {
         cl.author, cl.author, getSummary(cl.summary), cl.id, getTags(cl.tags));
 }
 
-function getTags(tagArray) {
-    var tags = '';
-    tagArray = tagArray.split(', ');
-    for (var tag in tagArray)
-        tags += fillTemplate(tagTemplate, tagArray[tag], tagArray[tag]) + '\n';
-
-    return tags;
-}
-
 function getSummary(summ) {
     if (summ.length > 120)
         return summ.slice(0, 120) + ' ...'; //TODO: make this more intelligent
     else
         return summ;
-}
-
-function positiveOrNegative(num) {
-    if (num >= 0)
-        return "positive";
-    else
-        return "negative";
-}
-
-function getDateString(date) {
-    if (!date)
-        return undefined;
-
-    return date.slice(0, date.indexOf('T'));
-}
-
-function getRating(rating) {
-    return fillTemplate(starTemplate, 'yellow-star').repeat(rating) + fillTemplate(starTemplate, 'star').repeat(5-rating);
 }
 
 whenLoaded();
