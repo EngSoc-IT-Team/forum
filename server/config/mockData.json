@@ -49,7 +49,7 @@
 		"id": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"author": "WizardPikachu",
 		"timestamp": "2016-12-04",
-		"tags": "MECH321, STATICS, PHYSICS, MECH",
+		"tags": "MECH321, STATICS, PHYSICS",
 		"title": "How do you analyze statically indeterminate systems?",
 		"content": "I've been confused all year and have no idea what I'm doing pls help.",
 		"upvotes": "189",
@@ -68,14 +68,14 @@
 		"name": "STATICS",
 		"id": "qko42021rnu1shic0vyyotrzbygkz17m",
 		"summary": "The study of structural members and statically indeterminate systems.",
-		"relatedTags": "MECH321, CIVIL, MECH, MECH328"
+		"relatedTags": "MECH321, CIVIL, MECH328"
 	},
 	"8": {
 		"table": "tag",
 		"name": "PHYSICS",
 		"id": "elibsfxg0mbs8qzfpuqz16yr7cvinaio",
 		"summary": "The study of the nature and properties of nature including mechanics, heat, light, work, energy, radiation, electricity and magnetism.",
-		"relatedTags": "MECH321, STATICS, MECH, MECH328"
+		"relatedTags": "MECH321, STATICS, MECH328"
 	},
 	"9": {
 		"table": "tag",
@@ -252,7 +252,7 @@
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"type": "post",
-		"tags": "MECH321, STATICS, PHYSICS, MECH"
+		"tags": "MECH321, STATICS, PHYSICS"
 	},
 	"31": {
 		"table": "post",
@@ -635,7 +635,7 @@
 		"userID": "ufs6jhhbjavxymgt0m8a1x024pcj7khx",
 		"itemID": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"type": "post",
-		"tags": "MECH321, STATICS, PHYSICS, MECH"
+		"tags": "MECH321, STATICS, PHYSICS"
 	},
 	"71": {
 		"table": "item",
