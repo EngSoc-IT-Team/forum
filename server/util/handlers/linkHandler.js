@@ -22,7 +22,7 @@ exports.handle = function(request) {
                 comments.orderBy(lit.FIELD_NETVOTES, lit.DESC);
                 comments.setLimit(10);
                 comments.query().then(function() {
-                    commenter.getSubComments(reviews, cl, resolve, info);
+                    commenter.getSubComments(comments, link, resolve, info);
                 });
             }
             else
