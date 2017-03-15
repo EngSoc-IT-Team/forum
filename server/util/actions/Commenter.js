@@ -13,10 +13,11 @@ var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals');
 var log = require('./../log');
 var voter = require('./Voter');
+var contributor = require('./Contributor');
 
 exports.addComment = function (request) {
     return new Promise(function(resolve, reject) {
-        var comment = new DBRow(lot.COMMENT_TABLE);
+        var comment = new DBRow(lit.COMMENT_TABLE);
         comment.setValue(lit.FIELD_AUTHOR, request.body.author);
         comment.setValue(lit.FIELD_PARENT_POST, request.body.parent);
         comment.setValue(lit.FIELD_PARENT_COMMENT, request.body.parentComment);
@@ -24,6 +25,7 @@ exports.addComment = function (request) {
         comment.setValue(lit.FIELD_USER_ID, request.body.userID);
         comment.insert().then(function () {
             voter.vote(request.signedCookies.usercookie.userID, comment.getValue(lit.FIELD_ID), 1); // don't need to wait for this to complete
+            contributor.generateContribution(comment, request.signedCookies.usercookie.userID, lit.COMMENT_TABLE);
             resolve();
         }, function (err) {
             reject(err);
@@ -36,7 +38,7 @@ exports.editComment = function (request) {
         var comment = new DBRow(lit.COMMENT_TABLE);
         comment.getRow(request.body.id).then(function() {
             if (!comment.count())
-                reject("No comment to edit found");
+                return reject("No comment to edit found");
 
             comment.setValue(lit.FIELD_CONTENT, request.body.content); // once a comment is inserted, we only need update its content
             comment.update().then(function() {
@@ -53,7 +55,7 @@ exports.deleteComment = function(request) {
         var comment = new DBRow(lit.COMMENT_TABLE);
         comment.getRow(request.body.id).then(function() {
             if (!comment.count())
-                reject("No comment to delete found");
+                return reject("No comment to delete found");
 
             comment.delete().then(function () {
                 resolve();

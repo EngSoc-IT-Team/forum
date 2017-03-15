@@ -179,6 +179,8 @@ const literals = {
 
     //fields for rating table only
     RATING_TABLE: "rating",
+    FIELD_PARENT: "parent",
+    FIELD_RATING: "rating",
 
     //fields for sweeper class
     SWEEPER_CANCEL_JOB: "cancelJob",

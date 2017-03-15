@@ -8,6 +8,7 @@ var log = require('./../log');
 var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals');
 var voter = require('./../actions/Voter');
+var contributor = require('./../actions/Contributor');
 
 exports.handle = function(request) {
     return new Promise(function(resolve, reject) {
@@ -55,7 +56,7 @@ function createClass(body, user, resolve, reject) {
 
     c.insert().then(function() {
         vote(user, c, resolve); // if we make it this far we will always resolve
-        generateContribution(c, user, lit.CLASS_TABLE); // we can get away with creating the contribution in parallel in this case
+        contributor.generateContribution(c, user.getValue(lit.FIELD_ID), lit.CLASS_TABLE); // we can get away with creating the contribution in parallel in this case
         generateItem(c, user, lit.CLASS_TABLE); //ditto the item
     }, function(err) {
         log.error(err);
@@ -75,7 +76,7 @@ function createLink(body, user, resolve, reject) { // check if this link should 
     l.insert().then(function() {
         vote(user, l, resolve); // if we make it this far we will always resolve
         generateContribution(l, user, lit.LINK_TABLE); // we can get away with creating the contribution in parallel in this case
-        generateItem(l, user, lit.LINK_TABLE); // ditto the item
+        contributor.generateItem(l, user.getValue(lit.FIELD_ID), lit.LINK_TABLE); // ditto the item
     }, function(err) {
         log.error(err);
         reject("Error entering the new link");
@@ -93,7 +94,7 @@ function createQuestion(body, user, resolve, reject) { // also create a vote
 
     q.insert().then(function() {
         vote(user, q, resolve); // if we make it this far we will always resolve
-        generateContribution(q, user, lit.POST_TABLE); // we can get away with creating the contribution in parallel in this case
+        contributor.generateContribution(q, user.getValue(lit.FIELD_ID), lit.POST_TABLE); // we can get away with creating the contribution in parallel in this case
         generateItem(q, user, lit.POST_TABLE); //ditto the item
     }, function(err) {
         log.error(err);
@@ -101,7 +102,7 @@ function createQuestion(body, user, resolve, reject) { // also create a vote
     })
 }
 
-function getTagsIfNotPresent(body) { // needs to be fully implemented
+function getTagsIfNotPresent(body) { // TODO: needs to be fully implemented
     if (!body.tags)
         body.tags = "DEFAULT";
 }
@@ -112,19 +113,6 @@ function vote(user, item, resolve) {
     }, function(err) {
         log.error(err);
         resolve({'id': item.getValue(lit.FIELD_ID)});
-    })
-}
-
-function generateContribution(item, user, type) {
-    var contr = new DBRow(lit.CONTRIBUTION_TABLE);
-    contr.setValue(lit.FIELD_TYPE, type);
-    contr.setValue(lit.FIELD_USER_ID, user.getValue(lit.FIELD_ID));
-    contr.setValue(lit.FIELD_ITEM_ID, item.getValue(lit.FIELD_ID));
-    contr.setValue(lit.FIELD_TAGS, item.getValue(lit.FIELD_TAGS));
-    contr.insert().then(function() {
-
-    }, function(err) {
-        log.error(err);
     })
 }
 

@@ -7,7 +7,7 @@
 
 var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals.js');
-var commenter = require('./../actions/Commenter');
+var rater = require('./../actions/Rater');
 
 exports.handle = function(request) {
     var info = {class: {}, reviews: []};
@@ -16,14 +16,7 @@ exports.handle = function(request) {
         cl.getRow(request.query.id).then(function() {
             if (cl.count() > 0) {
                 getClassInfo(cl, info);
-                var reviews = new DBRow(lit.COMMENT_TABLE);
-                reviews.addQuery(lit.FIELD_COMMENT_LEVEL, 0);
-                reviews.addQuery(lit.FIELD_PARENT_POST, cl.getValue(lit.FIELD_ID));
-                reviews.orderBy(lit.FIELD_NETVOTES, lit.DESC);
-                reviews.setLimit(10);
-                reviews.query().then(function() {
-                    commenter.getSubComments(reviews, cl, resolve, info);
-                });
+                rater.getRatings(cl.getValue(lit.FIELD_ID), info, resolve);
             }
             else
                 reject("The class does not exist");

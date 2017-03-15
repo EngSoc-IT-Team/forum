@@ -19,6 +19,7 @@ var subscriber = require('./actions/Subscriptions');
 var voter = require('./actions/Voter');
 var tagger = require('./actions/Tagger');
 var commenter = require('./actions/Commenter');
+var rater = require('./actions/Rater');
 var DBRow = require('./DBRow').DBRow;
 
 
@@ -27,13 +28,13 @@ exports.respond = function(request) {
         var use = undefined;
         var action = request.body.action;
         switch(action) {
-           case("vote"):
+            case("vote"):
                use = vote;
                break;
-           case("subscribe"):
+            case("subscribe"):
                use = subscribe;
                break;
-           case("save"):
+            case("save"):
                use = save;
                break;
             case("report"):
@@ -44,6 +45,9 @@ exports.respond = function(request) {
                 break;
             case('comment'):
                 use = comment;
+                break;
+            case('rate'):
+                use = rate;
                 break;
            default:
                 log.error("Attempt access an invalid action: '" + action + "'");
@@ -126,5 +130,18 @@ function comment(request) {
             commenter.deleteComment(request).then(function() {resolve(true)}, function() {reject(false)});
         else
             log.error("Invalid request for commenting");
+    });
+}
+
+function rate(request) {
+    return new Promise(function(resolve, reject){
+        if (request.body.sub == "add")
+            rater.addRating(request).then(function(res) {resolve(res)}, function() {reject(false)});
+        else if (request.body.sub == "edit")
+            rater.editRating(request).then(function() {resolve(true)}, function() {reject(false)});
+        else if (request.body.sub == "delete")
+            rater.deleteRating(request).then(function() {resolve(true)}, function() {reject(false)});
+        else
+            log.error("Invalid request for rating");
     });
 }

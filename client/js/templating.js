@@ -60,6 +60,8 @@ function getTags(tagArray) {
 function getDateString(date) {
     if (!date)
         return undefined;
+    else if (date == "Just Now")
+        return date;
 
     return date.slice(0, date.indexOf('T'));
 }

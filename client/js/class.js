@@ -38,16 +38,19 @@ var level1ReviewTemplate = '<div class="col-sm-12" id="{0}">\
                                 <hr />\
                             </div>';
 
-var level2ReviewTemplate = '<div class="info-block comment-block media" id="{0}">\
-                                {1}\
-                                <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
-                                <p class="description">{summ}</p>\
-                                <button class="btn btn-sm button" onclick="save(this)">Save</button>\
-                                <button class="btn btn-sm button" onclick="report(this)">Report</button>\
-                                <hr />\
-                            </div>';
+
+// TODO: delete if not used
+// var level2ReviewTemplate = '<div class="info-block comment-block media" id="{0}">\
+//                                 {1}\
+//                                 <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
+//                                 <p class="description">{summ}</p>\
+//                                 <button class="btn btn-sm button" onclick="save(this)">Save</button>\
+//                                 <button class="btn btn-sm button" onclick="report(this)">Report</button>\
+//                                 <hr />\
+//                             </div>';
 
 var classID;
+var starRating = 0;
 
 function whenLoaded() {
     var href;
@@ -84,7 +87,6 @@ function whenLoaded() {
 jQuery(document).ready(function() { // Class Rating Stars
 {
   //Retains the current star rating
-  var starRating = 0;
   var stars = $(".star-ratings .star");
     stars.hover(
     function(e) {
@@ -147,28 +149,60 @@ function addReviews(reviews) {
             continue;
 
         template = fillReviewLevel1Template(reviews[review]);
-
-        if (reviews[review].children) {
-            for (var child in reviews[review].children) {
-                if (!reviews[review].children.hasOwnProperty(child))
-                    continue;
-
-                template += fillReviewLevel2Template(reviews[review].children[child]);
-            }
-        }
-
         $('#reviews').append(template);
     }
 }
 
 function fillReviewLevel1Template(review) {
-    return fillTemplate(level1ReviewTemplate, positiveOrNegative(review.votes), review.votes,
-        getDateString(review.date), review.author, review.author, review.summary);
+    return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
+        getDateString(review.date), review.author, review.author, review.content);
 }
 
-function fillReviewLevel2Template(review) {
-    return fillTemplate(level2ReviewTemplate, positiveOrNegative(review.votes), review.votes,
-        getDateString(review.date), review.author, review.author, review.summary);
+// function fillReviewLevel2Template(review) {
+//     return fillTemplate(level2ReviewTemplate, positiveOrNegative(review.votes), review.votes,
+//         getDateString(review.date), review.author, review.author, review.summary);
+// }
+
+function rate(element) {
+    var ratingInfo = getRatinginfo(element, true);
+    $.ajax({
+        url: '/action',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({info: ratingInfo, action: "rate", sub: "add"})
+    }).done(function(data) {
+        if (data) {
+            ratingInfo.id = data.id;
+            ratingInfo.author = data.author;
+            ratingInfo.date = 'Just Now';
+            $('#reviews').append(fillReviewLevel1Template(ratingInfo));
+            console.log("Successful rating");
+        }
+        else {
+            // TODO: display some error message
+            console.error('An error occurred, or the user has already rated this class');
+        }
+    }).fail(function(err) {
+        console.error(err);
+    });
+}
+
+function getRatinginfo(element, withComment) {
+    var rating = $(element);
+    if(!withComment) {
+        return {
+            rating: starRating,
+            parent:classID
+        }
+    }
+    else {
+        return {
+            rating: starRating,
+            parent: classID,
+            content: rating.parent().parent().children('div.modal-body').children('div.form-group').children('textarea').val(), // isn't this fun
+
+        }
+    }
 }
 
 whenLoaded();
