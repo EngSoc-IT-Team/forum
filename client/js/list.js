@@ -9,7 +9,7 @@ var starTemplate = '<span class="star rating">\
                         <img src="../assets/{0}.svg" class="svg" />\
                     </span>';
 
-var postTemplate = '<div class="col-sm-12">\
+var postTemplate = '<div class="col-sm-12" id="{8}">\
                         <div class="ratings">\
                         <span class="thumbs-up pointer">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
@@ -35,7 +35,7 @@ var postTemplate = '<div class="col-sm-12">\
                         <hr>\
                      </div>';
 
-var linkTemplate = '<div class="col-sm-12">\
+var linkTemplate = '<div class="col-sm-12" id="{8}">\
                         <div class="ratings">\
                         <span class="thumbs-up pointer">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
@@ -61,7 +61,7 @@ var linkTemplate = '<div class="col-sm-12">\
                         <hr>\
                      </div>';
 
-var classTemplate = '<div class="col-sm-12">\
+var classTemplate = '<div class="col-sm-12" id="{10}">\
                         <div class="class-rating">\
                           {3}\
                         </div>\
@@ -142,17 +142,17 @@ function fillPostTemplate(post) {
     var date = getDateString(post.date);
 
     return fillTemplate(postTemplate, post.id, post.title, polarity, post.votes, date, post.author,
-            post.author, summary, post.id, tags);
+            post.author, summary, post.id, tags, post.id);
 }
 
 function fillLinkTemplate(li) {
     return fillTemplate(linkTemplate, li.url, li.title, positiveOrNegative(li.votes), li.votes, getDateString(li.date),
-        li.author, li.author, getSummary(li.summary), li.id, getTags(li.tags));
+        li.author, li.author, getSummary(li.summary), li.id, getTags(li.tags), li.id);
 }
 
 function fillClassTemplate(cl) {
     return fillTemplate(classTemplate, cl.id, cl.courseCode, cl.title, getRating(cl.rating), getDateString(cl.date),
-        cl.author, cl.author, getSummary(cl.summary), cl.id, getTags(cl.tags));
+        cl.author, cl.author, getSummary(cl.summary), cl.id, getTags(cl.tags), cl.id);
 }
 
 function getSummary(summ) {
