@@ -84,7 +84,10 @@ function whenLoaded() {
     });
 }
 
-jQuery(document).ready(function() { // Class Rating Stars
+jQuery(document).ready(function() {
+
+// Class Rating Stars (Homage to @TranBrian10 on Github for his help on this)
+
 {
   //Retains the current star rating
   var stars = $(".star-ratings .star");

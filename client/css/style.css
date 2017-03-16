@@ -320,9 +320,19 @@ a:focus {
    clear: both;
 }
 
+.thumbs-up svg {
+  fill:rgb(255,146,0);
+  fill-rule:nonzero;
+}
+
+.thumbs-down svg {
+  fill: rgb(255,146,0);
+  fill-rule: nonzero;
+}
+
 .thumbs-up svg:hover path,
 .positive {
-  fill: green !important;
+  fill: green;
   color: green;
 }
 
@@ -436,7 +446,7 @@ a:focus {
 
 /* Star Ratings */
 
-.star svg {
+svg {
   fill-rule: evenodd;
   clip-rule: evenodd;
   stroke-linejoin: round;
