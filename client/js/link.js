@@ -18,7 +18,7 @@ var linkTemplate = '<div class="info-block row">\
                                 <span class="date">Posted on {6} by <a href="/profile?username={7}">{8}</a></span>\
                                 <p class="description">{9}</p>\
                                 <div class="clearfix">\
-                                    <button type="button" class="btn btn-sm button" data-toggle="modal" data-target="#myModal">Comment</button>\
+                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#demo2">Comment</button>\
                                     {10}\
                                 </div>\
                             </div>\

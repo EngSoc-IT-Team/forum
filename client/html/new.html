@@ -77,8 +77,8 @@
 							<div class="form-group">
 								<label class="help" for="details" data-toggle="tooltip" title="More information to help others better understand your question">Question Details<b class="negative inline">*</b></label>
 
-								<!--<textarea class="form-control" rows="5" id="details"></textarea>-->
-								<textarea name="editor1"></textarea>
+								<!--<textarea class="form-control" rows="5" ></textarea>-->
+								<textarea name="editor1" id="details"></textarea>
 							</div>
 
 							<div class="form-group">
@@ -111,7 +111,7 @@
 
 							<div class="form-group">
 								<label class="help" for="linkSummary" data-toggle="tooltip" title="A summary of what information the link leads to">Summary<b class="negative inline">*</b></label>
-								<textarea class="form-control" rows="5" id="linkSummary"></textarea>
+								<textarea name="editor2" id="linkSummary"></textarea>
 							</div>
 
 							<div class="form-group">
@@ -154,7 +154,7 @@
 
 							<div class="form-group">
 								<label class="help" for="classSummary" data-toggle="tooltip" title="A summary of the course topics">Class Summary<b class="negative inline">*</b></label>
-								<textarea class="form-control" rows="5" id="classSummary"></textarea>
+								<textarea name="editor3" id="classSummary"></textarea>
 							</div>
 
 							<div class="form-group">
@@ -195,8 +195,9 @@
 		</div>
 	</footer>
 	<script>
-
         CKEDITOR.replace('editor1');
+        CKEDITOR.replace('editor2');
+        CKEDITOR.replace('editor3');
 	</script>
 </body>
 </html>

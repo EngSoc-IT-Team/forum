@@ -17,8 +17,7 @@ var questionTemplate = '<div class="info-block row">\
                                 <span class="date">Posted on {4} by <a href="/profile?username={5}">{6}</a></span>\
                                 <p class="description">{7}</p>\
                                 <div class="clearfix">\
-                                    <button type="button" class="btn btn-sm button" data-toggle="modal" data-target="#myModal">Comment</button>\
-                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#demo">Collapsible</button>\
+                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#demo">Comment</button>\
                                     {8}\
                                 </div>\
                             </div>\
