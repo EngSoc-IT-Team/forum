@@ -21,8 +21,15 @@ var linkTemplate = '<div class="info-block row" id="{11}" data-hasvoted="{12}" d
                                     <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#demo2">Comment</button>\
                                     {10}\
                                 </div>\
+                                <br>\
+                                <div id="editor" class="collapse">\
+                                    <textarea name="editor1" id="editor2" rows="10" cols="80"></textarea>\
+                                    <button type="button" class="btn btn-sm button" onclick="reply(this)">Submit</button>\
+                                </div>\
                             </div>\
                         </div>';
+
+var itemID;
 
 function whenLoaded() {
     var href;
@@ -60,6 +67,8 @@ function fillInLinkHeader(details) {
     var temp = fillTemplate(linkTemplate, details.url, details.title, details.url, details.url,
         positiveOrNegative(details.votes), details.votes, getDateString(details.date), details.author, details.author,
         details.summary, getTags(details.tags), details.id, details.voted);
+
+    itemID = details.id;
 
     if(details.voted)
         updateItemsWithPolarity.push({id: details.id, polarity: details.voted});

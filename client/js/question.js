@@ -17,11 +17,18 @@ var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}
                                 <span class="date">Posted on {4} by <a href="/profile?username={5}">{6}</a></span>\
                                 <p class="description">{7}</p>\
                                 <div class="clearfix">\
-                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#demo">Comment</button>\
+                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
                                     {8}\
+                                </div>\
+                                <br>\
+                                <div id="editor" class="collapse">\
+                                    <textarea name="editor1" id="editor2" rows="10" cols="80"></textarea>\
+                                    <button id="test" type="button" class="btn btn-sm button" onclick="reply(this)">Submit</button>\
                                 </div>\
                             </div>\
                         </div>';
+
+var itemID;
 
 function whenLoaded() {
     var href;
@@ -59,6 +66,8 @@ function fillInQuestionHeader(details) {
     var temp = fillTemplate(questionTemplate, details.id, details.title, positiveOrNegative(details.votes), details.votes,
                                 getDateString(details.date), details.author, details.author, details.summary,
                                 getTags(details.tags), details.id, details.voted);
+
+    itemID = details.id;
 
     if (details.voted)
         updateItemsWithPolarity.push({id: details.id, polarity: details.voted});
