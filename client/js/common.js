@@ -63,12 +63,58 @@ function save(itemid, isSaved, type) {
     });
 }
 
-function vote(itemid, voteValue, hasVoted) {
+function vote(el) {
+    el = $(el);
+    var itemID = el.parent().parent().attr('id');
+    var voteValue;
+    var hasVoted = el.parent().parent().attr('data-hasvoted');
+    var itemType = el.parent().parent().attr('data-hastype');
+    var thumbsUpFills = el.parent().children('.thumbs-up').children().children().children().children(); // I <3 jQuery
+    var thumbsDownFills = el.parent().children('.thumbs-down').children().children().children();
+    var votes = el.parent().children('#votes');
+    var currentVotes = votes[0].innerHTML;
+    var voteCount;
+
+    if (el.hasClass('thumbs-up') && hasVoted != 'positive') {
+        voteValue = 1;
+        if(thumbsDownFills.hasClass('negative'))
+            thumbsDownFills.removeClass('negative');
+
+        thumbsUpFills.addClass('positive');
+        if (hasVoted == 'negative')
+            voteCount = Number(currentVotes) + 2;
+        else
+            voteCount = ++currentVotes;
+
+        displayNewVotes(voteCount, votes);
+
+        el.parent().parent().attr('data-hasVoted', 'positive');
+    }
+    else if (el.hasClass('thumbs-down') && hasVoted != 'negative') {
+        voteValue = 0;
+        if(thumbsUpFills.hasClass('positive'))
+            thumbsUpFills.removeClass('positive');
+
+        thumbsDownFills.addClass('negative');
+        if (hasVoted == 'positive')
+            voteCount = Number(currentVotes) - 2;
+        else
+            voteCount = --currentVotes;
+
+        displayNewVotes(voteCount, votes);
+
+        el.parent().parent().attr('data-hasVoted', 'negative');
+    }
+    else
+        return; // they already voted on the thumb they selected
+
+    hasVoted = hasVoted == 'positive' || hasVoted == 'negative'; // true if data-hasvoted has been set, false otherwise
+
     $.ajax({
         url: '/action',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({itemId: itemid, value: voteValue, voted: hasVoted, action:"vote"})
+        data: JSON.stringify({itemId: itemID, value: voteValue, voted: hasVoted, type: itemType, action:"vote"})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success
@@ -81,6 +127,15 @@ function vote(itemid, voteValue, hasVoted) {
     }).fail(function(err) {
         console.error(err);
     });
+}
+
+function displayNewVotes(count, element) {
+    if (count >= 0 && element.hasClass('negative'))
+        element.removeClass('negative').addClass('positive');
+    else if (count < 0 && element.hasClass('positive'))
+        element.removeClass('positive').addClass('negative');
+
+    element[0].innerHTML = count;
 }
 
 function reply(parent, text, userid) {
@@ -150,7 +205,7 @@ function svgConverter() {
             }
             // Add replaced image's classes to the new SVG
             if(typeof imgClass !== 'undefined') {
-                $svg = $svg.attr('class', imgClass+' replaced-svg');
+                $svg = $svg.attr('class', imgClass + ' replaced-svg');
             }
 
             // Remove any invalid XML tags as per http://validator.w3.org
@@ -158,6 +213,20 @@ function svgConverter() {
 
             // Replace image with new SVG
             $img.replaceWith($svg);
+            updateElements();
         });
     });
+}
+
+function updateElements() {
+    for (var it in updateItemsWithPolarity) {
+        if(!updateItemsWithPolarity.hasOwnProperty(it))
+            continue;
+
+        var update = updateItemsWithPolarity[it];
+        if (update.polarity == 'positive')
+            $('#' + update.id + ' .thumbs-up').children().children().children().children().addClass('positive');
+        else
+            $('#' + update.id + ' .thumbs-down').children().children().children().addClass('negative');
+    }
 }

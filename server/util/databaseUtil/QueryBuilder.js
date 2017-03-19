@@ -14,7 +14,7 @@ var escaper = require('./QueryEscaper');
 var lit = require('./../Literals.js');
 var compare = require('./../Compare');
 
-const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"] //TODO: implement 'in' and 'between' operators
+const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"]; //TODO: implement 'in' and 'between' operators
 
 exports.update = function(table, dbObject) {
 	if (!dbObject[lit.FIELD_ID])
@@ -104,8 +104,12 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 	if (!allowSettingId || addOne)
 		itrs = 1;
 
+    var prop;
 	if (returnAsTwoStrings){
-		for (var prop in obj) {
+		for (prop in obj) {
+            if (!obj.hasOwnProperty(prop))
+                continue;
+
 			if (!escaper.isValidField(table, prop))
 				return log.warn('An invalid field "' + prop + '" for the table "' + table + '" was entered');
 
@@ -129,14 +133,17 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 		return [fields, values];
 	}
 	else {
-		for (var prop in obj) {
+		for (prop in obj) {
+			if (!obj.hasOwnProperty(prop))
+				continue;
+
 			if (!escaper.isValidField(table, prop))
 				return log.warn('An invalid field "' + prop + '" for the table "' + table + '" was entered');
 
 			if (!allowSettingId && prop == 'id') 
 				continue;
-
-			if (typeof obj[prop] == 'object' && obj[prop][lit.OPERATOR])
+			
+			if (typeof obj[prop] == 'object' && obj[prop] != null && obj[prop][lit.OPERATOR])
 				dbObjectString += prop + " " + checkOperator(obj[prop][lit.OPERATOR]) + " " + resolveObjectType(obj[prop][lit.VALUE]);
 			else
 				dbObjectString += prop + "=" + resolveObjectType(obj[prop]);
@@ -160,8 +167,9 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 
 function resolveObjectType(resolveThis) {
 	var objectType = typeof resolveThis;
-	if (objectType == lit.UNDEFINED || objectType == lit.SYMBOL || objectType == lit.FUNCTION || objectType == lit.OBJECT)
-		return log.warn("Objects with type '" + objectType + "' are not currently implemented, please pass a number, boolean or string");
+
+    if (resolveThis instanceof Date)
+        return mysql.escape(resolveThis);
 
 	if (objectType == lit.NUMBER)
 		return resolveThis.toString();
@@ -176,9 +184,11 @@ function resolveObjectType(resolveThis) {
 			return lit.ZERO;
 	}
 
-	if (objectType == lit.STRING){
+	if (objectType == lit.STRING)
 		return mysql.escape(resolveThis);
-	}
+
+    if (objectType == lit.UNDEFINED || objectType == lit.SYMBOL || objectType == lit.FUNCTION || objectType == lit.OBJECT)
+        return log.warn("Objects with type '" + objectType + "' are not currently implemented, please pass a number, boolean or string");
 }
 
 function checkOperator(op) {

@@ -4,15 +4,15 @@
 
 "use strict";
 
-var linkTemplate = '<div class="info-block row">\
+var linkTemplate = '<div class="info-block row" id="{11}" data-hasvoted="{12}" data-hastype="link">\
                             <div class="col-sm-12">\
                                 <h2 class="title" id="title"><a href="{0}">{1}</a></h2>\
                                 <h6 class="date">Links to: <a href="{2}">{3}</a></h6>\
-                                <span class="thumbs-up">\
+                                <span class="thumbs-up pointer" onclick="vote(this)">\
                                     <img src="../assets/thumbsUp.svg" class="svg" />\
                                 </span>\
                                 <span id="votes" class="{4}">{5}</span>\
-                                <span class="thumbs-down">\
+                                <span class="thumbs-down pointer" onclick="vote(this)">\
                                     <img src="../assets/thumbsDown.svg" class="svg" />\
                                 </span>\
                                 <span class="date">Posted on {6} by <a href="/profile?username={7}">{8}</a></span>\
@@ -59,7 +59,11 @@ function whenLoaded() {
 function fillInLinkHeader(details) {
     var temp = fillTemplate(linkTemplate, details.url, details.title, details.url, details.url,
         positiveOrNegative(details.votes), details.votes, getDateString(details.date), details.author, details.author,
-        details.summary, getTags(details.tags));
+        details.summary, getTags(details.tags), details.id, details.voted);
+
+    if(details.voted)
+        updateItemsWithPolarity.push({id: details.id, polarity: details.voted});
+
     $('#linkHead').append(temp);
 }
 
@@ -76,6 +80,9 @@ function addComments(comments) {
         if (!comments.hasOwnProperty(comment))
             continue;
 
+        if (it.voted)
+            updateItemsWithPolarity.push({id: comments[comment].id, polarity: comments[comment].voted});
+
         template = fillCommentLevel1Template(comments[comment]);
 
         if (comments[comment].children) {
@@ -83,22 +90,16 @@ function addComments(comments) {
                 if (!comments[comment].children.hasOwnProperty(child))
                     continue;
 
+                if (it.voted)
+                    updateItemsWithPolarity.push({id: comments[comment].children[child].id,
+                        polarity: comments[comment].children[child].voted});
+
                 template += fillCommentLevel2Template(comments[comment].children[child]);
             }
         }
 
         $('#comments').append(template);
     }
-}
-
-function fillCommentLevel1Template(comment) {
-    return fillTemplate(level1CommentTemplate, positiveOrNegative(comment.votes), comment.votes,
-        getDateString(comment.date), comment.author, comment.author, comment.summary);
-}
-
-function fillCommentLevel2Template(comment) {
-    return fillTemplate(level2CommentTemplate, positiveOrNegative(comment.votes), comment.votes,
-        getDateString(comment.date), comment.author, comment.author, comment.summary);
 }
 
 whenLoaded();

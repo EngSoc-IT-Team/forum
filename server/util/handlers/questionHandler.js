@@ -10,6 +10,7 @@
 var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals.js');
 var commenter = require('./../actions/Commenter');
+var voter = require('./../actions/Voter');
 
 //TODO: add duplicate handling
 
@@ -19,15 +20,17 @@ exports.handle = function(request) {
         var question = new DBRow(lit.POST_TABLE);
         question.getRow(request.query.id).then(function() {
             if (question.count() > 0) {
-                getQuestionInfo(question, info);
-                var comments = new DBRow(lit.COMMENT_TABLE);
-                comments.addQuery(lit.FIELD_COMMENT_LEVEL, 0);
-                comments.addQuery(lit.FIELD_PARENT_POST, question.getValue(lit.FIELD_ID));
-                comments.orderBy(lit.FIELD_NETVOTES, lit.DESC);
-                comments.setLimit(10);
-                comments.query().then(function() {
-                    commenter.getSubComments(comments, question, resolve, info);
-                });
+                voter.getVote(request.signedCookies.usercookie.userID, request.query.id).then(function (vote) {
+                    getQuestionInfo(question, info, vote);
+                    var comments = new DBRow(lit.COMMENT_TABLE);
+                    comments.addQuery(lit.FIELD_COMMENT_LEVEL, 0);
+                    comments.addQuery(lit.FIELD_PARENT_POST, question.getValue(lit.FIELD_ID));
+                    comments.orderBy(lit.FIELD_NETVOTES, lit.DESC);
+                    comments.setLimit(10);
+                    comments.query().then(function() {
+                        commenter.getSubComments(comments, question, resolve, info, request.signedCookies.usercookie.userID);
+                    });
+                })
             }
             else
                 reject("The question does not exist");
@@ -35,7 +38,7 @@ exports.handle = function(request) {
     });
 };
 
-function getQuestionInfo(question, info) {
+function getQuestionInfo(question, info, vote) {
     info.question.title = question.getValue(lit.FIELD_TITLE);
     info.question.date = question.getValue(lit.FIELD_TIMESTAMP);
     info.question.author = question.getValue(lit.FIELD_AUTHOR);
@@ -44,4 +47,6 @@ function getQuestionInfo(question, info) {
     info.question.votes = question.getValue(lit.FIELD_NETVOTES);
     info.question.isDuplicate = question.getValue(lit.FIELD_DUPLICATE);
     info.question.isSelf = false; //TODO: check if this user owns the post
+    info.question.id = question.getValue(lit.FIELD_ID); //TODO: check if this user owns the post
+    info.question.voted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined;
 }
