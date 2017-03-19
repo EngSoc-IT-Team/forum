@@ -48,7 +48,7 @@ function submitItem() {
         content: getContent(getPressed().replace('#', ''))
     };
 
-    if (!allFieldsFilled(content.type))
+    if (!checkFields(content.type))
         return;
 
     addMissingTags(content.content.rawTags);
@@ -122,7 +122,7 @@ function getContent(type) {
         return {
             title: $('#classTitle').val(),
             courseCode: $('#courseCode').val(),
-            summary: $('#classSummary').val(),
+            summary: CKEDITOR.instances.classSummary.getData(),
             instructor: $('#instructor').val(),
             credit: $('#credit').val(),
             prereqs: $('#prerequisites').val(),
@@ -134,7 +134,7 @@ function getContent(type) {
         tags = getTags('#linkTags');
         return {
             title: $('#linkTitle').val(),
-            summary: $('#linkSummary').val(),
+            summary: CKEDITOR.instances.linkSummary.getData(),
             href: $('#url').val(),
             tags: tags[1],
             rawTags: tags[0]
@@ -144,7 +144,7 @@ function getContent(type) {
         tags = getTags('#questionTags');
         return {
             title: $('#questionTitle').val(),
-            summary: $('#details').val(),
+            summary: CKEDITOR.instances.details.getData(),
             tags: tags[1],
             rawTags: tags[0]
         };
@@ -187,41 +187,35 @@ $(function () {
 * Form handling and checking
  */
 
-const reqClass = ['#courseCode', '#classTitle', '#classSummary', '#instructor', '#credit'];
-const reqLink = ['#url', '#linkTitle', '#linkSummary'];
-const reqQ = ['#questionTitle', '#details'];
-function allFieldsFilled(type) {
-    switch(type) {
-        case ("class"):
-            return checkFields(reqClass, type);
-        case ("link"):
-            return checkFields(reqLink, type);
-        case ("question"):
-            return checkFields(reqQ, type);
-        default:
-            console.log('How did you get here? You shouldn\'t be here!');
-            return false;
-    }
-}
+const requiredFields = {"class": {editor: 'classSummary', fields: ['#courseCode', '#classTitle','#instructor', '#credit']},
+                link: {editor: "linkSummary", fields: ['#url', '#linkTitle']},
+                question: {editor: 'details', fields: ['#questionTitle']}};
 
-function checkFields(fields, type) {
+function checkFields(type) {
     var warnAbout = '';
-    for (var field in fields) {
-        if (!fields.hasOwnProperty(field))
+    for (var field in requiredFields[type].fields) {
+        if (!requiredFields[type].fields.hasOwnProperty(field))
             continue;
 
-        var current = $(fields[field]);
+        var current = $(requiredFields[type].fields[field]);
         if(!current.val()) {
             addWarning(current);
             if (warnAbout)
                 warnAbout += ',';
 
             warnAbout += ' ' + current.attr('id').replace(type, '').toLowerCase();
-
         }
         else
             removeWarning(current);
     }
+
+    if (!CKEDITOR.instances[requiredFields[type].editor].getData().trim()) {
+        if (warnAbout)
+            warnAbout += ',';
+
+        warnAbout += ' ' + requiredFields[type].editor.replace(type, '').toLowerCase();
+    }
+
 
     if (warnAbout) {
         $('#warning-target-' + type).text('Please fill out the following required field(s):' + warnAbout);
