@@ -102,6 +102,7 @@ const literals = {
     FIELD_ITEM_ID: "itemID",
     FIELD_TYPE: "type",
     FIELD_DUPLICATE: "duplicate",
+    FIELD_GEN_TAGS: "generatedTags",
 
     //fields for post table only
     POST_TABLE: "post",
