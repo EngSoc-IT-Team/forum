@@ -49,16 +49,6 @@ function getUserTagsInDB() {
     });
 }
 
-function searchByGenTag(searchTags, genTags) {
-    return new Promise(function (resolve, reject) {
-        if (typeof searchTags != lit.STRING || typeof genTags != lit.STRING) {
-            reject("invalid tags");
-        }
-        //split generated tags into array
-        var genTags = genTags.toUpperCase().split(" ");
-    });
-}
-
 /**
  * Function to search for posts by tags. Goes through search term looking for tags in database and numbers, then
  * finds posts with those tags/tags with that number.
@@ -156,7 +146,7 @@ function searchForContent(inputSearch, table) {
     return new Promise(function (resolve, reject) {
         if (goodInputs(inputSearch, table)) {
             getKeyTerms(inputSearch).then(function (keyTerms) {
-                return searchTable(keyTerms, table);
+                return searchGenTags(keyTerms, table);
             }).then(function (documentInfo) {
                 documentInfo = removeLowMeasures(documentInfo);
                 //TODO add in user tag search
@@ -247,7 +237,7 @@ function getKeyTerms(input) {
  * @returns {Promise} Promise as database query is asynchronous. Eventually returns an array of objects holding
  * content IDs and their relation to the key terms.
  */
-function searchTable(keyTerms, table) {
+function searchGenTags(keyTerms, table) {
     var documentInfo = [];
     var row = new dbr.DBRow(table);
     return new Promise(function (resolve, reject) {
