@@ -108,28 +108,40 @@ function searchByUserTag(inputSearch) {
 /**
  * Function that generates and inserts tags for content for later search usage.
  * @param newRow The row to generate tags for and to insert the tags into.
+ * @param table The row's table for which the new tags are being generated.
  * @returns {Promise} Promise as querying database is asynchronous. Eventually returns the generated tags,
  * which is one String with each tag concatenated by a space.
  */
-function generateTags(newRow) {
+function generateTags(newRow, table) {
     return new Promise(function (resolve, reject) {
-            var content = newRow.getValue(lit.FIELD_TITLE) + "\n" + newRow.getValue(lit.FIELD_CONTENT);
-            getKeyTerms(content).then(function (keyTerms) {
-                var tags = "";
-                for (var i in keyTerms) {
-                    tags += keyTerms[i];
-                    if (i < keyTerms.length - 1) {
-                        tags += " "; //space splits up tags
-                    }
+            if (goodInputs("this is a good search", table)) { //dummy input search so goodInputs can be re-used for the table arg
+
+                //get the fields and add all fields together to get content to search for
+                var fields = getSearchableFields(table);
+                var content = " ";
+                for (var index in fields) {
+                    content += newRow.getValue(fields[index]) + "\n";
                 }
-                newRow.setValue(lit.FIELD_GEN_TAGS, tags);
-                newRow.update().then(function () {
-                    resolve(tags); //string of all tags to be put into field for the new post
+
+                getKeyTerms(content).then(function (keyTerms) {
+                    var tags = "";
+                    for (var i in keyTerms) {
+                        tags += keyTerms[i];
+                        if (i < keyTerms.length - 1) {
+                            tags += " "; //space splits up tags
+                        }
+                    }
+                    newRow.setValue(lit.FIELD_GEN_TAGS, tags);
+                    newRow.update().then(function () {
+                        resolve(tags); //string of all tags to be put into field for the new post
+                    });
+                }).catch(function (error) {
+                    log.log("tagPosts error: " + error);
+                    reject(error);
                 });
-            }).catch(function (error) {
-                log.log("tagPosts error: " + error);
-                reject(error);
-            });
+            } else {
+                reject("Tried to generate tags for a bad table");
+            }
         }
     );
 }
@@ -144,10 +156,10 @@ function searchForContent(inputSearch, table) {
     return new Promise(function (resolve, reject) {
         if (goodInputs(inputSearch, table)) {
             getKeyTerms(inputSearch).then(function (keyTerms) {
-                var fields = getSearchableFields(table);
-                return searchTable(keyTerms, table, fields);
+                return searchTable(keyTerms, table);
             }).then(function (documentInfo) {
                 documentInfo = removeLowMeasures(documentInfo);
+                //TODO add in user tag search
                 resolve(sortByMeasure(documentInfo));
             }).catch(function (error) {
                 log.log("searchForContent error: " + error);
@@ -232,27 +244,23 @@ function getKeyTerms(input) {
  * Function that takes data out of the database and finds its relation to the key terms of the search.
  * @param keyTerms Terms that data relation is found relative to.
  * @param table The table being searched.
- * @param fields The table fields being searched.
  * @returns {Promise} Promise as database query is asynchronous. Eventually returns an array of objects holding
  * content IDs and their relation to the key terms.
  */
-function searchTable(keyTerms, table, fields) {
+function searchTable(keyTerms, table) {
     var documentInfo = [];
     var row = new dbr.DBRow(table);
     return new Promise(function (resolve, reject) {
-        //TODO get generated tags,
+        //TODO wildcard to filter posts
         row.query().then(function () {
             while (row.next()) {
-                //search the post content and title
-                var docData = "";
-                for (var i in fields) {
-                    docData += row.getValue(fields[i]) + "\n";
+                //get generated tags. find relation of input key terms to generated tags
+                var genTags = row.getValue(lit.FIELD_GEN_TAGS);
+                if (genTags != null) { //only use posts with generated tags...should be all
+                    wordRelater.addDocument(genTags);
+                    var oneDoc = {measure: 0, id: row.getValue(lit.FIELD_ID)};
+                    documentInfo.push(oneDoc); //add a row in the arrays for each document
                 }
-                wordRelater.addDocument(docData);
-                var docID = row.getValue(lit.FIELD_ID);
-                var oneDoc = {measure: 0, id: docID};
-                //add a row in the arrays for each document
-                documentInfo.push(oneDoc);
             }
         }).then(function () {
             for (var termIndex in keyTerms) {
@@ -297,7 +305,6 @@ function sortByMeasure(documentInfo) {
     for (var index in documentInfo) {
         sortedIDs.push(documentInfo[index][lit.FIELD_ID]);
     }
-    log.log(sortedIDs);
     return sortedIDs;
 }
 
