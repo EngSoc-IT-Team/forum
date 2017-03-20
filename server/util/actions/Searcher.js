@@ -102,7 +102,7 @@ function searchByUserTag(inputSearch) {
  * @returns {Promise} Promise as querying database is asynchronous. Eventually returns the generated tags,
  * which is one String with each tag concatenated by a space.
  */
-function generateTags(newRow, table) {
+exports.generateTags = function (newRow, table) {
     return new Promise(function (resolve, reject) {
             if (goodInputs("this is a good search", table)) { //dummy input search so goodInputs can be re-used for the table arg
 
@@ -134,7 +134,7 @@ function generateTags(newRow, table) {
             }
         }
     );
-}
+};
 
 /**
  * Searches a given array of table for data related to a given search. Fields are chosen for you, as the fields
@@ -149,8 +149,16 @@ function searchForContent(inputSearch, table) {
                 return searchGenTags(keyTerms, table);
             }).then(function (documentInfo) {
                 documentInfo = removeLowMeasures(documentInfo);
-                //TODO add in user tag search
-                resolve(sortByMeasure(documentInfo));
+                var sortedPosts = sortByMeasure(documentInfo);
+                searchByUserTag(inputSearch).then(function (userPosts) {
+                    for (var i in userPosts){
+                        if (!sortedPosts.includes(userPosts[i])){ //no duplicated posts
+                            //just add posts with the tags to the end - actual content of post more important than tags
+                            sortedPosts.push(userPosts[i]);
+                        }
+                    }
+                    resolve(sortedPosts);
+                })
             }).catch(function (error) {
                 log.log("searchForContent error: " + error);
             });
