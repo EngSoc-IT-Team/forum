@@ -47,6 +47,6 @@ function getQuestionInfo(question, info, vote) {
     info.question.votes = question.getValue(lit.FIELD_NETVOTES);
     info.question.isDuplicate = question.getValue(lit.FIELD_DUPLICATE);
     info.question.isSelf = false; //TODO: check if this user owns the post
-    info.question.id = question.getValue(lit.FIELD_ID); //TODO: check if this user owns the post
+    info.question.id = question.getValue(lit.FIELD_ID);
     info.question.voted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined;
 }

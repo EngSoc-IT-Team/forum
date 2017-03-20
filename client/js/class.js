@@ -167,7 +167,7 @@ function fillReviewLevel1Template(review) {
 // }
 
 function rate(element) {
-    var ratingInfo = getRatinginfo(element, true);
+    var ratingInfo = getRatingInfo(element, true);
     $.ajax({
         url: '/action',
         type: 'POST',
@@ -190,20 +190,19 @@ function rate(element) {
     });
 }
 
-function getRatinginfo(element, withComment) {
+function getRatingInfo(element, withComment) {
     var rating = $(element);
     if(!withComment) {
         return {
             rating: starRating,
-            parent:classID
+            parent: classID
         }
     }
     else {
         return {
             rating: starRating,
             parent: classID,
-            content: rating.parent().parent().children('div.modal-body').children('div.form-group').children('textarea').val(), // isn't this fun
-
+            content: CKEDITOR.instances['message-text'].getData()
         }
     }
 }
