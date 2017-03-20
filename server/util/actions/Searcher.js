@@ -1,11 +1,10 @@
 /**
  * Created by Carson on 24/02/2017.
- * Implementation for the search function. Users enter their search terms in the search bar, and the key parts
+ * Implementation for searching. Users enter their search terms in a search bar, and the key parts
  * are used to look through the database of posts/comments. Implements AutoTag algorithm from Algorithmia to
  * automatically get the key parts of the search terms. Note that numbers (e.g. course numbers) are not considered
  * to be words, and will need to be parsed out manually and searched for in the tags column.
- * Those words are then checked to see how relevant they
- * are to posts/comments in the database. This is done by Natural.
+ * Those words are then checked to see how relevant they are to posts/comments in the database. This is done by Natural.
  *
  * need: npm install natural, npm install algorithmia
  *
@@ -17,7 +16,9 @@
  * 10,000 calls. However, for free, 5K credits are given each month, so on a small scale it is still free.
  */
 
-//TODO get course numbers to search tags
+//TODO search tags - wildcards to improve?
+//TODO need to search multiple tables at once
+//TODO stop holding entire database in memory when searching - recursiveGet
 
 var natural = require("natural");
 var algorithmia = require("algorithmia");
@@ -28,9 +29,77 @@ var dbr = require('./../DBRow.js');
 var TfIdf = natural.TfIdf;
 var wordRelater = new TfIdf();
 
+/**
+ * Retrieves all tags currently in the database
+ * @returns {Promise} Promise as database query is asynchronous. Eventually returns an array of Strings, one
+ * for each tag in the database.
+ */
+function getTagsInDB() {
+    var tags = [];
+    return new Promise(function (resolve, reject) {
+        var row = new dbr.DBRow(lit.TAG_TABLE);
+        row.query().then(function () {
+            while (row.next()) {
+                tags.push(row.getValue(lit.FIELD_NAME));
+            }
+            resolve(tags);
+        }).catch(function (err) {
+            log.log("getTagsInDB error: " + err);
+            reject(err);
+        });
+    });
+}
+
+/**
+ * Function to search for posts by tags. Goes through search term looking for tags in database and numbers, then
+ * finds posts with those tags/tags with that number.
+ * @param inputSearch The search term.
+ * @returns {Promise} Promise as query to database is asynchronous. Eventually returns an array of post IDs that have
+ * matching tags/numbers.
+ */
+function searchByTag(inputSearch) {
+    return new Promise(function (resolve, reject) {
+        if (!(typeof inputSearch == lit.STRING)) {
+            reject("you inputted an invalid search!");
+        }
+        getTagsInDB().then(function (dbTags) {
+            var words = inputSearch.toUpperCase().split(/[ ,!?.]+/); //all possibilities for things splitting up words
+            //and tags are all in upper case, so searched tags need to be as well
+
+            return words.filter(function (element) {//take out words from the input search that don't include a tag in them
+                //if the word is a tag if it is the same as a dbTag or if it has a number
+                //often people refer to courses just by the number (e.g. you won't pass 112!)
+                return dbTags.includes(element) || element.includes("1") || element.includes("2") || element.includes("3")
+                    || element.includes("4") || element.includes("5") || element.includes("6") || element.includes("7")
+                    || element.includes("8") || element.includes("9") || element.includes("0");
+            });
+        }).then(function (tagsInSearch) {
+            //find posts with tags either matching a tag or that has the same course number that was searched
+            var row = new dbr.DBRow(lit.POST_TABLE);
+            var postsWithTags = [];
+            row.query().then(function () {
+                while (row.next()) {
+                    for (var index in tagsInSearch) {
+                        if (row.getValue(lit.FIELD_TAGS).includes(tagsInSearch[index])) {
+                            postsWithTags.push(row.getValue(lit.FIELD_ID));
+                        }
+                    }
+                }
+                resolve(postsWithTags);
+            }).catch(function (err) {
+                log.log("searchByTag - getting posts - error: " + err);
+                reject(err);
+            });
+        }).catch(function (err) {
+            log.log("searchByTag: " + err);
+        });
+    });
+}
+
 //TODO talk with michael about how to do this
-//can an object be passed in here? object with each newPost field in it
-//for tags, just throwing in a string of them separated by commas?
+//new column on item/contribution with this stuff
+// add some to actual tags column ONLY if user did not put in their own tags
+//content type will be added to item/contribution
 function tagPosts(newPostContent) {
     return new Promise(function (resolve, reject) {
             getKeyTerms(newPostContent).then(function (keyTerms) {
@@ -50,20 +119,18 @@ function tagPosts(newPostContent) {
     );
 }
 
+//TODO use autotag column to speed up the search
 /**
  * Searches a given array of table for data related to a given search. Fields are chosen for you, as the fields
  * that should be searched. Does not allow searches with bad search terms/tables to be conducted.
  * @param inputSearch Search inputted by user.
  * @param table Array of tables to be searched.
- * @param fields Array of fields to be searched.
  */
-searchForContent("install a module", lit.POST_TABLE);
-//check terms are legit, if they are continue with search
 function searchForContent(inputSearch, table) {
     if (goodInputs(inputSearch, table)) {
         getKeyTerms(inputSearch).then(function (keyTerms) {
             var fields = getSearchableFields(table);
-            return searchTable(keyTerms, table, fields)
+            return searchTable(keyTerms, table, fields);
         }).then(function (documentInfo) {
             documentInfo = removeLowMeasures(documentInfo);
             return sortByMeasure(documentInfo);
@@ -157,6 +224,7 @@ function searchTable(keyTerms, table, fields) {
     var documentInfo = [];
     var row = new dbr.DBRow(table);
     return new Promise(function (resolve, reject) {
+        //TODO use wildcards to filter rows returned by query
         row.query().then(function () {
             while (row.next()) {
                 //search the post content and title
