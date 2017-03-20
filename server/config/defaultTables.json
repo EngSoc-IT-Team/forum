@@ -46,6 +46,9 @@
 			"tags": {
 				"type": "string",
 				"constraint": "NOT NULL"
+			},
+			"generatedTags": {
+				"type": "string"
 			}
 		}
 	},
@@ -96,6 +99,9 @@
 				"type": "datetime",
 				"constraint": "NOT NULL",
 				"default": "CURRENT_TIMESTAMP"
+			},
+			"generatedTags": {
+				"type": "string"
 			}
 		}
 	},
@@ -193,6 +199,9 @@
 			"id": {
 				"type": "uniqueidentifier",
 				"primaryKey": "true"
+			},
+			"generatedTags": {
+				"type": "string"
 			}
 		}
 	},
@@ -282,6 +291,9 @@
 			"addedBy": {
 				"type": "uniqueidentifier",
 				"constraints": "NOT NULL"
+			},
+			"generatedTags": {
+				"type": "string"
 			}
 		}
 	},
@@ -335,6 +347,9 @@
 			"duplicate": {
 				"type": "boolean",
 				"default": "0"
+			},
+			"generatedTags": {
+				"type": "string"
 			}
 		}
 	},
