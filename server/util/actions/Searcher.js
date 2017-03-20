@@ -127,19 +127,21 @@ function tagPosts(newPostContent) {
  * @param table Array of tables to be searched.
  */
 function searchForContent(inputSearch, table) {
-    if (goodInputs(inputSearch, table)) {
-        getKeyTerms(inputSearch).then(function (keyTerms) {
-            var fields = getSearchableFields(table);
-            return searchTable(keyTerms, table, fields);
-        }).then(function (documentInfo) {
-            documentInfo = removeLowMeasures(documentInfo);
-            return sortByMeasure(documentInfo);
-        }).catch(function (error) {
-            log.log("searchForContent error: " + error);
-        });
-    } else {
-        log.log("your input terms didn't work for a search!");
-    }
+    return new Promise(function (resolve, reject) {
+        if (goodInputs(inputSearch, table)) {
+            getKeyTerms(inputSearch).then(function (keyTerms) {
+                var fields = getSearchableFields(table);
+                return searchTable(keyTerms, table, fields);
+            }).then(function (documentInfo) {
+                documentInfo = removeLowMeasures(documentInfo);
+                resolve(sortByMeasure(documentInfo));
+            }).catch(function (error) {
+                log.log("searchForContent error: " + error);
+            });
+        } else {
+            reject("your input terms didn't work for a search!");
+        }
+    });
 }
 
 /**
