@@ -16,7 +16,6 @@
  * 10,000 calls. However, for free, 5K credits are given each month, so on a small scale it is still free.
  */
 
-//TODO search tags - wildcards to improve?
 //TODO need to search multiple tables at once
 //TODO stop holding entire database in memory when searching - recursiveGet
 
@@ -34,7 +33,7 @@ var wordRelater = new TfIdf();
  * @returns {Promise} Promise as database query is asynchronous. Eventually returns an array of Strings, one
  * for each tag in the database.
  */
-function getTagsInDB() {
+function getUserTagsInDB() {
     var tags = [];
     return new Promise(function (resolve, reject) {
         var row = new dbr.DBRow(lit.TAG_TABLE);
@@ -50,6 +49,16 @@ function getTagsInDB() {
     });
 }
 
+function searchByGenTag(searchTags, genTags) {
+    return new Promise(function (resolve, reject) {
+        if (typeof searchTags != lit.STRING || typeof genTags != lit.STRING) {
+            reject("invalid tags");
+        }
+        //split generated tags into array
+        var genTags = genTags.toUpperCase().split(" ");
+    });
+}
+
 /**
  * Function to search for posts by tags. Goes through search term looking for tags in database and numbers, then
  * finds posts with those tags/tags with that number.
@@ -57,12 +66,12 @@ function getTagsInDB() {
  * @returns {Promise} Promise as query to database is asynchronous. Eventually returns an array of post IDs that have
  * matching tags/numbers.
  */
-function searchByTag(inputSearch) {
+function searchByUserTag(inputSearch) {
     return new Promise(function (resolve, reject) {
         if (!(typeof inputSearch == lit.STRING)) {
             reject("you inputted an invalid search!");
         }
-        getTagsInDB().then(function (dbTags) {
+        getUserTagsInDB().then(function (dbTags) {
             var words = inputSearch.toUpperCase().split(/[ ,!?.]+/); //all possibilities for things splitting up words
             //and tags are all in upper case, so searched tags need to be as well
 
@@ -96,21 +105,27 @@ function searchByTag(inputSearch) {
     });
 }
 
-//TODO talk with michael about how to do this
-//new column on item/contribution with this stuff
-// add some to actual tags column ONLY if user did not put in their own tags
-//content type will be added to item/contribution
-function tagPosts(newPostContent) {
+/**
+ * Function that generates and inserts tags for content for later search usage.
+ * @param newRow The row to generate tags for and to insert the tags into.
+ * @returns {Promise} Promise as querying database is asynchronous. Eventually returns the generated tags,
+ * which is one String with each tag concatenated by a space.
+ */
+function generateTags(newRow) {
     return new Promise(function (resolve, reject) {
-            getKeyTerms(newPostContent).then(function (keyTerms) {
+            var content = newRow.getValue(lit.FIELD_TITLE) + "\n" + newRow.getValue(lit.FIELD_CONTENT);
+            getKeyTerms(content).then(function (keyTerms) {
                 var tags = "";
                 for (var i in keyTerms) {
                     tags += keyTerms[i];
                     if (i < keyTerms.length - 1) {
-                        tags += ", ";
+                        tags += " "; //space splits up tags
                     }
                 }
-                resolve(tags); //string of all tags to be put into field for the new post
+                newRow.setValue(lit.FIELD_GEN_TAGS, tags);
+                newRow.update().then(function () {
+                    resolve(tags); //string of all tags to be put into field for the new post
+                });
             }).catch(function (error) {
                 log.log("tagPosts error: " + error);
                 reject(error);
@@ -119,7 +134,6 @@ function tagPosts(newPostContent) {
     );
 }
 
-//TODO use autotag column to speed up the search
 /**
  * Searches a given array of table for data related to a given search. Fields are chosen for you, as the fields
  * that should be searched. Does not allow searches with bad search terms/tables to be conducted.
@@ -226,7 +240,7 @@ function searchTable(keyTerms, table, fields) {
     var documentInfo = [];
     var row = new dbr.DBRow(table);
     return new Promise(function (resolve, reject) {
-        //TODO use wildcards to filter rows returned by query
+        //TODO get generated tags,
         row.query().then(function () {
             while (row.next()) {
                 //search the post content and title
