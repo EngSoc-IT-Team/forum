@@ -17,15 +17,21 @@ var log = require('./../log');
  */
 exports.vote = function(userId, itemId, voteValue) {
     return new Promise(function(resolve, reject) {
-        var row = new DBRow(lit.VOTE_TABLE);
-        row.setValue(lit.FIELD_USER_ID, userId);
-        row.setValue(lit.FIELD_ITEM_ID, itemId);
-        row.setValue(lit.FIELD_VOTE_VALUE, voteValue);
-        row.insert().then(function() {
-            resolve();
-        }, function(err) {
-            log.error(err);
-            reject(err);
+        exports.getVote(userId, itemId).then(function (vote) {
+            if (!vote) {
+                var row = new DBRow(lit.VOTE_TABLE);
+                row.setValue(lit.FIELD_USER_ID, userId);
+                row.setValue(lit.FIELD_ITEM_ID, itemId);
+                row.setValue(lit.FIELD_VOTE_VALUE, voteValue);
+                row.insert().then(function () {
+                    resolve(true);
+                }, function (err) {
+                    log.error(err);
+                    reject(err);
+                });
+            }
+            else
+                resolve('already voted');
         });
     });
 };
@@ -60,15 +66,64 @@ exports.changeVote = function(userId, itemId, newVoteValue) {
  */
 
 exports.getVote = function(userId, itemId) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve) {
         var vote = new DBRow(lit.VOTE_TABLE);
         vote.addQuery(lit.FIELD_USER_ID, userId);
         vote.addQuery(lit.FIELD_ITEM_ID, itemId);
         vote.query().then(function() {
             if (!vote.next())
-                return resolve(-1);
+                return resolve(undefined);
 
-            resolve(vote.getValue(lit.FIELD_VOTE_VALUE));
+            resolve(vote);
         });
     });
 };
+
+exports.voteAndUpdateItem = function(userId, itemId, voteValue, type) {
+    return new Promise(function(resolve, reject) {
+        exports.vote(userId, itemId, voteValue).then(function() {
+            updateItem(itemId, voteValue, type).then(function() {
+                resolve(true);
+            }, function(err) {
+                log.error(err);
+                reject(err);
+            })
+        }, function(err) {
+            log.error(err);
+            reject(err);
+        });
+    });
+};
+
+exports.updateVoteAndItem = function(userId, itemId, voteValue, type) {
+    return new Promise(function(resolve, reject) {
+        exports.changeVote(userId, itemId, voteValue).then(function() {
+            updateItem(itemId, voteValue, type, true).then(function() {
+                resolve(true);
+            }, function(err) {
+                log.error(err);
+                reject(err);
+            })
+        }, function(err) {
+            log.error(err);
+            reject(err);
+        });
+    });
+};
+
+function updateItem(itemID, voteValue, type, voteIsUpdated) {
+    var netChange = (voteIsUpdated ? 2 : 1) * (voteValue ? 1 : -1);
+    return new Promise(function(resolve, reject) {
+        var it = new DBRow(type);
+        it.getRow(itemID).then(function() {
+            it.setValue(lit.FIELD_NETVOTES, it.getValue(lit.FIELD_NETVOTES) + netChange);
+            it.update().then(function() {
+                resolve();
+            }, function(err) {
+                reject(err);
+            })
+        }, function(err) {
+            reject(err);
+        })
+    });
+}

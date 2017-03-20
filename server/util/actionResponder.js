@@ -88,10 +88,10 @@ function subscribe(request) {
 function vote(request) {
     return new Promise(function(resolve, reject) {
         if (request.body.voted)
-            voter.changeVote(request.body.userId, request.body.itemId, request.body.voteValue)
+            voter.updateVoteAndItem(request.signedCookies.usercookie.userID, request.body.itemId, request.body.value, request.body.type)
                 .then(function() {resolve(true)}, function() {reject(false)});
         else
-            voter.onSubscribed(request.body.userId, request.body.itemId, request.body.voteValue)
+            voter.voteAndUpdateItem(request.signedCookies.usercookie.userID, request.body.itemId, request.body.value, request.body.type)
                 .then(function() {resolve(true)}, function() {reject(false)});
     });
 }
@@ -99,7 +99,7 @@ function vote(request) {
 function report(request) {
     return new Promise(function(resolve, reject) {
         if (request.body.sub == 'enter')
-            reporter.sendReport(request.body.userId, request.body.itemId, request.body.reportReason, request.body.content)
+            reporter.sendReport(request.signedCookies.usercookie.userID, request.body.itemId, request.body.reportReason, request.body.content)
                 .then(function() {resolve(true)}, function() {reject(false)});
         else
             reporter.sendReport(request.body.reportId)

@@ -19,6 +19,16 @@
 	<link rel="stylesheet" href="../css/style.css" />
 	<script type="text/javascript" src="/js/common.js"></script>
 	<script type="text/javascript" src="/js/new.js"></script>
+
+	<script src="https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
+
+	<!-- uncalled versions of CKeditor, may use later-->
+	<!--<script type="text/javascript" src="/js/text_editor.js"></script>-->
+	<!--<script src="//cdn.ckeditor.com/4.6.2/full/ckeditor.js"></script>-->
+	<!--<script src="//cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>-->
+	<!--<script type="text/javascript" src="../ckeditor.js"></script>-->
+	<!--<script type="text/javascript" src="ckeditor/ckeditor.js"></script>-->
+
 </head>
 <body>
 	<div class="container-fluid" id="wrap">
@@ -66,7 +76,9 @@
 
 							<div class="form-group">
 								<label class="help" for="details" data-toggle="tooltip" title="More information to help others better understand your question">Question Details<b class="negative inline">*</b></label>
-								<textarea class="form-control" rows="5" id="details"></textarea>
+
+								<!--<textarea class="form-control" rows="5" ></textarea>-->
+								<textarea name="editor1" id="details"></textarea>
 							</div>
 
 							<div class="form-group">
@@ -99,7 +111,7 @@
 
 							<div class="form-group">
 								<label class="help" for="linkSummary" data-toggle="tooltip" title="A summary of what information the link leads to">Summary<b class="negative inline">*</b></label>
-								<textarea class="form-control" rows="5" id="linkSummary"></textarea>
+								<textarea name="editor2" id="linkSummary"></textarea>
 							</div>
 
 							<div class="form-group">
@@ -142,7 +154,7 @@
 
 							<div class="form-group">
 								<label class="help" for="classSummary" data-toggle="tooltip" title="A summary of the course topics">Class Summary<b class="negative inline">*</b></label>
-								<textarea class="form-control" rows="5" id="classSummary"></textarea>
+								<textarea name="editor3" id="classSummary"></textarea>
 							</div>
 
 							<div class="form-group">
@@ -182,5 +194,10 @@
 			</div>
 		</div>
 	</footer>
+	<script>
+        CKEDITOR.replace('editor1');
+        CKEDITOR.replace('editor2');
+        CKEDITOR.replace('editor3');
+	</script>
 </body>
 </html>

@@ -9,15 +9,15 @@ var starTemplate = '<span class="star rating">\
                         <img src="../assets/{0}.svg" class="svg" />\
                     </span>';
 
-var postTemplate = '<div class="col-sm-12" id="{8}">\
+var postTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-hastype="post">\
                         <div class="ratings">\
-                        <span class="thumbs-up pointer">\
-                            <img src="../assets/thumbsUp.svg" class="svg" />\
-                        </span>\
-                        <span class="{2}">{3}</span>\
-                        <span class="thumbs-down pointer">\
-                            <img src="../assets/thumbsDown.svg" class="svg" />\
-                        </span>\
+                            <span class="thumbs-up pointer" onclick="vote(this)">\
+                                <img src="../assets/thumbsUp.svg" class="svg" />\
+                            </span>\
+                            <span id="votes" class="{2}">{3}</span>\
+                            <span class="thumbs-down pointer" onclick="vote(this)">\
+                                <img src="../assets/thumbsDown.svg" class="svg" />\
+                            </span>\
                         </div>\
                         <h2 class="title"><a href="/question?id={0}">{1}</a></h2>\
                         {9}\
@@ -35,13 +35,13 @@ var postTemplate = '<div class="col-sm-12" id="{8}">\
                         <hr>\
                      </div>';
 
-var linkTemplate = '<div class="col-sm-12" id="{8}">\
+var linkTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-hastype="link">\
                         <div class="ratings">\
-                        <span class="thumbs-up pointer">\
+                        <span class="thumbs-up pointer" onclick="vote(this)">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
                         </span>\
-                        <span class="{2}">{3}</span>\
-                        <span class="thumbs-down pointer">\
+                        <span id="votes" class="{2}">{3}</span>\
+                        <span class="thumbs-down pointer" onclick="vote(this)">\
                             <img src="../assets/thumbsDown.svg" class="svg" />\
                         </span>\
                         </div>\
@@ -123,6 +123,9 @@ function buildList(items) {
         if (!it)
             continue;
 
+        if (it.voted)
+            updateItemsWithPolarity.push({id: it.id, polarity: it.voted});
+
         if (it.type == "post")
             filledTemplate = fillPostTemplate(it);
         else if (it.type == "link")
@@ -142,12 +145,12 @@ function fillPostTemplate(post) {
     var date = getDateString(post.date);
 
     return fillTemplate(postTemplate, post.id, post.title, polarity, post.votes, date, post.author,
-            post.author, summary, post.id, tags, post.id);
+            post.author, summary, post.id, tags, post.id, post.voted);
 }
 
 function fillLinkTemplate(li) {
     return fillTemplate(linkTemplate, li.url, li.title, positiveOrNegative(li.votes), li.votes, getDateString(li.date),
-        li.author, li.author, getSummary(li.summary), li.id, getTags(li.tags), li.id);
+        li.author, li.author, getSummary(li.summary), li.id, getTags(li.tags), li.id, li.voted);
 }
 
 function fillClassTemplate(cl) {

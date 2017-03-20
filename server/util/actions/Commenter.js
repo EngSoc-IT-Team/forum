@@ -69,7 +69,7 @@ exports.deleteComment = function(request) {
 /*
 * Used by many of the requestResponder subclasses to get their subComments
 */
-exports.getSubComments = function(comment, item, resolve, info) {
+exports.getSubComments = function(comment, item, resolve, info, userID) {
     var commentCount = comment.count();
     var complete = 0;
     if(commentCount < 1) { // if there are no comments just resolve with the question information
@@ -78,58 +78,60 @@ exports.getSubComments = function(comment, item, resolve, info) {
     }
 
     while (comment.next()) {
-        var commentInfo = getCommentInfo(comment);
-        var subComment = new DBRow(lit.COMMENT_TABLE);
-        subComment.addQuery(lit.FIELD_COMMENT_LEVEL, 1);
-        subComment.addQuery(lit.FIELD_PARENT_POST, item.getValue(lit.FIELD_ID));
-        subComment.addQuery(lit.FIELD_PARENT_COMMENT, comment.getValue(lit.FIELD_ID));
-        subComment.orderBy(lit.FIELD_NETVOTES, lit.DESC); //TODO: enable sorting by best or by new
-        subComment.setLimit(10);
-        subComment.query().then(function () {
-            var subCommentCount = subComment.count();
-            var subComplete = 0;
-            if (subCommentCount < 1 && commentCount >= complete - 1) {
-                resolve(info);
-            }
-            else {
-                while (subComment.next()) {
-                    getSubCommentInfo(subComment, commentInfo); // pass reference to the base comment object, fill children
-                    if (commentCount >= complete && subCommentCount >= subComplete) {
-                        resolve(info);
-                        return;
-                    }
-                    subComplete++;
+        voter.getVote(userID, comment.getValue(lit.FIELD_ID)).then(function(vote) {
+            var commentInfo = getCommentInfo(comment, vote);
+            var subComment = new DBRow(lit.COMMENT_TABLE);
+            subComment.addQuery(lit.FIELD_COMMENT_LEVEL, 1);
+            subComment.addQuery(lit.FIELD_PARENT_POST, item.getValue(lit.FIELD_ID));
+            subComment.addQuery(lit.FIELD_PARENT_COMMENT, comment.getValue(lit.FIELD_ID));
+            subComment.orderBy(lit.FIELD_NETVOTES, lit.DESC); //TODO: enable sorting by best or by new
+            subComment.setLimit(10);
+            subComment.query().then(function () {
+                var subCommentCount = subComment.count();
+                var subComplete = 0;
+                if (subCommentCount < 1 && commentCount >= complete - 1)
+                    resolve(info);
+                else {
+                    while (subComment.next()) {
+                        voter.getVote(userID, subComment.getValue(lit.FIELD_ID)).then(function(subvote) {
+                            getSubCommentInfo(subComment, commentInfo, subvote); // pass reference to the base comment object, fill children
+                            if (commentCount >= complete && subCommentCount >= subComplete)
+                                return resolve(info);
 
+                            subComplete++;
+                        })
+                    }
                 }
-            }
-        });
-        info.comments.push(commentInfo); // push comment and its children to the comment array
-        complete++;
+            });
+            info.comments.push(commentInfo); // push comment and its children to the comment array
+            complete++;
+        })
     }
 };
 
-function getCommentInfo(comment) {
+function getCommentInfo(comment, vote) {
+    var hasVoted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
     return {
         summary: comment.getValue(lit.FIELD_CONTENT),
         author: comment.getValue(lit.FIELD_AUTHOR),
         votes: comment.getValue(lit.FIELD_NETVOTES),
         date: comment.getValue(lit.FIELD_TIMESTAMP),
+        id: comment.getValue(lit.FIELD_ID),
         isSelf: true, //TODO: pass this information in
-        hasVoted: false, //TODO: pass this information in
-        voteValue: 0,
-        children: []
+        voted: hasVoted
     };
 }
 
-function getSubCommentInfo(sub, comment) {
+function getSubCommentInfo(sub, comment, vote) {
+    var hasVoted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined;
     var info = {
         summary: sub.getValue(lit.FIELD_CONTENT),
         author: sub.getValue(lit.FIELD_AUTHOR),
         votes: sub.getValue(lit.FIELD_NETVOTES),
         date: sub.getValue(lit.FIELD_TIMESTAMP),
+        id: sub.getValue(lit.FIELD_ID),
         isSelf: true, //TODO: pass this information in
-        hasVoted: false, //TODO: pass this information in
-        voteValue: 0
+        voted: hasVoted
     };
     comment.children.push(info);
 }

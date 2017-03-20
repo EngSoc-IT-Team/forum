@@ -3,26 +3,32 @@
 */
 
 "use strict";
-
-var questionTemplate = '<div class="info-block row">\
+//data-hasvoted can be false, positive or negative
+var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}" data-hastype="post">\
                             <div class="col-sm-12">\
                                 <h2 class="title" id="title"><a href="/question?id={0}">{1}</a></h2>\
-                                <span class="thumbs-up">\
+                                <span class="thumbs-up pointer" onclick="vote(this)">\
                                     <img src="../assets/thumbsUp.svg" class="svg" />\
                                 </span>\
                                 <span id="votes" class="{2}">{3}</span>\
-                                <span class="thumbs-down">\
+                                <span class="thumbs-down pointer" onclick="vote(this)">\
                                     <img src="../assets/thumbsDown.svg" class="svg" />\
                                 </span>\
                                 <span class="date">Posted on {4} by <a href="/profile?username={5}">{6}</a></span>\
                                 <p class="description">{7}</p>\
                                 <div class="clearfix">\
-                                    <button type="button" class="btn btn-sm button" data-toggle="modal" data-target="#myModal">Comment</button>\
-                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#demo">Collapsible</button>\
+                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
                                     {8}\
+                                </div>\
+                                <br>\
+                                <div id="editor" class="collapse">\
+                                    <textarea name="editor1" id="editor2" rows="10" cols="80"></textarea>\
+                                    <button id="test" type="button" class="btn btn-sm button" onclick="reply(this)">Submit</button>\
                                 </div>\
                             </div>\
                         </div>';
+
+var itemID;
 
 function whenLoaded() {
     var href;
@@ -59,7 +65,13 @@ function whenLoaded() {
 function fillInQuestionHeader(details) {
     var temp = fillTemplate(questionTemplate, details.id, details.title, positiveOrNegative(details.votes), details.votes,
                                 getDateString(details.date), details.author, details.author, details.summary,
-                                getTags(details.tags));
+                                getTags(details.tags), details.id, details.voted);
+
+    itemID = details.id;
+
+    if (details.voted)
+        updateItemsWithPolarity.push({id: details.id, polarity: details.voted});
+
     $('#questionHead').append(temp);
 }
 
@@ -76,6 +88,9 @@ function addComments(comments) {
         if (!comments.hasOwnProperty(comment))
             continue;
 
+        if (comments[comment].voted)
+            updateItemsWithPolarity.push({id: comments[comment].id, polarity: comments[comment].voted});
+
         template = fillCommentLevel1Template(comments[comment]);
 
         if (comments[comment].children) {
@@ -83,22 +98,16 @@ function addComments(comments) {
                 if (!comments[comment].children.hasOwnProperty(child))
                     continue;
 
+                if (comments[comment].children[child].voted)
+                    updateItemsWithPolarity.push({id: comments[comment].children[child].id,
+                        polarity: comments[comment].children[child].voted});
+
                 template += fillCommentLevel2Template(comments[comment].children[child]);
             }
         }
 
         $('#comments').append(template);
     }
-}
-
-function fillCommentLevel1Template(comment) {
-    return fillTemplate(level1CommentTemplate, positiveOrNegative(comment.votes), comment.votes,
-        getDateString(comment.date), comment.author, comment.author, comment.summary);
-}
-
-function fillCommentLevel2Template(comment) {
-    return fillTemplate(level2CommentTemplate, positiveOrNegative(comment.votes), comment.votes,
-        getDateString(comment.date), comment.author, comment.author, comment.summary);
 }
 
 whenLoaded();

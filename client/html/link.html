@@ -18,6 +18,9 @@
     <script type="text/javascript" src="/js/templating.js"></script>
     <script type="text/javascript" src="/js/common.js"></script>
     <script type="text/javascript" src="/js/link.js"></script>
+
+    <script src="https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
+
 </head>
 <body class="question-answer-page">
 <div class="container-fluid" id="wrap">
@@ -47,22 +50,15 @@
   <div class="main-content">
       <!-- Link -->
       <div id="linkHead"></div>
-      <!-- Modal -->
-      <div class="modal fade" id="myModal" role="dialog">
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-body">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <label for="comment">Comment:</label>
-                      <textarea class="form-control" rows="5" id="comment"></textarea>
-                  </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-sm button">Submit</button>
-                  </div>
-              </div>
 
-          </div>
+      <div id="demo2" class="collapse">
+
+          <textarea name="editor1" id="editor2" rows="10" cols="80"></textarea>
+          <button type="button" class="btn btn-sm button">Submit</button>
+
       </div>
+
+      <!-- Modal -->
       <br>
       <!-- Comments -->
       <div class="comment-list media">
@@ -95,5 +91,9 @@
         </div>
     </div>
 </footer>
+<script type="text/javascript" >
+    CKEDITOR.replace( 'editor1' );
+    CKEDITOR.replace( 'editor2' );
+</script>
 </body>
 </html>

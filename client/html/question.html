@@ -18,8 +18,7 @@
 	<script type="text/javascript" src="/js/templating.js"></script>
 	<script type="text/javascript" src="/js/common.js"></script>
 	<script type="text/javascript" src="/js/question.js"></script>
-
-	<script src="https://cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>
+	<script src="https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js"></script>
 
 </head>
 <body class="question-answer-page">
@@ -50,49 +49,16 @@
 		<div class="main-content">
 			<!-- Question -->
 			<div id="questionHead">
-
-			</div>
-			<!-- Modal -->
-			<div class="modal fade" id="myModal" role="dialog">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-body">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<label for="comment">Comment:</label>
-							<form>
-            						<textarea name="editor1" id="editor1" rows="10" cols="80">
-                						Please write comment here...
-            						</textarea>
-
-						     </form>
-
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-sm button">Submit</button>
-						</div>
-					</div>
-
-				</div>
 			</div>
 			<br>
+
 			<!-- Comments -->
 			<div class="comment-list media">
 				<div class="info-block comment-block media row">
 					<div class="col-sm-12">
 						<h2 class="title">Comments</h2>
-
-						<div id="demo" class="collapse">
-							<textarea name="editor1" id="editor2" rows="10" cols="80"></textarea>
-							<!--<textarea class="form-control" rows="5" id="classSummary"></textarea>-->
-						</div>
 					</div>
-					
-						<script type="text/javascript" >
-                            // Replace the <textarea id="editor1"> with a CKEditor
-                            // instance, using default configuration.
-                            CKEDITOR.replace( 'editor1' );
-                            CKEDITOR.replace( 'editor2' );
-						</script>
+
 
 
 					<div id="comments">
@@ -120,5 +86,11 @@
 			</div>
 		</div>
 	</footer>
+	<script type="text/javascript" >
+        // Replace the <textarea id="editor1"> with a CKEditor
+        // instance, using default configuration.
+        CKEDITOR.replace( 'editor1' );
+        CKEDITOR.replace( 'editor2' );
+	</script>
 </body>
 </html>

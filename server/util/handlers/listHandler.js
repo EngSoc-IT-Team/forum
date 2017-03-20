@@ -10,7 +10,7 @@
 var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals.js');
 var log = require('./../log');
-var recursiveGet = require('./../recursion').recursiveGet;
+var recursiveGetWithVotes = require('./../recursion').recursiveGetWithVotes;
 
 
 /** listRequest(request)
@@ -24,6 +24,7 @@ var recursiveGet = require('./../recursion').recursiveGet;
 
 exports.handle = function(request) {
     var info = [];
+    var userID = request.signedCookies.usercookie.userID;
     return new Promise(function(resolve, reject) {
         var items = new DBRow(lit.ITEM_TABLE);
         for (var key in request.query)
@@ -32,16 +33,21 @@ exports.handle = function(request) {
         items.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         items.setLimit(20);
         items.query().then(function() {
-            recursiveGet(resolve, reject, items, listInfo, [info]);
+            recursiveGetWithVotes(resolve, reject, items, listInfo, userID, [info]);
         }).catch(function() {
             reject(false);
         });
     });
 };
 
-function listInfo(row, item, list) {
+function listInfo(row, item, vote, type, list) {
+    var hasVoted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
+    var voteValue;
+    if (type == 'post' || type == 'link')
+        voteValue = vote ? vote.getValue(lit.FIELD_VOTE_VALUE) : 0;
+
     var data;
-    switch(row.getValue(lit.FIELD_TYPE)) {
+    switch(type) {
         case('post'):
             data = {
                 id: item.getValue(lit.FIELD_ID),
@@ -51,7 +57,9 @@ function listInfo(row, item, list) {
                 date: row.getValue(lit.FIELD_TIMESTAMP),
                 summary: item.getValue(lit.FIELD_CONTENT),
                 type: row.getValue(lit.FIELD_TYPE),
-                tags: item.getValue(lit.FIELD_TAGS)
+                tags: item.getValue(lit.FIELD_TAGS),
+                voted: hasVoted,
+                voteValue: voteValue
             };
             break;
         case('link'):
@@ -64,7 +72,9 @@ function listInfo(row, item, list) {
                 summary: item.getValue(lit.FIELD_SUMMARY),
                 type: row.getValue(lit.FIELD_TYPE),
                 tags: item.getValue(lit.FIELD_TAGS),
-                url: item.getValue(lit.FIELD_LINK)
+                url: item.getValue(lit.FIELD_LINK),
+                voted: hasVoted,
+                voteValue: voteValue
             };
             break;
         case('class'):
@@ -77,7 +87,8 @@ function listInfo(row, item, list) {
                 date: row.getValue(lit.FIELD_TIMESTAMP),
                 summary: item.getValue(lit.FIELD_SUMMARY),
                 type: row.getValue(lit.FIELD_TYPE),
-                tags: item.getValue(lit.FIELD_TAGS)
+                tags: item.getValue(lit.FIELD_TAGS),
+                voted: hasVoted
             };
             break;
         default:
