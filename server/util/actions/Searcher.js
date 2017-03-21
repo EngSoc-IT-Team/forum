@@ -29,34 +29,13 @@ var TfIdf = natural.TfIdf;
 var wordRelater = new TfIdf();
 
 /**
- * Retrieves all tags currently in the database
- * @returns {Promise} Promise as database query is asynchronous. Eventually returns an array of Strings, one
- * for each tag in the database.
- */
-function getUserTagsInDB() {
-    var tags = [];
-    return new Promise(function (resolve, reject) {
-        var row = new dbr.DBRow(lit.TAG_TABLE);
-        row.query().then(function () {
-            while (row.next()) {
-                tags.push(row.getValue(lit.FIELD_NAME));
-            }
-            resolve(tags);
-        }).catch(function (err) {
-            log.log("getTagsInDB error: " + err);
-            reject(err);
-        });
-    });
-}
-
-/**
  * Function to search for posts by tags. Goes through search term looking for tags in database and numbers, then
  * finds posts with those tags/tags with that number.
  * @param inputSearch The search term.
  * @returns {Promise} Promise as query to database is asynchronous. Eventually returns an array of post IDs that have
  * matching tags/numbers.
  */
-function searchByUserTag(inputSearch) {
+exports.searchByUserTag = function(inputSearch) {
     return new Promise(function (resolve, reject) {
         if (!(typeof inputSearch == lit.STRING)) {
             reject("you inputted an invalid search!");
@@ -93,7 +72,7 @@ function searchByUserTag(inputSearch) {
             log.log("searchByTag: " + err);
         });
     });
-}
+};
 
 /**
  * Function that generates and inserts tags for content for later search usage.
@@ -135,6 +114,27 @@ exports.generateTags = function (newRow, table) {
         }
     );
 };
+
+/**
+ * Retrieves all tags currently in the database
+ * @returns {Promise} Promise as database query is asynchronous. Eventually returns an array of Strings, one
+ * for each tag in the database.
+ */
+function getUserTagsInDB() {
+    var tags = [];
+    return new Promise(function (resolve, reject) {
+        var row = new dbr.DBRow(lit.TAG_TABLE);
+        row.query().then(function () {
+            while (row.next()) {
+                tags.push(row.getValue(lit.FIELD_NAME));
+            }
+            resolve(tags);
+        }).catch(function (err) {
+            log.log("getTagsInDB error: " + err);
+            reject(err);
+        });
+    });
+}
 
 /**
  * Searches a given array of table for data related to a given search. Fields are chosen for you, as the fields
