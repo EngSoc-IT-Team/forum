@@ -85,8 +85,11 @@ function addMissingTags(tags) {
         if (!tags.hasOwnProperty(tag))
             continue;
 
+        if (tagArray.includes(tags[tag].toUpperCase())) // make sure we don't add tags twice
+            continue;
+
         if (!tagArray.includes(tags[tag]))
-            addTag(tags[tag]);
+            addTag(tags[tag].toUpperCase());
     }
 }
 
