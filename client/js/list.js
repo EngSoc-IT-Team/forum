@@ -114,6 +114,17 @@ function whenLoaded() {
 
 function buildList(items) {
     var filledTemplate;
+    var askAQuestion = "<h6 class='info-block show-links'>Didn't find what you were looking for? Ask it <a href='/new'>here!</a></h6>"
+
+    if (items.length == 0) {
+        $('#getMore').hide();
+        $('#foot').append(askAQuestion);
+        return;
+    }
+    else if (items.length < 10) {
+        $('#getMore').hide();
+        $('#foot').append(askAQuestion);
+    }
 
     for (var item in items) {
         if (!items.hasOwnProperty(item))

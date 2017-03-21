@@ -549,6 +549,10 @@ svg {
   width: 80px;
 }
 
+.show-links a {
+  color: #FF9200;
+}
+
 /* Footer */
 
 footer {
