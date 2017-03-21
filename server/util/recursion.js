@@ -10,6 +10,8 @@
 
 var DBRow = require('./DBRow').DBRow;
 var lit = require('./Literals');
+var voter = require('./actions/Voter');
+var rater = require('./actions/Rater');
 
 /** recursiveGet(resolve, reject, rowsToGet, action, actionArgs)
  * NOTE: the action function MUST be synchronous
@@ -56,14 +58,11 @@ exports.recursiveGetWithVotes = function(resolve, reject, rowsToGet, action, use
         var item = new DBRow(type);
         item.getRow(rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function() {
             if (type == 'link' || type == 'post') {
-                var vote = new DBRow(lit.VOTE_TABLE);
-                vote.addQuery(lit.FIELD_ITEM_ID, rowsToGet.getValue(lit.FIELD_ITEM_ID));
-                vote.addQuery(lit.FIELD_USER_ID, userID);
-                vote.query().then(function () {
-                    if (vote.next())
-                        action(rowsToGet, item, vote, type, actionArgs);
+                voter.getVote(userID, rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function (vote) {
+                    if (vote)
+                        action(item, vote, type, actionArgs);
                     else
-                        action(rowsToGet, item, undefined, type, actionArgs);
+                        action(item, undefined, type, actionArgs);
 
                     exports.recursiveGetWithVotes(resolve, reject, rowsToGet, action, userID, actionArgs)
                 }, function (err) {
@@ -73,14 +72,11 @@ exports.recursiveGetWithVotes = function(resolve, reject, rowsToGet, action, use
             else {
                 var u = new DBRow(lit.USER_TABLE);
                 u.getRow(userID).then(function() {
-                    var rating = new DBRow(lit.RATING_TABLE);
-                    rating.addQuery(lit.FIELD_PARENT, rowsToGet.getValue(lit.FIELD_ITEM_ID));
-                    rating.addQuery(lit.FIELD_AUTHOR, u.getValue(lit.FIELD_USERNAME));
-                    rating.query().then(function () {
-                        if (rating.next())
-                            action(rowsToGet, item, rating, type, actionArgs);
+                    rater.getRating(u.getValue(lit.FIELD_USERNAME), item.getValue(lit.FIELD_ID)).then(function(rating) {
+                        if (rating)
+                            action(item, rating, type, actionArgs);
                         else
-                            action(rowsToGet, item, undefined, type, actionArgs);
+                            action(item, undefined, type, actionArgs);
 
                         exports.recursiveGetWithVotes(resolve, reject, rowsToGet, action, userID, actionArgs)
                     }, function (err) {
@@ -92,6 +88,30 @@ exports.recursiveGetWithVotes = function(resolve, reject, rowsToGet, action, use
         }, function(err) {
             reject(actionArgs, err);
 
+        });
+    }
+};
+
+exports.recursiveGetListWithVotes = function(resolve, reject, rowList, action, userID, actionArgs, index) {
+    if (index > rowList.length)
+        resolve(actionArgs);
+    else {
+        var current = rowList[index];
+        if (!current)
+            return exports.recursiveGetListWithVotes(resolve, reject, rowList, action, userID, actionArgs, ++index);
+
+        var post = new DBRow(lit.POST_TABLE);
+        post.getRow(current).then(function () {
+            voter.getVote(userID,current).then(function (vote) {
+                if (vote)
+                    action(post, vote, 'post', actionArgs);
+                else
+                    action(post, undefined, 'post', actionArgs);
+
+                exports.recursiveGetListWithVotes(resolve, reject, rowList, action, userID, actionArgs, ++index)
+            }, function (err) {
+                reject(actionArgs, err);
+            });
         });
     }
 };

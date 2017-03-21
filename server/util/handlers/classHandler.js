@@ -16,7 +16,7 @@ exports.handle = function(request) {
         cl.getRow(request.query.id).then(function() {
             if (cl.count() > 0) {
                 getClassInfo(cl, info);
-                rater.getRatings(cl.getValue(lit.FIELD_ID), info, resolve);
+                rater.getRatingList(cl.getValue(lit.FIELD_ID), info, resolve);
             }
             else
                 reject("The class does not exist");

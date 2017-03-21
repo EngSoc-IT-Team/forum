@@ -203,14 +203,6 @@ function fillTemplate(template) {
     return completedTemplate;
 }
 
-/*
-*  Makes our lovely svg elements function and appear properly
- */
-jQuery(document).ready(function() {
-    /* Replace all SVG images with inline SVG */
-    svgConverter();
-});
-
 function svgConverter() {
     jQuery('img.svg').each(function(){
         var $img = jQuery(this);
@@ -257,3 +249,38 @@ function updateElements() {
             $('#' + update.id + ' .thumbs-down').children().children().children().addClass('negative');
     }
 }
+
+function search(el, direct) {
+    var query
+    if (!direct) {
+        el = $(el);
+        query = el.parent().parent().children('input').val()
+    }
+    else
+        query = direct;
+
+    if (!query)
+        return;
+
+    window.location = '/list?query=' + query;
+}
+
+function appendOnkeydown() {
+    var searcher = $('#search');
+    if (searcher)
+        searcher.keypress(function(e) {
+            if (e.which == 13) {
+                search(false, searcher.val())
+            }
+        });
+}
+
+/*
+ *  Makes our lovely svg elements function and appear properly
+ */
+jQuery(document).ready(function() {
+    /* Replace all SVG images with inline SVG */
+    svgConverter();
+
+    appendOnkeydown();
+});

@@ -79,7 +79,21 @@ exports.deleteRating = function(request) {
     });
 };
 
-exports.getRatings = function(parentID, info, resolve) {
+exports.getRating = function(username, parentID) {
+    return new Promise(function(resolve) {
+        var rating = new DBRow(lit.RATING_TABLE);
+        rating.addQuery(lit.FIELD_PARENT, parentID);
+        rating.addQuery(lit.FIELD_AUTHOR, username);
+        rating.query().then(function() {
+            if (rating.next)
+                resolve(rating);
+            else
+                resolve(undefined);
+        })
+    })
+};
+
+exports.getRatingList = function(parentID, info, resolve) {
     var ratingList = [];
     var ratings = new DBRow(lit.RATING_TABLE);
     ratings.addQuery(lit.FIELD_PARENT, parentID);
