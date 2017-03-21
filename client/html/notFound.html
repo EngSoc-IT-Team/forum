@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700&amp;subset=cyrillic" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src="/js/notFound.js"></script>
 </head>
 
 <body onload="addUrl()">
@@ -35,6 +36,12 @@
                         <a role="menuitem" tabindex="-1" href="/profile" class="dropdown-item"><li role="presentation">Profile</li></a>
                         <a role="menuitem" tabindex="-1" href="#" onclick="logout()" class="dropdown-item"><li role="presentation">Logout</li></a>
                     </ul>
+                </div>
+                <div class="input-group" id="navbar-search">
+                    <input type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="button" onclick="search(this)">Go!</button>
+                    </span>
                 </div>
             </div>
         </header>
@@ -65,9 +72,4 @@
       </div>
     </footer>
 </body>
-<script type="text/javascript" src="/js/loginPost.js"></script>
-<script type="text/javascript">
-    function addUrl() {
-        $(urlText).html('The URL: <b><a class="body-link" href="' + window.location.href + '">' + window.location.href + '</a></b> could not be found.');}
-</script>
 </html>
