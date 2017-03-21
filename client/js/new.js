@@ -247,6 +247,9 @@ function suggestTag(parent) {
 
 $(document).ready(function() {
     getTagArray();
+    CKEDITOR.replace('editor1');
+    CKEDITOR.replace('editor2');
+    CKEDITOR.replace('editor3');
 });
 
 

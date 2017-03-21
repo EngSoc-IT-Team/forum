@@ -73,6 +73,7 @@ function whenLoaded() {
             classID = data.class.id;
             fillInClassHeader(data.class);
             addReviews(data.reviews);
+            CKEDITOR.replace('editor1');
         }
         else {
             // at some point show "something went wrong" modal
