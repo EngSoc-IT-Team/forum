@@ -160,9 +160,9 @@ function fillClassTemplate(cl) {
 
 function getSummary(summ) {
     if (summ.length > 120)
-        return summ.slice(0, 120) + ' ...'; //TODO: make this more intelligent
+        return summ.replace(/<(?:.|\n)*?>/gm, ' ').slice(0, 120) + ' ...'; //TODO: make this more intelligent
     else
-        return summ;
+        return summ.replace(/<(?:.|\n)*?>/gm, ' ');
 }
 
 whenLoaded();

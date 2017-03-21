@@ -28,7 +28,7 @@ exports.handle = function(request) {
                     comments.orderBy(lit.FIELD_NETVOTES, lit.DESC);
                     comments.setLimit(10);
                     comments.query().then(function() {
-                        commenter.getSubComments(comments, question, resolve, info, request.signedCookies.usercookie.userID);
+                        commenter.getCommentsRecursive(resolve, reject, comments, question, info, request.signedCookies.usercookie.userID);
                     });
                 })
             }

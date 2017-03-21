@@ -41,6 +41,7 @@ exports.insert = function(table, dbObject) {
 	if (!dboBrokenDown)
 		return undefined;
 
+	console.log(base + dboBrokenDown[0] + " VALUES " + dboBrokenDown[1] + ";");
 	return base + dboBrokenDown[0] + " VALUES " + dboBrokenDown[1] + ";";
 };
 
@@ -187,7 +188,10 @@ function resolveObjectType(resolveThis) {
 	if (objectType == lit.STRING)
 		return mysql.escape(resolveThis);
 
-    if (objectType == lit.UNDEFINED || objectType == lit.SYMBOL || objectType == lit.FUNCTION || objectType == lit.OBJECT)
+	if (objectType == lit.UNDEFINED)
+		return null;
+
+    if (objectType == lit.SYMBOL || objectType == lit.FUNCTION || objectType == lit.OBJECT)
         return log.warn("Objects with type '" + objectType + "' are not currently implemented, please pass a number, boolean or string");
 }
 

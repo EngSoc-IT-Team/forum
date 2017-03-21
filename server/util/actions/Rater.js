@@ -28,7 +28,7 @@ exports.addRating = function (request) {
                 var rating = new DBRow(lit.RATING_TABLE);
                 rating.setValue(lit.FIELD_AUTHOR, u.getValue(lit.FIELD_USERNAME));
                 rating.setValue(lit.FIELD_PARENT, request.body.info.parent);
-                rating.setValue(lit.FIELD_CONTENT, request.body.info.content);
+                rating.setValue(lit.FIELD_CONTENT, request.body.info.content ? request.body.info.content : null);
                 rating.setValue(lit.FIELD_RATING, request.body.info.rating);
                 rating.insert().then(function () {
                     voter.vote(request.signedCookies.usercookie.userID, rating.getValue(lit.FIELD_ID), 1); // don't need to wait for this to complete

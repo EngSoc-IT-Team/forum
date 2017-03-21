@@ -18,18 +18,19 @@ var linkTemplate = '<div class="info-block row" id="{11}" data-hasvoted="{12}" d
                                 <span class="date">Posted on {6} by <a href="/profile?username={7}">{8}</a></span>\
                                 <p class="description">{9}</p>\
                                 <div class="clearfix">\
-                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#demo2">Comment</button>\
+                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
                                     {10}\
                                 </div>\
                                 <br>\
                                 <div id="editor" class="collapse">\
                                     <textarea name="editor1" id="editor2" rows="10" cols="80"></textarea>\
-                                    <button type="button" class="btn btn-sm button" onclick="reply(this)">Submit</button>\
+                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor" onclick="reply(this)">Submit</button>\
                                 </div>\
                             </div>\
                         </div>';
 
 var itemID;
+var loaded = false;
 
 function whenLoaded() {
     var href;
@@ -52,6 +53,9 @@ function whenLoaded() {
             fillInLinkHeader(data.link);
             addComments(data.comments);
             svgConverter();
+            CKEDITOR.replace( 'editor1' );
+            activateEditors();
+            loaded = true;
         }
         else {
             // at some point show "something went wrong" modal
@@ -89,7 +93,7 @@ function addComments(comments) {
         if (!comments.hasOwnProperty(comment))
             continue;
 
-        if (it.voted)
+        if (comments[comment])
             updateItemsWithPolarity.push({id: comments[comment].id, polarity: comments[comment].voted});
 
         template = fillCommentLevel1Template(comments[comment]);
@@ -99,7 +103,7 @@ function addComments(comments) {
                 if (!comments[comment].children.hasOwnProperty(child))
                     continue;
 
-                if (it.voted)
+                if (comments[comment].children[child])
                     updateItemsWithPolarity.push({id: comments[comment].children[child].id,
                         polarity: comments[comment].children[child].voted});
 
@@ -111,4 +115,5 @@ function addComments(comments) {
     }
 }
 
+// start the page
 whenLoaded();

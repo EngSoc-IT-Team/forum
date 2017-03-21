@@ -3,7 +3,7 @@
 */
 
 "use strict";
-//data-hasvoted can be false, positive or negative
+
 var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}" data-hastype="post">\
                             <div class="col-sm-12">\
                                 <h2 class="title" id="title"><a href="/question?id={0}">{1}</a></h2>\
@@ -23,12 +23,13 @@ var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}
                                 <br>\
                                 <div id="editor" class="collapse">\
                                     <textarea name="editor1" id="editor2" rows="10" cols="80"></textarea>\
-                                    <button id="test" type="button" class="btn btn-sm button" onclick="reply(this)">Submit</button>\
+                                    <button id="test" type="button" class="btn btn-sm button" data-target="#editor" data-toggle="collapse" onclick="reply(this)">Submit</button>\
                                 </div>\
                             </div>\
                         </div>';
 
 var itemID;
+var loaded = false;
 
 function whenLoaded() {
     var href;
@@ -51,6 +52,9 @@ function whenLoaded() {
             fillInQuestionHeader(data.question);
             addComments(data.comments);
             svgConverter();
+            CKEDITOR.replace( 'editor1' );
+            activateEditors();
+            loaded = true;
         }
         else {
             // at some point show "something went wrong" modal
@@ -110,4 +114,5 @@ function addComments(comments) {
     }
 }
 
+// start the page
 whenLoaded();

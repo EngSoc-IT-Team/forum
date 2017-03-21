@@ -1,9 +1,9 @@
-"use strict";
-
 /* Common.js
  *  Created by Michael Albinson 12/20/17
  * A file that contains functionality core to the entire forum
  */
+
+"use strict";
 
 function logout() {
     $.ajax({
@@ -138,16 +138,41 @@ function displayNewVotes(count, element) {
     element[0].innerHTML = count;
 }
 
-function reply(parent, text, userid) {
-    var content = {requested:"add", type:"comment", parentId: parent, content: text, userId: userid};
+function reply(el) {
+    el = $(el);
+    var editorID = el.parent().children('textarea').attr('id');
+    var text = CKEDITOR.instances[editorID].getData();
+    var replyLevel = (el.parent().parent().attr('data-hastype') == "comment") ? 1 : 0;
+    var parentID;
+
+    if (replyLevel)
+        parentID = el.parent().parent().attr('id');
+
+    if (!text.trim())
+        return; // if there's no body to the comment don't add it
+
+    var content = {sub:"add", action: "comment", parent: itemID, content: text, parentComment: parentID, level: replyLevel};
     $.ajax({
-        url: href,
+        url: '/action',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(content)
     }).done(function(data) {
         if (data) {
-            console.log("success");
+            console.log(data);
+            data.votes = 1;
+            data.date = "Just Now";
+            var newComment;
+            if (content.level) {
+                newComment = fillCommentLevel2Template(data);
+                $('#' + parentID).after(newComment);
+            }
+            else {
+                newComment = fillCommentLevel1Template(data);
+                $('#comments').prepend(newComment[0]);
+                activateEditors(newComment[1]);
+            }
+            svgConverter();
         }
         else {
             // at some point show "something went wrong" modal
@@ -182,9 +207,7 @@ function fillTemplate(template) {
 *  Makes our lovely svg elements function and appear properly
  */
 jQuery(document).ready(function() {
-    /*
-     * Replace all SVG images with inline SVG
-     */
+    /* Replace all SVG images with inline SVG */
     svgConverter();
 });
 
@@ -218,6 +241,10 @@ function svgConverter() {
     });
 }
 
+/**
+ * Adds the correct coloring to the thumbs up and thumbs down elements of comments and posts
+ * Must be called after svgConverter, otherwise the elements will not be properly converted
+ */
 function updateElements() {
     for (var it in updateItemsWithPolarity) {
         if(!updateItemsWithPolarity.hasOwnProperty(it))

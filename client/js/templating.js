@@ -5,6 +5,8 @@
 * A file that contains functions universally required for creating templates and templates used by more than one page
  */
 
+"use strict";
+
 var level1CommentTemplate = '<div class="col-sm-12" id="{6}" data-hasvoted="{7}" data-hastype="comment">\
                                 <div style="display:inline-block">\
                                     <span class="thumbs-up pointer" onclick="vote(this)">\
@@ -17,28 +19,29 @@ var level1CommentTemplate = '<div class="col-sm-12" id="{6}" data-hasvoted="{7}"
                                 </div>\
                                 <span class="date">{2} by <a href="/profile?username={3}">{4}</a></span>\
                                 <p class="description">{5}</p>\
-                                <a class="btn btn-sm button" href="/question/id=tobecreated">Reply</a>\
-                                <a class="btn btn-sm button" href="/question/id=tobecreated">Save</a>\
-                                <a class="btn btn-sm button" href="/question/id=tobecreated">Subscribe</a>\
-                                <a class="btn btn-sm button" href="/question/id=tobecreated">Report</a>\
+                                {8}\
+                                <button role="button" class="btn btn-sm button">Save</button>\
+                                <button role="button" class="btn btn-sm button">Subscribe</button>\
+                                <button role="button" class="btn btn-sm button">Report</button>\
+                                {9}\
                                 <hr/>\
                              </div>';
 
 var level2CommentTemplate = '<div class="info-block comment-block media" id="{6}" data-hasvoted="{7}" data-hastype="comment">\
                                 <div style="display:inline-block">\
-                                    <span class="thumbs-up" onclick="vote(this)">\
+                                    <span class="thumbs-up pointer" onclick="vote(this)">\
                                         <img src="../assets/thumbsUp.svg" class="svg" />\
                                     </span>\
                                     <span id="votes" class="{0}">{1}</span>\
-                                    <span class="thumbs-down" onclick="vote(this)">\
+                                    <span class="thumbs-down pointer" onclick="vote(this)">\
                                         <img src="../assets/thumbsDown.svg" class="svg" />\
                                     </span>\
                                 </div>\
                                 <span class="date">{2} by <a href="/profile?username={3}">{4}</a></span>\
                                 <p class="description">{5}</p>\
-                                <a class="btn btn-sm button" href="/question/id=tobecreated">Save</a>\
-                                <a class="btn btn-sm button" href="/question/id=tobecreated">Subscribe</a>\
-                                <a class="btn btn-sm button" href="/question/id=tobecreated">Report</a>\
+                                <button role="button" class="btn btn-sm button">Save</button>\
+                                <button role="button" class="btn btn-sm button">Subscribe</button>\
+                                <button role="button" class="btn btn-sm button">Report</button>\
                                 <hr />\
                             </div>';
 
@@ -47,6 +50,14 @@ var tagTemplate = '<button class="btn btn-sm question-tag" type="submit" onclick
 var starTemplate = '<span class="star rating">\
                       <img src="../assets/{0}.svg" class="svg" />\
                     </span>';
+
+var replyTemplate = '<button role="button" class="btn btn-sm button" data-toggle="collapse" data-target="#{0}">Reply</button>';
+
+var editorTemplate = '<div id="{0}" class="collapse">\
+                        <br>\
+                        <textarea name="{1}" id="{2}" rows="10" cols="80"></textarea><br>\
+                        <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#{3}" onclick="reply(this)">Submit</button>\
+                     </div>';
 
 var updateItemsWithPolarity = []; // go and update votes on elements that need updates
 
@@ -87,8 +98,15 @@ function fillCommentLevel1Template(comment) {
     if(comment.voted)
         updateItemsWithPolarity.push({id: comment.id, polarity: comment.voted});
 
-    return fillTemplate(level1CommentTemplate, positiveOrNegative(comment.votes), comment.votes,
-        getDateString(comment.date), comment.author, comment.author, comment.summary, comment.id, comment.voted);
+    var replyThings = getReplyItems();
+    if (!loaded)
+        return fillTemplate(level1CommentTemplate, positiveOrNegative(comment.votes), comment.votes,
+        getDateString(comment.date), comment.author, comment.author, comment.summary, comment.id, comment.voted,
+        replyThings[0], replyThings[1]);
+    else
+        return [fillTemplate(level1CommentTemplate, positiveOrNegative(comment.votes), comment.votes,
+            getDateString(comment.date), comment.author, comment.author, comment.summary, comment.id, comment.voted,
+            replyThings[0], replyThings[1]), replyThings[2]];
 }
 
 function fillCommentLevel2Template(comment) {
@@ -97,4 +115,29 @@ function fillCommentLevel2Template(comment) {
 
     return fillTemplate(level2CommentTemplate, positiveOrNegative(comment.votes), comment.votes,
         getDateString(comment.date), comment.author, comment.author, comment.summary, comment.id, comment.voted);
+}
+
+var numEditors = 0;
+var editorNames = [];
+function getReplyItems() {
+    var items = [];
+    var editorName = 'e' + numEditors;
+    var editorId = 'edID' + numEditors;
+    items.push(fillTemplate(replyTemplate, editorId));
+    items.push(fillTemplate(editorTemplate, editorId, editorName, editorName, editorId));
+    editorNames.push(editorName);
+    if (loaded)
+        items.push(editorName);
+
+    numEditors++;
+    return items;
+}
+
+function activateEditors(id) {
+    if (!id) {
+        for (var i = 0; i < numEditors; i++)
+            CKEDITOR.replace('e' + i);
+    }
+    else
+        CKEDITOR.replace(id);
 }

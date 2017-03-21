@@ -215,8 +215,9 @@ a:focus {
   background-color: #957db3;
 }
 
-.button:hover {
-  color: #957db3;
+.button:hover,
+.button:focus {
+  color: #FF9200;
 }
 
 .eng-text {

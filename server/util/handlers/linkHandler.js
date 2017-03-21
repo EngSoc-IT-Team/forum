@@ -23,8 +23,11 @@ exports.handle = function(request) {
                     comments.addQuery(lit.FIELD_PARENT_POST, link.getValue(lit.FIELD_ID));
                     comments.orderBy(lit.FIELD_NETVOTES, lit.DESC);
                     comments.setLimit(10);
-                    comments.query().then(function () {
-                        commenter.getSubComments(comments, link, resolve, info, request.signedCookies.usercookie.userID);
+                    comments.query().then(function() {
+                        if (comments.count() < 1)
+                            resolve(info);
+                        else
+                            commenter.getCommentsRecursive(resolve, reject, comments, link, info, request.signedCookies.usercookie.userID);
                     });
                 });
             }

@@ -123,7 +123,7 @@ function tag(request) {
 function comment(request) {
     return new Promise(function(resolve, reject){
         if (request.body.sub == "add")
-            commenter.addComment(request).then(function() {resolve(true)}, function() {reject(false)});
+            commenter.addComment(request).then(function(res) {resolve(res)}, function() {reject(false)});
         else if (request.body.sub == "edit")
             commenter.editComment(request).then(function() {resolve(true)}, function() {reject(false)});
         else if (request.body.sub == "delete")
