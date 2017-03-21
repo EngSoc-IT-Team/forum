@@ -11,7 +11,6 @@ var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals.js');
 var log = require('./../log');
 var searcher = require('./../actions/Searcher');
-var voter = require('./../actions/Voter');
 var recursion = require('./../recursion');
 
 

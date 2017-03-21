@@ -69,7 +69,7 @@ var classTemplate = '<div class="col-sm-12" id="{10}">\
                         {9}\
                         <p class="date-and-user">\
                             <span class="date" style="color: blue">[class]</span>\
-                            <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
+                            <span class="date">Added by <a href="/profile?username={5}">{6}</a></span>\
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
