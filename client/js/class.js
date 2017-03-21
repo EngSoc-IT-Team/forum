@@ -38,17 +38,6 @@ var level1ReviewTemplate = '<div class="col-sm-12" id="{0}">\
                                 <hr />\
                             </div>';
 
-
-// TODO: delete if not used
-// var level2ReviewTemplate = '<div class="info-block comment-block media" id="{0}">\
-//                                 {1}\
-//                                 <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
-//                                 <p class="description">{summ}</p>\
-//                                 <button class="btn btn-sm button" onclick="save(this)">Save</button>\
-//                                 <button class="btn btn-sm button" onclick="report(this)">Report</button>\
-//                                 <hr />\
-//                             </div>';
-
 var classID;
 var starRating = 0;
 
