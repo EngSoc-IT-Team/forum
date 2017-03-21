@@ -159,7 +159,6 @@ function reply(el) {
         data: JSON.stringify(content)
     }).done(function(data) {
         if (data) {
-            console.log(data);
             data.votes = 1;
             data.date = "Just Now";
             var newComment;
@@ -173,6 +172,10 @@ function reply(el) {
                 activateEditors(newComment[1]);
             }
             svgConverter();
+
+            var foot = $('#foot');
+            if (foot.length && foot.is(":visible"))
+                foot.hide();
         }
         else {
             // at some point show "something went wrong" modal
