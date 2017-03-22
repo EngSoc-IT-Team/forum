@@ -17,13 +17,13 @@ function login() {
 	}
 
 	$.ajax({
-    	url: '/login',
+    	url: location.url,
     	type: 'POST',
     	contentType: 'application/json', 
     	data: JSON.stringify(content)
     }).done(function(data) {
     	if (data) {
-            location.href = '/'
+            location.href = location.href.replace('/login?redirect=', '');
         }
         else {
             $(signIn).prop("disabled", false);

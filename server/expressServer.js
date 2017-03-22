@@ -39,28 +39,16 @@ var isInProduction = (config.production == lit.TRUE);
 */
 
 server.get(lit.ROOT_ROUTE, function(request, response) { // default link, delivers landing page
-	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
-
-	response.sendFile(path.join(__dirname, '..', 'client/html/index.html'));
-});
-
-server.get(lit.SEARCH_ROUTE, function(request, response) { // to search bar
-	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE);
 
 	response.sendFile(path.join(__dirname, '..', 'client/html/index.html'));
 });
 
 server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, queried by id
-	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
+	if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
+
 	validator.validateItemExistence(request).then(function() {
         response.sendFile(path.join(__dirname, '..', 'client/html/question.html'));
 	}).catch(function() {
@@ -69,38 +57,32 @@ server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, q
 });
 
 server.get(lit.ABOUT_ROUTE, function(request, response) { //about page
-	if (Object.keys(request.signedCookies).length === 0) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
 	response.sendFile(path.join(__dirname, '..', 'client/html/about.html'));
 });
 
 server.get(lit.NEW_ROUTE, function(request, response) { // place where new things can be added
-	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
+
 	response.sendFile(path.join(__dirname, '..', 'client/html/new.html'));
 });
 
 server.get(lit.LIST_ROUTE, function(request, response) { //return the a default most recent list of questions
-	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
 	response.sendFile(path.join(__dirname, '..', 'client/html/list.html'));
 });
 
 server.get(lit.PROFILE_ROUTE, function(request, response) { //user home page
-	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
+
 	if (!compare.isEmpty(request.query)) {
-		validator.validateUser(request).then(function(res) {
+		validator.validateUser(request).then(function() {
 			response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
 
 		}, function() {
@@ -113,21 +95,22 @@ server.get(lit.PROFILE_ROUTE, function(request, response) { //user home page
 	}
 });
 
-server.get(lit.LOGIN_ROUTE, function(request, response) { // mock login page
+server.get(lit.LOGIN_ROUTE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies))
 		response.sendFile(path.join(__dirname, '..', 'client/html/login.html'));
 	else
-		response.redirect(lit.ROOT_ROUTE);
+		response.redirect(request.query.redirect ? request.query.redirect : lit.ROOT_ROUTE);
 });
 
 server.get(lit.GUIDELINES_ROUTE, function(request, response) { // mock login page
-	if (compare.isEmpty(request.signedCookies))
-		response.redirect(lit.LOGIN_ROUTE);
+	if (compare.isEmpty(request.signedCookies)) {
+        response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
+	}
 	else
 		response.sendFile(path.join(__dirname, '..', 'client/html/guidelines.html'));
 });
 
-server.get(lit.DEV_ROUTE, function(request, response) { // mock login page
+server.get(lit.DEV_ROUTE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies))
 		response.redirect(lit.LOGIN_ROUTE);
 	else {
@@ -153,19 +136,15 @@ server.get(lit.EVAL_ROUTE, function(request, response) { //allows evaluation of 
 });
 
 server.get(lit.HELP_ROUTE, function(request, response) { // user help page
-	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
 	response.sendFile(path.join(__dirname, '..', 'client/html/help.html'));
 });
 
 server.get(lit.CLASS_ROUTE, function(request, response) { // user help page
-	if (compare.isEmpty(request.signedCookies)) {
-		response.redirect(lit.LOGIN_ROUTE);
-		return;
-	}
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
     validator.validateItemExistence(request).then(function() {
         response.sendFile(path.join(__dirname, '..', 'client/html/class.html'));
@@ -175,10 +154,8 @@ server.get(lit.CLASS_ROUTE, function(request, response) { // user help page
 });
 
 server.get(lit.LINK_ROUTE, function(request, response) { // user help page
-    if (compare.isEmpty(request.signedCookies)) {
-        response.redirect(lit.LOGIN_ROUTE);
-        return;
-    }
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
     validator.validateItemExistence(request).then(function() {
         response.sendFile(path.join(__dirname, '..', 'client/html/link.html'));
