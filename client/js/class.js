@@ -32,7 +32,7 @@ var classTemplate = '<div class="info-block clearfix">\
 var level1ReviewTemplate = '<div class="col-sm-12" id="{0}">\
                                 {1}\
                                 <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
-                                <p class="description">{5}</p>\
+                                <div class="description show-links">{5}</div>\
                                 <button class="btn btn-sm button" onclick="save(this)">Save</button>\
                                 <button class="btn btn-sm button" onclick="report(this)">Report</button>\
                                 <hr />\

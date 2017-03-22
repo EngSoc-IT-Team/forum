@@ -15,7 +15,7 @@ var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}
                                     <img src="../assets/thumbsDown.svg" class="svg" />\
                                 </span>\
                                 <span class="date">Posted on {4} by <a href="/profile?username={5}">{6}</a></span>\
-                                <p class="description">{7}</p>\
+                                <div class="description show-links">{7}</div>\
                                 <div class="clearfix">\
                                     <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
                                     {8}\

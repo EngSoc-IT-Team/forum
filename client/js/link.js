@@ -16,7 +16,7 @@ var linkTemplate = '<div class="info-block row" id="{11}" data-hasvoted="{12}" d
                                     <img src="../assets/thumbsDown.svg" class="svg" />\
                                 </span>\
                                 <span class="date">Posted on {6} by <a href="/profile?username={7}">{8}</a></span>\
-                                <p class="description">{9}</p>\
+                                <div class="description show-links">{9}</div>\
                                 <div class="clearfix">\
                                     <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
                                     {10}\
