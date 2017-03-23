@@ -33,6 +33,7 @@ exports.addRating = function (request) {
                 rating.insert().then(function () {
                     voter.vote(request.signedCookies.usercookie.userID, rating.getValue(lit.FIELD_ID), 1); // don't need to wait for this to complete
                     contributor.generateContribution(rating, request.signedCookies.usercookie.userID, lit.RATING_TABLE);
+                    exports.setAverageRating(rating.getValue(lit.FIELD_PARENT));
                     resolve({id: rating.getValue(lit.FIELD_ID), author: rating.getValue(lit.FIELD_AUTHOR)});
                 }, function (err) {
                     reject(err);
@@ -55,6 +56,7 @@ exports.editRating = function (request) {
 
             rating.setValue(lit.FIELD_CONTENT, request.body.content);
             rating.update().then(function() {
+                exports.setAverageRating(rating.getValue(lit.FIELD_PARENT));
                 resolve();
             }, function(err) {
                 reject(err)
@@ -133,3 +135,35 @@ function hasAlreadyRatedItem(user, item) {
         });
     });
 }
+
+exports.setAverageRating = function(classID) {
+    return new Promise(function(resolve) {
+        var ratings = new DBRow(lit.RATING_TABLE);
+        ratings.addQuery(lit.FIELD_PARENT, classID);
+        ratings.query().then(function() {
+            var count = ratings.count();
+            var aggregate = 0;
+            if (count < 1)
+                return resolve(false);
+
+            while (ratings.next())
+                aggregate += ratings.getValue(lit.FIELD_RATING);
+
+            var avgRating = Math.round(aggregate / count);
+            var cl = new DBRow(lit.CLASS_TABLE);
+            cl.getRow(classID).then(function() {
+                cl.setValue(lit.FIELD_AVERAGE_RATING, avgRating);
+                cl.setValue(lit.FIELD_RATINGS, count);
+                cl.update().then(function() {
+                    resolve(true);
+                }).catch(function() {
+                    resolve(false);
+                })
+            }).catch(function() {
+                resolve(false);
+            })
+        }).catch(function() {
+            resolve(false);
+        })
+    });
+};

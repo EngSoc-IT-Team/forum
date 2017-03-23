@@ -41,7 +41,6 @@ exports.insert = function(table, dbObject) {
 	if (!dboBrokenDown)
 		return undefined;
 
-	console.log(base + dboBrokenDown[0] + " VALUES " + dboBrokenDown[1] + ";");
 	return base + dboBrokenDown[0] + " VALUES " + dboBrokenDown[1] + ";";
 };
 
