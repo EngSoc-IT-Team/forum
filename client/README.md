@@ -1,16 +1,18 @@
-# Client Pages
-1.	Landing Page - Robert
-2.	Question Page - Ayrton
-3.	Profile Page - Michael
-4.	Reporting/flagging subsection -- more of a subsection
-5.	Reddit-style list view - Robert
-6.	Question Creation page - Ayrton
-7.	First Year Area
-8.	How to use forum page - Aryton
-9.  Login - Michael — needs updates
-10. About Page - Michael — needs updates
-11. Class Page - Robert
-12. Help page - Ayrton
-13. Not found page - Michael
-14. Guidelines Page - Michael — DRAFT, needs further updates
-15. Link page - ~(O.O)~ anyone?
+# Client
+quick summary about the client folder, what's in it and what those things are used for
+
+## assets
+quick summary, what to see, who to yell at when things go wrong, refer to the folder specific documentation
+(each folder will have a readme)
+
+## css
+quick summary, what to see, who to yell at when things go wrong, refer to the folder specific documentation
+                                                               (each folder will have a readme)
+
+## html
+quick summary, what to see, who to yell at when things go wrong, refer to the folder specific documentation
+                                                               (each folder will have a readme)
+
+## js
+quick summary, what to see, who to yell at when things go wrong, refer to the folder specific documentation
+                                                               (each folder will have a readme)
