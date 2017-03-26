@@ -20,7 +20,6 @@ var postTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-h
                             </span>\
                         </div>\
                         <h2 class="title"><a href="/question?id={0}">{1}</a></h2>\
-                        {9}\
                         <p class="date-and-user">\
                             <span class="positive date">[post]</span>\
                             <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
@@ -32,6 +31,7 @@ var postTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-h
                             <a href="javascript: void 0;" onclick="save(this)">Save</a>\
                             <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                         </div>\
+                        {9}\
                         <hr>\
                      </div>';
 
@@ -46,7 +46,6 @@ var linkTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-h
                         </span>\
                         </div>\
                         <h2 class="title"><a href="{0}" target="_blank">{1}</a></h2>\
-                        {9}\
                         <p class="date-and-user">\
                             <span class="negative date">[link]</span>\
                             <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
@@ -58,6 +57,7 @@ var linkTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-h
                             <a href="javascript: void 0;" onclick="save(this)">Save</a>\
                             <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                         </div>\
+                        {9}\
                         <hr>\
                      </div>';
 
@@ -66,7 +66,6 @@ var classTemplate = '<div class="col-sm-12" id="{10}" data-hastype="class">\
                           {3}\
                         </div>\
                         <h2 class="title"><a href="/class?id={0}">{1}: {2}</a></h2>\
-                        {9}\
                         <p class="date-and-user">\
                             <span class="date" style="color: blue">[class]</span>\
                             <span class="date">Added by <a href="/profile?username={5}">{6}</a></span>\
@@ -78,6 +77,7 @@ var classTemplate = '<div class="col-sm-12" id="{10}" data-hastype="class">\
                             <a href="javascript: void 0;" onclick="save(this)">Save</a>\
                             <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                         </div>\
+                        {9}\
                         <hr>\
                       </div>';
 

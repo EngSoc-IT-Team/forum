@@ -303,6 +303,9 @@ a:focus {
   float: right;
   background-color: rgba(52, 5, 109, 0.52);
   color: #fff;
+  padding-top: 3px;
+  padding-bottom: 0px;
+  font-size: 10px;
 }
 
 .question-tag:hover {
@@ -517,6 +520,10 @@ svg {
 
 #list-page .see-more {
   padding-bottom: 20px;
+}
+
+#list-page .action-links {
+  display: inline-block;
 }
 
 #list-page .action-links a {
