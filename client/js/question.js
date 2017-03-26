@@ -7,11 +7,11 @@
 var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}" data-hastype="post">\
                             <div class="col-sm-12">\
                                 <h2 class="title" id="title"><a href="/question?id={0}">{1}</a></h2>\
-                                <span class="thumbs-up pointer" onclick="vote(this)">\
+                                <span class="thumbs-up pointer" onclick="vote(this)" tabindex="0">\
                                     <img src="../assets/thumbsUp.svg" class="svg" />\
                                 </span>\
                                 <span id="votes" class="{2}">{3}</span>\
-                                <span class="thumbs-down pointer" onclick="vote(this)">\
+                                <span class="thumbs-down pointer" onclick="vote(this)" tabindex="0">\
                                     <img src="../assets/thumbsDown.svg" class="svg" />\
                                 </span>\
                                 <span class="date">Posted on {4} by <a href="/profile?username={5}">{6}</a></span>\
