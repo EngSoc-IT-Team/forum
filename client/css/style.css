@@ -21,10 +21,6 @@ a:focus {
   text-decoration: none;
 }
 
-.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
-  outline: 0;
-}
-
 .main-content {
   margin-bottom: 250px; /* Same height as footer */
   position: relative;
@@ -116,6 +112,10 @@ a:focus {
 
 .dropdown-toggle:after {
   color: #FF9200;
+}
+
+.dropdown-toggle:focus {
+  outline: 5px auto -webkit-focus-ring-color;
 }
 
 .profile-image {
