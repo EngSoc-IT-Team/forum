@@ -38,14 +38,14 @@ exports.handle = function(request) {
         items.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         items.setLimit(20);
         items.query().then(function() {
-            recursion.recursiveGetWithVotes(resolve, reject, items, listInfo, userID, [info]);
+            recursion.recursiveGetWithVotes(resolve, reject, items, exports.listInfo, userID, [info]);
         }).catch(function() {
             reject(false);
         });
     });
 };
 
-function listInfo(item, vote, type, list) {
+exports.listInfo = function(item, vote, type, list) {
     var hasVoted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
     var voteValue;
     if (type == 'post' || type == 'link')
@@ -99,7 +99,7 @@ function listInfo(item, vote, type, list) {
             break;
     }
     list[0].push(data);
-}
+};
 
 function useSearch(resolve, reject, request) {
     var info = [];

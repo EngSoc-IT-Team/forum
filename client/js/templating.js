@@ -9,11 +9,11 @@
 
 var level1CommentTemplate = '<div class="col-sm-12" id="{6}" data-hasvoted="{7}" data-hastype="comment">\
                                 <div style="display:inline-block">\
-                                    <span class="thumbs-up pointer" onclick="vote(this)">\
+                                    <span class="thumbs-up pointer" onclick="vote(this)" tabindex="0">\
                                         <img src="../assets/thumbsUp.svg" class="svg" />\
                                     </span>\
                                     <span id="votes" class="{0}">{1}</span>\
-                                    <span class="thumbs-down pointer" onclick="vote(this)">\
+                                    <span class="thumbs-down pointer" onclick="vote(this)" tabindex="0">\
                                         <img src="../assets/thumbsDown.svg" class="svg" />\
                                     </span>\
                                 </div>\
@@ -29,11 +29,11 @@ var level1CommentTemplate = '<div class="col-sm-12" id="{6}" data-hasvoted="{7}"
 
 var level2CommentTemplate = '<div class="info-block comment-block media" id="{6}" data-hasvoted="{7}" data-hastype="comment">\
                                 <div style="display:inline-block">\
-                                    <span class="thumbs-up pointer" onclick="vote(this)">\
+                                    <span class="thumbs-up pointer" onclick="vote(this)" tabindex="0">\
                                         <img src="../assets/thumbsUp.svg" class="svg" />\
                                     </span>\
                                     <span id="votes" class="{0}">{1}</span>\
-                                    <span class="thumbs-down pointer" onclick="vote(this)">\
+                                    <span class="thumbs-down pointer" onclick="vote(this)" tabindex="0">\
                                         <img src="../assets/thumbsDown.svg" class="svg" />\
                                     </span>\
                                 </div>\

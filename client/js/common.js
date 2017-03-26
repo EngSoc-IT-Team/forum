@@ -23,12 +23,16 @@ function logout() {
     });
 }
 
-function subscribe(itemid, isSubscribed, type) {
+function subscribe(el) {
+    el = $(el);
+    var itemID = el.parent().parent().attr('id');
+    var itemType = el.parent().parent().attr('data-hastype');
+
     $.ajax({
         url: '/action',
         type: 'POST',
-        contentType: 'application/json', 
-        data: JSON.stringify({itemId: itemid, subscribed: isSubscribed, action:"subscribe", contentType: type})
+        contentType: 'application/json',
+        data: JSON.stringify({itemId: itemID, subscribed: false, action: "subscribe", contentType: itemType})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success 
@@ -43,12 +47,16 @@ function subscribe(itemid, isSubscribed, type) {
     });
 }
 
-function save(itemid, isSaved, type) {
+function save(el) {
+    el = $(el);
+    var itemID = el.parent().parent().attr('id');
+    var itemType = el.parent().parent().attr('data-hastype');
+
     $.ajax({
         url: '/action',
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({itemId: itemid, saved: isSaved, action:"save", contentType: type})
+        data: JSON.stringify({itemId: itemID, saved: false, action: "save", contentType: itemType})
     }).done(function(data) {
         if (data) {
             // TODO: indicate the success
@@ -254,7 +262,7 @@ function updateElements() {
 }
 
 function search(el, direct) {
-    var query
+    var query;
     if (!direct) {
         el = $(el);
         query = el.parent().parent().children('input').val()

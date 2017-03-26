@@ -8,11 +8,11 @@ var linkTemplate = '<div class="info-block row" id="{11}" data-hasvoted="{12}" d
                             <div class="col-sm-12">\
                                 <h2 class="title" id="title"><a href="{0}">{1}</a></h2>\
                                 <h6 class="date">Links to: <a href="{2}">{3}</a></h6>\
-                                <span class="thumbs-up pointer" onclick="vote(this)">\
+                                <span class="thumbs-up pointer" onclick="vote(this)" onkeypress="vote(this)">\
                                     <img src="../assets/thumbsUp.svg" class="svg" />\
                                 </span>\
                                 <span id="votes" class="{4}">{5}</span>\
-                                <span class="thumbs-down pointer" onclick="vote(this)">\
+                                <span class="thumbs-down pointer" onclick="vote(this)" onkeypress="vote(this)">\
                                     <img src="../assets/thumbsDown.svg" class="svg" />\
                                 </span>\
                                 <span class="date">Posted on {6} by <a href="/profile?username={7}">{8}</a></span>\

@@ -11,11 +11,11 @@ var starTemplate = '<span class="star rating">\
 
 var postTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-hastype="post">\
                         <div class="ratings">\
-                            <span class="thumbs-up pointer" onclick="vote(this)">\
+                            <span class="thumbs-up pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                                 <img src="../assets/thumbsUp.svg" class="svg" />\
                             </span>\
                             <span id="votes" class="{2}">{3}</span>\
-                            <span class="thumbs-down pointer" onclick="vote(this)">\
+                            <span class="thumbs-down pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                                 <img src="../assets/thumbsDown.svg" class="svg" />\
                             </span>\
                         </div>\
@@ -27,21 +27,21 @@ var postTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-h
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
-                        <a href="/question?id={8}">View</a>\
-                        <a href="#">Subscribe</a>\
-                        <a href="#">Save</a>\
-                        <a href="#">Report</a>\
+                            <a href="/question?id={8}">View</a>\
+                            <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                            <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                            <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                         </div>\
                         <hr>\
                      </div>';
 
 var linkTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-hastype="link">\
                         <div class="ratings">\
-                        <span class="thumbs-up pointer" onclick="vote(this)">\
+                        <span class="thumbs-up pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
                         </span>\
                         <span id="votes" class="{2}">{3}</span>\
-                        <span class="thumbs-down pointer" onclick="vote(this)">\
+                        <span class="thumbs-down pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                             <img src="../assets/thumbsDown.svg" class="svg" />\
                         </span>\
                         </div>\
@@ -53,15 +53,15 @@ var linkTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-h
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
-                        <a href="/link?id={8}">View</a>\
-                        <a href="#">Subscribe</a>\
-                        <a href="#">Save</a>\
-                        <a href="#">Report</a>\
+                            <a href="/link?id={8}">View</a>\
+                            <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                            <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                            <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                         </div>\
                         <hr>\
                      </div>';
 
-var classTemplate = '<div class="col-sm-12" id="{10}">\
+var classTemplate = '<div class="col-sm-12" id="{10}" data-hastype="class">\
                         <div class="class-rating">\
                           {3}\
                         </div>\
@@ -73,10 +73,10 @@ var classTemplate = '<div class="col-sm-12" id="{10}">\
                         </p>\
                         <p class="description">{7}</p>\
                         <div class="action-links">\
-                          <a href="/class?id={8}">View</a>\
-                          <a href="#">Subscribe</a>\
-                          <a href="#">Save</a>\
-                          <a href="#">Report</a>\
+                            <a href="/class?id={8}">View</a>\
+                            <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                            <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                            <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                         </div>\
                         <hr>\
                       </div>';

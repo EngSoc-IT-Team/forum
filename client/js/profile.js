@@ -69,7 +69,7 @@ function whenLoaded() {
 	$.ajax({
     	url: href,
     	type: 'POST',
-    	contentType: 'application/json', 
+    	contentType: 'application/json',
     	data: JSON.stringify(content)
     }).done(function(data) {
     	if (data) {
@@ -77,7 +77,7 @@ function whenLoaded() {
                 $('#aProblemOccurred').modal('toggle');
                 return;
             }
-            
+
             animateVotingBar(data.profile.upvotes, data.profile.downvotes);
             fillInUserInfo(data.profile);
             fillInPostInfo(data.items);
@@ -102,7 +102,7 @@ function animateVotingBar(upvotes, downvotes) {
 	var downinc = (downvotes / (upvotes + downvotes));
 	var inc = 0;
 
-    if (upinc > 0.99) 
+    if (upinc > 0.99)
         $(positive).css('border-radius', '10px');
     else if (downinc > 0.99)
         $(negative).css('border-radius', '10px');
@@ -111,7 +111,7 @@ function animateVotingBar(upvotes, downvotes) {
     function frame() {
         if (inc > 400) {
             clearInterval(id);
-        } 
+        }
         else {
             ups.style.width = (upinc / 4) * inc + "%";
             down.style.width = (downinc / 4) * inc + "%";
@@ -132,7 +132,7 @@ function fillInUserInfo(profile) {
 	$(joined)[0].innerHTML = "Date Joined: " + profile.dateJoined.slice(0, profile.dateJoined.indexOf('T'));
 }
 
-function fillInPostInfo(items) { 
+function fillInPostInfo(items) {
     var html;
     if (items.subscribed.length != 0) {
         $('#subscribed')[0].innerHTML = "";
