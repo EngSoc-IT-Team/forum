@@ -120,7 +120,7 @@ jQuery(document).ready(function() {
 });
 
 function getRating(rating, mainColor) {
-    return fillTemplate(starTemplate, mainColor).repeat(rating) + fillTemplate(starTemplate, 'star').repeat(5 - rating);
+    return fillTemplate(starTemplate, mainColor).repeat(rating) + fillTemplate(starTemplate, 'grey-star').repeat(5 - rating);
 }
 
 function fillInClassHeader(cl) {
