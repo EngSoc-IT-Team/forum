@@ -6,19 +6,19 @@
 
 var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}" data-hastype="post">\
                             <div class="col-sm-12">\
-                                <h2 class="title" id="title"><a href="/question?id={0}">{1}</a></h2>\
+                                <h2 class="title" id="title">{0}</h2>\
                                 <span class="thumbs-up pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                                     <img src="../assets/thumbsUp.svg" class="svg" />\
                                 </span>\
-                                <span id="votes" class="{2}">{3}</span>\
+                                <span id="votes" class="{1}">{2}</span>\
                                 <span class="thumbs-down pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                                     <img src="../assets/thumbsDown.svg" class="svg" />\
                                 </span>\
-                                <span class="date">Posted on {4} by <a href="/profile?username={5}">{6}</a></span>\
-                                <div class="description show-links">{7}</div>\
+                                <span class="date">Posted on {3} by <a href="/profile?username={4}">{5}</a></span>\
+                                <div class="description show-links">{6}</div>\
                                 <div class="clearfix">\
                                     <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
-                                    {8}\
+                                    {7}\
                                 </div>\
                                 <br>\
                                 <div id="editor" class="collapse">\
@@ -67,7 +67,7 @@ function whenLoaded() {
 }
 
 function fillInQuestionHeader(details) {
-    var temp = fillTemplate(questionTemplate, details.id, details.title, positiveOrNegative(details.votes), details.votes,
+    var temp = fillTemplate(questionTemplate, details.title, positiveOrNegative(details.votes), details.votes,
                                 getDateString(details.date), details.author, details.author, details.summary,
                                 getTags(details.tags), details.id, details.voted);
 
