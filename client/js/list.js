@@ -11,11 +11,11 @@ var starTemplate = '<span class="star rating">\
 
 var postTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-hastype="post">\
                         <div class="ratings">\
-                            <span class="thumbs-up pointer" onclick="vote(this)" tabindex="0">\
+                            <span class="thumbs-up pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                                 <img src="../assets/thumbsUp.svg" class="svg" />\
                             </span>\
                             <span id="votes" class="{2}">{3}</span>\
-                            <span class="thumbs-down pointer" onclick="vote(this)" tabindex="0">\
+                            <span class="thumbs-down pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                                 <img src="../assets/thumbsDown.svg" class="svg" />\
                             </span>\
                         </div>\
@@ -37,11 +37,11 @@ var postTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-h
 
 var linkTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-hastype="link">\
                         <div class="ratings">\
-                        <span class="thumbs-up pointer" onclick="vote(this)" tabindex="0">\
+                        <span class="thumbs-up pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                             <img src="../assets/thumbsUp.svg" class="svg" />\
                         </span>\
                         <span id="votes" class="{2}">{3}</span>\
-                        <span class="thumbs-down pointer" onclick="vote(this)" tabindex="0">\
+                        <span class="thumbs-down pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                             <img src="../assets/thumbsDown.svg" class="svg" />\
                         </span>\
                         </div>\
