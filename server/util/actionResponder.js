@@ -20,6 +20,7 @@ var voter = require('./actions/Voter');
 var tagger = require('./actions/Tagger');
 var commenter = require('./actions/Commenter');
 var rater = require('./actions/Rater');
+var getter = require('./actions/Getter');
 var DBRow = require('./DBRow').DBRow;
 
 
@@ -49,6 +50,9 @@ exports.respond = function(request) {
             case('rate'):
                 use = rate;
                 break;
+            case('getMore'):
+                use = getMore;
+                break;
            default:
                 log.error("Attempt access an invalid action: '" + action + "'");
                break;
@@ -66,21 +70,21 @@ exports.respond = function(request) {
 function save(request) {
     return new Promise(function(resolve, reject) {
         if (request.body.saved)
-            saver.removeSave(request.body.userId, request.body.itemId)
-                .then(function() {resolve(true)}, function() {reject(false)});
+            saver.removeSave(request)
+                .then(function() {resolve(true)}).catch(function() {reject(false)});
         else
-            saver.save(request.body.userId, request.body.itemId, request.body.type)
-                .then(function() {resolve(true)}, function() {reject(false)});
+            saver.save(request)
+                .then(function() {resolve(true)}).catch(function() {reject('failure')});
     });
 }
 
 function subscribe(request) {
     return new Promise(function(resolve, reject) {
         if (request.body.subscribed)
-            subscriber.cancelSubscription(request.body.userId, request.body.itemId)
+            subscriber.cancelSubscription(request.signedCookies.usercookie.userID, request.body.itemId)
                 .then(function() {resolve(true)}, function() {reject(false)});
         else
-            subscriber.onSubscribed(request.body.userId, request.body.itemId, request.body.type)
+            subscriber.onSubscribed(request.body.itemId, request.signedCookies.usercookie.userID, request.body.contentType)
                 .then(function() {resolve(true)}, function() {reject(false)});
     });
 }
@@ -144,4 +148,11 @@ function rate(request) {
         else
             log.error("Invalid request for rating");
     });
+}
+
+function getMore(request) {
+    return new Promise(function(resolve, reject) {
+        getter.getMore(request).then(function(res){resolve(res)}, function() {reject(false)})
+            .catch(function(err) {console.error('Getter getMore error: ' + err)})
+    })
 }
