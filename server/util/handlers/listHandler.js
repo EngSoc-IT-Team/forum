@@ -105,7 +105,7 @@ function useSearch(resolve, reject, request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;
     searcher.searchByUserTag(request.query.query).then(function(res) {
-        recursion.recursiveGetListWithVotes(resolve, reject, res, listInfo, userID, [info], 0);
+        recursion.recursiveGetListWithVotes(resolve, reject, res, exports.listInfo, userID, [info], 0);
     }).catch(function(err) {
         reject(err);
     });
