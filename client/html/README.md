@@ -1,4 +1,4 @@
-# forum/client/HTML
+# HTML Folder
 This directory contains the bare HTML pages upon which the forum is built. Some pages are built dynamically while others are static.
 
 Summaries for the owners of each page, the page's state and the purpose of the page can be found below.
