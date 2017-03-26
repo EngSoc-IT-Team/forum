@@ -267,7 +267,7 @@ a:focus {
 }
 
 .title {
-  margin: 10px 0 15px;
+  margin: 10px 0px;
 }
 
 .title a:hover {
@@ -310,6 +310,10 @@ a:focus {
 
 .question-tag:hover {
   background-color: #34056D;
+}
+
+.comment-button-wrap {
+  text-align: center;
 }
 
 .comment-block .media {
@@ -522,18 +526,18 @@ svg {
   padding-bottom: 20px;
 }
 
-#list-page .action-links {
+.action-links {
   display: inline-block;
 }
 
-#list-page .action-links a {
+.action-links a {
   color: rgba(52, 5, 109, 0.52);
   font-weight: bolder;
   font-size: 12px;
   margin-right: 15px;
 }
 
-#list-page .action-links a:hover {
+.action-links a:hover {
   color: #34056D;
 }
 

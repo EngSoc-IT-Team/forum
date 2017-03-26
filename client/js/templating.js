@@ -19,10 +19,12 @@ var level1CommentTemplate = '<div class="col-sm-12" id="{6}" data-hasvoted="{7}"
                                 </div>\
                                 <span class="date">{2} by <a href="/profile?username={3}">{4}</a></span>\
                                 <p class="description">{5}</p>\
+                                <div class="action-links">\
                                 {8}\
-                                <button role="button" class="btn btn-sm button">Save</button>\
-                                <button role="button" class="btn btn-sm button">Subscribe</button>\
-                                <button role="button" class="btn btn-sm button">Report</button>\
+                                <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                                <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                                <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                                </div>\
                                 {9}\
                                 <hr/>\
                              </div>';
@@ -39,9 +41,11 @@ var level2CommentTemplate = '<div class="info-block comment-block media" id="{6}
                                 </div>\
                                 <span class="date">{2} by <a href="/profile?username={3}">{4}</a></span>\
                                 <p class="description">{5}</p>\
-                                <button role="button" class="btn btn-sm button">Save</button>\
-                                <button role="button" class="btn btn-sm button">Subscribe</button>\
-                                <button role="button" class="btn btn-sm button">Report</button>\
+                                <div class="action-links">\
+                                <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                                <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                                <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                                </div>\
                                 <hr />\
                             </div>';
 
@@ -51,7 +55,7 @@ var starTemplate = '<span class="star rating">\
                       <img src="../assets/{0}.svg" class="svg" />\
                     </span>';
 
-var replyTemplate = '<button role="button" class="btn btn-sm button" data-toggle="collapse" data-target="#{0}">Reply</button>';
+var replyTemplate = '<a role="button" data-toggle="collapse" data-target="#{0}" href="javascript: void 0;">Reply</a>';
 
 var editorTemplate = '<div id="{0}" class="collapse">\
                         <br>\

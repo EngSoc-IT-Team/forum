@@ -16,12 +16,17 @@ var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}
                                 </span>\
                                 <span class="date">Posted on {3} by <a href="/profile?username={4}">{5}</a></span>\
                                 <div class="description show-links">{6}</div>\
-                                <div class="clearfix">\
-                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
-                                    {7}\
+                                <div class="action-links">\
+                                    <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                                    <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                                    <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                                 </div>\
-                                <br>\
+                                {7}\
+                                <div class="comment-button-wrap">\
+                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
+                                </div>\
                                 <div id="editor" class="collapse">\
+                                    <br/>\
                                     <textarea name="editor1" id="editor2" rows="10" cols="80"></textarea>\
                                     <button id="test" type="button" class="btn btn-sm button" data-target="#editor" data-toggle="collapse" onclick="reply(this)">Submit</button>\
                                 </div>\
