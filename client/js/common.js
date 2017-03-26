@@ -1,7 +1,7 @@
 /* Common.js
  *  Created by Michael Albinson 12/20/17
  * A file that contains functionality core to the entire forum
- */
+*/
 
 "use strict";
 
@@ -9,7 +9,7 @@ function logout() {
     $.ajax({
         url: '/logout',
         type: 'POST',
-        contentType: 'application/json', 
+        contentType: 'application/json',
         data: JSON.stringify({logout: true})
     }).done(function(data) {
         if (data)
@@ -35,7 +35,7 @@ function subscribe(el) {
         data: JSON.stringify({itemId: itemID, subscribed: false, action: "subscribe", contentType: itemType})
     }).done(function(data) {
         if (data) {
-            // TODO: indicate the success 
+            // TODO: indicate the success
             console.log("Successful subscription");
         }
         else {
@@ -198,10 +198,10 @@ function reply(el) {
 /* fillTemplate(template [, strings, used, to, fill, template])
 **
 **
-** This is a basic templating function that can be used to 
+** This is a basic templating function that can be used to
 ** fill a specified template using the template and arguments provided.
 ** Note that this function should be wrapped around for page-specific
-** uses. 
+** uses.
 */
 function fillTemplate(template) {
     var completedTemplate = template;

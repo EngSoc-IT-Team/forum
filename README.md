@@ -9,7 +9,7 @@ This project is built with Node.js, MySQL and several key node modules. The foll
 ### Dependencies
 
 First, this program requires that you have Node.js version 7.0 or greater and npm 3.10 or greater in order to function. If you are unsure or do not yet have Node.js and npm installed see the server README.
- 
+
 Once you have Node and npm installed, there are several Node.js modules that this project requires, which include.
 
 ```
@@ -26,7 +26,7 @@ Once you have Node and npm installed, there are several Node.js modules that thi
 ### Running the forum
 
 Please follow the steps in the [server README]() to set up the sever.
-Once the 
+Once the sever is running you can log in with the username "anon" and you can input anything you want in the password field (it doesn't matter at the moment).
 
 ## Running Tests
 

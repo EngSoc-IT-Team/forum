@@ -1,5 +1,4 @@
 # Client Folder
-
 The client folder contains all the files used on the front end of the website. This includes the HTML, CSS, Javascript, and image Asset files. The following is a brief summary on each of the files, and what they contain. More detail can be found on each of the files in their respective section seen below.
 
 The assets folder contains the images and icons used on the website.
@@ -10,10 +9,8 @@ The Javascript file contains the js files necessary to execute the javascript co
 
 The CSS file contains the styling and formatting of the website, if you want to edit font size, colour, spacing etc then please check out the css file.
 
-
-
 ## assets
-The assets file contains many of the visual icons seen throughout the website. All icons such as the "thumbs up/thumbs down" exist here. To find specific files refer to the what you are looking for and a name of a file within the folder, if you cannot find what you are looking for then it is not an asset. If you are having issues with any of these files please contact the respective creators of the files.
+The assets file contains many of the visual icons seen throughout the website. All icons such as the "thumbs up/thumbs down" exist here. To find specific files refer to the what you are looking for and a name of a file within the folder, if you cannot find what you are looking for then it is not an asset.
 
 
 ## css
@@ -21,10 +18,9 @@ The css folder only contains two files: style.css and normalize.css. The style.c
 
 ## html
 
-The HTML folder contains the template HTML files for all the pages on the website. These files are the elements that essentially for the structure for each page. Each file is named according to what page it provides the structure for. For example, login.html represents the login page of the website.
+The HTML folder contains the template HTML files for all the pages on the website. These files are the elements that are essential for the structure for each page. Each file is named according to what page it provides the structure for. For example, login.html represents the login page of the website.
 
 If there are any issues with the structure of a specific page then the issue most likely originates from that pages source HTML. Many of these pages utilize templates to generate repeating elements such as comments and posts. These templates can be found in the js folder. If you are having issues with any of these files please contact the respective creators of the files.
-
 
 ## js
 
