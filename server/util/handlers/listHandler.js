@@ -12,6 +12,7 @@ var lit = require('./../Literals.js');
 var log = require('./../log');
 var searcher = require('./../actions/Searcher');
 var recursion = require('./../recursion');
+var itemInfo = require('./itemInfoGetter');
 
 
 /** listRequest(request)
@@ -38,74 +39,18 @@ exports.handle = function(request) {
         items.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         items.setLimit(20);
         items.query().then(function() {
-            recursion.recursiveGetWithVotes(resolve, reject, items, exports.listInfo, userID, [info]);
+            recursion.recursiveGetWithVotes(resolve, reject, items, itemInfo.generalInfo, userID, [info]);
         }).catch(function() {
             reject(false);
         });
     });
 };
 
-exports.listInfo = function(item, vote, type, list) {
-    var hasVoted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
-    var voteValue;
-    if (type == 'post' || type == 'link')
-        voteValue = vote ? vote.getValue(lit.FIELD_VOTE_VALUE) : 0;
-
-    var data;
-    switch(type) { //TODO: still need isSubscribed and isSaved information about each row
-        case('post'):
-            data = {
-                id: item.getValue(lit.FIELD_ID),
-                title: item.getValue(lit.FIELD_TITLE),
-                votes: item.getValue(lit.FIELD_NETVOTES),
-                author: item.getValue(lit.FIELD_AUTHOR),
-                date: item.getValue(lit.FIELD_TIMESTAMP),
-                summary: item.getValue(lit.FIELD_CONTENT),
-                type: lit.POST_TABLE,
-                tags: item.getValue(lit.FIELD_TAGS),
-                voted: hasVoted,
-                voteValue: voteValue
-            };
-            break;
-        case('link'):
-            data = {
-                id: item.getValue(lit.FIELD_ID),
-                title: item.getValue(lit.FIELD_TITLE),
-                votes: item.getValue(lit.FIELD_NETVOTES),
-                author: item.getValue(lit.FIELD_ADDED_BY),
-                date: item.getValue('datetime'),
-                summary: item.getValue(lit.FIELD_SUMMARY),
-                type: lit.LINK_TABLE,
-                tags: item.getValue(lit.FIELD_TAGS),
-                url: item.getValue(lit.FIELD_LINK),
-                voted: hasVoted,
-                voteValue: voteValue
-            };
-            break;
-        case('class'):
-            data = {
-                id: item.getValue(lit.FIELD_ID),
-                title: item.getValue(lit.FIELD_TITLE),
-                courseCode: item.getValue(lit.FIELD_COURSE_CODE),
-                rating: item.getValue(lit.FIELD_AVERAGE_RATING),
-                author: item.getValue(lit.FIELD_ADDED_BY),
-                summary: item.getValue(lit.FIELD_SUMMARY),
-                type: lit.CLASS_TABLE,
-                tags: item.getValue(lit.FIELD_TAGS),
-                voted: hasVoted
-            };
-            break;
-        default:
-            break;
-    }
-    list[0].push(data);
-};
-
 function useSearch(resolve, reject, request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;
     searcher.searchByUserTag(request.query.query).then(function(res) {
-        recursion.recursiveGetListWithVotes(resolve, reject, res, exports.listInfo, userID, [info], 0);
+        recursion.recursiveGetListWithVotes(resolve, reject, res, itemInfo.generalInfo, userID, [info], 0);
     }).catch(function(err) {
         reject(err);
     });

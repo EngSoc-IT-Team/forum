@@ -8,7 +8,8 @@
 var Aggregator = require('./../aggregator');
 var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals.js');
-var recursiveGet = require('./../recursion').recursiveGet;
+var recursion = require('./../recursion');
+var itemInfo = require('./itemInfoGetter');
 
 /* profileRequest(request)
  ** Handles requests from the profile page
@@ -98,7 +99,8 @@ function getSaved(user, info) {
         saved.setLimit(5);
         saved.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         saved.query().then(function() {
-            recursiveGet(resolve, reject, saved, savedInfo, [info.items.saved]);
+            recursion.recursiveGetWithVotes(resolve, reject, saved, itemInfo.generalInfo, user.getValue(lit.FIELD_ID),
+                [info.items.saved]);
         }, function(err) {
             reject(err);
         });
@@ -112,7 +114,8 @@ function getSubscribed(user, info) {
         subscribed.setLimit(5);
         subscribed.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         subscribed.query().then(function() {
-            recursiveGet(resolve, reject, subscribed, subscribedInfo, [info.items.subscribed]);
+            recursion.recursiveGetWithVotes(resolve, reject, subscribed, itemInfo.generalInfo, user.getValue(lit.FIELD_ID),
+                [info.items.subscribed]);
         }, function(err) {
             reject(err);
         });
@@ -126,44 +129,10 @@ function getContributions(user, info) {
         contr.setLimit(5);
         contr.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         contr.query().then(function() {
-            recursiveGet(resolve, reject, contr, contributionInfo, [info.items.contributions]);
+            recursion.recursiveGetWithVotes(resolve, reject, contr, itemInfo.generalInfo, user.getValue(lit.FIELD_ID),
+                [info.items.contributions]);
         }, function(err) {
             reject(err);
         });
     });
-}
-
-
-function subscribedInfo(row, item, list) {
-    var data = {
-        id: item.getValue(lit.FIELD_ID),
-        title: item.getValue(lit.FIELD_TITLE),
-        votes: item.getValue(lit.FIELD_NETVOTES),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        date: row.getValue(lit.FIELD_TIMESTAMP)
-    };
-    list[0].push(data);
-}
-
-function savedInfo(row, item, list) {
-    var data =  {
-        id: item.getValue(lit.FIELD_ID),
-        title: item.getValue(lit.FIELD_TITLE),
-        votes: item.getValue(lit.FIELD_NETVOTES),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        date: row.getValue(lit.FIELD_TIMESTAMP)
-    };
-    list[0].push(data);
-}
-
-function contributionInfo(row, item, list) {
-    var data = {
-        id: item.getValue(lit.FIELD_ID),
-        title: item.getValue(lit.FIELD_TITLE),
-        votes: item.getValue(lit.FIELD_NETVOTES),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        date: row.getValue(lit.FIELD_TIMESTAMP),
-        summary: item.getValue(lit.FIELD_CONTENT)
-    };
-    list[0].push(data);
 }
