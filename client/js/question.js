@@ -6,22 +6,22 @@
 
 var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}" data-hastype="post">\
                             <div class="col-sm-12">\
-                                <h2 class="title" id="title">{0}</h2>\
+                                <h2 class="title" id="title"><a href="/question?id={0}">{1}</a></h2>\
                                 <span class="thumbs-up pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                                     <img src="../assets/thumbsUp.svg" class="svg" />\
                                 </span>\
-                                <span id="votes" class="{1}">{2}</span>\
+                                <span id="votes" class="{2}">{3}</span>\
                                 <span class="thumbs-down pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
                                     <img src="../assets/thumbsDown.svg" class="svg" />\
                                 </span>\
-                                <span class="date">Posted on {3} by <a href="/profile?username={4}">{5}</a></span>\
-                                <div class="description show-links">{6}</div>\
+                                <span class="date">Posted on {4} by <a href="/profile?username={5}">{6}</a></span>\
+                                <div class="description show-links">{7}</div>\
                                 <div class="action-links">\
                                     <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
                                     <a href="javascript: void 0;" onclick="save(this)">Save</a>\
                                     <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                                 </div>\
-                                {7}\
+                                {8}\
                                 <div class="comment-button-wrap">\
                                     <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
                                 </div>\
@@ -72,9 +72,7 @@ function whenLoaded() {
 }
 
 function fillInQuestionHeader(details) {
-    var temp = fillTemplate(questionTemplate, details.title, positiveOrNegative(details.votes), details.votes,
-                                getDateString(details.date), details.author, details.author, details.summary,
-                                getTags(details.tags), details.id, details.voted);
+    var temp = fillTemplate(questionTemplate, details.id, details.title, positiveOrNegative(details.votes), details.votes, getDateString(details.date), details.author, details.author, details.summary, getTags(details.tags), details.id, details.voted);
 
     itemID = details.id;
 
