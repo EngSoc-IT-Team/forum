@@ -17,12 +17,17 @@ var linkTemplate = '<div class="info-block row" id="{11}" data-hasvoted="{12}" d
                                 </span>\
                                 <span class="date">Posted on {6} by <a href="/profile?username={7}">{8}</a></span>\
                                 <div class="description show-links">{9}</div>\
-                                <div class="clearfix">\
-                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
-                                    {10}\
+                                {10}\
+                                <div class="action-links">\
+                                    <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                                    <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                                    <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                                 </div>\
-                                <br>\
+                                <div class="comment-button-wrap">\
+                                    <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor">Comment</button>\
+                                </div>\
                                 <div id="editor" class="collapse">\
+                                    <br>\
                                     <textarea name="editor1" id="editor2" rows="10" cols="80"></textarea>\
                                     <button type="button" class="btn btn-sm button" data-toggle="collapse" data-target="#editor" onclick="reply(this)">Submit</button>\
                                 </div>\

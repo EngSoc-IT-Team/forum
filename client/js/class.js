@@ -4,7 +4,6 @@ var classTemplate = '<div class="info-block clearfix">\
                             <div class="col-sm-12">\
                                 <div class="clearfix">\
                                     <h2 class="title"><a href="/class?id={0}">{1}: {2}</a></h2>\
-                                    {3}\
                                 </div>\
                             </div>\
                             <div class="row">\
@@ -40,6 +39,12 @@ var classTemplate = '<div class="info-block clearfix">\
                             <div class="col-sm-12">\
                                 <p class="course-description-title"><b>Course Description</b></p>\
                                 <p class="description">{8}</p>\
+                            <div class="action-links">\
+                                <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                                <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                                <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                            </div>\
+                            {3}\
                             </div>\
                             <div class="col-sm-12 review-container">\
                                 <button class="btn btn-md button" data-toggle="modal" data-target="#submitReview">Submit Review</button>\
