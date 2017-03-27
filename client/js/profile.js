@@ -4,49 +4,11 @@
 * Profile.js
 * Created by Michael Albinson 2/15/17
  */
-var subscriptionTemplate = '<div class="item">\
-                                <span><img class="thumbs-up" src="../assets/thumbsUp.svg"/></span>\
-                                <span class="{0}">{1}</span>\
-                                <span><img class="thumbs-down" src="../assets/thumbsDown.svg"/></span>\
-                                <span><a href="/question?id={2}">{3}</a></span>\
-                                <div class="date">Subscribed on: {4}</div>\
-                                <div class="date">Author: <a href="/profile?username={5}">{6}</a></div>\
-                                <div class="links" style="font-size: .75em;">\
-                                    <a href="/question?id={7}">View</a> | \
-                                    <a href="" onclick="subscribe(\'{8}\', \'{9}\', true)">Unsubscribe</a> | \
-                                    <a href="" onclick="report(\'{10}\')">Report</a>\
-                                </div>\
-                                <hr>\
-                            </div>';
-var contributionTemplate = '<div class="item">\
-                                <span><img class="thumbs-up" src="../assets/thumbsUp.svg"/></span>\
-                                <span class="{0}">{1}</span>\
-                                <span><img class="thumbs-down" src="../assets/thumbsDown.svg"/></span>\
-                                <span><a href="/question?id={2}">{3}</a></span>\
-                                <div class="date">Posted on: {4}</div>\
-                                <p style="margin-bottom: 5px;">{5}</p>\
-                                <div class="links" style="font-size: .75em;">\
-                                    <a href="/question?id={6}" onclick="">View</a> | \
-                                    <a href="" onclick="save(\'{7}\', \'{8}\', true)">Save</a>\
-                                </div>\
-                                <hr>\
-                            </div>';
-var savedTemplate = '<div class="item">\
-                        <span><img class="thumbs-up" src="../assets/thumbsUp.svg"/></span>\
-                        <span class="{0}">{1}</span>\
-                        <span><img class="thumbs-down" src="../assets/thumbsDown.svg"/></span>\
-                        <span><a href="/question?id={2}">{3}</a></span>\
-                        <div class="date">Saved on: {4}</div>\
-                        <div class="date">Author: <a href="/profile?username={5}">{6}</a></div>\
-                        <div class="links" style="font-size: .75em;">\
-                            <a href="/question?id={7}">View</a> | \
-                            <a href="" onclick="save(\'{8}\', \'{9}\', true)">Unsave</a> | \
-                            <a href="" onclick="report(\'{10}\')">Report</a>\
-                        </div>\
-                        <hr>\
-                    </div>';
 
-var tag = '<button class="btn btn-sm question-tag" onclick="window.location = \'/list?tag={0}\'" type="submit">{1}</button>';
+var commentTemplate = '<div>Ayrton fill me in</div>';
+
+var reviewTemplate = '<div>Ayrton fill me in</div>';
+
 var uid;
 
 function whenLoaded() {
@@ -83,6 +45,7 @@ function whenLoaded() {
             fillInPostInfo(data.items);
             addTags(data.tags);
             svgConverter();
+            CKEDITOR.replace('report-text');
         }
         else {
             // at some point show "something went wrong" modal
@@ -134,33 +97,28 @@ function fillInUserInfo(profile) {
 
 function fillInPostInfo(items) {
     var html;
-    if (items.subscribed.length != 0) {
-        $('#subscribed')[0].innerHTML = "";
+    var sub = $('#subscribed');
+    var save = $('#saved');
+    var contr = $('#contributions');
 
-        for (var i = 0; i < items.subscribed.length; i++) {
-            html = $.parseHTML(fillSubscriptionTemplate(items.subscribed[i]))[0];
-            if (html)
-                $('#subscribed').append(html);
-        }
+
+    if (items.subscribed.length != 0) {
+        sub[0].innerHTML = "";
+        buildList(items.subscribed, '#subscribed')
+        sub.append('<a class="centered" href="javascript:void(0)" onclick="getMore(\'profile\', \'subscribed\')">v Load More v</a>')
     }
 
     if (items.saved.length != 0) {
-        $('#saved')[0].innerHTML = "";
+        save[0].innerHTML = "";
 
-        for (var i = 0; i < items.saved.length; i++) {
-            html = $.parseHTML(fillSavedTemplate(items.saved[i]))[0];
-            if (html)
-                $('#saved').append(html);
-        }
+        buildList(items.saved, '#saved')
+        save.append('<a class="centered" href="javascript:void(0)" onclick="getMore(\'profile\', \'saved\')">v Load More v</a>')
     }
 
     if (items.contributions.length != 0) {
-        $('#contributions')[0].innerHTML = "";
-        for (var i = 0; i < items.contributions.length; i++) {
-            html = $.parseHTML(fillContributionTemplate(items.contributions[i]))[0];
-            if (html)
-                $('#contributions').append(html);
-        }
+        contr[0].innerHTML = "";
+        buildList(items.contributions, '#contributions')
+        contr.append('<a class="centered" href="javascript:void(0)" onclick="getMore(\'profile\', \'contributions\')">v Load More v</a>')
     }
 }
 
@@ -173,30 +131,39 @@ function addTags(tags) {
     }
 }
 
-function fillSubscriptionTemplate(subscr) {
-    if (subscr.votes >= 0)
-        return fillTemplate(subscriptionTemplate, "positive", subscr.votes, subscr.id, subscr.title, getDateString(subscr.date), subscr.author, subscr.author, subscr.id, uid, subscr.id, subscr.id);
-    else
-        return fillTemplate(subscriptionTemplate, "negative", subscr.votes, subscr.id, subscr.title, getDateString(subscr.date), subscr.author, subscr.author, subscr.id, uid, subscr.id, subscr.id);
+/**
+ *
+ * @param it object with form {
+        id: item.getValue(lit.FIELD_ID),
+        author: item.getValue(lit.FIELD_AUTHOR),
+        content: item.getValue(lit.FIELD_CONTENT),
+        netVotes: item.getValue(lit.FIELD_NETVOTES),
+        parent: item.getValue(lit.FIELD_PARENT_POST),
+        parentComment: item.getValue(lit.FIELD_PARENT_COMMENT),
+        type: lit.COMMENT_TABLE,
+        date: item.getValue(lit.FIELD_TIMESTAMP),
+        voted: hasVoted
+    };
+ * @returns {*} the filled template for the comment, to be appended to the document
+ */
+function fillCommentTemplate(it) {
+    return fillTemplate(commentTemplate);
 }
 
-function fillSavedTemplate(saved) {
-    if (saved.votes >= 0)
-        return fillTemplate(savedTemplate, "positive", saved.votes, saved.id, saved.title, getDateString(saved.date), saved.author, saved.author, saved.id, uid, saved.id, saved.id);
-    else
-        return fillTemplate(savedTemplate, "negative", saved.votes, saved.id, saved.title, getDateString(saved.date), saved.author, saved.author, saved.id, uid, saved.id, uid, saved.id);
-}
-
-function fillContributionTemplate(contr) {
-    if (contr.votes >= 0)
-        return fillTemplate(contributionTemplate, "positive", contr.votes, contr.id, contr.title, getDateString(contr.date), contr.summary, contr.id, uid, contr.id, contr.id);
-    else
-        return fillTemplate(contributionTemplate, "negative", contr.votes, contr.id, contr.title, getDateString(contr.date), contr.summary, contr.id, uid, contr.id, contr.id);
-}
-
-function getDateString(date) {
-    if (!date)
-        return undefined;
-
-    return date.slice(0, date.indexOf('T'));
+/**
+ *
+ * @param it object with form {
+        parent: item.getValue(lit.FIELD_PARENT),
+        id: item.getValue(lit.FIELD_ID),
+        rating: item.getValue(lit.FIELD_AVERAGE_RATING),
+        author: item.getValue(lit.FIELD_AUTHOR),
+        content: item.getValue(lit.FIELD_CONTENT),
+        date: item.getValue('datetime'),
+        type: lit.RATING_TABLE,
+        voted: hasVoted
+    }
+ * @returns {*} the filled template for the review, to be appended to the document
+ */
+function fillReviewTemplate(it) {
+    return fillTemplate(reviewTemplate);
 }
