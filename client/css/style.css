@@ -444,9 +444,12 @@ a:focus {
   margin-top: 0;
 }
 
-.class-page .modal .star {
+.class-page .modal .star,
+.class-page #classHead .star-ratings .star {
     cursor: pointer;
 }
+
+
 
 .question-colour {
   color: purple;
@@ -604,4 +607,12 @@ footer .menu-items a:hover {
 
 .select2:not(.select2-container--focus) .select2-selection--multiple {
   border-color: rgba(0,0,0,.15) !important;
+}
+
+.course-rating {
+  display: inline-block;
+}
+
+#classHead .star-ratings {
+  display: none;
 }

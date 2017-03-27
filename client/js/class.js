@@ -12,6 +12,23 @@ var classTemplate = '<div class="info-block clearfix">\
                                     <div class="course-rating">\
                                         {4}\
                                     </div>\
+                                    <div class="star-ratings">\
+                      								<span class="star">\
+                      			  					<img src="../assets/star.svg" class="svg" />\
+                      			  				</span>\
+                      			          <span class="star">\
+                      			  					<img src="../assets/star.svg" class="svg" />\
+                      			  				</span>\
+                      			          <span class="star">\
+                      			  					<img src="../assets/star.svg" class="svg" />\
+                      			  				</span>\
+                      			          <span class="star">\
+                      			  					<img src="../assets/star.svg" class="svg" />\
+                      			  				</span>\
+                      			          <span class="star">\
+                      			  					<img src="../assets/star.svg" class="svg" />\
+                      			  				</span>\
+                      							</div>\
                                     <p class="instructor"><b>Instructor: </b>{5}</p>\
                                     <p><b>Credits: </b>{6}</p>\
                                 </div>\
@@ -115,6 +132,23 @@ jQuery(document).ready(function() {
     starRating = hoveredStars.length;
   });
 }
+
+
+// Allows for rating by hovering over the course rating in the classHead
+$(".course-rating").hover( function() {
+  $(this).toggle();
+  $("#classHead .star-ratings").toggle();
+},
+function() {
+});
+// Shows the average class rating if the user has not rated the course
+$("#classHead .star-ratings").mouseleave( function() {
+  if (!($(".star").hasClass('rated-star'))) {
+    $(this).toggle();
+    $(".course-rating").toggle();
+  };
+});
+
 
 
 });
