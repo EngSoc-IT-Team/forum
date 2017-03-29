@@ -16,8 +16,10 @@
  * 10,000 calls. However, for free, 5K credits are given each month, so on a small scale it is still free.
  */
 
-//TODO need to search multiple tables at once
-//TODO stop holding entire database in memory when searching - recursiveGet
+//TODO stop holding entire database in memory when searching - recursiveGet and wildcards
+//TODO "dummyproof" not having generated tags
+//TODO allow no table to be specified
+//TODO dbutil, action and handler readmes - what is folder for and quick blurb on each file
 
 var natural = require("natural");
 var algorithmia = require("algorithmia");
@@ -35,7 +37,7 @@ var wordRelater = new TfIdf();
  * @returns {Promise} Promise as query to database is asynchronous. Eventually returns an array of post IDs that have
  * matching tags/numbers.
  */
-exports.searchByUserTag = function(inputSearch) {
+exports.searchByUserTag = function (inputSearch) {
     return new Promise(function (resolve, reject) {
         if (!(typeof inputSearch == lit.STRING)) {
             reject("you inputted an invalid search!");
@@ -69,11 +71,12 @@ exports.searchByUserTag = function(inputSearch) {
                 reject(err);
             });
         }).catch(function (err) {
-            log.log("searchByTag: " + err);
+            log.error("searchByTag: " + err);
         });
     });
 };
 
+//TODO put generateTags newHandler.js and then use item table to search for user and generated tags
 /**
  * Function that generates and inserts tags for content for later search usage.
  * @param newRow The row to generate tags for and to insert the tags into.
@@ -83,7 +86,7 @@ exports.searchByUserTag = function(inputSearch) {
  */
 exports.generateTags = function (newRow, table) {
     return new Promise(function (resolve, reject) {
-            if (goodInputs("this is a good search", table)) { //dummy input search so goodInputs can be re-used for the table arg
+            if (goodInputs("this is a good search", table)) { //dummy input search so goodInputs() can be re-used for the table arg
 
                 //get the fields and add all fields together to get content to search for
                 var fields = getSearchableFields(table);
@@ -105,7 +108,7 @@ exports.generateTags = function (newRow, table) {
                         resolve(tags); //string of all tags to be put into field for the new post
                     });
                 }).catch(function (error) {
-                    log.log("tagPosts error: " + error);
+                    log.error("tagPosts error: " + error);
                     reject(error);
                 });
             } else {
@@ -130,7 +133,7 @@ function getUserTagsInDB() {
             }
             resolve(tags);
         }).catch(function (err) {
-            log.log("getTagsInDB error: " + err);
+            log.error("getTagsInDB error: " + err);
             reject(err);
         });
     });
@@ -151,8 +154,8 @@ function searchForContent(inputSearch, table) {
                 documentInfo = removeLowMeasures(documentInfo);
                 var sortedPosts = sortByMeasure(documentInfo);
                 searchByUserTag(inputSearch).then(function (userPosts) {
-                    for (var i in userPosts){
-                        if (!sortedPosts.includes(userPosts[i])){ //no duplicated posts
+                    for (var i in userPosts) {
+                        if (!sortedPosts.includes(userPosts[i])) { //no duplicated posts
                             //just add posts with the tags to the end - actual content of post more important than tags
                             sortedPosts.push(userPosts[i]);
                         }
@@ -160,7 +163,7 @@ function searchForContent(inputSearch, table) {
                     resolve(sortedPosts);
                 })
             }).catch(function (error) {
-                log.log("searchForContent error: " + error);
+                log.error("searchForContent error: " + error);
             });
         } else {
             reject("your input terms didn't work for a search!");
@@ -268,7 +271,7 @@ function searchGenTags(keyTerms, table) {
             }
             resolve(documentInfo);
         }).catch(function (error) {
-            log.log("searchTable error: " + error);
+            log.error("searchTable error: " + error);
             reject(error);
         });
     });
