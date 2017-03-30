@@ -16,8 +16,7 @@
  * 10,000 calls. However, for free, 5K credits are given each month, so on a small scale it is still free.
  */
 
-//TODO stop holding entire database in memory when searching - recursiveGet and wildcards
-//TODO "dummyproof" not having generated tags
+//TODO stop holding entire database in memory when searching - wildcards
 //TODO allow no table to be specified
 
 var natural = require("natural");
@@ -25,9 +24,43 @@ var algorithmia = require("algorithmia");
 var lit = require('./../Literals.js');
 var log = require('./../log.js');
 var dbr = require('./../DBRow.js');
+var recursion = require('../recursion');
 
 var TfIdf = natural.TfIdf;
 var wordRelater = new TfIdf();
+
+//TODO @ Michael...use searchForContent for all searches, nothing else. So you can un-export searchByUserTag.
+/**
+ * Searches a given array of table for data related to a given search. Fields are chosen for you, as the fields
+ * that should be searched. Does not allow searches with bad search terms/tables to be conducted.
+ * @param inputSearch Search inputted by user.
+ * @param table Array of tables to be searched.
+ */
+function searchForContent(inputSearch, table) {
+    return new Promise(function (resolve, reject) {
+        if (goodInputs(inputSearch, table)) {
+            getKeyTerms(inputSearch).then(function (keyTerms) {
+                return searchGenTags(keyTerms, table);
+            }).then(function (documentInfo) {
+                documentInfo = removeLowMeasures(documentInfo);
+                var sortedPosts = sortByMeasure(documentInfo);
+                exports.searchByUserTag(inputSearch).then(function (userPosts) {
+                    for (var i in userPosts) {
+                        if (!sortedPosts.includes(userPosts[i])) { //no duplicated posts
+                            //just add posts with the tags to the end - actual content of post more important than tags
+                            sortedPosts.push(userPosts[i]);
+                        }
+                    }
+                    resolve(sortedPosts);
+                })
+            }).catch(function (error) {
+                log.error("searchForContent error: " + error);
+            });
+        } else {
+            reject("your input terms didn't work for a search!");
+        }
+    });
+}
 
 /**
  * Function to search for posts by tags. Goes through search term looking for tags in database and numbers, then
@@ -66,7 +99,7 @@ exports.searchByUserTag = function (inputSearch) {
                 }
                 resolve(postsWithTags);
             }).catch(function (err) {
-                log.log("searchByTag - getting posts - error: " + err);
+                log.error("searchByTag - getting posts - error: " + err);
                 reject(err);
             });
         }).catch(function (err) {
@@ -139,50 +172,18 @@ function getUserTagsInDB() {
 }
 
 /**
- * Searches a given array of table for data related to a given search. Fields are chosen for you, as the fields
- * that should be searched. Does not allow searches with bad search terms/tables to be conducted.
- * @param inputSearch Search inputted by user.
- * @param table Array of tables to be searched.
- */
-function searchForContent(inputSearch, table) {
-    return new Promise(function (resolve, reject) {
-        if (goodInputs(inputSearch, table)) {
-            getKeyTerms(inputSearch).then(function (keyTerms) {
-                return searchGenTags(keyTerms, table);
-            }).then(function (documentInfo) {
-                documentInfo = removeLowMeasures(documentInfo);
-                var sortedPosts = sortByMeasure(documentInfo);
-                searchByUserTag(inputSearch).then(function (userPosts) {
-                    for (var i in userPosts) {
-                        if (!sortedPosts.includes(userPosts[i])) { //no duplicated posts
-                            //just add posts with the tags to the end - actual content of post more important than tags
-                            sortedPosts.push(userPosts[i]);
-                        }
-                    }
-                    resolve(sortedPosts);
-                })
-            }).catch(function (error) {
-                log.error("searchForContent error: " + error);
-            });
-        } else {
-            reject("your input terms didn't work for a search!");
-        }
-    });
-}
-
-/**
  * Sanitizes search input.
  * @param inputSearch The search term attempted.
  * @param table The table attempted to be searched.
  * @returns {boolean} True if all inputs are legitimate, else false.
  */
 function goodInputs(inputSearch, table) {
-    if (!(typeof inputSearch == lit.STRING) || inputSearch == undefined || inputSearch == "") {
+    if (!(typeof inputSearch === lit.STRING) || inputSearch === undefined || inputSearch === "") {
         return false;
     } else {
         //check that table is actually a table name
-        return !(!(typeof table == lit.STRING) || (table != lit.CLASS_TABLE && table != lit.POST_TABLE && table != lit.COMMENT_TABLE &&
-        table != lit.LINK_TABLE && table != lit.TAG_TABLE && table != lit.USER_TABLE));
+        return !(!(typeof table === lit.STRING) || (table !== lit.CLASS_TABLE && table !== lit.POST_TABLE && table !== lit.COMMENT_TABLE &&
+        table !== lit.LINK_TABLE && table !== lit.TAG_TABLE && table !== lit.USER_TABLE));
     }
 }
 
@@ -248,21 +249,12 @@ function getKeyTerms(input) {
  * content IDs and their relation to the key terms.
  */
 function searchGenTags(keyTerms, table) {
-    var documentInfo = [];
-    var row = new dbr.DBRow(table);
+    var rows = new dbr.DBRow(table);
     return new Promise(function (resolve, reject) {
         //TODO wildcard to filter posts
-        row.query().then(function () {
-            while (row.next()) {
-                //get generated tags. find relation of input key terms to generated tags
-                var genTags = row.getValue(lit.FIELD_GEN_TAGS);
-                if (genTags != null) { //only use posts with generated tags...should be all
-                    wordRelater.addDocument(genTags);
-                    var oneDoc = {measure: 0, id: row.getValue(lit.FIELD_ID)};
-                    documentInfo.push(oneDoc); //add a row in the arrays for each document
-                }
-            }
-        }).then(function () {
+        rows.query().then(function () {
+            return recursion.recursiveGetTags(rows, addDocument, table, []);
+        }).then(function (documentInfo) {
             for (var termIndex in keyTerms) {
                 wordRelater.tfidfs(keyTerms[termIndex], function (docIndex, measure) {
                     documentInfo[docIndex][lit.KEY_MEASURE] += measure;
@@ -270,11 +262,16 @@ function searchGenTags(keyTerms, table) {
             }
             resolve(documentInfo);
         }).catch(function (error) {
-            log.error("searchTable error: " + error);
+            log.error("searchGenTags error: " + error);
             reject(error);
         });
     });
 }
+
+var addDocument = function (tags, row) {
+    wordRelater.addDocument(tags);
+    return {measure: 0, id: row.getValue(lit.FIELD_ID)};
+};
 
 /**
  * Removes documents from search consideration that have too low of a measure.

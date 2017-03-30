@@ -12,6 +12,8 @@ var DBRow = require('./DBRow').DBRow;
 var lit = require('./Literals');
 var voter = require('./actions/Voter');
 var rater = require('./actions/Rater');
+var searcher = require('./actions/Searcher');
+var log = require('./log');
 
 /** recursiveGet(resolve, reject, rowsToGet, action, actionArgs)
  * NOTE: the action function MUST be synchronous
@@ -23,16 +25,16 @@ var rater = require('./actions/Rater');
  * @param actionArgs: the function arguments, if any, that need to be passed to the action function
  */
 
-exports.recursiveGet = function(resolve, reject, rowsToGet, action, actionArgs) {
+exports.recursiveGet = function (resolve, reject, rowsToGet, action, actionArgs) {
     if (!rowsToGet.next())
         resolve(actionArgs);
     else {
         var item = new DBRow(rowsToGet.getValue(lit.TYPE));
-        item.getRow(rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function() {
+        item.getRow(rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function () {
             action(rowsToGet, item, actionArgs);
             exports.recursiveGet(resolve, reject, rowsToGet, action, actionArgs)
 
-        }, function(err) {
+        }, function (err) {
             reject(actionArgs, err);
 
         });
@@ -50,13 +52,13 @@ exports.recursiveGet = function(resolve, reject, rowsToGet, action, actionArgs) 
  * @param userID: the userID of the user to get votes for
  */
 
-exports.recursiveGetWithVotes = function(resolve, reject, rowsToGet, action, userID, actionArgs) {
+exports.recursiveGetWithVotes = function (resolve, reject, rowsToGet, action, userID, actionArgs) {
     if (!rowsToGet.next())
         resolve(actionArgs);
     else {
         var type = rowsToGet.getValue(lit.FIELD_TYPE);
         var item = new DBRow(type);
-        item.getRow(rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function() {
+        item.getRow(rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function () {
             if (type == 'link' || type == 'post') {
                 voter.getVote(userID, rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function (vote) {
                     if (vote)
@@ -71,8 +73,8 @@ exports.recursiveGetWithVotes = function(resolve, reject, rowsToGet, action, use
             }
             else {
                 var u = new DBRow(lit.USER_TABLE);
-                u.getRow(userID).then(function() {
-                    rater.getRating(u.getValue(lit.FIELD_USERNAME), item.getValue(lit.FIELD_ID)).then(function(rating) {
+                u.getRow(userID).then(function () {
+                    rater.getRating(u.getValue(lit.FIELD_USERNAME), item.getValue(lit.FIELD_ID)).then(function (rating) {
                         if (rating)
                             action(item, rating, type, actionArgs);
                         else
@@ -85,14 +87,14 @@ exports.recursiveGetWithVotes = function(resolve, reject, rowsToGet, action, use
                 })
             }
 
-        }, function(err) {
+        }, function (err) {
             reject(actionArgs, err);
 
         });
     }
 };
 
-exports.recursiveGetListWithVotes = function(resolve, reject, rowList, action, userID, actionArgs, index) {
+exports.recursiveGetListWithVotes = function (resolve, reject, rowList, action, userID, actionArgs, index) {
     if (index > rowList.length)
         resolve(actionArgs);
     else {
@@ -102,7 +104,7 @@ exports.recursiveGetListWithVotes = function(resolve, reject, rowList, action, u
 
         var post = new DBRow(lit.POST_TABLE);
         post.getRow(current).then(function () {
-            voter.getVote(userID,current).then(function (vote) {
+            voter.getVote(userID, current).then(function (vote) {
                 if (vote)
                     action(post, vote, 'post', actionArgs);
                 else
@@ -113,5 +115,22 @@ exports.recursiveGetListWithVotes = function(resolve, reject, rowList, action, u
                 reject(actionArgs, err);
             });
         });
+    }
+};
+
+exports.recursiveGetTags = function (row, addDocument, table, docInfo) {
+    if (!row.next()) {
+        return docInfo;
+    } else {
+        var genTags = row.getValue(lit.FIELD_GEN_TAGS);
+        if (genTags !== null) {
+            docInfo.push(addDocument(genTags, row));
+            return exports.recursiveGetTags(row, addDocument, table, docInfo);
+        } else {
+            searcher.generateTags(row, table).then(function (tags) {
+                addDocument(tags, row);
+                return exports.recursiveGetTags(row, addDocument, table, docInfo);
+            });
+        }
     }
 };

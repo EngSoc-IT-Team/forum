@@ -195,6 +195,8 @@ const literals = {
 
     //keys for objects
     KEY_MEASURE: "measure",
+    KEY_WORD_RELATER: "wordRelater",
+    KEY_DOC_INFO: "documentInfo",
 
     //API keys/information
     AUTO_TAG_API_KEY: "sim/u46ka7/UoVlIZFYomudRRxO1",
