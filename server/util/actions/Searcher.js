@@ -19,7 +19,6 @@
 //TODO stop holding entire database in memory when searching - recursiveGet and wildcards
 //TODO "dummyproof" not having generated tags
 //TODO allow no table to be specified
-//TODO dbutil, action and handler readmes - what is folder for and quick blurb on each file
 
 var natural = require("natural");
 var algorithmia = require("algorithmia");
@@ -39,7 +38,7 @@ var wordRelater = new TfIdf();
  */
 exports.searchByUserTag = function (inputSearch) {
     return new Promise(function (resolve, reject) {
-        if (!(typeof inputSearch == lit.STRING)) {
+        if (!(typeof inputSearch === lit.STRING)) {
             reject("you inputted an invalid search!");
         }
         getUserTagsInDB().then(function (dbTags) {
