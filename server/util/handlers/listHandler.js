@@ -24,10 +24,10 @@ var itemInfo = require('./itemInfoGetter');
 
 //TODO: add hidden handling -- or just avoid them
 
-exports.handle = function(request) {
+exports.handle = function (request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var items = new DBRow(lit.ITEM_TABLE);
 
         if (request.query.hasOwnProperty('query'))
@@ -38,9 +38,9 @@ exports.handle = function(request) {
 
         items.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
         items.setLimit(20);
-        items.query().then(function() {
+        items.query().then(function () {
             recursion.recursiveGetWithVotes(resolve, reject, items, itemInfo.generalInfo, userID, [info]);
-        }).catch(function() {
+        }).catch(function () {
             reject(false);
         });
     });
@@ -49,9 +49,9 @@ exports.handle = function(request) {
 function useSearch(resolve, reject, request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;
-    searcher.searchByUserTag(request.query.query).then(function(res) {
+    searcher.searchForContent(request.query.query, lit.POST_TABLE).then(function (res) {
         recursion.recursiveGetListWithVotes(resolve, reject, res, itemInfo.generalInfo, userID, [info], 0);
-    }).catch(function(err) {
+    }).catch(function (err) {
         reject(err);
     });
 }

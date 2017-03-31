@@ -27,16 +27,14 @@ var dbr = require('./../DBRow.js');
 var recursion = require('../recursion');
 
 var TfIdf = natural.TfIdf;
-var wordRelater = new TfIdf();
-
-//TODO @ Michael...use searchForContent for all searches, nothing else. So you can un-export searchByUserTag.
+var wordRelater;
 /**
  * Searches a given array of table for data related to a given search. Fields are chosen for you, as the fields
  * that should be searched. Does not allow searches with bad search terms/tables to be conducted.
  * @param inputSearch Search inputted by user.
  * @param table Array of tables to be searched.
  */
-function searchForContent(inputSearch, table) {
+exports.searchForContent = function (inputSearch, table) {
     return new Promise(function (resolve, reject) {
         if (goodInputs(inputSearch, table)) {
             getKeyTerms(inputSearch).then(function (keyTerms) {
@@ -60,7 +58,7 @@ function searchForContent(inputSearch, table) {
             reject("your input terms didn't work for a search!");
         }
     });
-}
+};
 
 /**
  * Function to search for posts by tags. Goes through search term looking for tags in database and numbers, then
@@ -249,6 +247,7 @@ function getKeyTerms(input) {
  * content IDs and their relation to the key terms.
  */
 function searchGenTags(keyTerms, table) {
+    wordRelater = new TfIdf;
     var rows = new dbr.DBRow(table);
     return new Promise(function (resolve, reject) {
         //TODO wildcard to filter posts
