@@ -124,7 +124,7 @@ exports.isSubscribed = function (contentID, userID) {
  * a child comment is added.
  * @param contentID ID of content added/edited.
  */
-exprots.onContentAddedOrChanged = function (contentID) {
+exports.onContentAddedOrChanged = function (contentID) {
     //get ID of content user actually subscribed to
     getSubscribedContentID(contentID).then(function (contentID) {
         //add to number of notifications missed
