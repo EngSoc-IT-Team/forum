@@ -1,0 +1,22 @@
+/*
+** Written By Michael Albinson, 4/1/2017
+**
+** This file contains styling specific to the profile page. Normally, a new file would not be created for a single page,
+** but in order to style templates correctly on the profile page, specific style rules needed to be created.
+ */
+
+.title, .ratings, .class-rating {
+    display: inline !important;
+}
+
+.title {
+    font-size: 1.5em;
+}
+
+.title a{
+    color: black !important;
+}
+
+.title a:hover {
+    color: #cc7e15 !important;
+}
