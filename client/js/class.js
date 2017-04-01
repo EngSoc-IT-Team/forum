@@ -142,13 +142,13 @@ jQuery(document).ready(function() {
     var headerStars = $("#classHead .star-ratings");
 
     // Allows for rating by hovering over the course rating in the classHead
-    $(".course-rating").hover( function() {
+    $(".course-rating").hover(function() {
         $(this).toggle();
         headerStars.toggle();
-    });
+    }, function(){});
 
     // Shows the average class rating if the user has not rated the course
-    headerStars.mouseleave( function() {
+    headerStars.mouseleave(function() {
         if (!($(".star").hasClass('rated-star'))) {
             $(this).toggle();
             $(".course-rating").toggle();
