@@ -12,7 +12,7 @@ var lit = require('../util/Literals.js');
 ** To run a function to try it out just copy its call somewhere in this document and run this file.
 */
 
-usingOrderBy();
+// add a function here to see what it does
 
 /* getARowExample()
 **
