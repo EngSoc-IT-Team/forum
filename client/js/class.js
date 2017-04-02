@@ -145,7 +145,7 @@ jQuery(document).ready(function() {
     $(".course-rating").hover(function() {
         $(this).toggle();
         headerStars.toggle();
-    }, function(){});
+    }, function(){}); // this empty function on hover-off is required to make the stars render correctly
 
     // Shows the average class rating if the user has not rated the course
     headerStars.mouseleave(function() {

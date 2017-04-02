@@ -5,6 +5,7 @@
 * Created by Michael Albinson 2/15/17
  */
 
+// list page specific templates
 var askAQuestion = "<h6 class='info-block show-links'>Didn't find what you were looking for? Ask it <a href='/new'>here!</a></h6>";
 
 /**
@@ -51,9 +52,9 @@ function whenLoaded() {
     });
 }
 
-whenLoaded();
-
+// indicate the index of the posts the page has received (they are returned in sets of 20)
 var lastGotten = 0;
+
 /**
  * getMore function exclusively for the list page.
  *
@@ -88,3 +89,6 @@ function getMore() {
         console.log(err);
     });
 }
+
+// render the page
+whenLoaded();

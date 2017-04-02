@@ -4,6 +4,7 @@
 
 "use strict";
 
+// question page specific templates
 var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}" data-hastype="post">\
                             <div class="col-sm-12">\
                                 <h2 class="title" id="title"><a href="/question?id={0}">{1}</a></h2>\
@@ -33,9 +34,14 @@ var questionTemplate = '<div class="info-block row" id="{9}" data-hasvoted="{10}
                             </div>\
                         </div>';
 
+// hold the itemID and the state of the page as a global variable
 var itemID;
 var loaded = false;
 
+/**
+ * Run once the page is loaded. Gets the question and its comments out of the database and renders them. Additionally,
+ * this function sets up the editors appended to each of the comments and the question header.
+ */
 function whenLoaded() {
     var href;
     var content = {
@@ -71,6 +77,11 @@ function whenLoaded() {
     });
 }
 
+/** Sets up and renders the question information as an HTML string, and then appends it to the page at the #questionHead
+ *  element
+ *
+ * @param details: The question JSON object received from the server
+ */
 function fillInQuestionHeader(details) {
     var temp = fillTemplate(questionTemplate, details.id, details.title, positiveOrNegative(details.votes), details.votes, getDateString(details.date), details.author, details.author, details.summary, getTags(details.tags), details.id, details.voted);
 
@@ -82,6 +93,11 @@ function fillInQuestionHeader(details) {
     $('#questionHead').append(temp);
 }
 
+/** Adds the comments and subcomments to the page at the #comments. Additionally, changes the page footer depending on
+ * if there are more comments that can be retrieved from the server or not.
+ *
+ * @param comments: The comment array retrieved from the server. Each comment is represented as a JSON object.
+ */
 function addComments(comments) {
     var template;
 
@@ -120,5 +136,5 @@ function addComments(comments) {
     }
 }
 
-// start the page
+// render the page
 whenLoaded();

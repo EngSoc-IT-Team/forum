@@ -4,10 +4,18 @@
 
 "use strict";
 
+/** Gets the login information from the login boxes
+ *
+ * @returns {{username: (*|jQuery), secret: (*|jQuery)}} The user login details
+ */
 function getLoginContent() {
 	return {username: $(netid).val(), secret: $(secret).val()};
 }
 
+/** Logs the user in and redirects them if necessary
+ *
+ * @returns {*|void}
+ */
 function login() {
 	$(signIn).prop("disabled", true);
 	var content = getLoginContent();
