@@ -2,7 +2,7 @@
  * DatabaseManager.js
  * Written by Michael Albinson 11/19/16
  *
- *
+ * The interface for working with the
  */
 
 "use strict";
@@ -16,6 +16,7 @@ var lit = require('./../Literals.js');
 var databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/database.json'), 'utf8'));
 
 exports.DatabaseManager = function() {
+	// the information needed to make the connection to the mySQL database
 	var pool = mysql.createPool({
 		host: databaseInformation[lit.HOST],
 		user: databaseInformation[lit.USER],
@@ -24,6 +25,10 @@ exports.DatabaseManager = function() {
 		connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
 	});
 
+    /** Queries the database by opening a connection and querying and then closes the connection and returns the response.
+	 *
+     * @param queryString: The sanitized query string from the query builder to be passed to the database
+     */
 	this.query = function(queryString) {
 		return new Promise(function(resolve, reject){
 			pool.getConnection(function(err, connection) {
