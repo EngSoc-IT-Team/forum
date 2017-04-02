@@ -14,10 +14,10 @@ var lit = require('./../Literals');
  * with some form of recursiveGet. The list to push to must be a mutable array that is the first element of another mutable array.
  * i.e. [[this, would, be, your, list]] (this operated based on the premise of recursiveGet, for more information, see recursion.js)
  *
- * @param item
- * @param vote
- * @param type
- * @param list
+ * @param item: the item to get information about
+ * @param vote: the vote the user has that corresponds to the item, undefined if there is no corresponding vote
+ * @param type: the type of the item to get information about
+ * @param list: the array of item information to push the new information JSON object to
  */
 exports.generalInfo = function(item, vote, type, list) {
     var hasVoted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
@@ -51,9 +51,9 @@ exports.generalInfo = function(item, vote, type, list) {
 /**
  * Gets the info for the provided question. The vote information should be provided along with the question DBRow.
  *
- * @param item the question DBRow
- * @param voteValue the value of the vote associated with the question
- * @param hasVoted whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
+ * @param item: the question DBRow
+ * @param voteValue: the value of the vote associated with the question
+ * @param hasVoted: whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
  * @returns {{id, title, votes, author, date, summary, type: string, tags, voted: *, voteValue: *}}
  */
 exports.getQuestionInfo = function(item, voteValue, hasVoted) {
@@ -74,9 +74,9 @@ exports.getQuestionInfo = function(item, voteValue, hasVoted) {
 /**
  * Gets the row info for the given link
  *
- * @param item the link DBRow
- * @param voteValue the value of the vote associated with the link
- * @param hasVoted whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
+ * @param item: the link DBRow
+ * @param voteValue: the value of the vote associated with the link
+ * @param hasVoted: whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
  * @returns {{id, title, votes, author, date, summary, type: string, tags, url, voted: *, voteValue: *}}
  */
 exports.getLinkInfo = function(item, voteValue, hasVoted) {
@@ -98,9 +98,9 @@ exports.getLinkInfo = function(item, voteValue, hasVoted) {
 /**
  * Gets the row info for the given class
  *
- * @param item the class DBRow
- * @param voteValue the value of the vote associated with the class
- * @param hasVoted whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
+ * @param item: the class DBRow
+ * @param voteValue: the value of the vote associated with the class
+ * @param hasVoted: whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
  * @returns {{id, title, courseCode, rating, author, summary, type: string, tags, voted: *}}
  */
 exports.getClassInfo = function(item, voteValue, hasVoted) {
@@ -120,9 +120,9 @@ exports.getClassInfo = function(item, voteValue, hasVoted) {
 /**
  * Gets the row info for the given comment
  *
- * @param item the comment DBRow
- * @param voteValue the value of the vote associated with the comment
- * @param hasVoted whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
+ * @param item: the comment DBRow
+ * @param voteValue: the value of the vote associated with the comment
+ * @param hasVoted: whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
  * @returns {{id, author, content, netVotes, parent, parentComment, type: string, date, voted: *}}
  */
 exports.getCommentInfo = function(item, voteValue, hasVoted) {
@@ -142,9 +142,9 @@ exports.getCommentInfo = function(item, voteValue, hasVoted) {
 /**
  * Gets the row info for the given rating
  *
- * @param item the rating DBRow
- * @param voteValue the value of the vote associated with the rating
- * @param hasVoted whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
+ * @param item: the rating DBRow
+ * @param voteValue: the value of the vote associated with the rating
+ * @param hasVoted: whether or not the user has voted, which is given as the "polarity" of the vote, either positive or negative
  * @returns {{parent, id, rating, author, content, date, type: string, voted: *}}
  */
 exports.getRatingInfo = function(item, voteValue, hasVoted) {

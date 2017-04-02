@@ -14,16 +14,13 @@ var searcher = require('./../actions/Searcher');
 var recursion = require('./../recursion');
 var itemInfo = require('./itemInfoGetter');
 
-
-/** listRequest(request)
- * Handles requests from the list page
- *
- * @param request: the express request
- * @returns {Promise}
- */
-
 //TODO: add hidden handling -- or just avoid them
 
+/** Handles requests from the list page and resolves a list of matching items for the query, or uses the Searcher functionality
+ * to use more advanced query parsing. Resolves an array of JSON objects containing
+ *
+ * @param request: the express request from the client
+ */
 exports.handle = function (request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;
@@ -46,10 +43,17 @@ exports.handle = function (request) {
     });
 };
 
+/** Uses the Searcher's searchForContent function parse a search query string to build the list page's information array.
+ *
+ * @param resolve: The handle function's resolution
+ * @param reject: The handle function's rejection
+ * @param request: The express server's request
+ */
 function useSearch(resolve, reject, request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;
-    searcher.searchForContent(request.query.query, lit.POST_TABLE).then(function (res) {
+    var table = request.query.table ? request.query.table : lit.POST_TABLE; // if a table is specified, search it, otherwise just search the post table
+    searcher.searchForContent(request.query.query, table).then(function (res) {
         recursion.recursiveGetListWithVotes(resolve, reject, res, itemInfo.generalInfo, userID, [info], 0);
     }).catch(function (err) {
         reject(err);
