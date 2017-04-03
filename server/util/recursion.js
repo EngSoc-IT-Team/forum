@@ -118,6 +118,14 @@ exports.recursiveGetListWithVotes = function (resolve, reject, rowList, action, 
     }
 };
 
+/**
+ * Function that recursively retrieves the generated tags for each row from a given table.
+ * @param row The individual row of a table that each recursive call is using.
+ * @param addDocument Function to add the tags to the wordRelater in Searcher.js.
+ * @param table The table row is in.
+ * @param docInfo An object holding a placeholder measure for wordRelater and the ID of the row.
+ * @returns {*} An array is built with each recursive call to eventually be an array of all docInfo's made
+ */
 exports.recursiveGetTags = function (row, addDocument, table, docInfo) {
     if (!row.next()) {
         return docInfo;

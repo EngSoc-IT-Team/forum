@@ -267,6 +267,12 @@ function searchGenTags(keyTerms, table) {
     });
 }
 
+/**
+ * Function argument used for recursively getting the generated tags of a searchable row. Adds tags to the wordRelater.
+ * @param tags The tags to be added to the wordRelater
+ * @param row The row used to get the tag.
+ * @returns {{measure: number, id}} Object to be added to documentInfo array - makes a spot for each
+ */
 var addDocument = function (tags, row) {
     wordRelater.addDocument(tags);
     return {measure: 0, id: row.getValue(lit.FIELD_ID)};
