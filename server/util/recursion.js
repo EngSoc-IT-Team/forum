@@ -94,23 +94,22 @@ exports.recursiveGetWithVotes = function (resolve, reject, rowsToGet, action, us
     }
 };
 
-exports.recursiveGetListWithVotes = function (resolve, reject, rowList, action, userID, actionArgs, index) {
-    if (index > rowList.length)
+exports.recursiveGetListWithVotes = function (resolve, reject, rowList, tableList, action, userID, actionArgs, index) {
+    if (index > rowList.length) //tableList and rowList have the same length
         resolve(actionArgs);
     else {
         var current = rowList[index];
         if (!current)
-            return exports.recursiveGetListWithVotes(resolve, reject, rowList, action, userID, actionArgs, ++index);
-
-        var post = new DBRow(lit.POST_TABLE);
-        post.getRow(current).then(function () {
+            return exports.recursiveGetListWithVotes(resolve, reject, rowList, tableList, action, userID, actionArgs, ++index);
+        var content = new DBRow(tableList[index]);
+        content.getRow(current).then(function () {
             voter.getVote(userID, current).then(function (vote) {
                 if (vote)
-                    action(post, vote, 'post', actionArgs);
-                else
-                    action(post, undefined, 'post', actionArgs);
-
-                exports.recursiveGetListWithVotes(resolve, reject, rowList, action, userID, actionArgs, ++index)
+                    action(content, vote, tableList[index], actionArgs);
+                else {
+                    action(content, undefined, tableList[index], actionArgs);
+                }
+                exports.recursiveGetListWithVotes(resolve, reject, rowList, tableList, action, userID, actionArgs, ++index)
             }, function (err) {
                 reject(actionArgs, err);
             });
@@ -119,25 +118,53 @@ exports.recursiveGetListWithVotes = function (resolve, reject, rowList, action, 
 };
 
 /**
+ * Function that recursively queries multiple tables for each row of each table's generated tags.
+ * @param resolve The Promise resolve used to make the code act synchronously.
+ * @param reject The Promise reject used to pass errors up the Promise chains.
+ * @param tables The tables to be queried.
+ * @param index The current table to be queried within tables.
+ * @param allDocInfo One information object (id, measure, table) is added for each row of each table.
+ * @param queryOneTable Function parameter that queries one table and gets the generated tags for each row in that table.
+ */
+exports.recursiveGetTagsMultiTables = function (resolve, reject, tables, index, allDocInfo, queryOneTable) {
+    if (index > tables.length - 1) {
+        resolve(allDocInfo);
+    } else {
+        queryOneTable(tables[index]).then(function (oneDoc) {
+            allDocInfo = allDocInfo.concat(oneDoc);
+            exports.recursiveGetTagsMultiTables(resolve, reject, tables, ++index, allDocInfo, queryOneTable);
+        }).catch(function (err) {
+            log.error("recursiveGetTagsMultiTables error: " + err);
+            reject(err);
+        });
+    }
+};
+
+/**
  * Function that recursively retrieves the generated tags for each row from a given table.
+ * @param resolve The Promise resolve used to make the code act synchronously.
+ * @param reject The Promise reject used to pass errors up the Promise chains.
  * @param row The individual row of a table that each recursive call is using.
  * @param addDocument Function to add the tags to the wordRelater in Searcher.js.
  * @param table The table row is in.
  * @param docInfo An object holding a placeholder measure for wordRelater and the ID of the row.
  * @returns {*} An array is built with each recursive call to eventually be an array of all docInfo's made
  */
-exports.recursiveGetTags = function (row, addDocument, table, docInfo) {
+exports.recursiveGetTags = function (resolve, reject, row, addDocument, table, docInfo) {
     if (!row.next()) {
-        return docInfo;
+        resolve(docInfo);
     } else {
         var genTags = row.getValue(lit.FIELD_GEN_TAGS);
         if (genTags !== null) {
-            docInfo.push(addDocument(genTags, row));
-            return exports.recursiveGetTags(row, addDocument, table, docInfo);
+            docInfo.push(addDocument(genTags, row, table));
+            return exports.recursiveGetTags(resolve, reject, row, addDocument, table, docInfo);
         } else {
             searcher.generateTags(row, table).then(function (tags) {
-                addDocument(tags, row);
-                return exports.recursiveGetTags(row, addDocument, table, docInfo);
+                addDocument(tags, row, table);
+                return exports.recursiveGetTags(resolve, reject, row, addDocument, table, docInfo);
+            }).catch(function (err) {
+                log.error("recursiveGetTags error: " + err);
+                reject(err);
             });
         }
     }

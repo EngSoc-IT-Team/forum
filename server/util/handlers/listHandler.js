@@ -49,8 +49,8 @@ exports.handle = function (request) {
 function useSearch(resolve, reject, request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;
-    searcher.searchForContent(request.query.query, lit.POST_TABLE).then(function (res) {
-        recursion.recursiveGetListWithVotes(resolve, reject, res, itemInfo.generalInfo, userID, [info], 0);
+    searcher.searchForContent(request.query.query).then(function (res) {
+        recursion.recursiveGetListWithVotes(resolve, reject, res[0], res[1], itemInfo.generalInfo, userID, [info], 0);
     }).catch(function (err) {
         reject(err);
     });

@@ -27,7 +27,34 @@ var dbr = require('./../DBRow.js');
 var recursion = require('../recursion');
 
 var TfIdf = natural.TfIdf;
-var wordRelater;
+var wordRelater = new TfIdf;
+
+var searchableTables = [lit.CLASS_TABLE, lit.LINK_TABLE, lit.POST_TABLE, lit.COMMENT_TABLE, lit.TAG_TABLE];
+
+/**
+ * Function argument used for recursively getting the generated tags of a searchable row. Adds tags to the wordRelater.
+ * @param table The table the row is from.
+ * @param tags The tags to be added to the wordRelater
+ * @param row The row used to get the tag.
+ * @returns {{measure: number, id}} Object to be added to documentInfo array - makes a spot for each
+ */
+var addDocument = function (tags, row, table) {
+    wordRelater.addDocument(tags);
+    return {measure: 0, id: row.getValue(lit.FIELD_ID), table: table};
+};
+
+var queryOneTable = function (table) {
+    var row = new dbr.DBRow(table);
+    return new Promise(function (resolve, reject) {
+        row.query().then(function () {
+            resolve(recursion.recursiveGetTags(resolve, reject, row, addDocument, table, []));
+        }).catch(function (err) {
+            log.error("queryTable error: " + err);
+            reject(err);
+        });
+    });
+};
+
 /**
  * Searches a given array of table for data related to a given search. Fields are chosen for you, as the fields
  * that should be searched. Does not allow searches with bad search terms/tables to be conducted.
@@ -41,7 +68,7 @@ exports.searchForContent = function (inputSearch, table) {
                 return searchGenTags(keyTerms, table);
             }).then(function (documentInfo) {
                 documentInfo = removeLowMeasures(documentInfo);
-                var sortedPosts = sortByMeasure(documentInfo);
+                var sortedPosts = mergeSort(documentInfo);
                 exports.searchByUserTag(inputSearch).then(function (userPosts) {
                     for (var i in userPosts) {
                         if (!sortedPosts.includes(userPosts[i])) { //no duplicated posts
@@ -49,7 +76,15 @@ exports.searchForContent = function (inputSearch, table) {
                             sortedPosts.push(userPosts[i]);
                         }
                     }
-                    resolve(sortedPosts);
+                    //get ids and tables in one array to be used to send back to listHandler
+                    var res = [];
+                    res[0] = [];
+                    res[1] = [];
+                    for (var j in sortedPosts) {
+                        res[0].push(sortedPosts[j][lit.FIELD_ID]);
+                        res[1].push(sortedPosts[j][lit.TABLE]);
+                    }
+                    resolve(res);
                 })
             }).catch(function (error) {
                 log.error("searchForContent error: " + error);
@@ -91,7 +126,7 @@ exports.searchByUserTag = function (inputSearch) {
                 while (row.next()) {
                     for (var index in tagsInSearch) {
                         if (row.getValue(lit.FIELD_TAGS).includes(tagsInSearch[index])) {
-                            postsWithTags.push(row.getValue(lit.FIELD_ID));
+                            postsWithTags.push({measure: 0, id: row.getValue(lit.FIELD_ID), table: lit.POST_TABLE});
                         }
                     }
                 }
@@ -179,6 +214,9 @@ function goodInputs(inputSearch, table) {
     if (!(typeof inputSearch === lit.STRING) || inputSearch === undefined || inputSearch === "") {
         return false;
     } else {
+        if (table === undefined || table === null) { //means we search all searchable tables
+            return true;
+        }
         //check that table is actually a table name
         return !(!(typeof table === lit.STRING) || (table !== lit.CLASS_TABLE && table !== lit.POST_TABLE && table !== lit.COMMENT_TABLE &&
         table !== lit.LINK_TABLE && table !== lit.TAG_TABLE && table !== lit.USER_TABLE));
@@ -216,9 +254,6 @@ function getSearchableFields(table) {
             searchableFields.push(lit.FIELD_RELATED_TAGS);
             searchableFields.push(lit.FIELD_NAME);
             break;
-        case lit.USER_TABLE:
-            searchableFields.push(lit.FIELD_USERNAME);
-            break;
     }
     return searchableFields;
 }
@@ -248,12 +283,9 @@ function getKeyTerms(input) {
  */
 function searchGenTags(keyTerms, table) {
     wordRelater = new TfIdf;
-    var rows = new dbr.DBRow(table);
     return new Promise(function (resolve, reject) {
         //TODO wildcard to filter posts
-        rows.query().then(function () {
-            return recursion.recursiveGetTags(rows, addDocument, table, []);
-        }).then(function (documentInfo) {
+        queryTables(table).then(function (documentInfo) {
             for (var termIndex in keyTerms) {
                 wordRelater.tfidfs(keyTerms[termIndex], function (docIndex, measure) {
                     documentInfo[docIndex][lit.KEY_MEASURE] += measure;
@@ -267,16 +299,20 @@ function searchGenTags(keyTerms, table) {
     });
 }
 
-/**
- * Function argument used for recursively getting the generated tags of a searchable row. Adds tags to the wordRelater.
- * @param tags The tags to be added to the wordRelater
- * @param row The row used to get the tag.
- * @returns {{measure: number, id}} Object to be added to documentInfo array - makes a spot for each
- */
-var addDocument = function (tags, row) {
-    wordRelater.addDocument(tags);
-    return {measure: 0, id: row.getValue(lit.FIELD_ID)};
-};
+function queryTables(table) {
+    return new Promise(function (resolve, reject) {
+        if (table === undefined || table === null) { //search all tables
+            recursion.recursiveGetTagsMultiTables(resolve, reject, searchableTables, 0, [], queryOneTable);
+        } else {
+            queryOneTable(table).then(function (docInfo) {
+                resolve(docInfo);
+            }).catch(function (err) {
+                log.error("queryTables error: " + err);
+                reject(err);
+            });
+        }
+    });
+}
 
 /**
  * Removes documents from search consideration that have too low of a measure.
@@ -294,20 +330,6 @@ function removeLowMeasures(documentInfo) {
         }
     }
     return documentInfo;
-}
-
-/**
- * Sorts document info by measure, and then returns an array of the document IDs in the same order.
- * @param documentInfo document array to sort by measure.
- * @returns {Array} Sorted document IDs.
- */
-function sortByMeasure(documentInfo) {
-    documentInfo = mergeSort(documentInfo);
-    var sortedIDs = [];
-    for (var index in documentInfo) {
-        sortedIDs.push(documentInfo[index][lit.FIELD_ID]);
-    }
-    return sortedIDs;
 }
 
 /**
