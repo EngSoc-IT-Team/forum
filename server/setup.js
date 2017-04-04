@@ -19,7 +19,10 @@ var preferences = JSON.parse(fs.readFileSync(path.join('./config/config.json'), 
 
 setup(); // let's set everything up
 
-
+/**
+ * Sets up the database (provided that one has already been created). Additionally, loads mock data if the preference is
+ * set in the config/config.json folder
+ */
 function setup() {
 	dependencies.checkDependencies();
 

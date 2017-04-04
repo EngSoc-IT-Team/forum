@@ -14,8 +14,15 @@ var escaper = require('./QueryEscaper');
 var lit = require('./../Literals.js');
 var compare = require('./../Compare');
 
-const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"]; //TODO: implement 'in' and 'between' operators
+// the operators which are allowed to be used to query the database TODO: implement the 'in' and 'between' operators
+const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"];
 
+/** Creates an escaped "update" query provided the table and database object JSON
+ *
+ * @param table: The table that the row that's being updated is on
+ * @param dbObject: The database object JSON to be broken down and escaped
+ * @returns {string}: The escaped query string
+ */
 exports.update = function(table, dbObject) {
 	if (!dbObject[lit.FIELD_ID])
 		return log.warn("The field 'id' must be set in order to update a row");
@@ -28,6 +35,12 @@ exports.update = function(table, dbObject) {
 	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject[lit.FIELD_ID]) + ";";
 };
 
+/** Creates an escaped "insert" query provided the table and database object JSON
+ *
+ * @param table: The table that the row that's being updated is on
+ * @param dbObject: The database object JSON to be broken down and escaped
+ * @returns {*}: The escaped query string
+ */
 exports.insert = function(table, dbObject) {
 	if (!dbObject[lit.FIELD_ID])
 		return log.warn("The field 'id' must be set in order to insert a row");
@@ -44,6 +57,13 @@ exports.insert = function(table, dbObject) {
 	return base + dboBrokenDown[0] + " VALUES " + dboBrokenDown[1] + ";";
 };
 
+/** Creates an escaped "select" query provided the table and database row's ID that only returns one row if the row exists,
+ * none if it doesn't
+ *
+ * @param table: The table that the row that's being updated is on
+ * @param rowId: The ID of the database row to get
+ * @returns {string}: The escaped query string
+ */
 exports.get = function(table, rowId) {
 	if (!escaper.isValidTableName(table))
 		return log.warn("Invalid table name used for call to GET");
@@ -51,6 +71,12 @@ exports.get = function(table, rowId) {
 	return "SELECT * FROM " + table + " WHERE id=" + mysql.escape(rowId) + ";";
 };
 
+/** Creates an escaped "select" query provided the table and database object JSON
+ *
+ * @param table: The table that the row that's being updated is on
+ * @param dbObject: the database object JSON to be broken down and escaped
+ * @returns {string}: The escaped query string
+ */
 exports.query = function(table, dbObject) {
 	if (!escaper.isValidTableName(table))
 		return log.warn("Invalid table name used for call to QUERY");
@@ -64,7 +90,12 @@ exports.query = function(table, dbObject) {
 	
 };
 
-// This is the only way we will allow a record to be deleted (by id)
+/** Creates an escaped "delete" query provided the table and database object JSON
+ *
+ * @param table: The table that the row that's being updated is on
+ * @param id: the if of a database row to delete
+ * @returns {string}: The escaped query string
+ */
 exports.delete = function(table, id) {
 	if (!escaper.isValidTableName(table))
 		return log.warn("Invalid table name used for call to DELETE");
@@ -72,21 +103,53 @@ exports.delete = function(table, id) {
 	return "DELETE FROM " + table + " WHERE id=" + resolveObjectType(id) + ";";
 };
 
+/** Escapes the limit clause for queries
+ *
+ * @param limitNum: The limit number that needs to be escaped
+ * @returns {string}: The complete sanitized escape clause
+ */
 exports.escapeLimit = function(limitNum) {
 	return "LIMIT " + resolveObjectType(limitNum);
 };
 
+/** Escapes the order by clause for queries
+ *
+ * @param field: the field to order the query by
+ * @param ascOrDesc: indicates whether the field should be ordered by ascending or descending order. Must be the string 'asc' or 'desc' or their upper case versions
+ * @returns {*}: the escaped order by clause or undefined if the field or operator passed in is invalid
+ */
 exports.escapeOrderBy = function(field, ascOrDesc) {
+    var asc = "asc";
+    var desc = "desc";
+    if (!escaper.isValidField(table, prop))
+		return undefined;
+
+    if (ascOrDesc != asc || ascOrDesc != asc.toUpperCase() || ascOrDesc != desc || ascOrDesc != desc.toUpperCase())
+    	return undefined;
+
 	return "ORDER BY " + field + " " + ascOrDesc;
 };
 
+/** Escapes the id passed in
+ *
+ * @param idToEscape: the ID that needs to be escaped
+ * @returns {*}: the escaped id
+ */
 exports.escapeID = function(idToEscape) {
 	return mysql.escape(idToEscape);
 };
 
-// if string, return a string of format "(field1='value1', field2='value2' ...)"
-// if true, return string of column ids and values where the indices are the same for each list
-// i.e. ["field1, field2, field3", "'value1', 'value2, 'value3'"]
+/** Breaks down the passed in DBObject and escapes it to form the base of a query string based on the arguments passed in
+ *
+ * @param obj: the database object to break down
+ * @param returnAsTwoStrings: Boolean, whether or not to pass the string
+ * @param allowSettingId: Boolean, whether to allow IDs to be *set* while building the query string or not, generally set to false
+ * @param parenthesis: Boolean, whether or not to wrap the returned string in parentheses or not
+ * @param isUpdate: Boolean, whether the string is for an update query string or not
+ * @param addOne: Boolean, whether or not to skip over the first key in the object keys (i.e. to prevent setting the row)
+ * @param table: The table to query on
+ * @returns {*}: The database object broken down into a string, as an array of two strings if the returnAsTwoStrings boolean is set to true
+ */
 function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis, isUpdate, addOne, table) {
 	var fields = "";
 	var values = "";
@@ -165,6 +228,12 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 	}
 }
 
+/** Resolves the object type of the object that is passed in. This is, perhaps, the core of the security of the website,
+ * ensuring objects of unsecured types are rejected, causing queries to fail, and escaping queries to prevent SQL injection.
+ *
+ * @param resolveThis: the object that needs to be resolved
+ * @returns {*}: the escaped object, if it is of valid type. Returns undefined otherwise.
+ */
 function resolveObjectType(resolveThis) {
 	var objectType = typeof resolveThis;
 
@@ -194,6 +263,12 @@ function resolveObjectType(resolveThis) {
         return log.warn("Objects with type '" + objectType + "' are not currently implemented, please pass a number, boolean or string");
 }
 
+/** Checks to ensure that the operator being used is a valid one. Replaces invalid operators with the equals operator
+ * if the operator passed in is invalid.
+ *
+ * @param op: The operator trying to be used
+ * @returns {*}: The operator if it is valid, returns = if it is invalid
+ */
 function checkOperator(op) {
 	if (allowedOperators.includes(op.toLowerCase()))
 		return op.toUpperCase();

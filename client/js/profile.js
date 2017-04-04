@@ -9,15 +9,20 @@ var commentTemplate = '<div>Ayrton fill me in</div>';
 
 var reviewTemplate = '<div>Ayrton fill me in</div>';
 
+//the userID of the user
 var uid;
 
+/**
+ * Gets the profile information, saves, contributions, and contributions of the user form the server and adds them to the
+ * page
+ */
 function whenLoaded() {
 	var href;
     var content = {
 		requested: "profile"
 	};
 
-    if (window.location.href.includes("?")) {
+    if (window.location.href.includes("?")) { // hide the personal section if
         $(personal).hide();
         content.self = false;
         href = '/info' + window.location.href.slice(window.location.href.indexOf('?'));
@@ -57,7 +62,11 @@ function whenLoaded() {
     });
 }
 
-
+/** Animates the voting bar on load of the page to show the relative number of upvotes and downvotes of a user
+ *
+ * @param upvotes: The number of upvotes the user has
+ * @param downvotes: The number of downvotes a user has
+ */
 function animateVotingBar(upvotes, downvotes) {
 	var ups = $(positive)[0];
 	var down = $(negative)[0];
@@ -83,6 +92,10 @@ function animateVotingBar(upvotes, downvotes) {
     }
 }
 
+/** Fills in the header of the profile page with all of the information retrieved from the server
+ *
+ * @param profile: the JSON object containing information specific to the user
+ */
 function fillInUserInfo(profile) {
     uid = profile.id;
 	$(posts)[0].innerHTML = "Posts: " + profile.posts;
@@ -95,8 +108,13 @@ function fillInUserInfo(profile) {
 	$(joined)[0].innerHTML = "Date Joined: " + profile.dateJoined.slice(0, profile.dateJoined.indexOf('T'));
 }
 
+/** Fills in the saved, subscribed and contribution components of the page for the given information provided. Note that
+ * saves and subscriptions are only provided if the user if viewing their own profile, otherwise only contributions
+ * are shown.
+ *
+ * @param items: the items that the user has saved, subscribed and contributed
+ */
 function fillInPostInfo(items) {
-    var html;
     var sub = $('#subscribed');
     var save = $('#saved');
     var contr = $('#contributions');
@@ -122,6 +140,10 @@ function fillInPostInfo(items) {
     }
 }
 
+/** Adds the tags the user knows about to the profile header
+ *
+ * @param tags: The tags the user "knows about"
+ */
 function addTags(tags) {
     var html = '';
     for (var i=0; i< tags.length; i++){

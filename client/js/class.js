@@ -1,5 +1,6 @@
 "use strict";
 
+// Templates only used on the class page
 var classTemplate = '<div class="info-block clearfix">\
                             <div class="col-sm-12">\
                                 <div class="clearfix">\
@@ -12,22 +13,22 @@ var classTemplate = '<div class="info-block clearfix">\
                                         {4}\
                                     </div>\
                                     <div class="star-ratings">\
-                      								<span class="star">\
-                      			  					<img src="../assets/star.svg" class="svg" />\
-                      			  				</span>\
-                      			          <span class="star">\
-                      			  					<img src="../assets/star.svg" class="svg" />\
-                      			  				</span>\
-                      			          <span class="star">\
-                      			  					<img src="../assets/star.svg" class="svg" />\
-                      			  				</span>\
-                      			          <span class="star">\
-                      			  					<img src="../assets/star.svg" class="svg" />\
-                      			  				</span>\
-                      			          <span class="star">\
-                      			  					<img src="../assets/star.svg" class="svg" />\
-                      			  				</span>\
-                      							</div>\
+                      					<span class="star">\
+                                            <img src="../assets/star.svg" class="svg" />\
+                                        </span>\
+                      			        <span class="star">\
+                                            <img src="../assets/star.svg" class="svg" />\
+                                        </span>\
+                      			        <span class="star">\
+                                            <img src="../assets/star.svg" class="svg" />\
+                                        </span>\
+                      			        <span class="star">\
+                                            <img src="../assets/star.svg" class="svg" />\
+                                        </span>\
+                      			        <span class="star">\
+                                            <img src="../assets/star.svg" class="svg" />\
+                                        </span>\
+                      				</div>\
                                     <p class="instructor"><b>Instructor: </b>{5}</p>\
                                     <p><b>Credits: </b>{6}</p>\
                                 </div>\
@@ -60,9 +61,14 @@ var level1ReviewTemplate = '<div class="col-sm-12" id="{0}">\
                                 <hr />\
                             </div>';
 
+// hold the class ID and the user rating for the page as global variables
 var classID;
 var starRating = 0;
 
+/**
+ * Once the page is loaded, gets the class item from the server as well as all of its corresponding reviews,
+ * and renders them on the page.
+ */
 function whenLoaded() {
     var href;
     var content = {
@@ -96,78 +102,84 @@ function whenLoaded() {
     });
 }
 
-jQuery(document).ready(function() {
-
 // Class Rating Stars (Homage to @TranBrian10 on Github for his help on this)
+/**
+ * When the document is ready, adds the hover and onclick events to all of the stars where a user can submit a rating
+ */
+jQuery(document).ready(function() {
+    var stars = $(".star-ratings .star"); //Get the star elements
+    stars.hover(function() {
+        //Add yellow colour to current and previous stars
+        var hoveredStars = $(this).prevAll().add(this);
+        hoveredStars.addClass("hovered");
 
-{
-  //Retains the current star rating
-  var stars = $(".star-ratings .star");
-    stars.hover(
-    function(e) {
-      //Add yellow colour to current and previous stars
-      var hoveredStars = $(this).prevAll().add(this);
-      hoveredStars.addClass("hovered");
-
-      //Remove yellow caused by rated stars so that the hovering shows the new potential rating
-      var allStars = $(this).siblings().add(this);
-      allStars.removeClass("rated-star");
+        //Remove yellow caused by rated stars so that the hovering shows the new potential rating
+        var allStars = $(this).siblings().add(this);
+        allStars.removeClass("rated-star");
     },
-    function(e) {
-      //Remove all yellow caused by hovering
-      var allStars = $(this).siblings().add(this);
-      allStars.removeClass("hovered unhovered");
+    function() {
+        //Remove all yellow caused by hovering
+        var allStars = $(this).siblings().add(this);
+        allStars.removeClass("hovered unhovered");
 
-      //Add back yellow caused by rated stars to the correct number of rated stars
-      allStars.slice(0, starRating).addClass("rated-star");
-    }
-  );
+        //Add back yellow caused by rated stars to the correct number of rated stars
+        allStars.slice(0, starRating).addClass("rated-star");
+    });
 
-    stars.on("click", function(e) {
+    stars.on("click", function() {
+        //Removes the rated-star class from all stars in case a rating was provided earlier
+        var allStars = $(this).siblings().add(this);
+        allStars.removeClass("rated-star");
 
-    //Removes the rated-star class from all stars in case a rating was provided earlier
-    var allStars = $(this).siblings().add(this);
-    allStars.removeClass("rated-star");
+        //Adds the the rated-star class to the stars corresponding with the clicked rating
+        var hoveredStars = $(this).prevAll().add(this);
+        hoveredStars.addClass("rated-star");
 
-    //Adds the the rated-star class to the stars corresponding with the clicked rating
-    var hoveredStars = $(this).prevAll().add(this);
-    hoveredStars.addClass("rated-star");
+        //Update the starRating variable with the new rating
+        starRating = hoveredStars.length;
+    });
 
-    //Update the starRating variable with the new rating
-    starRating = hoveredStars.length;
-  });
-}
+    var headerStars = $("#classHead .star-ratings");
 
+    // Allows for rating by hovering over the course rating in the classHead
+    $(".course-rating").hover(function() {
+        $(this).toggle();
+        headerStars.toggle();
+    }, function(){}); // this empty function on hover-off is required to make the stars render correctly
 
-// Allows for rating by hovering over the course rating in the classHead
-$(".course-rating").hover( function() {
-  $(this).toggle();
-  $("#classHead .star-ratings").toggle();
-},
-function() {
-});
-// Shows the average class rating if the user has not rated the course
-$("#classHead .star-ratings").mouseleave( function() {
-  if (!($(".star").hasClass('rated-star'))) {
-    $(this).toggle();
-    $(".course-rating").toggle();
-  };
+    // Shows the average class rating if the user has not rated the course
+    headerStars.mouseleave(function() {
+        if (!($(".star").hasClass('rated-star'))) {
+            $(this).toggle();
+            $(".course-rating").toggle();
+        }
+    });
 });
 
-
-
-});
-
+/** Creates the star HTML elements included with both the class and review elements
+ *
+ * @param rating: The number, out of 5, of stars associated with an item
+ * @param mainColor: The color of the stars that are filled in for the rating
+ * @returns {*} The HTML string containing 5 stars of the indicated colors
+ */
 function getRating(rating, mainColor) {
     return fillTemplate(starTemplate, mainColor).repeat(rating) + fillTemplate(starTemplate, 'grey-star').repeat(5 - rating);
 }
 
+/** Fills in the class Template and appends it to the page at the #classHead
+ *
+ * @param cl: The class JSON object received from the server
+ */
 function fillInClassHeader(cl) {
     var tmp = fillTemplate(classTemplate, cl.id, cl.courseCode, cl.title, getTags(cl.tags), getRating(cl.rating, 'red-star'),
         cl.instructor, cl.credit, cl.prereqs, cl.summary);
     $('#classHead').append(tmp);
 }
 
+/** Creates all the reviews for the class and then appends them to the #review element
+ *
+ * @param reviews: The review array for the class that need to be rendered
+ */
 function addReviews(reviews) {
     var template;
     if (reviews.length == 0) {
@@ -188,16 +200,20 @@ function addReviews(reviews) {
     }
 }
 
+/** Function used to create a HTML string for the review JSON object that is passed in
+ *
+ * @param review: The review item json to be displayed
+ * @returns {*} The filled review template's HTML string
+ */
 function fillReviewLevel1Template(review) {
     return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
         getDateString(review.date), review.author, review.author, review.content);
 }
 
-// function fillReviewLevel2Template(review) {
-//     return fillTemplate(level2ReviewTemplate, positiveOrNegative(review.votes), review.votes,
-//         getDateString(review.date), review.author, review.author, review.summary);
-// }
-
+/** Rates the class by either submitting a review and rating or just a rating
+ *
+ * @param element: The element containing the rating information
+ */
 function rate(element) {
     var ratingInfo = getRatingInfo(element, true);
     $.ajax({
@@ -222,6 +238,12 @@ function rate(element) {
     });
 }
 
+/** Gets the rating information that a user is trying to make with or without a comment
+ *
+ * @param element: The element associated with the rating
+ * @param withComment: A flag indicating whether or not a rating has a comment associated with it
+ * @returns {*} A JSON object containing the rating and comment, if there is one
+ */
 function getRatingInfo(element, withComment) {
     var rating = $(element);
     if(!withComment) {
@@ -239,4 +261,5 @@ function getRatingInfo(element, withComment) {
     }
 }
 
+// render the page
 whenLoaded();

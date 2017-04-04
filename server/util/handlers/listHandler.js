@@ -14,16 +14,13 @@ var searcher = require('./../actions/Searcher');
 var recursion = require('./../recursion');
 var itemInfo = require('./itemInfoGetter');
 
-
-/** listRequest(request)
- * Handles requests from the list page
- *
- * @param request: the express request
- * @returns {Promise}
- */
-
 //TODO: add hidden handling -- or just avoid them
 
+/** Handles requests from the list page and resolves a list of matching items for the query, or uses the Searcher functionality
+ * to use more advanced query parsing. Resolves an array of JSON objects containing
+ *
+ * @param request: the express request from the client
+ */
 exports.handle = function (request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;
@@ -46,6 +43,12 @@ exports.handle = function (request) {
     });
 };
 
+/** Uses the Searcher's searchForContent function parse a search query string to build the list page's information array.
+ *
+ * @param resolve: The handle function's resolution
+ * @param reject: The handle function's rejection
+ * @param request: The express server's request
+ */
 function useSearch(resolve, reject, request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;

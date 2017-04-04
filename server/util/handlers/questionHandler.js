@@ -14,6 +14,11 @@ var voter = require('./../actions/Voter');
 
 //TODO: add duplicate handling
 
+/** Handles the request from the client by getting information about the question and its subcomments and returning it to
+ * the client.
+ *
+ * @param request: The express request received by the express server
+ */
 exports.handle = function(request) {
     var info = {question: {}, comments: []};
     return new Promise(function(resolve, reject) {
@@ -38,6 +43,12 @@ exports.handle = function(request) {
     });
 };
 
+/** Gets all the information about a question and appends it to the JSON object that will be returned to the client
+ *
+ * @param question: The question DBRow
+ * @param info: the object to be returned to the client in the format {question: {}, comments: []}
+ * @param vote: The vote DBRow for the question and the user that has requested the page
+ */
 function getQuestionInfo(question, info, vote) {
     info.question.title = question.getValue(lit.FIELD_TITLE);
     info.question.date = question.getValue(lit.FIELD_TIMESTAMP);

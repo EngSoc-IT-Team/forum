@@ -10,6 +10,10 @@ var lit = require('./../Literals.js');
 var commenter = require('./../actions/Commenter');
 var voter = require('./../actions/Voter');
 
+/** Handles the request from the client by getting information about the link and its comments and returning it to the client.
+ *
+ * @param request: The express request received by the express server
+ */
 exports.handle = function(request) {
     var info = {link: {}, comments: []};
     return new Promise(function(resolve, reject) {
@@ -37,6 +41,12 @@ exports.handle = function(request) {
     });
 };
 
+/** Gets all the information about a link and appends it to the JSON object that will be returned to the client
+ *
+ * @param link: The link DBRow
+ * @param info: the object to be returned to the client in the format {link: {}, comments: []}
+ * @param vote: The vote DBRow for the link and the user that has requested the page
+ */
 function getLinkInfo(link, info, vote) {
     info.link.title = link.getValue(lit.FIELD_TITLE);
     info.link.url = link.getValue(lit.FIELD_LINK);

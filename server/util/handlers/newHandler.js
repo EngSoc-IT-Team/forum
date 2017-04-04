@@ -10,6 +10,12 @@ var lit = require('./../Literals');
 var voter = require('./../actions/Voter');
 var contributor = require('./../actions/Contributor');
 
+/** Handles the insertion of new items into the database that were sent from the new page. Can create links, questions,
+ * and classes. Additionally, inserts a new vote, contribution and item table entry that corresponds to the new item.
+ *
+ * @param request: The express request received by the express server
+ * @returns {*}: void
+ */
 exports.handle = function(request) {
     return new Promise(function(resolve, reject) {
         var userID = request.signedCookies.usercookie.userID;
@@ -34,6 +40,13 @@ exports.handle = function(request) {
     });
 };
 
+/** Creates a new class row for the new class and inserts a new vote, contribution and item for it.
+ *
+ * @param body: The JSON object containing information about the item to be created
+ * @param user: The current user's DBRow
+ * @param resolve: The resolution of the linkHandler.handle function's promise
+ * @param reject: The rejection of the linkHandler.handle function's promise
+ */
 function createClass(body, user, resolve, reject) {
     getTagsIfNotPresent(body);
 
@@ -64,6 +77,13 @@ function createClass(body, user, resolve, reject) {
     })
 }
 
+/** Creates a new link row for the new link and inserts a new vote, contribution and item for it.
+ *
+ * @param body: The JSON object containing information about the item to be created
+ * @param user: The current user's DBRow
+ * @param resolve: The resolution of the linkHandler.handle function's promise
+ * @param reject: The rejection of the linkHandler.handle function's promise
+ */
 function createLink(body, user, resolve, reject) { // check if this link should be trusted
     getTagsIfNotPresent(body);
 
@@ -83,6 +103,13 @@ function createLink(body, user, resolve, reject) { // check if this link should 
     })
 }
 
+/** Creates a new post row for the new question and inserts a new vote, contribution and item for it.
+ *
+ * @param body: The JSON object containing information about the item to be created
+ * @param user: The current user's DBRow
+ * @param resolve: The resolution of the linkHandler.handle function's promise
+ * @param reject: The rejection of the linkHandler.handle function's promise
+ */
 function createQuestion(body, user, resolve, reject) { // also create a vote
     getTagsIfNotPresent(body);
 
@@ -102,11 +129,23 @@ function createQuestion(body, user, resolve, reject) { // also create a vote
     })
 }
 
-function getTagsIfNotPresent(body) { // TODO: needs to be fully implemented
+/** Creates tags for items that are being inserted with no tags
+ *
+ * @param body: The JSON object containing information about the item to be created
+ * TODO: needs to be fully implemented
+ */
+function getTagsIfNotPresent(body) {
     if (!body.tags)
         body.tags = "DEFAULT";
 }
 
+/** Submits a vote for the new item. Resolves the promise of the newHandler.handle function to send the newly inserted
+ * item's id to the client
+ *
+ * @param user: The current user's DBRow
+ * @param item: The newly inserted item's DBRow
+ * @param resolve: The resolution of the linkHandler.handle function's promise
+ */
 function vote(user, item, resolve) {
     voter.vote(user.getValue(lit.FIELD_ID), item.getValue(lit.FIELD_ID), 1).then(function() {
         resolve({'id': item.getValue(lit.FIELD_ID)});
@@ -116,6 +155,12 @@ function vote(user, item, resolve) {
     })
 }
 
+/** Generates the new item row that corresponds to the new item
+ *
+ * @param item: The newly inserted item's DBRow
+ * @param user: The current user's DBRow
+ * @param type: The type of the newly inserted item (either a class, post or comment)
+ */
 function generateItem(item, user, type) {
     var it = new DBRow(lit.ITEM_TABLE);
     it.setValue(lit.FIELD_TYPE, type);

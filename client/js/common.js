@@ -5,6 +5,9 @@
 
 "use strict";
 
+/**
+ * Allows the user to log out of the website, redirects to the login page if the logout is successful
+ */
 function logout() {
     $.ajax({
         url: '/logout',
@@ -23,11 +26,16 @@ function logout() {
     });
 }
 
+/** Adds a subscription for the current user for the selected item in the database
+ *
+ * @param el: the HTML subscribe button element attached to the item being subscribed to
+ */
 function subscribe(el) {
     el = $(el);
     var itemID = el.parent().parent().attr('id');
     var itemType = el.parent().parent().attr('data-hastype');
 
+    // send the subscription to the server
     $.ajax({
         url: '/action',
         type: 'POST',
@@ -35,7 +43,7 @@ function subscribe(el) {
         data: JSON.stringify({itemId: itemID, subscribed: false, action: "subscribe", contentType: itemType})
     }).done(function(data) {
         if (data) {
-            // TODO: indicate the success
+            // TODO: indicate the success, change "subscribe" to "unsubscribe"
             console.log("Successful subscription");
         }
         else {
@@ -47,11 +55,16 @@ function subscribe(el) {
     });
 }
 
+/** Adds a save for the current user for the selected item in the database
+ *
+ * @param el: the HTML save button element attached to the item being saved
+ */
 function save(el) {
     el = $(el);
     var itemID = el.parent().parent().attr('id');
     var itemType = el.parent().parent().attr('data-hastype');
 
+    // send the save to the server
     $.ajax({
         url: '/action',
         type: 'POST',
@@ -59,7 +72,7 @@ function save(el) {
         data: JSON.stringify({itemId: itemID, saved: false, action: "save", contentType: itemType})
     }).done(function(data) {
         if (data) {
-            // TODO: indicate the success
+            // TODO: indicate the success, change "save" to "unsave"
             console.log("Successful save");
         }
         else {
@@ -71,6 +84,10 @@ function save(el) {
     });
 }
 
+/** Adds or changes a vote on the selected item for the current use in the database and on the page
+ *
+ * @param el: the HTML thumbs up or thumbs down button that has been clicked, used to get the metadata for the item being voted on
+ */
 function vote(el) {
     el = $(el);
     var itemID = el.parent().parent().attr('id');
@@ -118,6 +135,7 @@ function vote(el) {
 
     hasVoted = hasVoted == 'positive' || hasVoted == 'negative'; // true if data-hasvoted has been set, false otherwise
 
+    // send the vote to the server
     $.ajax({
         url: '/action',
         type: 'POST',
@@ -137,6 +155,11 @@ function vote(el) {
     });
 }
 
+/** Changes the color of the vote count if necessary when a vote is added or changed
+ *
+ * @param count: the new vote count of the item
+ * @param element: the vote count element that may need to be changed
+ */
 function displayNewVotes(count, element) {
     if (count >= 0 && element.hasClass('negative'))
         element.removeClass('negative').addClass('positive');
@@ -146,6 +169,10 @@ function displayNewVotes(count, element) {
     element[0].innerHTML = count;
 }
 
+/** Adds a child comment to a link, post, or comment in the database and adds it to the page
+ *
+ * @param el: the submit button on the HTML element being replied to
+ */
 function reply(el) {
     el = $(el);
     var editorID = el.parent().children('textarea').attr('id');
@@ -196,13 +223,15 @@ function reply(el) {
 }
 
 /* fillTemplate(template [, strings, used, to, fill, template])
-**
-**
-** This is a basic templating function that can be used to
-** fill a specified template using the template and arguments provided.
-** Note that this function should be wrapped around for page-specific
-** uses.
-*/
+ *
+ * This is a basic templating function that can be used to
+ * fill a specified template using the template and arguments provided.
+ * Note that this function should be wrapped around for page-specific
+ * uses.
+ *
+ * @param template: the template to be filled, followed by the parameters used to fill it
+ * @returns {*} the completed template
+ */
 function fillTemplate(template) {
     var completedTemplate = template;
     var replaceThis;
@@ -214,6 +243,9 @@ function fillTemplate(template) {
     return completedTemplate;
 }
 
+/** A function used to convert svg images on each page into their path components so that they can later be manipulated
+ * to change their appearance. Called each time new components with svg elements are added to the page.
+ */
 function svgConverter() {
     jQuery('img.svg').each(function(){
         var $img = jQuery(this);
@@ -261,6 +293,11 @@ function updateElements() {
     }
 }
 
+/** Redirects to the list page with the query specified in the search bar
+ *
+ * @param el: the element where the search was made
+ * @param direct: The query, if the query does not need to be gotten from a specific element
+ */
 function search(el, direct) {
     var query;
     if (!direct) {
@@ -276,22 +313,25 @@ function search(el, direct) {
     window.location = '/list?query=' + query;
 }
 
+/**
+ * Appends the onkeydown event to all search bars so that when a user hits the enter key, calling the search function
+ * with the value of the search bar.
+ */
 function appendOnkeydown() {
     var searcher = $('#search');
     if (searcher)
         searcher.keypress(function(e) {
-            if (e.which == 13) {
+            if (e.which == 13) { // 13 = the enter key
                 search(false, searcher.val())
             }
         });
 }
 
-/*
- *  Makes our lovely svg elements function and appear properly
+/**
+ * Makes our lovely svg elements function and appear properly
  */
 jQuery(document).ready(function() {
     /* Replace all SVG images with inline SVG */
     svgConverter();
-
     appendOnkeydown();
 });

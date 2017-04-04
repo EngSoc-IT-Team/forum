@@ -150,11 +150,10 @@ var editorTemplate = '<div id="{0}" class="collapse">\
 
 var updateItemsWithPolarity = []; // go and update votes on elements that need updates
 
-/** GetTags
+/** Gets HTML string of tags that relate to a particular item
  *
- *
- * @param tagArray
- * @returns {string}
+ * @param tagArray: The tag array for an item that was received from the database
+ * @returns {string}: The HTML string containing the tags, generally added into a larger HTML template
  */
 function getTags(tagArray) {
     var tags = '';
@@ -169,10 +168,10 @@ function getTags(tagArray) {
     return tags;
 }
 
-/**
+/** Gets the properly formatted date string for the item
  *
- * @param date
- * @returns {*}
+ * @param date: the date string for the item retrieved from the server
+ * @returns {*}: the formatted date string if there is a date string, undefined if the date string does not exist
  */
 function getDateString(date) {
     if (!date)
@@ -183,6 +182,11 @@ function getDateString(date) {
     return date.slice(0, date.indexOf('T'));
 }
 
+/** Determines if a number should be indicated as positive or negative and returns the corresponding string
+ *
+ * @param num: The number to check
+ * @returns {*}: The string corresponding to the numbers value, positive if greater than or equal to zero, negative otherwise
+ */
 function positiveOrNegative(num) {
     if (num >= 0)
         return "positive";
@@ -190,19 +194,20 @@ function positiveOrNegative(num) {
         return "negative";
 }
 
-/**
+/** Gets the stars necessary to render a rating and returns the HTML string containing all 5 star svg elements
  *
- * @param rating
- * @returns {*}
+ * @param rating: A number between 0 and 5 corresponding to the rating of the item
+ * @returns {*} the HTML string containing 5 stars that match the rating passed in
  */
 function getRating(rating) {
     return fillTemplate(starTemplate, 'yellow-star').repeat(rating) + fillTemplate(starTemplate, 'star').repeat(5-rating);
 }
 
-/**
+/** Fills in a "parent" comment template
  *
- * @param comment
- * @returns {*}
+ * @param comment: the JSON object containing the comment info to fill the template with
+ * @returns {*} the filled template HTML string if the page is loaded not yet loaded, else it returns an array containing
+ * the filled HTML template string and the name of the new CKEditor that is a part of the comment template
  */
 function fillCommentLevel1Template(comment) {
     if(comment.voted)
@@ -219,10 +224,10 @@ function fillCommentLevel1Template(comment) {
             replyThings[0], replyThings[1]), replyThings[2]];
 }
 
-/**
+/** Fills in a "child" comment template
  *
- * @param comment
- * @returns {*}
+ * @param comment: the JSON object containing the comment info to fill the template with
+ * @returns {*} the filled template HTML string
  */
 function fillCommentLevel2Template(comment) {
     if(comment.voted)
@@ -232,11 +237,15 @@ function fillCommentLevel2Template(comment) {
         getDateString(comment.date), comment.author, comment.author, comment.summary, comment.id, comment.voted);
 }
 
+// the number of editors on the page and the names of additional editors added to the page
 var numEditors = 0;
 var editorNames = [];
-/**
+
+/** Gets the new editor name and id that will be appended with the new comment template and adds them to the list of
+ * editor names as well as incrementing the number of editors on the page.
  *
- * @returns {Array}
+ * @returns {Array}: An array containing the filled editor template, the filled editor template and the editor name
+ * (only if the page is loaded)
  */
 function getReplyItems() {
     var items = [];
@@ -252,9 +261,9 @@ function getReplyItems() {
     return items;
 }
 
-/**
+/** Activates the CKEditors on the page
  *
- * @param id
+ * @param id: the id of the CKEditor to activate
  */
 function activateEditors(id) {
     if (!id) {
@@ -265,7 +274,7 @@ function activateEditors(id) {
         CKEDITOR.replace(id);
 }
 
-/**
+/** Fills the post template for the list and profile pages
  *
  * @param post
  * @returns {*}
@@ -280,7 +289,7 @@ function fillPostTemplate(post) {
         post.author, summary, post.id, tags, post.id, post.voted);
 }
 
-/**
+/** Fills the link template for the list and profile pages
  *
  * @param li
  * @returns {*}
@@ -290,7 +299,7 @@ function fillLinkTemplate(li) {
         li.author, li.author, getSummary(li.summary), li.id, getTags(li.tags), li.id, li.voted);
 }
 
-/**
+/** Fills the class template for the list and profile pages
  *
  * @param cl
  * @returns {*}
@@ -300,10 +309,10 @@ function fillClassTemplate(cl) {
         cl.author, cl.author, getSummary(cl.summary), cl.id, getTags(cl.tags), cl.id);
 }
 
-/**
+/** Gets the abbreviated summary for an item
  *
- * @param summ
- * @returns {*}
+ * @param summ: the full summary provided for the item
+ * @returns {*}: the abbreviated summary if the full summary is more than 120 characters
  */
 function getSummary(summ) {
     if (summ.length > 120)
@@ -312,8 +321,8 @@ function getSummary(summ) {
         return summ.replace(/<(?:.|\n)*?>/gm, ' ');
 }
 
-/**
- * Builds
+/** Builds a list of items on the profile and list pages based upon the list of items passed in and appends it to the
+ * target element
  *
  * @param items the items to populate the html list with
  * @param target the target html element where the

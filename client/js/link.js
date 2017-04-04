@@ -4,6 +4,7 @@
 
 "use strict";
 
+// link page specific template
 var linkTemplate = '<div class="info-block row" id="{11}" data-hasvoted="{12}" data-hastype="link">\
                             <div class="col-sm-12">\
                                 <h2 class="title" id="title"><a href="{0}">{1}</a></h2>\
@@ -34,9 +35,14 @@ var linkTemplate = '<div class="info-block row" id="{11}" data-hasvoted="{12}" d
                             </div>\
                         </div>';
 
+// keep the link's id stored in memory
 var itemID;
 var loaded = false;
 
+/**
+ * Run once the page is loaded. Gets the link and its comments out of the database and renders them. Additionally,
+ * this function sets up the editors appended to each of the comments and the link header.
+ */
 function whenLoaded() {
     var href;
     var content = {
@@ -72,6 +78,10 @@ function whenLoaded() {
     });
 }
 
+/** Sets up and renders the link information as an HTML string, and then appends it to the page at the #linkHead element
+ *
+ * @param details: The link JSON object received from the server
+ */
 function fillInLinkHeader(details) {
     var temp = fillTemplate(linkTemplate, details.url, details.title, details.url, details.url,
         positiveOrNegative(details.votes), details.votes, getDateString(details.date), details.author, details.author,
@@ -85,6 +95,11 @@ function fillInLinkHeader(details) {
     $('#linkHead').append(temp);
 }
 
+/** Adds the comments and subcomments to the page at the #comments. Additionally, changes the page footer depending on
+ * if there are more comments that can be retrieved from the server or not.
+ *
+ * @param comments: The comment array retrieved from the server. Each comment is represented as a JSON object.
+ */
 function addComments(comments) {
     var template;
 
@@ -123,5 +138,5 @@ function addComments(comments) {
     }
 }
 
-// start the page
+// render the page
 whenLoaded();
