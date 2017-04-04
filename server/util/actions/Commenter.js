@@ -15,7 +15,7 @@ var log = require('./../log');
 var voter = require('./Voter');
 var contributor = require('./Contributor');
 
-/**
+/** Adds a new comment
  *
  * @param request
  */

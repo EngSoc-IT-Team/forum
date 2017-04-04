@@ -13,6 +13,13 @@ var voter = require('./Voter');
 var contributor = require('./Contributor');
 var log = require('../log');
 
+/** Adds a rating for a class
+ *
+ * @param request: the express server request containing the review
+ *
+ * Resolves a JSON object containing the inserted values of the rating if it is successful, resolves false if something
+ * goes wrong or if the user has already submitted a rating for the current class
+ */
 exports.addRating = function (request) {
     return new Promise(function(resolve, reject) {
         var userID = request.signedCookies.usercookie.userID;
@@ -47,6 +54,10 @@ exports.addRating = function (request) {
     });
 };
 
+/** Edits an existing rating. The user editing the rating must be the same as the user that inserted the rating.
+ *
+ * @param request: the express server request containing the edited review
+ */
 exports.editRating = function (request) {
     return new Promise(function(resolve, reject) {
         var rating = new DBRow(lit.RATING_TABLE);
@@ -54,7 +65,11 @@ exports.editRating = function (request) {
             if (!rating.count())
                 return reject("No rating to edit found");
 
-            rating.setValue(lit.FIELD_CONTENT, request.body.content);
+            if (rating.getValue(lit.FIELD_USER_ID != request.signedCookies.usercookie.userID))
+                return reject("The user attempting to edit the row is not the one that inserted it");
+
+            rating.setValue(lit.FIELD_CONTENT, request.body.info.content);
+            rating.setValue(lit.FIELD_RATING, request.body.info.rating);
             rating.update().then(function() {
                 exports.setAverageRating(rating.getValue(lit.FIELD_PARENT));
                 resolve();
@@ -65,12 +80,19 @@ exports.editRating = function (request) {
     });
 };
 
+/** Deletes the specified rating. The user deleting the rating must be the same as the user that inserted the rating.
+ *
+ * @param request: the express server request containing the review to delete
+ */
 exports.deleteRating = function(request) {
     return new Promise(function(resolve, reject) {
         var rating = new DBRow(lit.RATING_TABLE);
         rating.getRow(request.body.id).then(function() {
             if (!rating.count())
                 return reject("No comment to delete found");
+
+            if (rating.getValue(lit.FIELD_USER_ID != request.signedCookies.usercookie.userID))
+                return reject("The user attempting to edit the row is not the one that inserted it");
 
             rating.delete().then(function () {
                 resolve();
@@ -81,13 +103,21 @@ exports.deleteRating = function(request) {
     });
 };
 
+/** Gets a rating for a specific user on the specified class
+ *
+ * @param username: the username of the user who created the rating
+ * @param parentID: the id of the parent class
+ *
+ * Resolves the retrieved rating DBRow containing the user's review on a specific class or undefined if the row
+ * doesn't exist
+ */
 exports.getRating = function(username, parentID) {
     return new Promise(function(resolve) {
         var rating = new DBRow(lit.RATING_TABLE);
         rating.addQuery(lit.FIELD_PARENT, parentID);
         rating.addQuery(lit.FIELD_AUTHOR, username);
         rating.query().then(function() {
-            if (rating.next)
+            if (rating.next())
                 resolve(rating);
             else
                 resolve(undefined);
@@ -95,6 +125,14 @@ exports.getRating = function(username, parentID) {
     })
 };
 
+/** Gets a list of ratings based on the specified parentID
+ *
+ * @param parentID: the id of the parent post
+ * @param info: the JSON object to store
+ * @param resolve: the resolution of the calling function
+ *
+ * Resolves the JSON object containing all of the ratings stored in an array ordered by the date they were added
+ */
 exports.getRatingList = function(parentID, info, resolve) {
     var ratingList = [];
     var ratings = new DBRow(lit.RATING_TABLE);
@@ -110,6 +148,11 @@ exports.getRatingList = function(parentID, info, resolve) {
    })
 };
 
+/** Gets the rating information for a rating from its DBRow and formats it to be passed to the client
+ *
+ * @param rating: the rating DBRow to get info for
+ * @returns {{rating, author, date, content, id}}
+ */
 function getRatingInfo(rating) {
     return {
         rating: rating.getValue(lit.FIELD_RATING),
@@ -120,11 +163,18 @@ function getRatingInfo(rating) {
     }
 }
 
-function hasAlreadyRatedItem(user, item) {
+/** Checks to see if a user has already rated a class
+ *
+ * @param user: the user's DBRow
+ * @param classID: the id of the class that the user is trying to add a review to
+ *
+ * resolves true if the user has already made a rating, resolves false if they haven't
+ */
+function hasAlreadyRatedItem(user, classID) {
     return new Promise(function(resolve, reject) {
         var rating = new DBRow(lit.FIELD_RATING);
         rating.addQuery(lit.FIELD_AUTHOR, user.getValue(lit.FIELD_USERNAME));
-        rating.addQuery(lit.FIELD_PARENT, item);
+        rating.addQuery(lit.FIELD_PARENT, classID);
         rating.query().then(function() {
             if (rating.next())
                 return resolve(true);
@@ -136,6 +186,11 @@ function hasAlreadyRatedItem(user, item) {
     });
 }
 
+/** Averages the ratings on a class and sets the class's average rating to that value after a new review is inserted
+ *
+ * @param classID: the id of the class that the user is trying to add a review to
+ * TODO: make this so you do't have to pull all ratings for a class in the database out to do the average
+ */
 exports.setAverageRating = function(classID) {
     return new Promise(function(resolve) {
         var ratings = new DBRow(lit.RATING_TABLE);

@@ -44,7 +44,7 @@ The content's ID, the ID of user who entered it, the type of content added (e.g.
 This file deals with rating the classes in the database. It can add, edit and delete ratings of classes, as well as makes sure a user can rate a specific class only once.
 Rater.js also retrieves individual ratings or all of the ratings for one class, and can set the average rating of a class.
  
- ## Reporter.js
+ ## Reporter.js *This is currently not implemented on the client*
  
  This file allows the user to report a piece of content for being offensive/inaccurate etc. It also ensures that a user cannot report a piece of content more than once.
  In the future report resolves will be implemented, so that reports can be flagged as still needing to be dealt with.

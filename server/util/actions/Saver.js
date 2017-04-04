@@ -12,8 +12,11 @@ var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals');
 var log = require('./../log');
 
-/*
- * Saves the specified item for a user
+/** Saves the specified item for a user so long as they have not already saved it
+ *
+ * @param request: the express server request containing the save
+ *
+ * Resolves true if the save is successful, resolves the error otherwise
  */
 exports.save = function(request) {
     var userID = request.signedCookies.usercookie.userID;
@@ -26,7 +29,7 @@ exports.save = function(request) {
                 row.setValue(lit.FIELD_ITEM_ID, request.body.itemId);
                 row.setValue(lit.FIELD_TYPE, request.body.contentType);
                 row.insert().then(function() {
-                    resolve();
+                    resolve(true);
                 }).catch(function(err) {
                     log.error(err);
                     reject(err);
@@ -41,8 +44,11 @@ exports.save = function(request) {
     });
 };
 
-/*
- * Deletes the save record
+/** Deletes the save record
+ *
+ * @param request: the express server request containing the information about the save to delete
+ *
+ * Resolves true if the save deletion is successful, the error for the reason if it was not inserted otherwise
  */
 exports.removeSave = function(request) {
     var userID = request.signedCookies.usercookie.userID;
@@ -61,8 +67,10 @@ exports.removeSave = function(request) {
     });
 };
 
-/*
- * Checks if the user has saved the specified item
+/** Checks if the user has saved the specified item
+ *
+ * @param userId: the id of the user who may have saved an item
+ * @param itemId: the item id that the user may have saved
  */
 exports.isSaved = function(userId, itemId) {
     return new Promise(function(resolve, reject) {

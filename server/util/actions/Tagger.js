@@ -14,12 +14,19 @@ var log = require('./../log');
 
 var tagArray = [];
 
+/**
+ * Gets the stores array of all the known tag names in the database
+ */
 exports.getArray = function() {
     return new Promise(function(resolve) {
         resolve(tagArray);
     });
 };
 
+/** Gets a specific tag by id
+ *
+ * @param id: the id of the tag to get
+ */
 exports.getTag = function(id) {
     var info = {};
     return new Promise(function (resolve, reject) {
@@ -37,6 +44,10 @@ exports.getTag = function(id) {
     });
 };
 
+/** Adds a tag to the database
+ *
+ * @param tagName: the name of the new tag to be entered into the database
+ */
 exports.add = function(tagName) { //TODO: add related tags
     return new Promise(function(resolve, reject) {
         var tag = new DBRow(lit.TAG_TABLE);
@@ -48,6 +59,9 @@ exports.add = function(tagName) { //TODO: add related tags
     });
 };
 
+/**
+ * Updates the stored tag array
+ */
 exports.updateTagArray = function() {
     return new Promise(function(resolve, reject) {
         log.info("Updating tag array");
@@ -62,4 +76,5 @@ exports.updateTagArray = function() {
     });
 };
 
+// update the tag array as soon as the module is required
 exports.updateTagArray();

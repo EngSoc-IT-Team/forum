@@ -12,13 +12,12 @@ var DBRow = require('../DBRow').DBRow;
 var lit = require('../Literals');
 var log = require('../log');
 
-/**
- * Enters the report into the database
+/** Enters the report into the database
  *
- * @param userId
- * @param itemId
- * @param reportReason
- * @param reportContent
+ * @param userId: the id of the user making the report
+ * @param itemId: the id of the item being reported
+ * @param reportReason: the integer representing the report reason
+ * @param reportContent: the string content of the report
  */
 exports.sendReport = function(userId, itemId, reportReason, reportContent) {
     return new Promise(function(resolve, reject) {
@@ -42,11 +41,12 @@ exports.sendReport = function(userId, itemId, reportReason, reportContent) {
     });
 };
 
-/*
- * Resolves the report in the database so that it is known that the issue in the report
+/** Resolves the report in the database so that it is known that the issue in the report
  * has been fixed
  *
- * @param reportId The id of the report to resolve.
+ * @param reportId: The id of the report to resolve.
+ *
+ * TODO: Figure out how to specify that a report has been resolved
  */
 exports.resolveReport = function(reportId) {
     return new Promise(function(resolve, reject) {
@@ -63,8 +63,8 @@ exports.resolveReport = function(reportId) {
 
 /** Checks to see if the given user has already reported the provided item
  *
- * @param userID the ID of the user who reported the item
- * @param itemID the ID of the reported item
+ * @param userID: the ID of the user who reported the item
+ * @param itemID: the ID of the reported item
  */
 exports.hasBeenReported = function(userID, itemID) {
     return new Promise(function(resolve, reject) {
