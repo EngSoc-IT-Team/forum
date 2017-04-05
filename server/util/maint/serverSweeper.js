@@ -27,7 +27,7 @@ exports.Sweeper = function() {
 			return;
 
 		cancelled = true;
-	})
+	});
 
 	this.sweepTable = function(table) {
 		switch(table) {
@@ -59,8 +59,11 @@ exports.Sweeper = function() {
 				log.warn('There is no cleanup routine defined for the table: "' + table + '" continuing happily.');
 
 		}
-	}
+	};
 
+    /**
+	 * Starts the full slate of database validation, 
+     */
 	this.sweepAllTables = function() {
 		log.info("Starting full slate of database validations, server performance may be reduced for some time");
 		classCleanup();
@@ -71,11 +74,16 @@ exports.Sweeper = function() {
 		sessionCleanup();
 		tagCleanup();
 		userCleanup();
-	}
+	};
 
+    /**
+	 * Checks to see if the current sweeper has been cancelled
+	 *
+     * @returns {boolean}
+     */
 	this.isCancelled = function() {
 		return cancelled;
-	}
+	};
 
 	/*
 	** Checks the user table to ensure that all users have the proper number of votes
@@ -86,10 +94,11 @@ exports.Sweeper = function() {
 	}
 
 	/*
-	** Checks the link table to make sure links are still valid (lead to non-empty pages/404 errors)
+	** Checks the link table to make sure links are still valid (lead to non-empty pages/404 errors). If the links are not
+	* marked, check if they are valid. If they are not valid,
 	*/
 	function linkCleanup() {
-		var links = new DBRow(lit.LINK);
+		var links = new DBRow(lit.LINK_TABLE);
 		links.query().then(function() {
 			var href = "";
 
@@ -101,7 +110,7 @@ exports.Sweeper = function() {
 				else
 					links.delete().then(function() { //if it's not valid delete the current link
 
-					}, function(err) {
+					}, function() {
 						log.warn("The link " + href + " was unable to be deleted but is invalid, consider manually deleting the link.")
 					})
 			}
@@ -111,5 +120,46 @@ exports.Sweeper = function() {
 		});
 	}
 
+    /**
+	 * Checks for duplicate comments on a post or link
+     */
+	function commentCleanup() {
+		
+    }
 
-}
+    /**
+	 * Makes sure there are no duplicate tags
+	 * TODO: maybe this finds related tags?
+     */
+    function tagCleanup() {
+
+	}
+
+    /**
+	 * TODO: figure out what this would do
+     */
+	function postCleanup() {
+
+    }
+
+    /**
+	 * Checks for duplicate classes
+     */
+    function classCleanup() {
+
+	}
+
+    /**
+	 * Removes duplicate reports
+     */
+	function reportCleanup() {
+
+	}
+
+    /**
+	 * makes sure only active sessions exist
+     */
+	function sessionCleanup() {
+
+	}
+};

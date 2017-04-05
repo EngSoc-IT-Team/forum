@@ -9,8 +9,13 @@
 
 var log = require('../log');
 
-const dependencies = ['mysql', 'express', 'path', 'fs', 'cookie-parser', 'body-parser', 'nodemailer', 'nodemailer-smtp-transport', 'algorithmia', 'natural'];
+const dependencies = ['mysql', 'express', 'path', 'fs', 'cookie-parser', 'body-parser', 'nodemailer',
+	'nodemailer-smtp-transport', 'algorithmia', 'natural'];
 
+/**
+ * Checks to make sure all the dependencies in the dependencies array exist in the execution environment
+ * if they don't, warns the user telling them to install the required modules
+ */
 exports.checkDependencies = function() {
 	log.info("~~~~~~~~~~~~~~~~Module Check~~~~~~~~~~~~~~~~~");
 	var modulesYouNeed = [];
@@ -30,6 +35,13 @@ exports.checkDependencies = function() {
 	log.info("~~~~~~~~~~~~~~~End Module Check~~~~~~~~~~~~~~~~\n\n");
 };
 
+/** Logs the summary of the dependency check
+ *
+ * @param dependencyList: the list of dependencies the service relies on
+ * @param modulesNotInstalled:
+ * @returns {boolean}: returns true if all the modules are installed, throws an error to cancel all other execution if
+ * not all of the modules are installed
+ */
 function logSummary(dependencyList, modulesNotInstalled) {
 	log.info("~~~~~~~~~~~~~~~~~~~~Summary~~~~~~~~~~~~~~~~~~~");
 	log.info((dependencyList.length - modulesNotInstalled.length) + "/" +dependencyList.length + " modules installed");

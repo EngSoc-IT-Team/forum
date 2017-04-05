@@ -22,6 +22,9 @@ var demodata = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'conf
 var dbm = new db.DatabaseManager();
 var numCreated = 0;
 
+/**
+ * Creates the tables in defaultTables.json
+ */
 exports.setupDatabase = function() { 
 	log.info("~~~~~~~~~~~~~~Starting Database Setup~~~~~~~~~~~~~~~");
 
@@ -36,6 +39,9 @@ exports.setupDatabase = function() {
 	}
 };
 
+/**
+ * Loads the demo data into the database
+ */
 exports.loadDemoData = function() {
 	log.info("~~~~~~~~~~~~~~Loading Demo Data~~~~~~~~~~~~~~~");
 	var totalLength = Object.keys(demodata).length;
@@ -48,6 +54,12 @@ exports.loadDemoData = function() {
 	}
 };
 
+/** Loads individual rows into database based upon the information found in mockData.json
+ *
+ * @param table: the table the new row is on
+ * @param fields: the fields that need to be set to add the new table
+ * @param numElementsToCreate: the number of new rows to load into the database
+ */
 function loadRow(table, fields, numElementsToCreate) {
 	var newRow = new dbr.DBRow(table);
 	newRow.setId = false;
@@ -78,7 +90,12 @@ function loadRow(table, fields, numElementsToCreate) {
 	});
 }
 
-
+/** Creates the different tables for the database according to the
+ *
+ * @param tableName: name of the new table
+ * @param fields: the fields that are a part of the new table
+ * @param numberTablesToCreate: the number of tables that need to be created
+ */
 function createTable(tableName, fields, numberTablesToCreate) { //TODO: make this more intelligent to match changes to defaultTables.json
 	var keyCount = 0;
 	var queryString = 'CREATE TABLE ' + tableName + ' (';
