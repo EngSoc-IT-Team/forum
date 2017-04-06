@@ -114,14 +114,15 @@ exports.escapeLimit = function(limitNum) {
 
 /** Escapes the order by clause for queries
  *
+ * @param table: the table the field to order by should be on
  * @param field: the field to order the query by
  * @param ascOrDesc: indicates whether the field should be ordered by ascending or descending order. Must be the string 'asc' or 'desc' or their upper case versions
  * @returns {*}: the escaped order by clause or undefined if the field or operator passed in is invalid
  */
-exports.escapeOrderBy = function(field, ascOrDesc) {
+exports.escapeOrderBy = function(table, field, ascOrDesc) {
     var asc = "asc";
     var desc = "desc";
-    if (!escaper.isValidField(table, prop))
+    if (!escaper.isValidField(table, field))
 		return undefined;
 
     if (ascOrDesc != asc || ascOrDesc != asc.toUpperCase() || ascOrDesc != desc || ascOrDesc != desc.toUpperCase())
