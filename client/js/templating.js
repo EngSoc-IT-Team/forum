@@ -349,7 +349,7 @@ function buildList(items, target) {
             filledTemplate = fillClassTemplate(it);
         else if (it.type == "comment")
             filledTemplate = fillCommentTemplate(it);
-        else if (it.type == "review")
+        else if (it.type == "rating")
             filledTemplate = fillReviewTemplate(it);
 
         if (filledTemplate)
