@@ -161,7 +161,7 @@ exports.recursiveGetTags = function (resolve, reject, row, addDocument, table, d
         } else {
             searcher.generateTags(row, table).then(function (tags) {
                 addDocument(tags, row, table);
-                return exports.recursiveGetTags(resolve, reject, row, addDocument, table, docInfo);
+                exports.recursiveGetTags(resolve, reject, row, addDocument, table, docInfo);
             }).catch(function (err) {
                 log.error("recursiveGetTags error: " + err);
                 reject(err);
