@@ -125,7 +125,7 @@ exports.escapeOrderBy = function(table, field, ascOrDesc) {
     if (!escaper.isValidField(table, field))
 		return undefined;
 
-    if (ascOrDesc != asc || ascOrDesc != asc.toUpperCase() || ascOrDesc != desc || ascOrDesc != desc.toUpperCase())
+    if (ascOrDesc != asc && ascOrDesc != asc.toUpperCase() && ascOrDesc != desc && ascOrDesc != desc.toUpperCase())
     	return undefined;
 
 	return "ORDER BY " + field + " " + ascOrDesc;
