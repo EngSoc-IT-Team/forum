@@ -195,7 +195,7 @@ exports.DBRow = function(table) {
 		if (ascOrDesc == undefined)
 			ascOrDesc = lit.ASC;
 		
-		querySort = qb.escapeOrderBy(field, ascOrDesc);
+		querySort = qb.escapeOrderBy(table, field, ascOrDesc);
 	};
 
 	/** getValue(property)
