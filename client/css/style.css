@@ -14,7 +14,8 @@ body {
 a,
 .dropdown-item,
 #home-page .main-search h1,
-.dropdown-toggle::after {
+.dropdown-toggle::after,
+#home-page #options {
   color: #FF9200;
 }
 
@@ -114,6 +115,10 @@ a:focus {
 #navbar-search button:hover,
 #navbar-search button:focus {
   color: #fff;
+}
+
+#navbar-search #search {
+  font-family: inherit;
 }
 
 
