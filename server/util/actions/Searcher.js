@@ -69,7 +69,7 @@ exports.searchForContent = function (inputSearch, table) {
             }).then(function (documentInfo) {
                 documentInfo = removeLowMeasures(documentInfo);
                 var sortedPosts = mergeSort(documentInfo);
-                exports.searchByUserTag(inputSearch).then(function (userPosts) {
+                searchByUserTag(inputSearch).then(function (userPosts) {
                     for (var i in userPosts) {
                         if (!sortedPosts.includes(userPosts[i])) { //no duplicated posts
                             //just add posts with the tags to the end - actual content of post more important than tags
@@ -92,52 +92,6 @@ exports.searchForContent = function (inputSearch, table) {
         } else {
             reject("your input terms didn't work for a search!");
         }
-    });
-};
-
-/**
- * Function to search for posts by tags. Goes through search term looking for tags in database and numbers, then
- * finds posts with those tags/tags with that number.
- * @param inputSearch The search term.
- * @returns {Promise} Promise as query to database is asynchronous. Eventually returns an array of post IDs that have
- * matching tags/numbers.
- */
-exports.searchByUserTag = function (inputSearch) {
-    return new Promise(function (resolve, reject) {
-        if (!(typeof inputSearch === lit.STRING)) {
-            reject("you inputted an invalid search!");
-        }
-        getUserTagsInDB().then(function (dbTags) {
-            var words = inputSearch.toUpperCase().split(/[ ,!?.]+/); //all possibilities for things splitting up words
-            //and tags are all in upper case, so searched tags need to be as well
-
-            return words.filter(function (element) {//take out words from the input search that don't include a tag in them
-                //if the word is a tag if it is the same as a dbTag or if it has a number
-                //often people refer to courses just by the number (e.g. you won't pass 112!)
-                return dbTags.includes(element) || element.includes("1") || element.includes("2") || element.includes("3")
-                    || element.includes("4") || element.includes("5") || element.includes("6") || element.includes("7")
-                    || element.includes("8") || element.includes("9") || element.includes("0");
-            });
-        }).then(function (tagsInSearch) {
-            //find posts with tags either matching a tag or that has the same course number that was searched
-            var row = new dbr.DBRow(lit.POST_TABLE);
-            var postsWithTags = [];
-            row.query().then(function () {
-                while (row.next()) {
-                    for (var index in tagsInSearch) {
-                        if (row.getValue(lit.FIELD_TAGS).includes(tagsInSearch[index])) {
-                            postsWithTags.push({measure: 0, id: row.getValue(lit.FIELD_ID), table: lit.POST_TABLE});
-                        }
-                    }
-                }
-                resolve(postsWithTags);
-            }).catch(function (err) {
-                log.error("searchByTag - getting posts - error: " + err);
-                reject(err);
-            });
-        }).catch(function (err) {
-            log.error("searchByTag: " + err);
-        });
     });
 };
 
@@ -181,6 +135,52 @@ exports.generateTags = function (newRow, table) {
             }
         }
     );
+};
+
+/**
+ * Function to search for posts by tags. Goes through search term looking for tags in database and numbers, then
+ * finds posts with those tags/tags with that number.
+ * @param inputSearch The search term.
+ * @returns {Promise} Promise as query to database is asynchronous. Eventually returns an array of post IDs that have
+ * matching tags/numbers.
+ */
+function searchByUserTag(inputSearch) {
+    return new Promise(function (resolve, reject) {
+        if (!(typeof inputSearch === lit.STRING)) {
+            reject("you inputted an invalid search!");
+        }
+        getUserTagsInDB().then(function (dbTags) {
+            var words = inputSearch.toUpperCase().split(/[ ,!?.]+/); //all possibilities for things splitting up words
+            //and tags are all in upper case, so searched tags need to be as well
+
+            return words.filter(function (element) {//take out words from the input search that don't include a tag in them
+                //if the word is a tag if it is the same as a dbTag or if it has a number
+                //often people refer to courses just by the number (e.g. you won't pass 112!)
+                return dbTags.includes(element) || element.includes("1") || element.includes("2") || element.includes("3")
+                    || element.includes("4") || element.includes("5") || element.includes("6") || element.includes("7")
+                    || element.includes("8") || element.includes("9") || element.includes("0");
+            });
+        }).then(function (tagsInSearch) {
+            //find posts with tags either matching a tag or that has the same course number that was searched
+            var row = new dbr.DBRow(lit.POST_TABLE);
+            var postsWithTags = [];
+            row.query().then(function () {
+                while (row.next()) {
+                    for (var index in tagsInSearch) {
+                        if (row.getValue(lit.FIELD_TAGS).includes(tagsInSearch[index])) {
+                            postsWithTags.push({measure: 0, id: row.getValue(lit.FIELD_ID), table: lit.POST_TABLE});
+                        }
+                    }
+                }
+                resolve(postsWithTags);
+            }).catch(function (err) {
+                log.error("searchByTag - getting posts - error: " + err);
+                reject(err);
+            });
+        }).catch(function (err) {
+            log.error("searchByTag: " + err);
+        });
+    });
 };
 
 /**
