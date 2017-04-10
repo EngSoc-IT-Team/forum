@@ -11,3 +11,6 @@ server/config/database.json
 .idea/jsLibraryMappings.xml
 .idea/misc.xml
 
+node_modules 
+
+

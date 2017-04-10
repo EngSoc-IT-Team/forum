@@ -5,9 +5,7 @@
 * Created by Michael Albinson 2/15/17
  */
 
-var commentTemplate = '<div><p>comment</p></div>';
-
-/*'<div class ="col-sm-12" id="{4}" data-hasvoted="{5}" data-hastype="comment">\
+var commentTemplate ='<div class ="col-sm-12" id="{4}" data-hasvoted="{5}" data-hastype="comment">\
                            <div style="display:inline-block">\
                                 <span class="thumbs-up pointer" tabindex="0">\
                                     <img src="../assets/thumbsUp.svg" class="svg">\
@@ -29,11 +27,10 @@ var commentTemplate = '<div><p>comment</p></div>';
                            </div>\
                            \
                            <hr/>\
-                       </div>';*/
+                       </div>';
 
 
-var reviewTemplate = '<div><p>comment</p></div>';
-    /*'<div class="col-sm-12" id="{3}" datahasvoted="{4}" data-hastype="review">\
+var reviewTemplate = '<div class="col-sm-12" id="{3}" datahasvoted="{4}" data-hastype="review">\
                         <div style="display:inline-block">\
                             <div class="class-rating">\
                                 {0}\
@@ -49,7 +46,7 @@ var reviewTemplate = '<div><p>comment</p></div>';
                          <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                          </div>\
                          <hr/>\
-                      </div>'; */
+                      </div>';
 
 
 
@@ -215,10 +212,10 @@ function addTags(tags) {
  * @returns {*} the filled template for the comment, to be appended to the document
  */
 function fillCommentTemplate(comment) {
-/*
+
         return fillTemplate(commentTemplate, positiveOrNegative(comment.netVotes), comment.netVotes,
         getDateString(comment.date), comment.content, comment.id, comment.voted, comment.parentName);
-*/
+
 }
 
 /**
@@ -236,8 +233,8 @@ function fillCommentTemplate(comment) {
  * @returns {*} the filled template for the review, to be appended to the document
  */
 function fillReviewTemplate(review) {
-/*
+
     return fillTemplate(reviewTemplate, review.rating,
     getDateString(review.date), review.content, review.id, review.voted, review.parent);
-*/
+
 }
