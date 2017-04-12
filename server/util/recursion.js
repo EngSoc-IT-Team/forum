@@ -157,10 +157,10 @@ exports.recursiveGetTags = function (resolve, reject, row, addDocument, table, d
         var genTags = row.getValue(lit.FIELD_GEN_TAGS);
         if (genTags !== null) {
             docInfo.push(addDocument(genTags, row, table));
-            return exports.recursiveGetTags(resolve, reject, row, addDocument, table, docInfo);
+            exports.recursiveGetTags(resolve, reject, row, addDocument, table, docInfo);
         } else {
             searcher.generateTags(row, table).then(function (tags) {
-                addDocument(tags, row, table);
+                docInfo.push(addDocument(tags, row, table));
                 exports.recursiveGetTags(resolve, reject, row, addDocument, table, docInfo);
             }).catch(function (err) {
                 log.error("recursiveGetTags error: " + err);

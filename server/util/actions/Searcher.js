@@ -47,7 +47,7 @@ var queryOneTable = function (table) {
     var row = new dbr.DBRow(table);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
-            resolve(recursion.recursiveGetTags(resolve, reject, row, addDocument, table, []));
+            recursion.recursiveGetTags(resolve, reject, row, addDocument, table, []);
         }).catch(function (err) {
             log.error("queryTable error: " + err);
             reject(err);
@@ -181,7 +181,7 @@ function searchByUserTag(inputSearch) {
             log.error("searchByTag: " + err);
         });
     });
-};
+}
 
 /**
  * Retrieves all tags currently in the database
