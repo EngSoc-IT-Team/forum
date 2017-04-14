@@ -5,9 +5,52 @@
 * Created by Michael Albinson 2/15/17
  */
 
-var commentTemplate = '<div>Ayrton fill me in</div>';
+var commentTemplate ='<div class ="col-sm-12" id="{4}" data-hasvoted="{5}" data-hastype="comment">\
+                           <div style="display:inline-block">\
+                                <span class="thumbs-up pointer" tabindex="0">\
+                                    <img src="../assets/thumbsUp.svg" class="svg">\
+                                </span>\
+                                <span id="votes" class="{0}">{1}</span>\
+                                <span class="thumbs-down pointer" tabindex="0">\
+                                    <img src="../assets/thumbsDown.svg" class="svg">\
+                                </span>\
+                           </div>\
+                           \
+                           <span class="date"> You commeneted on {2} </span>\
+                           <p class="description">{3}</p>\
+                           <div class="action-links">\
+                           \
+                           <a href="/link?id={6}">View</a>\
+                           <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                           <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                           <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                           </div>\
+                           \
+                           <hr/>\
+                       </div>';
 
-var reviewTemplate = '<div>Ayrton fill me in</div>';
+
+var reviewTemplate = '<div class="col-sm-12" id="{3}" datahasvoted="{4}" data-hastype="review">\
+                        <div style="display:inline-block">\
+                            <div class="class-rating">\
+                                {0}\
+                            </div>\
+                            </div>\
+                            <span class="date">on {1}</span>\
+                            <p class="description">{2}</p>\
+                            <div class="action-links">\
+                         \
+                         <a href="/link?id={5}">View</a>\
+                         <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                         <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                         <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                         </div>\
+                         <hr/>\
+                      </div>';
+
+
+
+
 
 //the userID of the user
 var uid;
@@ -168,8 +211,11 @@ function addTags(tags) {
     };
  * @returns {*} the filled template for the comment, to be appended to the document
  */
-function fillCommentTemplate(it) {
-    return fillTemplate(commentTemplate);
+function fillCommentTemplate(comment) {
+
+        return fillTemplate(commentTemplate, positiveOrNegative(comment.netVotes), comment.netVotes,
+        getDateString(comment.date), comment.content, comment.id, comment.voted, comment.parentName);
+
 }
 
 /**
@@ -186,6 +232,9 @@ function fillCommentTemplate(it) {
     }
  * @returns {*} the filled template for the review, to be appended to the document
  */
-function fillReviewTemplate(it) {
-    return fillTemplate(reviewTemplate);
+function fillReviewTemplate(review) {
+
+    return fillTemplate(reviewTemplate, review.rating,
+    getDateString(review.date), review.content, review.id, review.voted, review.parent);
+
 }
