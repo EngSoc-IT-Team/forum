@@ -17,3 +17,14 @@ exports.generate = function() {
 
     return identifier;
 };
+
+exports.generateUsername = function() {
+    const adj = ['Abominable', 'Astonishing', 'Acrimonious', 'Fantastic', 'Wonderful', 'Adventurous', 'Bitter', 'Frustrated',
+        'Criminal', 'Functional', 'Beautiful', 'Crushing', 'Satisfied', 'Monstrous', 'Curious', 'Terse', 'Interested',
+        'ProcedurallyGenerated', 'Anonymous', 'Functional', 'Appreciative', 'Horrified', 'Lustrous'];
+    const noun = ['Antelope', 'Anteater', 'ArtSci', 'Computer', 'Virus', 'Program', 'Circuit', 'Gear', 'Chemical',
+        'Molecule', 'Element', 'FREC', 'Plant', 'Particle', 'Cell', 'Mystery', 'Math', 'Problem', 'Proof', 'Theory', 'Method',
+        'Diode', 'Geode', 'Pickax'];
+
+    return adj[Math.floor(Math.random() * adj.length)] + noun[Math.floor(Math.random() * noun.length)];
+};
