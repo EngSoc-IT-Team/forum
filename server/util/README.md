@@ -19,7 +19,7 @@ directory has the code to return data to the list, link, question, class and pro
 (and more) so that there is information that can be rendered on those pages.
 
 #### Maint
-The maint directory contains code required to perform routine server maintainance. This code
+**Incomplete** The maint directory contains code required to perform routine server maintainance. This code
 remains _incomplete_ as of 5/7/17.
 
 #### Setup
@@ -52,7 +52,7 @@ server maintainance once the server is running and cannot be restarted. *Still r
 #### evalUtil.js
 Utility functions for the evaluation environment.
 
-#### IDGenerator.js
+#### Generator.js
 Allows for the generation of random IDs for database rows as well as random usernames.
  
 #### Literals.js
