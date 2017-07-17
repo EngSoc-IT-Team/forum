@@ -28,7 +28,7 @@ server.use(bp.json());
 //configuration information
 var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config/config.json'), lit.UTF8));
 
-var isInProduction = (config.production == lit.TRUE);
+var isInProduction = (config.production === lit.TRUE);
 
 /* GET Requests
 **
