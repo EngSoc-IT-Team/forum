@@ -15,42 +15,34 @@ var commentTemplate ='<div class ="col-sm-12" id="{4}" data-hasvoted="{5}" data-
                                     <img src="../assets/thumbsDown.svg" class="svg">\
                                 </span>\
                            </div>\
-                           \
-                           <span class="date"> You commeneted on {2} </span>\
+                           <span class="date"> You commented on {2} </span>\
                            <p class="description">{3}</p>\
                            <div class="action-links">\
-                           \
-                           <a href="/link?id={6}">View</a>\
-                           <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
-                           <a href="javascript: void 0;" onclick="save(this)">Save</a>\
-                           <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                               <a href="/link?id={6}">View</a>\
+                               <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                               <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                               <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                            </div>\
-                           \
                            <hr/>\
                        </div>';
 
 
-var reviewTemplate = '<div class="col-sm-12" id="{3}" datahasvoted="{4}" data-hastype="review">\
+var reviewTemplate = '<div class="col-sm-12" id="{3}" data-hasvoted="{4}" data-hastype="review">\
                         <div style="display:inline-block">\
                             <div class="class-rating">\
                                 {0}\
                             </div>\
-                            </div>\
-                            <span class="date">on {1}</span>\
-                            <p class="description">{2}</p>\
-                            <div class="action-links">\
-                         \
-                         <a href="/link?id={5}">View</a>\
-                         <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
-                         <a href="javascript: void 0;" onclick="save(this)">Save</a>\
-                         <a href="javascript: void 0;" onclick="report(this)">Report</a>\
-                         </div>\
-                         <hr/>\
+                        </div>\
+                        <span class="date">on {1}</span>\
+                        <p class="description">{2}</p>\
+                        <div class="action-links">\
+                            <a href="/link?id={5}">View</a>\
+                            <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                            <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                            <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                        </div>\
+                        <hr/>\
                       </div>';
-
-
-
-
 
 //the userID of the user
 var uid;
@@ -165,20 +157,20 @@ function fillInPostInfo(items) {
 
     if (items.subscribed.length != 0) {
         sub[0].innerHTML = "";
-        buildList(items.subscribed, '#subscribed')
+        buildList(items.subscribed, '#subscribed');
         sub.append('<a class="centered" href="javascript:void(0)" onclick="getMore(\'profile\', \'subscribed\')">v Load More v</a>')
     }
 
     if (items.saved.length != 0) {
         save[0].innerHTML = "";
 
-        buildList(items.saved, '#saved')
+        buildList(items.saved, '#saved');
         save.append('<a class="centered" href="javascript:void(0)" onclick="getMore(\'profile\', \'saved\')">v Load More v</a>')
     }
 
     if (items.contributions.length != 0) {
         contr[0].innerHTML = "";
-        buildList(items.contributions, '#contributions')
+        buildList(items.contributions, '#contributions');
         contr.append('<a class="centered" href="javascript:void(0)" onclick="getMore(\'profile\', \'contributions\')">v Load More v</a>')
     }
 }
@@ -238,3 +230,6 @@ function fillReviewTemplate(review) {
     getDateString(review.date), review.content, review.id, review.voted, review.parent);
 
 }
+
+// Render document
+$(document).ready(whenLoaded);
