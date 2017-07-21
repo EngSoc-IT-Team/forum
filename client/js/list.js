@@ -91,4 +91,4 @@ function getMore() {
 }
 
 // render the page
-whenLoaded();
+$(document).ready(whenLoaded);

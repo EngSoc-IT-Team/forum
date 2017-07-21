@@ -245,7 +245,7 @@ function rate(element) {
  * @returns {*} A JSON object containing the rating and comment, if there is one
  */
 function getRatingInfo(element, withComment) {
-    var rating = $(element);
+    var rating = $(element); //TODO huh, what did I do here
     if(!withComment) {
         return {
             rating: starRating,
@@ -262,4 +262,4 @@ function getRatingInfo(element, withComment) {
 }
 
 // render the page
-whenLoaded();
+$(document).ready(whenLoaded);

@@ -137,4 +137,4 @@ function addComments(comments) {
 }
 
 // render the page
-whenLoaded();
+$(document).ready(whenLoaded);
