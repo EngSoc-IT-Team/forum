@@ -16,8 +16,11 @@
  * 10,000 calls. However, for free, 5K credits are given each month, so on a small scale it is still free.
  */
 
+"use strict";
+
 //TODO stop holding entire database in memory when searching - wildcards
 //TODO allow no table to be specified
+//TODO this should fail gracefully if algorithmia cannot be accessed, it crashes the server right now
 
 var natural = require("natural");
 var algorithmia = require("algorithmia");
@@ -265,12 +268,17 @@ function getSearchableFields(table) {
  */
 function getKeyTerms(input) {
     return new Promise(function (resolve, reject) {
-        algorithmia.client(lit.AUTO_TAG_API_KEY).algo(lit.AUTO_TAG_ALGORITHM).pipe(input)
-            .then(function (response) {
-                resolve(response.get());
-            }, function (err) {
-                reject(err);
-            });
+        try { //TODO: if there is no internet connection, the whole server will still fail
+            algorithmia.client(lit.AUTO_TAG_API_KEY).algo(lit.AUTO_TAG_ALGORITHM).pipe(input)
+                .then(function (response) {
+                    resolve(response.get());
+                }, function (err) {
+                    reject(err);
+                })
+        } catch (e) {
+            console.error(e);
+            reject('Could not connect to algoithmia! Search failure.')
+        }
     });
 }
 
