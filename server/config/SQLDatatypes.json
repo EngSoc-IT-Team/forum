@@ -17,7 +17,7 @@
 	"fixed": "FIXED",
 	"float": "FLOAT",
 	"double": "DOUBLE",
-	"double precision": "DOUBLE PRECISION",
+	"doublePrecision": "DOUBLE PRECISION",
 	"real": "REAL",
 
 	"unsigned": "UNSIGNED",
