@@ -1,5 +1,6 @@
 {
-	"production": "false",
-	"databaseSetupNeeded": "true",
-	"loadMockData": "true"
+	"production": false,
+	"databaseSetupNeeded": true,
+	"loadMockData": true,
+	"port": 8080
 }

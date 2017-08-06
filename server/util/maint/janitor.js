@@ -6,9 +6,10 @@
 
 "use strict";
 
-var config = require('../../config/config.json');
+var PM = require('../PropertyManager');
 
 var log = require('../log.js');
+var lit = require('../Literals');
 var events = require('events');
 var serverSweeper = undefined; //require('./serverSweeper.js');
 
@@ -79,7 +80,7 @@ exports.Janitor = function(isAutomated) {
 	 * Will NOT be able to add schema changes
      */
 	this.freshDatabase = function() {
-		if (config.isProduction)
+		if (PM.getConfigProperty(lit.PRODUCTION))
 			return log.error(prefix + "This function is not permitted in a production environment.");
 
 	};

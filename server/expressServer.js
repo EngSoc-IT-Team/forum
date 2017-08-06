@@ -12,8 +12,9 @@ var requestor = require('./util/requestResponder');
 var action = require('./util/actionResponder');
 var fs = require('fs');
 var lit = require('./util/Literals.js');
+var PM = require('./util/PropertyManager');
 
-const PORT = 8080;
+const PORT = PM.getConfigProperty(lit.PORT);
 var server = express();
 
 // directories from which we serve css, js and assets statically
@@ -25,10 +26,7 @@ server.use('/assets', express.static('../client/assets'));
 server.use(cp(lit.SIMPLE_SECRET)); //simple secret is an example password
 server.use(bp.json());
 
-//configuration information
-var config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config/config.json'), lit.UTF8));
-
-var isInProduction = (config.production === lit.TRUE);
+var isInProduction = (PM.getConfigProperty(lit.PRODUCTION) === true);
 
 /* GET Requests
 **
@@ -114,7 +112,7 @@ server.get(lit.DEV_ROUTE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies))
 		response.redirect(lit.LOGIN_ROUTE);
 	else {
-		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
+		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function() {
 			response.sendFile(path.join(__dirname, '..', 'client/html/dev.html'));
 		}, function() {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
@@ -127,7 +125,7 @@ server.get(lit.EVAL_ROUTE, function(request, response) { //allows evaluation of 
 	if (compare.isEmpty(request.signedCookies))
 		response.redirect(lit.LOGIN_ROUTE);
 	else {
-		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
+		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function() {
 			response.sendFile(path.join(__dirname, '..', 'client/html/eval.html'));
 		}, function() {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
@@ -164,6 +162,20 @@ server.get(lit.LINK_ROUTE, function(request, response) { // user help page
     });
 });
 
+server.get(lit.SETTINGS_ROUTE, function(request, response) { // user help page
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
+
+    response.sendFile(path.join(__dirname, '..', 'client/html/settings.html'));
+});
+
+server.get(lit.ADVANCED_SEARCH_ROUTE, function(request, response) { // user help page
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
+
+    response.sendFile(path.join(__dirname, '..', 'client/html/advanced.html'));
+});
+
 /* POST Requests
 **
 ** These are not directly accessible from the browser, but can be used by making a POST
@@ -192,7 +204,7 @@ server.post(lit.EVAL_ROUTE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies))
 		response.redirect(lit.LOGIN_ROUTE);
 	else {
-		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function(res) {
+		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function() {
 			var env = new Environment(); // a new disposable execution environment
 			env.execute(request.body.code).then(function(res) {
 				response.send(res);
@@ -217,10 +229,10 @@ server.post(lit.LOGOUT_ROUTE, function(request, response) { // a place to post e
 	}
 
 	if (request.body.logout === true) {
-		validator.logout(request.signedCookies.usercookie).then(function(res) {
+		validator.logout(request.signedCookies.usercookie).then(function() {
 			response.clearCookie(lit.USER_COOKIE);
 			response.send(true);
-		}, function(res) {
+		}, function() {
 			response.send(false);
 		}).catch(function(err) {
             log.error(err.message);

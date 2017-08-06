@@ -81,6 +81,7 @@ const literals = {
     DATABASE_SETUP_NEEDED: "databaseSetupNeeded",
     LOAD_MOCK_DATA: "loadMockData",
     UTF8: "utf8",
+    PORT: "port",
 
     //session information
     ADMIN: "admin",
