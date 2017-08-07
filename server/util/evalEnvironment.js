@@ -11,6 +11,8 @@
 ** user-provided scripts.
 */
 
+var QEFError = require('./QEFError');
+
 var withResolve = "(function a() {\n\
 						return new Promise(function(resolve, reject) {\n\
 							try { {0} \nresolve();}\n\
@@ -34,8 +36,9 @@ var withoutResolve = "(function a() {\n\
 
 exports.Environment = function() {
 	var DBRow = require('./DBRow').DBRow;
-	var Janitor = require('./maint/janitor').Janitor;
+	var Janitor = require('./maint/Janitor').Janitor;
 	var util = require('./evalUtil');
+    var PM = require('./PropertyManager');
 	// require = function() {throw new Error("Requiring is not permitted in eval mode")};
 	var logs = [];
 
