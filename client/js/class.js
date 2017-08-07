@@ -80,6 +80,8 @@ function whenLoaded() {
     else
         href = '/info';
 
+    startPulsing();
+
     $.ajax({
         url: href,
         type: 'POST',
@@ -96,8 +98,10 @@ function whenLoaded() {
             // at some point show "something went wrong" modal
             console.error("Server Responded in an Unexpected Fashion");
         }
+        stopPulsing();
     }).fail(function(err) {
         // at some point show "something went wrong" modal
+        stopPulsing();
         console.log(err);
     });
 }

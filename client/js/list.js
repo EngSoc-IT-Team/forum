@@ -22,12 +22,15 @@ function whenLoaded() {
     else
         href = '/info';
 
+    startPulsing();
+
     $.ajax({
         url: href,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(content)
     }).done(function(data) {
+        stopPulsing();
         if (data) {
             if (data[0].length == 0) {
                 $('#getMore').hide();
@@ -38,7 +41,7 @@ function whenLoaded() {
                 $('#getMore').hide();
                 $('#foot').append(askAQuestion);
             }
-
+            stopPulsing();
             buildList(data[0], '#listHead');
             svgConverter();
         }
@@ -48,6 +51,7 @@ function whenLoaded() {
         }
     }).fail(function(err) {
         // at some point show "something went wrong" modal
+        stopPulsing();
         console.log(err);
     });
 }

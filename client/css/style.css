@@ -592,6 +592,34 @@ footer .wrap div {
   width: 80px;
 }
 
+.med-img {
+  width: 200px;
+  opacity: 1;
+}
+
+.pulse-logo-container {
+  position: absolute;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
+  margin-top: -125px;
+  margin-left: -125px;
+  width: 250px;
+}
+
+.obscure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.90;
+  z-index: 100 !important;
+  padding-top: 20px;
+  padding-bottom: 325px;
+  background-color: grey;
+}
+
 /* Select2 */
 .select2-results__option {
   color: black;
@@ -607,4 +635,21 @@ footer .wrap div {
 
 #classHead .star-ratings {
   display: none;
+}
+
+input[type=checkbox]:checked:focus:before,
+input[type=checkbox]:checked:hover:before {
+  border-color: #FF9200;
+}
+
+input[type=checkbox]:after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 24px;
+  height: 24px;
+  background: #000;
+  cursor: pointer;
+  box-sizing: border-box;
 }

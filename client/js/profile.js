@@ -68,6 +68,8 @@ function whenLoaded() {
         href = '/info';
     }
 
+    startPulsing();
+
 	$.ajax({
     	url: href,
     	type: 'POST',
@@ -91,8 +93,10 @@ function whenLoaded() {
             // at some point show "something went wrong" modal
             console.log('empty response')
         }
+        stopPulsing();
     }).fail(function(err) {
         // at some point show "something went wrong" modal
+        startPulsing();
     	console.log("Something went wrong");
     });
 }
