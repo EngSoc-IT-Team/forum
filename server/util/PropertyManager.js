@@ -21,7 +21,7 @@ function PropertyManager() {
      * @returns {*}
      */
     this.getConfigProperty = function(optionName) {
-        if (options.hasOwnProperty(optionName))
+        if (options.hasOwnProperty(optionName) && options[optionName].readable === true)
             return options[optionName];
     };
 
@@ -32,11 +32,10 @@ function PropertyManager() {
      * @returns {*}
      */
     this.setConfigProperty = function(optionName, value) {
-        if(!optionName || !value || (optionName === 'production'))
-            return false;
-
-        if (options.hasOwnProperty(optionName))
+        if (options.hasOwnProperty(optionName) && optionName && value && options[optionName].writable === true)
             return options[optionName] = value;
+
+        return false
     };
 }
 

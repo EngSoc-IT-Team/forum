@@ -1,6 +1,22 @@
 {
-	"production": false,
-	"databaseSetupNeeded": true,
-	"loadMockData": true,
-	"port": 8080
+	"production": {
+		"value": false,
+		"readable": true,
+		"writable": false
+	},
+	"databaseSetupNeeded": {
+		"value": true,
+		"readable": true,
+		"writable": false
+	},
+	"loadMockData": {
+		"value": true,
+		"readable": true,
+		"writable": false
+	},
+	"port": {
+		"value": 8080,
+		"readable": true,
+		"writable": false
+	}
 }
