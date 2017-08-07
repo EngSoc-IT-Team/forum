@@ -206,7 +206,8 @@
 		"title": "Dynamics and Vibrations",
 		"summary": "A class covering the physics of dynamic rigid bodies and vibrations.",
 		"prereqs": "A longer summary would go here",
-		"tags": "MECH328, MECH, MECH GENERAL"
+		"tags": "MECH328, MECH, MECH GENERAL",
+		"addedBy": "classbot"
 	},
 	"25": {
 		"table": "saved",
@@ -788,7 +789,7 @@
 		"credit": "3.5",
 		"id": "wl2096b3653kylg491du46d8lu45fryq",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"87": {
 		"table": "contribution",
@@ -821,7 +822,7 @@
 		"credit": "3.5",
 		"id": "3g56nsdg37axjai0jhdg9zqc3ot9dq49",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"90": {
 		"table": "contribution",
@@ -854,7 +855,7 @@
 		"credit": "11",
 		"id": "v0dr16xjojfylk4cyeppvqxgg823bx4z",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"93": {
 		"table": "contribution",
@@ -887,7 +888,7 @@
 		"credit": "3.5",
 		"id": "gbn20rvl18boglxa1s16vrhxvk6kqkva",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"96": {
 		"table": "contribution",
@@ -920,7 +921,7 @@
 		"credit": "3.5",
 		"id": "p880rx9dj4662p7skc25pq1qaib5g9wv",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"99": {
 		"table": "contribution",
@@ -953,7 +954,7 @@
 		"credit": "3",
 		"id": "7zhngog925o1ui8jovr17kxd8fn0h5xf",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"102": {
 		"table": "contribution",
@@ -986,7 +987,7 @@
 		"credit": "3.5",
 		"id": "r34dy0unpnmpa90dn2cfkvs0ylq07hjw",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"105": {
 		"table": "contribution",
@@ -1019,7 +1020,7 @@
 		"credit": "3.5",
 		"id": "dvr9ntd1gy9691kmstehy1l4iw6keb4t",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"108": {
 		"table": "contribution",
@@ -1052,7 +1053,7 @@
 		"credit": "3.5",
 		"id": "9srfsnfdhcekhy51azjjo746jd99omaw",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"111": {
 		"table": "contribution",
@@ -1085,7 +1086,7 @@
 		"credit": "3.5",
 		"id": "7vuwgv01dc8zs8sdy99glz5ypru6kpyt",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"114": {
 		"table": "contribution",
@@ -1118,7 +1119,7 @@
 		"credit": "4",
 		"id": "0k0b2ih839uiudy6rta785scg4pmavzn",
 		"duplicate": 0,
-		"addedBy": "HotMuffin"
+		"addedBy": "classBot"
 	},
 	"117": {
 		"table": "contribution",
@@ -1233,5 +1234,19 @@
 		"id": "l3e7hkuxgf8lcl3lwqq8b590rp7h0n7l",
 		"timestamp": "2017-03-13",
 		"tags": "FIRST-YEAR, APSC-112"
+	},
+	"128": {
+		"table": "user",
+		"username": "ClassBot",
+		"netid": "~~~~~",
+		"dateJoined": "2016-11-10",
+		"privilege": "bot",
+		"id": "npgyh100qn926pm0qa5ohwrj3qmy8hlu",
+		"reportCount": "0",
+		"totalUpvotes": "0",
+		"totalDownvotes": "0",
+		"netVotes": "-0",
+		"totalSolved": "0",
+		"acceptedTerms": "1"
 	}
 }
