@@ -53,32 +53,16 @@ function whenLoaded() {
     else
         href = '/info';
 
-    startPulsing();
+    AJAXCall(href, content, true, onGetQuestionDataSuccess);
+}
 
-    $.ajax({
-        url: href,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(content)
-    }).done(function(data) {
-        if (data) {
-            fillInQuestionHeader(data.question);
-            addComments(data.comments);
-            svgConverter();
-            CKEDITOR.replace( 'editor1' );
-            activateEditors();
-            loaded = true;
-        }
-        else {
-            // at some point show "something went wrong" modal
-            console.error("Server Responded in an Unexpected Fashion");
-        }
-        stopPulsing();
-    }).fail(function(err) {
-        // at some point show "something went wrong" modal
-        console.log(err);
-        stopPulsing();
-    });
+function onGetQuestionDataSuccess(data) {
+    fillInQuestionHeader(data.question);
+    addComments(data.comments);
+    svgConverter();
+    CKEDITOR.replace( 'editor1' );
+    activateEditors();
+    loaded = true;
 }
 
 /** Sets up and renders the question information as an HTML string, and then appends it to the page at the #questionHead

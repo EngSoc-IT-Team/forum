@@ -68,37 +68,21 @@ function whenLoaded() {
         href = '/info';
     }
 
-    startPulsing();
+    AJAXCall(href, content, true, onSuccess);
+}
 
-	$.ajax({
-    	url: href,
-    	type: 'POST',
-    	contentType: 'application/json',
-    	data: JSON.stringify(content)
-    }).done(function(data) {
-    	if (data) {
-            if (!data.profile){
-                $('#aProblemOccurred').modal('toggle');
-                return;
-            }
+function onSuccess(data) {
+    if (!data.profile){
+        $('#aProblemOccurred').modal('toggle');
+        return;
+    }
 
-            animateVotingBar(data.profile.upvotes, data.profile.downvotes);
-            fillInUserInfo(data.profile);
-            fillInPostInfo(data.items);
-            addTags(data.tags);
-            svgConverter();
-            CKEDITOR.replace('report-text');
-        }
-        else {
-            // at some point show "something went wrong" modal
-            console.log('empty response')
-        }
-        stopPulsing();
-    }).fail(function(err) {
-        // at some point show "something went wrong" modal
-        startPulsing();
-    	console.log("Something went wrong");
-    });
+    animateVotingBar(data.profile.upvotes, data.profile.downvotes);
+    fillInUserInfo(data.profile);
+    fillInPostInfo(data.items);
+    addTags(data.tags);
+    svgConverter();
+    CKEDITOR.replace('report-text');
 }
 
 /** Animates the voting bar on load of the page to show the relative number of upvotes and downvotes of a user

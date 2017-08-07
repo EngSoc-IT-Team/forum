@@ -328,6 +328,71 @@ function appendOnkeydown() {
 }
 
 /**
+ * I realized I repeated this all over the code and it was a mess, so I made it better! (DRY kiddies)
+ * Generic AJAX call to POST to the server to retrieve information. Note that the arguments onSuccessNoData, onFailure,
+ * and callback are all OPTIONAL, if you do not need these functions, simply do not pass them
+ *
+ * @param href: STRING The url to POST to
+ * @param content: JSON The content to pass to the server
+ * @param onSuccessWithData: The function to pass the data object to if the call is successful MUST be a function
+ * @param onSuccessNoData: The function to call if the call is successful but there is no data, pass false if no function is needed
+ * @param onFailure: The function to call if the response fails, pass false if no function is needed
+ * @param callback: The callback function to call regardless of the result of the AJAX call
+ * @param shouldPulse: BOOLEAN whether on not the logo should pulse while we process the request
+ */
+function AJAXCall(href, content, shouldPulse, onSuccessWithData, onSuccessNoData, onFailure, callback) {
+    if (shouldPulse)
+        startPulsing();
+
+    $.ajax({
+        url: href,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(content)
+    }).done(function(data) {
+        if (data) {
+            onSuccessWithData(data);
+        }
+        else {
+            // at some point show "something went wrong RELOAD" modal
+            executeIfObjectIsFunction(onSuccessNoData);
+            console.error("Server Responded in an Unexpected Fashion");
+        }
+        finish(callback, false, shouldPulse);
+    }).fail(function(err) {
+        // at some point show "something went wrong" modal
+        executeIfObjectIsFunction(onFailure);
+        finish(callback, err, shouldPulse);
+    });
+}
+
+/** Helper function that deals with the result of the AJAX call and stops the logo pulsing
+ *
+ * @param callback: The callback function to call when the AJAX call completes
+ * @param err: The server/response error object, if there was one
+ * @param needCancelPulse: whether or not we need to cancel the pulsing logo
+ */
+function finish(callback, err, needCancelPulse) {
+    if (needCancelPulse)
+        stopPulsing();
+
+    if (err)
+        console.error(err);
+
+    executeIfObjectIsFunction(callback);
+}
+
+/** Helper function to make sure that what is passed is a function and not something else
+ *
+ * @param func: Object to test
+ */
+function executeIfObjectIsFunction(func) {
+    if (typeof func === 'function') // if the object is a function, execute it
+        func();
+}
+
+
+/**
  * Makes our lovely svg elements function and appear properly
  */
 jQuery(document).ready(function() {

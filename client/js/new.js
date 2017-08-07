@@ -9,6 +9,7 @@ var select2Options = {data: [], tags: true, tokenSeparators: [',', ' '], width: 
     theme: "classic",  maximumSelectionLength: 3, forcebelow: true};
 
 var tagArray = [];
+var newContent;
 
 /**
  * Gets the tag array used in the tags section of the new item forms and sets the options for the Select2 boxes to be
@@ -20,29 +21,21 @@ function getTagArray() {
         sub: "getArray"
     };
 
-    $.ajax({
-        url: 'action',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(content)
-    }).done(function(data) {
-        if (data) { // if we don't get here that's ok,
-            tagArray = data;
-            select2Options.data = data;
-            $('#questionTags').select2(select2Options);
-            $('#classTags').select2(select2Options);
-            $('#linkTags').select2(select2Options);
+    var href = 'action';
 
-        }
+    AJAXCall(href, content, true, onSuccessfulGetTags, noTags);
+}
 
-        else { // otherwise we need to TODO: let the user know something went wrong
-            // we just let ourselves know that tags
-            console.error("Couldn't get tags");
-        }
-    }).fail(function(err) {
-        // at some point show "something went wrong" modal
-        console.log(err);
-    });
+function onSuccessfulGetTags(data) {
+    tagArray = data;
+    select2Options.data = data;
+    $('#questionTags').select2(select2Options);
+    $('#classTags').select2(select2Options);
+    $('#linkTags').select2(select2Options);
+}
+
+function noTags() {
+    console.error("Couldn't get tags");
 }
 
 /**
@@ -50,42 +43,34 @@ function getTagArray() {
  * the database successfully.
  */
 function submitItem() {
-    var content = {
+    newContent = {
         requested: "new",
         type: getPressed().replace('#', ''), //class, question, link
         content: getContent(getPressed().replace('#', ''))
     };
 
-    if (!checkFields(content.type))
+    if (!checkFields(newContent.type))
         return;
 
-    addMissingTags(content.content.rawTags);
+    addMissingTags(newContent.content.rawTags);
 
-    var buttonName = '#' + content.type + '-button'; //once we've cleared the check to make sure required fields are filled, disable the button until we receive a response
+    var buttonName = '#' + newContent.type + '-button'; //once we've cleared the check to make sure required fields are filled, disable the button until we receive a response
     $(buttonName).prop('disabled', true);
 
-    $.ajax({
-        url: 'info',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(content)
-    }).done(function(data) {
-        if (data) { // if we get a valid response, redirect to the new item
-            if (data.id)
-                document.location = '/' + content.type + '?id=' + data.id;
-            else
-                console.error('There was a problem');
-        }
+    var href = 'info';
 
-        else { // otherwise we need to let the user know something went wrong
-            // at some point show "something went wrong" modal
-            console.error("Server Responded in an Unexpected Fashion");
-        }
-        $(buttonName).prop('disabled', false);
-    }).fail(function(err) {
-        // at some point show "something went wrong" modal
-        console.log(err);
-    });
+    AJAXCall(href, newContent, false, onSuccessfulInsert);
+}
+
+/** What to do if we successdully receive data from the server when we attampt to insert an item
+ *
+ * @param data: return data from the server
+ */
+function onSuccessfulInsert(data) {
+    if (data.id)
+        document.location = '/' + newContent.type + '?id=' + data.id;
+    else
+        console.error('There was a problem inserting the new item! Please try again!');
 }
 
 /** Adds any new user-created tags to the database.
@@ -116,17 +101,14 @@ function addTag(tagName) {
         sub: "add"
     };
 
-    $.ajax({
-        url: 'action',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(content)
-    }).done(function() {
-        console.log("Tag '" + tagName + "' added"); //We don't really need to wait for this to happen
-    }).fail(function(err) {
-        // at some point show "something went wrong" modal
-        console.log(err);
-    });
+    var href = 'action';
+
+    AJAXCall(href, content, false, successfullyInsertedTag);
+}
+
+// if we successfully insert a tag, log it
+function successfullyInsertedTag() {
+    console.log('Successful tag insertion');
 }
 
 // get the current item type that will be sent to the database

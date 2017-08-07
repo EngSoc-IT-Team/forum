@@ -80,30 +80,14 @@ function whenLoaded() {
     else
         href = '/info';
 
-    startPulsing();
+    AJAXCall(href, content, true, onSuccess);
+}
 
-    $.ajax({
-        url: href,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(content)
-    }).done(function(data) {
-        if (data) {
-            classID = data.class.id;
-            fillInClassHeader(data.class);
-            addReviews(data.reviews);
-            CKEDITOR.replace('editor1');
-        }
-        else {
-            // at some point show "something went wrong" modal
-            console.error("Server Responded in an Unexpected Fashion");
-        }
-        stopPulsing();
-    }).fail(function(err) {
-        // at some point show "something went wrong" modal
-        stopPulsing();
-        console.log(err);
-    });
+function onSuccess(data) {
+    classID = data.class.id;
+    fillInClassHeader(data.class);
+    addReviews(data.reviews);
+    CKEDITOR.replace('editor1');
 }
 
 // Class Rating Stars (Homage to @TranBrian10 on Github for his help on this)

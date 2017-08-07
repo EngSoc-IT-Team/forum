@@ -22,6 +22,8 @@ function whenLoaded() {
     else
         href = '/info';
 
+
+
     startPulsing();
 
     $.ajax({

@@ -54,32 +54,20 @@ function whenLoaded() {
     else
         href = '/info';
 
-    startPulsing();
+    AJAXCall(href, content, true, onSuccess);
+}
 
-    $.ajax({
-        url: href,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(content)
-    }).done(function(data) {
-        if (data) {
-            fillInLinkHeader(data.link);
-            addComments(data.comments);
-            svgConverter();
-            CKEDITOR.replace( 'editor1' );
-            activateEditors();
-            loaded = true;
-        }
-        else {
-            // at some point show "something went wrong" modal
-            console.error("Server Responded in an Unexpected Fashion");
-        }
-        stopPulsing();
-    }).fail(function(err) {
-        // at some point show "something went wrong" modal
-        stopPulsing();
-        console.log(err);
-    });
+/** Function to call if the AJAX call is a success. Populates the page using the data object.
+ *
+ * @param data: The data object returned from the server
+ */
+function onSuccess(data) {
+    fillInLinkHeader(data.link);
+    addComments(data.comments);
+    svgConverter();
+    CKEDITOR.replace( 'editor1' );
+    activateEditors();
+    loaded = true;
 }
 
 /** Sets up and renders the link information as an HTML string, and then appends it to the page at the #linkHead element
