@@ -25,16 +25,7 @@
 # Moving Forward - The javascript
 1. Make sure your nodejs is up to date (Version 7.0.0 or up please)
 2. Make sure you have npm installed ([try this ](http://blog.npmjs.org/post/85484771375/how-to-install-npm) if you need to install both node and npm)
-3. Now that you have npm, you'll need to run:
-
-  * `npm install mysql`
-  * `npm install cookie-parser`
-  * `npm install body-parser`
-  * `npm install nodemailer`
-  * `npm install nodemailer-smtp-transport`
-  * `npm install express`
-  * `npm install natural`
-  * `npm install algorithmia`
+3. Now that you have npm, navigate to the forum main directory where the package.json file is located and run `npm install`
 
   so that you have all the dependencies we need to get our server up and running (this list will be added to over time)
 4. In your mysql client add a database called `testing`
