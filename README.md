@@ -1,6 +1,6 @@
 # Engineering Society Forum
 
-One Paragraph of project description goes here, feel free to include screenshots and anything else.
+The Engineering Society Forum is a pilot by the Engineering Society Software Development Team (ESSDev) to create a place where Queen's Engineering Students can build a central repository of knowledge not available elsewhere on the internet.
 
 ## Getting Started
 
@@ -10,18 +10,7 @@ This project is built with Node.js, MySQL and several key node modules. The foll
 
 First, this program requires that you have Node.js version 7.0 or greater and npm 3.10 or greater in order to function. If you are unsure or do not yet have Node.js and npm installed see the server README.
 
-Once you have Node and npm installed, there are several Node.js modules that this project requires, which include.
-
-```
-  npm install mysql
-  npm install cookie-parser
-  npm install body-parser
-  npm install nodemailer
-  npm install nodemailer-smtp-transport
-  npm install express
-  npm install natural
-  npm install algorithmia
-```
+Once you have Node and npm installed, there are several Node.js modules that this project requires. These can be installed by navigating to the main forum directory in the terminal and running `npm install`
 
 ### Running the forum
 
@@ -30,31 +19,18 @@ Once the sever is running you can log in with the username "anon" and you can in
 
 ## Running Tests
 
-Explain how to run any automated tests is there are any, don't include othersie
+Currently the Engineering Society Forum has no automated tests, although they will ideally be created in an upcoming release.
 
-Explain what these tests test and why
+## Built With Node Modules:
 
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-1. Fork it!
-2. Create your feature branch: `git checkout -b my-new-feature`
-3. Commit your changes: `git commit -am 'Add some feature'`
-4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request
+* mysql
+* body-parser
+* cookie-parser
+* nodemailer
+* nodemailer-smtp-transport
+* express
+* natural
+* algorithmia
 
 ### Version History
 
