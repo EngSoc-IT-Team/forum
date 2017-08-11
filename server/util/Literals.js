@@ -49,6 +49,8 @@ const literals = {
     INFO_ROUTE: "/info",
     ROOT_ROUTE: "/",
     LINK_ROUTE: "/link",
+    SETTINGS_ROUTE: "/settings",
+    ADVANCED_SEARCH_ROUTE: "/advanced",
 
     //values in string format: e.g. boolean value true as \'true\'
     ZERO: "0",
