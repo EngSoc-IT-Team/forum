@@ -22,7 +22,7 @@ function PropertyManager() {
      */
     this.getConfigProperty = function(optionName) {
         if (options.hasOwnProperty(optionName) && options[optionName].readable === true)
-            return options[optionName];
+            return options[optionName].value;
     };
 
     /**
@@ -33,7 +33,7 @@ function PropertyManager() {
      */
     this.setConfigProperty = function(optionName, value) {
         if (options.hasOwnProperty(optionName) && optionName && value && options[optionName].writable === true)
-            return options[optionName] = value;
+            return options[optionName].value = value;
 
         return false
     };
