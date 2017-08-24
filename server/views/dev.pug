@@ -1,0 +1,76 @@
+extends layout 
+
+block content
+  .main-content
+    .media
+      .info-block.description.media
+        h2
+          b Dev TODO Page
+        p(style='size: .25em')
+          | This is a place I will periodically update with things that different team members should be working on. Feel free to ask if you have any questions.
+        hr
+        h3
+          b What we Should be Working On
+        br
+        .row
+          .col-xs-12.col-sm-6.col-md-3
+            h4 Robert
+            ul
+              li Have
+          .col-xs-12.col-sm-6.col-md-3
+            h4 Ayrton
+            ul
+              li A
+          .col-xs-12.col-sm-6.col-md-3
+            h4 Carson
+            ul
+              li Good
+          .col-xs-12.col-sm-6.col-md-3
+            h4 Michael
+            ul
+              li Summer
+        hr
+        h3
+          b Up for grabs
+        p
+          i Let me know if you want to take up one of these
+        .row
+          .col-sm-6
+            h5
+              b Client
+            ul
+              li Reporting modal subsection and implementation
+              li First year area (larger, may need to be a series of pages, not this year)
+              li Filtering on questions and comments by new, highest voted
+              li Filter results by questions, classes or links on list page
+              li Image and video previewing
+              li
+                | Equation formatting in posts 
+                a(href='http://docs.mathjax.org/en/latest/start.html') something like this
+              li Make login page more dynamic
+              li Implement js game easter egg (modal window)
+              li Badge/achievement design
+              li
+                | Optional introduction/tour on first login (More than a large block of text, dynamic tour)
+              li Mark questions as answered
+              li Mark links as verified/option to verify links as a user
+              li Class reviews need up/downvotes
+              li Move shared functionality to common.js/templating file
+              li Stars are not accessibility friendly
+              li Page loading animation
+          .col-sm-6
+            h5
+              b Server
+            ul
+              li Batching
+              li Hidden question handling
+              li Updating of vote points for post/user when votes are made
+              li More mock data
+              li Links and link authentication
+              li Reward system + authorizations
+              li User/pass attempt limiting/lockout (?)
+              li SSO
+              li Caching files
+              li Notifications (?)
+              li List sort by new or by vote
+              li Scrape classes with a bot

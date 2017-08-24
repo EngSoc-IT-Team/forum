@@ -1,0 +1,107 @@
+extends layout
+
+block content
+  .main-content
+  .info-block.media
+    .container
+      h2 What would you like to add?
+      hr
+      .centered
+        .btn-group(role='group', aria-label='Basic example')
+          button#question.btn.btn-secondary(type='button', data-toggle='tab', href='#home', onclick="toggleSelection('question')") Question
+          button#link.btn.btn-secondary(type='button', data-toggle='tab', href='#menu2', onclick="toggleSelection('link')") Link
+          button#class.btn.btn-secondary(type='button', data-toggle='tab', href='#menu3', onclick="toggleSelection('class')") Class
+      hr
+      .tab-content
+        #home.tab-pane.fade
+          h3 New Question
+          // <p>Please post the title of you question</p>
+          .form-group
+            label.help(for='questionTitle', data-toggle='tooltip', title='A one line summary of your question')
+              | Title
+              b.negative.inline *
+            input#questionTitle.form-control
+          .form-group
+            label.help(for='details', data-toggle='tooltip', title='More information to help others better understand your question')
+              | Question Details
+              b.negative.inline *
+            // <textarea class="form-control" rows="5" ></textarea>
+            textarea#details(name='editor1')
+          .form-group
+            label.help(for='questionTags', data-toggle='tooltip', title='Adding tags helps other people help you faster!') Tags
+            div
+              select#questionTags.form-control(style='width: 100%;', multiple='multiple')
+          #warning-target-question.negative.warning
+          p
+            b.negative.inline *
+            |  Indicates a required field
+          button#question-button.btn.btn-sm.button(type='button', onclick="submitItem('question')") Submit
+        #menu2.tab-pane.fade
+          h3 New Link
+          // <p>Please post your linked questions</p>
+          .form-group
+            label.help(for='url', data-toggle='tooltip', title='Copy the link URL here')
+              | URL
+              b.negative.inline *
+            input#url.form-control
+          .form-group
+            label.help(for='linkTitle', data-toggle='tooltip', title='A one line summary of what your link is for')
+              | Title
+              b.negative.inline *
+            input#linkTitle.form-control
+          .form-group
+            label.help(for='linkSummary', data-toggle='tooltip', title='A summary of what information the link leads to')
+              | Summary
+              b.negative.inline *
+            textarea#linkSummary(name='editor2')
+          .form-group
+            label.help(for='linkTags', data-toggle='tooltip', title='Adding tags helps other people find this faster!') Tags
+            div
+              select#linkTags.form-control(style='width: 100%;', multiple='multiple')
+          #warning-target-link.negative.warning
+          p
+            b.negative.inline *
+            |  Indicates a required field
+          button#link-button.btn.btn-sm.button(type='button', onclick="submitItem('link')") Submit
+        #menu3.tab-pane.fade
+          h3 New Class
+          .form-group
+            label.help(for='courseCode', data-toggle='tooltip', title='The course code (i.e. MECH340, APSC100 etc.)')
+              | Course Code
+              b.negative.inline *
+            input#courseCode.form-control
+          .form-group
+            label.help(for='classTitle', data-toggle='tooltip', title='The title of the course')
+              | Title
+              b.negative.inline *
+            input#classTitle.form-control
+          .form-group
+            label.help(for='instructor', data-toggle='tooltip', title='The instructor of the course')
+              | Instructor
+              b.negative.inline *
+            input#instructor.form-control
+          .form-group
+            label.help(for='credit', data-toggle='tooltip', title='The number of credits the class is worth')
+              | Credits
+              b.negative.inline *
+            input#credit.form-control
+          .form-group
+            label.help(for='classSummary', data-toggle='tooltip', title='A summary of the course topics')
+              | Class Summary
+              b.negative.inline *
+            textarea#classSummary(name='editor3')
+          .form-group
+            label.help(for='prerequisites', data-toggle='tooltip', title='Prerequisites for the course') Prerequisites
+            input#prerequisites.form-control
+          .form-group
+            label.help(for='classTags', data-toggle='tooltip', title='Adding tags helps other people find this faster!') Tags
+            div
+              select#classTags.form-control(style='width: 100%;', multiple='multiple')
+          #warning-target-class.negative.warning
+          p
+            b.negative.inline *
+            |  Indicates a required field
+          button#class-button.btn.btn-sm.button(type='button', onclick="submitItem('class')") Submit
+  link(href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css', rel='stylesheet')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js')
+  script(src='https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js')

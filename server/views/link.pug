@@ -1,0 +1,22 @@
+extends layout 
+
+block content 
+  .main-content
+    // Link
+    #linkHead
+    #demo2.collapse
+      textarea#editor2(name='editor1', rows='10', cols='80')
+      button.btn.btn-sm.button(type='button') Submit
+    // Modal
+    br
+    // Comments
+    .comment-list.media
+      .info-block.comment-block.media.row
+        .col-sm-12
+          h2.title Comments
+        #comments
+        // /First Level Comment
+        #foot.centered.media
+          hr
+          a#getMore(href='#', onclick='getMore()') v See More v
+  script(src='https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js')

@@ -60,7 +60,10 @@ server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, q
       scripts: ['templating.js', 'question.js', 'pulse.js']
         })
 	}).catch(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+    response.render('notFound', {
+      title: 'Not Found',
+      scripts: ['notFound.js']
+    })
 	});
 });
 
@@ -68,14 +71,19 @@ server.get(lit.ABOUT_ROUTE, function(request, response) { //about page
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/about.html'));
+	response.render('about', {
+    title: 'About',
+    scripts: ['pulse.js']
+  })
 });
 
 server.get(lit.NEW_ROUTE, function(request, response) { // place where new things can be added
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
-
-	response.sendFile(path.join(__dirname, '..', 'client/html/new.html'));
+	response.render('new', {
+    title: 'New Entry',
+    scripts: ['new.js', 'pulse.js']
+  })
 });
 
 server.get(lit.LIST_ROUTE, function(request, response) { //return the a default most recent list of questions
@@ -94,21 +102,33 @@ server.get(lit.PROFILE_ROUTE, function(request, response) { //user home page
 
 	if (!compare.isEmpty(request.query)) {
 		validator.validateUser(request).then(function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
-
+			response.render('profile', {
+        title: 'Profile',
+        stylesheets: ['profile.css'],
+        scripts: ['templating.js', 'profile.js', 'pulse.js']
+      })
 		}, function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
-
+      response.render('notFound', {
+        title: 'Not Found',
+        scripts: ['notFound.js']
+      })
 		});
 	}
 	else {
-		response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
+    response.render('profile', {
+      title: 'Profile',
+      stylesheets: ['profile.css'],
+      scripts: ['templating.js', 'profile.js', 'pulse.js']
+    })
 	}
 });
 
 server.get(lit.LOGIN_ROUTE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies))
-		response.sendFile(path.join(__dirname, '..', 'client/html/login.html'));
+    response.render('login', {
+      title: 'Login',
+      scripts: ['login.js']
+    })
 	else
 		response.redirect(request.query.redirect ? request.query.redirect : lit.ROOT_ROUTE);
 });
@@ -118,7 +138,9 @@ server.get(lit.GUIDELINES_ROUTE, function(request, response) { // mock login pag
         response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 	}
 	else
-		response.sendFile(path.join(__dirname, '..', 'client/html/guidelines.html'));
+		response.render('guidelines', {
+      title: 'Guidelines'
+    })
 });
 
 server.get(lit.DEV_ROUTE, function(request, response) {
@@ -126,9 +148,14 @@ server.get(lit.DEV_ROUTE, function(request, response) {
 		response.redirect(lit.LOGIN_ROUTE);
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/dev.html'));
+			response.render('dev', {
+        title: 'Development'
+      })
 		}, function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+      response.render('notFound', {
+        title: 'Not Found',
+        scripts: ['notFound.js']
+      })
 		});
 
 	}
@@ -139,9 +166,14 @@ server.get(lit.EVAL_ROUTE, function(request, response) { //allows evaluation of 
 		response.redirect(lit.LOGIN_ROUTE);
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/eval.html'));
+			response.render('eval', {
+        title: 'Evaluate'
+      })
 		}, function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+      response.render('notFound', {
+        title: 'Not Found',
+        scripts: ['notFound.js']
+      })
 		});
 	}
 });
@@ -150,7 +182,10 @@ server.get(lit.HELP_ROUTE, function(request, response) { // user help page
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/help.html'));
+	response.render('help', {
+    title: 'Help',
+    scripts: ['pulse.js']
+  })
 });
 
 server.get(lit.CLASS_ROUTE, function(request, response) { // user help page
@@ -158,9 +193,15 @@ server.get(lit.CLASS_ROUTE, function(request, response) { // user help page
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
     validator.validateItemExistence(request).then(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/class.html'));
+        response.render('class', {
+          title: 'Class',
+          scripts: ['templating.js', 'class.js', 'pulse.js']
+        })
     }).catch(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+      response.render('notFound', {
+        title: 'Not Found',
+        scripts: ['notFound.js']
+      })
     });
 });
 
@@ -169,24 +210,34 @@ server.get(lit.LINK_ROUTE, function(request, response) { // user help page
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
     validator.validateItemExistence(request).then(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/link.html'));
+        response.render('link', {
+          title: 'Link',
+          scripts: ['templating.js', 'link.js', 'pulse.js']
+        })
     }).catch(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+      response.render('notFound', {
+        title: 'Not Found',
+        scripts: ['notFound.js']
+      })
     });
 });
 
 server.get(lit.SETTINGS_ROUTE, function(request, response) { // user help page
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
-
-    response.sendFile(path.join(__dirname, '..', 'client/html/settings.html'));
+    response.render('settings', {
+      title: 'Settings',
+      scripts: ['pulse.js', 'templating.js', 'settings.js']
+    })
 });
 
 server.get(lit.ADVANCED_SEARCH_ROUTE, function(request, response) { // user help page
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
-
-    response.sendFile(path.join(__dirname, '..', 'client/html/advanced.html'));
+    response.render('advanced', {
+      title: 'Search',
+      scripts: ['pulse.js', 'advanced.js']
+    })
 });
 
 /* POST Requests
@@ -296,11 +347,18 @@ server.post(lit.INFO_ROUTE, function(request, response) {
 
 server.use(function (err, req, res, next) { // catches URL errors
 	log.error(err.stack);
-	res.status(500).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+	res.statusCode = 500
+  res.render('notFound', {
+    title: 'Not Found',
+    scripts: ['notFound.js']
+  })
 });
 
 server.use(function (req, res, next) { // returns 404s instead of cannot GET
-	res.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+  res.render('notFound', {
+    title: 'Not Found',
+    scripts: ['notFound.js']
+  })
 });
 
 

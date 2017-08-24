@@ -1,0 +1,36 @@
+extends layout 
+
+block content
+  .main-content
+    .info-block.media
+      .centered.container
+        h2 I'm looking for...
+        .btn-group.centered(role='group', aria-label='Basic example')
+          button#posts.btn.btn-secondary(type='button', onclick="toggleSelection('posts')") ... a post
+          button#links.btn.btn-secondary(type='button', onclick="toggleSelection('links')") ... a link
+          button#classes.btn.btn-secondary(type='button', onclick="toggleSelection('classes')") ... a class
+          button#users.btn.btn-secondary(type='button', onclick="toggleSelection('users')") ... a user
+          button#all.btn.btn-secondary(type='button', onclick="toggleSelection('all')") Everything!
+        br
+        br
+        #filter.hidden
+          h2 Which has...
+          label(for='tags')
+            | Tags: 
+            input#tags(type='text')
+          br
+          label(for='keywords')
+            | Keywords: 
+            input#keywords(type='text')
+          br
+          label(for='exact-words')
+            | Exact Words: 
+            input#exact-words(type='text')
+          br
+          label(for='title')
+            | Title: 
+            input#title(type='text')
+          br
+          button#question-button.btn.btn-sm.button(type='button', onclick='sendQuery()') Search!
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css', rel='stylesheet')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js')

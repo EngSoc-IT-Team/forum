@@ -1,0 +1,98 @@
+extends layout 
+
+block content 
+  .main-content
+    .info-block.media
+      h2.title User Profile
+      .description
+        .row
+          .col-xs-6
+            h4#username _
+            hr
+            h6#joined Date joined:
+            h6 Status: Newbie
+            h6 Badges:
+            .badges.centered
+              .centered
+                | Earn badges by contributing to the forum!
+            br
+            #knowledge Knows About:
+          .col-xs-6
+            h4 Summary:
+            hr
+            h5 Contribution History:
+            h6#posts Posts:
+            h6#comments Comments:
+            h6#links Links:
+            h6#other Other Contributions:
+            br
+            h5 Voting:
+            h6#voting.centered
+              #up.inline.positive
+              |  |
+              #down.inline.negative
+            .container.vote-box
+              #positive.vote-box-positive
+              #negative.vote-box-negative
+            br
+    br
+    // IF isUser
+    #personal
+      .info-block.media
+        .description.row
+          .col-xs-6
+            h4 Saved Items
+            hr
+            div
+              #saved.info-block
+                | Nothing to see here!
+          .col-xs-6
+            h4 Subscribed Items
+            hr
+            div
+              #subscribed.info-block
+                | Nothing to see here!
+      br
+    // Regardless Show contributions
+    .info-block.media.row
+      .description
+        .col-xs-12
+          h4 Recent Contributions
+          hr
+          div
+            #contributions.info-block
+              | Nothing to see here ... yet!
+    script(src='https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js')
+    // Modal
+    #aProblemOccurred.modal.fade.media(role='dialog')
+      .modal-dialog
+        .modal-content
+          .modal-body
+            h3 Oh No!
+            p
+              | It appears that something went wrong. You can either 
+              a(href='#', onclick='location.reload()') reload the page
+              |  or 
+              a(href='/') try a new query
+              | .
+    // Feedback Modal
+    #feedback.modal.fade(role='dialog')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal') ×
+            h4.modal-title What's Up?
+          .modal-body
+            .centered
+              .btn-group(role='group', aria-label='Basic example')
+                button#love.btn.btn-secondary(type='button', data-toggle='tab', onclick='toggleSelection(this)') ♥ Love ♥
+                button#criticism.btn.btn-secondary(type='button', data-toggle='tab', onclick='toggleSelection(this)') ☠ Criticism ☠
+                button#suggestions.btn.btn-secondary(type='button', data-toggle='tab', onclick='toggleSelection(this)') Suggestions
+            hr
+            div
+              .form-group
+                label.form-control-label(for='report-text') What's on your mind?
+                br
+                textarea#report-text
+          .modal-footer
+            button.btn.btn-sm.button(type='button', data-dismiss='modal', onclick='report(this)') Let Us Know!
