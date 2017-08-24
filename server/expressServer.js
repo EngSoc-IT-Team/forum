@@ -28,19 +28,26 @@ server.use(bp.json());
 
 var isInProduction = (PM.getConfigProperty(lit.PRODUCTION) === true);
 
+// Set the templating engine to use Pug
+server.set('views', './views');
+server.set('view engine', 'pug');
+
 /* GET Requests
 **
-** These correspond to the urls you type into the browser and define the actions to be 
+** These correspond to the urls you type into the browser and define the actions to be
 ** taken when something like http://localhost:8080/***** is typed in
 ** For instance typing http://localhost:8080 in will correspond to the server.get('/', ...)
 ** call, http://localhost:8080/search corresponds to the server.get('/search', ...) call etc
 */
 
 server.get(lit.ROOT_ROUTE, function(request, response) { // default link, delivers landing page
-    if (compare.isEmpty(request.signedCookies))
-        return response.redirect(lit.LOGIN_ROUTE);
+  if (compare.isEmpty(request.signedCookies))
+      return response.redirect(lit.LOGIN_ROUTE);
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/index.html'));
+  response.render('index',{
+    title: 'Home',
+    scripts: ["index.js"]
+  });
 });
 
 server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, queried by id
@@ -48,7 +55,10 @@ server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, q
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
 	validator.validateItemExistence(request).then(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/question.html'));
+    response.render('question', {
+      title: 'Question',
+      scripts: ['templating.js', 'question.js', 'pulse.js']
+        })
 	}).catch(function() {
         response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
 	});
@@ -72,7 +82,10 @@ server.get(lit.LIST_ROUTE, function(request, response) { //return the a default 
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/list.html'));
+	response.render('list', {
+    title: 'Questions',
+    scripts: ['pulse.js', 'templating.js', 'list.js']
+  })
 });
 
 server.get(lit.PROFILE_ROUTE, function(request, response) { //user home page
@@ -117,7 +130,7 @@ server.get(lit.DEV_ROUTE, function(request, response) {
 		}, function() {
 			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
 		});
-		
+
 	}
 });
 

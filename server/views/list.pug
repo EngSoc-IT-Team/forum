@@ -1,0 +1,12 @@
+extends layout
+
+block content 
+  #list-page.main-content
+  #listHead.info-block.row
+    .hidden
+      | Search By:
+      .btn-group.centered(role='group', aria-label='Search Options')
+        button#new.btn.btn-secondary.active(type='button', onclick="toggleSelection('new')") New
+        button#best.btn.btn-secondary(type='button', onclick="toggleSelection('best')") Best
+  #foot.centered.media.see-more
+    a#getMore(href='javascript:void(0);', onclick='getMore()') v See More v
