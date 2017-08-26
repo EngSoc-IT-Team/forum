@@ -11,6 +11,6 @@ server/config/database.json
 .idea/jsLibraryMappings.xml
 .idea/misc.xml
 
-node_modules 
+node_modules
 
-
+.DS_Store
