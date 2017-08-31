@@ -29,7 +29,7 @@ server.use(bp.json());
 var isInProduction = (PM.getConfigProperty(lit.PRODUCTION) === true);
 
 // Set the templating engine to use Pug
-server.set('views', './views');
+server.set('views', '../client/views');
 server.set('view engine', 'pug');
 
 /* GET Requests

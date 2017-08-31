@@ -1,4 +1,4 @@
-extends layout 
+extends layout
 
 block content 
   .main-content
@@ -19,21 +19,21 @@ block content
   script(type='text/javascript').
     function execute() {
     $.ajax({
-    url: '/eval',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({"code": $(code)[0].innerText})
-    }).done(function(data) {
-    var logs = "Result: \\n" + getInfo(data);
-    $(result).val(logs);
-    }).fail(function(err) {
-    console.log(err)
-    $(result).val("Result:\\n" + err.statusText);
-    });
+      url: '/eval',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({"code": $(code)[0].innerText})
+      }).done(function(data) {
+          var logs = "Result: \\n" + getInfo(data);
+          $(result).val(logs);
+        }).fail(function(err) {
+          console.log(err)
+          $(result).val("Result:\\n" + err.statusText);
+      });
     }
     function getInfo(logs) {
-    var str = "";
-    for (var i in logs)
-    str += logs[i] + "\\n";
-    return str;
+      var str = "";
+      for (var i in logs)
+        str += logs[i] + "\\n";
+      return str;
     }
