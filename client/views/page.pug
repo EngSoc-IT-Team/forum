@@ -24,7 +24,12 @@ html(lang='en')
         script(type='text/javascript', src='/js/' + script)
   body
     #wrap.container-fluid
-      include includes/menu
+      if nav == "search"
+        include includes/navbarWithSearchAndMenu
+      else if nav == "menuOnly"
+        include includes/navbarWithMenu
+      else
+        include includes/navbarWithMenu
       block content 
     footer
       .wrap.clearfix
