@@ -125,6 +125,10 @@ exports.generateTags = function (newRow, table) {
                             tags += " "; //space splits up tags
                         }
                     }
+
+                    if (!tags)
+                        tags = "NULL";
+
                     newRow.setValue(lit.FIELD_GEN_TAGS, tags);
                     newRow.update().then(function () {
                         resolve(tags); //string of all tags to be put into field for the new post
