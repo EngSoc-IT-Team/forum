@@ -1,0 +1,14 @@
+extends page
+
+block content 
+  br
+  br
+  .eng-text
+    h1 Oh no! We couldn't find what you were looking for!
+    br
+    p#urlText
+    p
+      | Sorry about that! Either 
+      a.body-link(href='#', onclick='location.reload()') try again
+      |  or 
+      a.body-link(href='/') try a new search

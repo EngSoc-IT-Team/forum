@@ -1,0 +1,20 @@
+extends page
+
+block content 
+  // Body
+  br
+  br
+  .eng-text.centered
+    img.body-image.centered.black-background(src='../assets/qef.png')
+    h2.centered Login
+    br
+    h4 userame or netid
+    input#netid(type='text', name='user')
+    br
+    br
+    h4 password
+    input#secret(type='password', name='secret')
+    br
+    br
+    button#signIn(onclick='login()') Sign In
+  // end body

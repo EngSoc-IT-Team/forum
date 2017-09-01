@@ -1,0 +1,12 @@
+extends navbar
+
+block navbar_includes
+    .dropdown.nav-profile
+        button#menu1.btn.btn-default.dropdown-toggle.transparent-background(type='button', data-toggle='dropdown')
+            img#profile.profile-image(src='/assets/profile.png')
+            span.caret.inverted
+        ul.dropdown-menu(role='menu', aria-labelledby='menu1')
+            a.dropdown-item(role='menuitem', href='/profile')
+                li(role='presentation') Profile
+            a.dropdown-item(role='menuitem', href='#', onclick='logout()')
+                li(role='presentation') Logout

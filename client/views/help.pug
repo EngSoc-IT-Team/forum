@@ -1,0 +1,95 @@
+extends page
+
+block content 
+  .main-content
+    .media
+      .info-block.description.media
+        h1 Help Page
+        br
+        //
+          <hr>
+          <h6>Search:</h6>
+          <input type="text" id="searchText"/>
+          <hr>
+        p
+          | Hello and welcom to the Eng Soc Forum Help page, here are awnsers to many many commonly asked qustions, as well direct you to resources that will help you if you cannnot find an awsner here.
+        p
+          | To begin what is the Eng Forum? – Well the Eng Forum is a website that is dedicated to Queen’s engineering students. It serves the purpose of a local knowledge bank for engineering students. Here students, given they sign in with their student ID will have access to a hopefully one day vast bank of knowledge.
+        p
+          | These resources are available through a finely tuned search algorithm that allows students to search for any pieces of information, from any subject at any level. The search function is the sites greatest strength, it is the first thing that greats you once you visit the website. All the information however does not come from nowhere. The knowledge and information comes from students asking questions related to school, and other students answering the question if they know it. (more on this later).
+        p
+          | Users/ students will post questions related to a topic/ class, and other students will answer the question to the best of their ability. Answers that are “quality” will be “upvoted” by other students. This will indicate the quality of the answer to other students, as well as make the answer more visible.
+        p
+          | These are the basics to the website, more details on the website can be seen below.
+        br
+        hr
+        h6 Search:
+        input#searchText(type='text')
+        hr
+        //
+          <ul id = "list">
+          <li class="element"> PASTA </li>
+          <li class="element"> MACARONI </li>
+          <li class="element"> SPICY MEATBALLA </li>
+          <li class="element"> PIZZA </li>
+          <li class="element"> FETTUCHINI </li>
+          </ul>
+        div
+          h4.question-colour Who is this website available too?
+          p
+            | In it’s current form the forum is dedicated to Queen’s engineering students only. No further plans have been made at this point and time.
+          br
+        div
+          h4.question-colour How do I ask a question?
+          p
+            | One you have accessed our website you should be prompted with either login page on the main search page, the difference should be noticeable. Once you are logged in you will be greeted with our main landing page. Here you will find the main search bar that encompasses a large portion of the page. Click on the search bar and type in your question to ask your question.
+          p
+            | You can refine your search by selecting options such as tags, relevance, and submission date. One you are happy with your question simply click the search button or press the enter key.
+          br
+        div
+          h4.question-colour What are tags?
+          p
+            | Tags are classifiers attached to post and pages that assign what subject that question is relate to. So, for example if you were to ask or search for a question related to physics - 111. That question should be tagged with a tag labeled “APSC-111”. These tags assist in both organising and structuring the post and search of questions.
+          br
+        div
+          h4.question-colour How to I post a question?
+          p To ask or post or ask a question you must …
+          br
+        div
+          h4.question-colour Do other people know who I am based on my username?
+          p
+            | No who you are is completely confidential. Your username is randomly generated; there is no way of other people knowing your identity unless you tell them.
+          br
+        div
+          h4.question-colour How do I answer posts?
+          p
+            | Post can be answered by viewing posts and clicking on them. Once you on the question page there should be a button below the question. Pressing this button will open a penel which will allow you to comment.
+          br
+        div
+          h4.question-colour  What are these numbers I see next to posts?
+          p
+            | The number next to posts and comments indicate “upvotes” these upvotes are there to indicate the quality of a post or question. A bigger number indicates that more people upvoted these comments, thus also indicating how good the question is, or how well the answer to the question is. To upvote the comment / post yourself simply click the arrow next to the number. If you see a negative number this indicates that the question was of poor quality, or the answer was unrelated / unhelpful. More upvoted posts will be shown closer to the top of the page, to allow for greater visibility.
+          br
+        div
+          h4.question-colour What are the buttons below comments used for?
+          p
+            | The buttons bellow posts and comments are used exactly as their labels suggest.
+            | Reply allows a user to respond to a comment with their own question.
+            | Report allows a user to report the question if the post / comment is  hurtful / condescending or violating.
+            | Save allows a user to save a post for later. This allows for easy access to the question at a later time.
+            | Edit – this only appears to peoples own comments or posts. This allows them to edit a post or comment after they have posted them; to either clear up their question or fix grammatical errors.
+          br
+        script(type='text/javascript').
+          function contains(text_one, text_two){
+          if(text_one.indexOf(text_two) != -1)
+          return true;
+          }
+          $("#searchText").keyup(function(){
+          var searchText = $("#searchText").val().toLowerCase()
+          $("h4").each(function(){
+          if(!contains($(this).text().toLowerCase(), searchText))
+          $(this).closest("div").hide()
+          else
+          $(this).closest("div").show()
+          })
+          })

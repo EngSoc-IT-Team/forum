@@ -13,9 +13,9 @@ body {
 
 a,
 .dropdown-item,
-#home-page .main-search h1,
+.main-search h1,
 .dropdown-toggle::after,
-#home-page #options {
+#options {
   color: #FF9200;
 }
 
@@ -165,11 +165,11 @@ a:focus {
 
 /* Home Page */
 
-#home-page .row.featured-content {
+.row.featured-content {
   padding-bottom: 250px;
 }
 
-#home-page .modal .modal-header .close {
+.modal .modal-header .close {
   position: absolute;
   top: 15px;
   right: 15px;

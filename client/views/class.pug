@@ -1,0 +1,45 @@
+extends page
+
+block content 
+  .main-content
+    // Class
+    #classHead
+    // Modal
+    #submitReview.modal.fade(tabindex='-1', role='dialog', aria-labelledby='exampleModalLabel', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5#exampleModalLabel.modal-title Review Course
+            button.close(type='button', data-dismiss='modal', aria-label='Close')
+              span(aria-hidden='true') ×
+          .modal-body
+            .star-ratings
+              span.star
+                img.svg(src='../assets/star.svg')
+              span.star
+                img.svg(src='../assets/star.svg')
+              span.star
+                img.svg(src='../assets/star.svg')
+              span.star
+                img.svg(src='../assets/star.svg')
+              span.star
+                img.svg(src='../assets/star.svg')
+            .form-group
+              label.form-control-label(for='message-text') Review:
+              textarea#message-text(name='editor1')
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-dismiss='modal') Close
+            button.btn.button(type='button', data-dismiss='modal', onclick='rate(this)') Submit
+    br
+    // Student Ratings
+    .comment-list.media
+      #reviews.info-block.comment-block.media.row
+        .col-sm-12
+          h2.title Reviews
+        br
+        // Rating
+        // /Rating
+      #foot.centered.media
+        hr
+        a#getMore(href='#', onclick='getMore()') v See More v
+    script(src='https://cdn.ckeditor.com/4.6.2/basic/ckeditor.js')

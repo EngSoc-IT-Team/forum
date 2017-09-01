@@ -174,9 +174,9 @@ exports.DBRow = function(table) {
 	 ** TODO: Implement three argument addQuery that is more specific (i.e. not queries, >=, <= queries)
 	**/
 	this.addQuery = function(property, value) { // with three arguments it will be interpreted as operator (OR, AND) property, value
-		if (arguments.length == 2)
+		if (arguments.length === 2)
 			currentRow[property] = value; 
-		else if (arguments.length == 3) {
+		else if (arguments.length === 3) {
 			currentRow[property] = {'operator': arguments[1], 'value': arguments[2]};
 		}
 		else
@@ -189,10 +189,10 @@ exports.DBRow = function(table) {
 	 ** No return values
 	**/
 	this.orderBy = function(field, ascOrDesc) { 
-		if (!(ascOrDesc == lit.ASC || ascOrDesc == lit.asc || ascOrDesc == lit.DESC || ascOrDesc == lit.desc || ascOrDesc == undefined))
+		if (!(ascOrDesc === lit.ASC || ascOrDesc === lit.asc || ascOrDesc === lit.DESC || ascOrDesc === lit.desc || ascOrDesc === undefined))
 			return log.error("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
-		if (ascOrDesc == undefined)
+		if (ascOrDesc === undefined)
 			ascOrDesc = lit.ASC;
 		
 		querySort = qb.escapeOrderBy(table, field, ascOrDesc);
@@ -215,7 +215,7 @@ exports.DBRow = function(table) {
 	 ** and your row will not get inserted
 	**/
 	this.setValue = function(property, value) {
-		if (property == lit.FIELD_ID)
+		if (property === lit.FIELD_ID)
 			log.warn("Once a row's ID has been set it SHOULD NOT be reset. Resetting ID for an update can cause query failures"); //will be removed eventually
 
 		currentRow[property] = value;
@@ -249,7 +249,7 @@ exports.DBRow = function(table) {
 	**/
 	this.next = function() { // changes to the next row returned from the database 
 		currentIndex++;
-		if (rows[currentIndex] != undefined){
+		if (rows[currentIndex] !== undefined){
 			currentRow = rows[currentIndex];
 			return true;
 		}

@@ -10,7 +10,7 @@
 var log = require('../log');
 
 const dependencies = ['mysql', 'express', 'path', 'fs', 'cookie-parser', 'body-parser', 'nodemailer',
-	'nodemailer-smtp-transport', 'algorithmia', 'natural'];
+	'nodemailer-smtp-transport', 'algorithmia', 'natural', 'pug'];
 
 /**
  * Checks to make sure all the dependencies in the dependencies array exist in the execution environment

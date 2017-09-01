@@ -125,7 +125,7 @@ exports.escapeOrderBy = function(table, field, ascOrDesc) {
     if (!escaper.isValidField(table, field))
 		return undefined;
 
-    if (ascOrDesc != asc && ascOrDesc != asc.toUpperCase() && ascOrDesc != desc && ascOrDesc != desc.toUpperCase())
+    if (ascOrDesc !== asc && ascOrDesc !== asc.toUpperCase() && ascOrDesc !== desc && ascOrDesc !== desc.toUpperCase())
     	return undefined;
 
 	return "ORDER BY " + field + " " + ascOrDesc;
@@ -177,7 +177,7 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 			if (!escaper.isValidField(table, prop))
 				return log.warn('An invalid field "' + prop + '" for the table "' + table + '" was entered');
 
-			if (!allowSettingId && prop == 'id') // skip field if setting the ID is not allowed
+			if (!allowSettingId && prop === 'id') // skip field if setting the ID is not allowed
 				continue;
 
 			fields += prop;
@@ -204,10 +204,10 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 			if (!escaper.isValidField(table, prop))
 				return log.warn('An invalid field "' + prop + '" for the table "' + table + '" was entered');
 
-			if (!allowSettingId && prop == 'id') 
+			if (!allowSettingId && prop === 'id')
 				continue;
 			
-			if (typeof obj[prop] == 'object' && obj[prop] != null && obj[prop][lit.OPERATOR])
+			if (typeof obj[prop] === 'object' && obj[prop] !== null && obj[prop][lit.OPERATOR])
 				dbObjectString += prop + " " + checkOperator(obj[prop][lit.OPERATOR]) + " " + resolveObjectType(obj[prop][lit.VALUE]);
 			else
 				dbObjectString += prop + "=" + resolveObjectType(obj[prop]);
@@ -241,26 +241,26 @@ function resolveObjectType(resolveThis) {
     if (resolveThis instanceof Date)
         return mysql.escape(resolveThis);
 
-	if (objectType == lit.NUMBER)
+	if (objectType === lit.NUMBER)
 		return resolveThis.toString();
 
 	if (!isNaN(resolveThis))
 		return resolveThis;
 
-	if (objectType == lit.BOOLEAN || resolveThis === lit.TRUE || resolveThis === lit.FALSE) {
-		if (resolveThis === true || resolveThis == lit.TRUE)
+	if (objectType === lit.BOOLEAN || resolveThis === lit.TRUE || resolveThis === lit.FALSE) {
+		if (resolveThis === true || resolveThis === lit.TRUE)
 			return lit.ONE;
 		else
 			return lit.ZERO;
 	}
 
-	if (objectType == lit.STRING)
+	if (objectType === lit.STRING)
 		return mysql.escape(resolveThis);
 
-	if (objectType == lit.UNDEFINED)
+	if (objectType === lit.UNDEFINED)
 		return null;
 
-    if (objectType == lit.SYMBOL || objectType == lit.FUNCTION || objectType == lit.OBJECT)
+    if (objectType === lit.SYMBOL || objectType === lit.FUNCTION || objectType === lit.OBJECT)
         return log.warn("Objects with type '" + objectType + "' are not currently implemented, please pass a number, boolean or string");
 }
 
@@ -274,7 +274,7 @@ function checkOperator(op) {
 	if (allowedOperators.includes(op.toLowerCase()))
 		return op.toUpperCase();
 	else {
-		if (op.toLowerCase() == lit.IN || op.toLowerCase() == lit.BETWEEN)
+		if (op.toLowerCase() === lit.IN || op.toLowerCase() === lit.BETWEEN)
 			log.warn('The operator "' + op + '" has not yet been implemented... \n Using "=" instead.');
 		else
 			log.warn('An unacceptable operator was passed into the query, replacing with the equals operator');

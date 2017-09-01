@@ -28,9 +28,13 @@ server.use(bp.json());
 
 var isInProduction = (PM.getConfigProperty(lit.PRODUCTION) === true);
 
+// Set the templating engine to use Pug
+server.set('views', '../client/views');
+server.set('view engine', 'pug');
+
 /* GET Requests
 **
-** These correspond to the urls you type into the browser and define the actions to be 
+** These correspond to the urls you type into the browser and define the actions to be
 ** taken when something like http://localhost:8080/***** is typed in
 ** For instance typing http://localhost:8080 in will correspond to the server.get('/', ...)
 ** call, http://localhost:8080/search corresponds to the server.get('/search', ...) call etc
@@ -40,7 +44,11 @@ server.get(lit.ROOT_ROUTE, function(request, response) { // default link, delive
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE);
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/index.html'));
+    response.render('index',{
+        title: 'Home',
+        scripts: ["index.js"],
+        nav: "menuOnly"
+    });
 });
 
 server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, queried by id
@@ -48,9 +56,16 @@ server.get(lit.QUESTION_ROUTE, function(request, response) { // question page, q
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
 	validator.validateItemExistence(request).then(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/question.html'));
+        response.render('question', {
+            title: 'Question',
+            scripts: ['templating.js', 'question.js', 'pulse.js']
+        });
 	}).catch(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+        response.render('notFound', {
+            title: 'Not Found',
+            scripts: ['notFound.js'],
+            nav: "search"
+        });
 	});
 });
 
@@ -58,21 +73,32 @@ server.get(lit.ABOUT_ROUTE, function(request, response) { //about page
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/about.html'));
+	response.render('about', {
+        title: 'About',
+        scripts: ['pulse.js'],
+        nav: "search"
+    });
 });
 
 server.get(lit.NEW_ROUTE, function(request, response) { // place where new things can be added
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
-
-	response.sendFile(path.join(__dirname, '..', 'client/html/new.html'));
+	response.render('new', {
+        title: 'New Entry',
+        scripts: ['new.js', 'pulse.js'],
+        nav: "menuOnly"
+    });
 });
 
 server.get(lit.LIST_ROUTE, function(request, response) { //return the a default most recent list of questions
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/list.html'));
+	response.render('list', {
+        title: 'Questions',
+        scripts: ['pulse.js', 'templating.js', 'list.js'],
+        nav: "search"
+    });
 });
 
 server.get(lit.PROFILE_ROUTE, function(request, response) { //user home page
@@ -81,31 +107,48 @@ server.get(lit.PROFILE_ROUTE, function(request, response) { //user home page
 
 	if (!compare.isEmpty(request.query)) {
 		validator.validateUser(request).then(function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
-
+			response.render('profile', {
+                title: 'Profile',
+                stylesheets: ['profile.css'],
+                scripts: ['templating.js', 'profile.js', 'pulse.js'],
+                nav: "search"
+            });
 		}, function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
-
+		    response.render('notFound', {
+                title: 'Not Found',
+                scripts: ['notFound.js'],
+                nav: "search"
+		    });
 		});
 	}
 	else {
-		response.sendFile(path.join(__dirname, '..', 'client/html/profile.html'));
+        response.render('profile', {
+            title: 'Profile',
+            stylesheets: ['profile.css'],
+            scripts: ['templating.js', 'profile.js', 'pulse.js'],
+            nav: "search"
+        })
 	}
 });
 
 server.get(lit.LOGIN_ROUTE, function(request, response) {
 	if (compare.isEmpty(request.signedCookies))
-		response.sendFile(path.join(__dirname, '..', 'client/html/login.html'));
+        response.render('login', {
+            title: 'Login',
+            scripts: ['login.js']
+        });
 	else
 		response.redirect(request.query.redirect ? request.query.redirect : lit.ROOT_ROUTE);
 });
 
 server.get(lit.GUIDELINES_ROUTE, function(request, response) { // mock login page
-	if (compare.isEmpty(request.signedCookies)) {
+	if (compare.isEmpty(request.signedCookies))
         response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
-	}
 	else
-		response.sendFile(path.join(__dirname, '..', 'client/html/guidelines.html'));
+		response.render('guidelines', {
+            title: 'Guidelines',
+            nav: "search"
+        });
 });
 
 server.get(lit.DEV_ROUTE, function(request, response) {
@@ -113,11 +156,17 @@ server.get(lit.DEV_ROUTE, function(request, response) {
 		response.redirect(lit.LOGIN_ROUTE);
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/dev.html'));
+			response.render('dev', {
+                title: 'Development',
+                nav: "search"
+            });
 		}, function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+            response.render('notFound', {
+                title: 'Not Found',
+                scripts: ['notFound.js'],
+                nav: "search"
+            })
 		});
-		
 	}
 });
 
@@ -126,54 +175,89 @@ server.get(lit.EVAL_ROUTE, function(request, response) { //allows evaluation of 
 		response.redirect(lit.LOGIN_ROUTE);
 	else {
 		validator.hasRole(request.signedCookies.usercookie.userID, lit.ADMIN).then(function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/eval.html'));
-		}, function() {
-			response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+			response.render('eval', {
+                title: 'Evaluate',
+                nav: "search"
+            });
+        }, function() {
+              response.render('notFound', {
+                  title: 'Not Found',
+                  scripts: ['notFound.js'],
+                  nav: "search"
+              });
 		});
 	}
 });
 
-server.get(lit.HELP_ROUTE, function(request, response) { // user help page
+server.get(lit.HELP_ROUTE, function(request, response) {
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
-	response.sendFile(path.join(__dirname, '..', 'client/html/help.html'));
+	response.render('help', {
+        title: 'Help',
+        scripts: ['pulse.js'],
+        nav: "search"
+    });
 });
 
-server.get(lit.CLASS_ROUTE, function(request, response) { // user help page
+server.get(lit.CLASS_ROUTE, function(request, response) {
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
     validator.validateItemExistence(request).then(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/class.html'));
+        response.render('class', {
+            title: 'Class',
+            scripts: ['templating.js', 'class.js', 'pulse.js'],
+            nav: "search"
+        });
     }).catch(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+        response.render('notFound', {
+            title: 'Not Found',
+            scripts: ['notFound.js'],
+            nav: "search"
+        });
     });
 });
 
-server.get(lit.LINK_ROUTE, function(request, response) { // user help page
+server.get(lit.LINK_ROUTE, function(request, response) {
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
     validator.validateItemExistence(request).then(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/link.html'));
+        response.render('link', {
+            title: 'Link',
+            scripts: ['templating.js', 'link.js', 'pulse.js'],
+            nav: "search"
+        });
     }).catch(function() {
-        response.sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+        response.render('notFound', {
+            title: 'Not Found',
+            scripts: ['notFound.js'],
+            nav: "search"
+        });
     });
 });
 
-server.get(lit.SETTINGS_ROUTE, function(request, response) { // user help page
+server.get(lit.SETTINGS_ROUTE, function(request, response) {
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
-    response.sendFile(path.join(__dirname, '..', 'client/html/settings.html'));
+    response.render('settings', {
+        title: 'Settings',
+        scripts: ['pulse.js', 'templating.js', 'settings.js'],
+        nav: "search"
+    });
 });
 
-server.get(lit.ADVANCED_SEARCH_ROUTE, function(request, response) { // user help page
+server.get(lit.ADVANCED_SEARCH_ROUTE, function(request, response) {
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
 
-    response.sendFile(path.join(__dirname, '..', 'client/html/advanced.html'));
+    response.render('advanced', {
+        title: 'Search',
+        scripts: ['pulse.js', 'advanced.js'],
+        nav: "search"
+    });
 });
 
 /* POST Requests
@@ -283,11 +367,20 @@ server.post(lit.INFO_ROUTE, function(request, response) {
 
 server.use(function (err, req, res, next) { // catches URL errors
 	log.error(err.stack);
-	res.status(500).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+	res.statusCode = 500;
+    res.render('notFound', {
+        title: 'Not Found',
+        scripts: ['notFound.js'],
+        nav: "search"
+    });
 });
 
 server.use(function (req, res, next) { // returns 404s instead of cannot GET
-	res.status(404).sendFile(path.join(__dirname, '..', 'client/html/notFound.html'));
+    res.render('notFound', {
+        title: 'Not Found',
+        scripts: ['notFound.js'],
+        nav: "search"
+    });
 });
 
 

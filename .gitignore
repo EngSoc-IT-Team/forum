@@ -1,16 +1,7 @@
 server/config/database.json
 
-.idea/workspace.xml
+.idea/*
 
-.idea/forum.iml
+node_modules
 
-.idea/modules.xml
-
-.idea/vcs.xml
-
-.idea/jsLibraryMappings.xml
-.idea/misc.xml
-
-node_modules 
-
-
+.DS_Store
