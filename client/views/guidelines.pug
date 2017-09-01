@@ -2,28 +2,28 @@ extends page
 
 block content 
   // Body
-  br
-  br
-  .container-fluid.description.row(style='background-color: white; color: black')
-    h2 Hey! Thanks for visiting the Engineering Forum!
-    hr.separator
-    h4
-      | Before you go wild asking and answering questions we'd like to share a few guidelines with you:
-    ol
-      li
-        u The Engineering Society does not condone cheating or academic dishonesty.
-        |  You are more than welcome to share or ask about examples similar to a problem, or to answer using old homework solutions, etc. But you may not share information that could implicate you in a case of academic dishonesty. Although your username is random, we know who you are and academic misconduct will be reported.
-      li
-        | You will also be held to the standards of Queen's University and its code of conduct while using this site. Abuse can and will be reported to the
-      li
-        | Please keep posts appropriate. Any inappropriate or offensive content will be removed and reported.
-      li
-        | Repeated misuse of the Engineering Forum will result in your removal from the site, and you will be banned from further use of the site.
-      li
-        | These are just the key points, the full terms of service can be seen 
-        a(href='#') here
-        |  and by clicking below you agree to all of them whether you've read them or not.
-    p
-      | Do you agree to the above terms of service? 
-      input(type='checkbox', name='agree')
-  // end body
+  .main-content
+    .media
+      .info-block.description.media(style='background-color: white; color: black')
+      h2 Hey! Thanks for visiting the Engineering Forum!
+      hr.separator
+      h4
+        | Before you go wild asking and answering questions we'd like to share a few guidelines with you:
+      ol
+        li
+          u The Engineering Society does not condone cheating or academic dishonesty.
+          |  You are more than welcome to share or ask about examples similar to a problem, or to answer using old homework solutions, etc. But you may not share information that could implicate you in a case of academic dishonesty. Although your username is random, we know who you are and academic misconduct will be reported.
+        li
+          | You will also be held to the standards of Queen's University and its code of conduct while using this site. Abuse can and will be reported to the
+        li
+          | Please keep posts appropriate. Any inappropriate or offensive content will be removed and reported.
+        li
+          | Repeated misuse of the Engineering Forum will result in your removal from the site, and you will be banned from further use of the site.
+        li
+          | These are just the key points, the full terms of service can be seen
+          a(href='#') here
+          |  and by clicking below you agree to all of them whether you've read them or not.
+      p
+        | Do you agree to the above terms of service?
+        input(type='checkbox', name='agree', style="margin-left:10px")
+    // end body

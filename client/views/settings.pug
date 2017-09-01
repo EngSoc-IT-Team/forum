@@ -2,32 +2,32 @@ extends page
 
 block content 
   #list-page.main-content
-  .info-block.row.centered
-    p
-      | There will be some neat text here regarding the settings a user has selested for the forum
-    br
-    h2 User Control Panel
-    hr
-    .col-sm-6
-      label(for='fancy') Fancy
+    .info-block.row.centered
+      p
+        | There will be some neat text here regarding the settings a user has selested for the forum
       br
-      label(for='notifications') Notification Toggle
-      br
-      label(for='searchable') Searchable
-      br
-      label(for='neat') Neat-o
-      br
-    .col-xs-6
-      input#notifications(type='checkbox', onkeydown='toggle(this)', onclick='toggle(this)')
-      br
-      br
-      input#searchable(type='checkbox', onkeydown='toggle(this)', onclick='toggle(this)')
-      br
-      br
-      input#neat(type='checkbox', onkeydown='toggle(this)', onclick='toggle(this)')
-      br
-      br
-      input#fancy(type='checkbox', onkeydown='toggle(this)', onclick='toggle(this)')
-      br
-      br
-    button#saveChanges.button.btn-sm.btn(type='button', onclick='saveSettingsChanges()', disabled='') Save Changes
+      h2 User Control Panel
+      hr
+      .col-sm-6
+        label(for='fancy') Fancy
+        br
+        label(for='notifications') Notification Toggle
+        br
+        label(for='searchable') Searchable
+        br
+        label(for='neat') Neat-o
+        br
+      .col-xs-6
+        input#notifications(type='checkbox', onkeydown='toggle(this)', onclick='toggle(this)')
+        br
+        br
+        input#searchable(type='checkbox', onkeydown='toggle(this)', onclick='toggle(this)')
+        br
+        br
+        input#neat(type='checkbox', onkeydown='toggle(this)', onclick='toggle(this)')
+        br
+        br
+        input#fancy(type='checkbox', onkeydown='toggle(this)', onclick='toggle(this)')
+        br
+        br
+      button#saveChanges.button.btn-sm.btn(type='button', onclick='saveSettingsChanges()', disabled='') Save Changes

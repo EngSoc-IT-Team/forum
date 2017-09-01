@@ -2,20 +2,20 @@ extends page
 
 block content 
   .main-content
-  .media
-    .info-block.description.media
-      h2 Code to Execute
-      p
-        | Code must be valid strict-mode javascript. All database queries are permanent. To log something, use log(str) instead of console.log(str).
-      hr
-      b
-        #code(contenteditable='true', style='resize: both; min-width: 50%; max-width: 100%; min-height: 200px; border: 1px solid #ccc;')
-        br
-        input(type='button', name='submit', value='Run', onclick='execute()')
-        br
+    .media
+      .info-block.description.media
+        h2 Code to Execute
+        p
+          | Code must be valid strict-mode javascript. All database queries are permanent. To log something, use log(str) instead of console.log(str).
         hr
-        h4 Result
-        textarea#result(style='font-weight:bold; resize: both; min-width: 50%; max-width: 100%;', disabled='')
+        b
+          #code(contenteditable='true', style='resize: both; min-width: 50%; max-width: 100%; min-height: 200px; border: 1px solid #ccc;')
+          br
+          input(type='button', name='submit', value='Run', onclick='execute()')
+          br
+          hr
+          h4 Result
+          textarea#result(style='font-weight:bold; resize: both; min-width: 50%; max-width: 100%;', disabled='')
   script(type='text/javascript').
     function execute() {
     $.ajax({
