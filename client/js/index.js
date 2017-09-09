@@ -23,6 +23,6 @@ function showOptions() {
 /** TODO: REMOVE THIS BEFORE THE DEMO
  * Shows the how to use the forum information modal
  */
-$(window).ready(function(){
-    $('#myModal').modal('show');
+$(window).ready(function() {
+    triggerModal('quickHelp');
 });

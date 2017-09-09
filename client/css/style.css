@@ -705,3 +705,10 @@ input[type=checkbox]:after {
   cursor: pointer;
   box-sizing: border-box;
 }
+
+textarea.modal-plaintext {
+  border-radius: 5px;
+  border-width: thin;
+  width: 100%;
+  height: 80%;
+}

@@ -82,7 +82,6 @@ function onSuccess(data) {
     fillInPostInfo(data.items);
     addTags(data.tags);
     svgConverter();
-    CKEDITOR.replace('report-text');
 }
 
 /** Animates the voting bar on load of the page to show the relative number of upvotes and downvotes of a user

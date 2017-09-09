@@ -30,7 +30,8 @@ html(lang='en')
         include includes/navbarWithMenu
       else
         include includes/navbarWithMenu
-      block content 
+      block content
+      include modals/feedbackModal
     footer
       .wrap.clearfix
         .menu-items
@@ -40,7 +41,7 @@ html(lang='en')
             p Engineering Society Website
           a(href='/help')
             p Help
-          a(href='/feedback')
+          a(onclick='triggerModal("feedback");', href="javascript:void(0)")
             p Feedback
         .footer-logo
           a(href='https://engsoc.queensu.ca/society/itsupport/', target='_blank')

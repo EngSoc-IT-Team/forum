@@ -1,0 +1,21 @@
+#feedback.modal.fade(role='dialog')
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.close(type='button', data-dismiss='modal') ×
+                h4.modal-title What's Up?
+            .modal-body
+                .centered
+                    .btn-group(role='group', aria-label='Basic example')
+                        button#love.btn.btn-secondary.active(type='button', data-toggle='tab', onclick='toggleFeedbackSelection("love")') ♥ Love ♥
+                        button#criticism.btn.btn-secondary(type='button', data-toggle='tab', onclick='toggleFeedbackSelection("criticism")') ☠ Criticism ☠
+                        button#suggestions.btn.btn-secondary(type='button', data-toggle='tab', onclick='toggleFeedbackSelection("suggestions")') Suggestions
+                hr
+                div
+                    .form-group
+                        label.form-control-label(for='report-text') What's on your mind?
+                        br
+                        textarea.modal-plaintext
+            .modal-footer
+                button.btn.btn-sm.button(type='button', data-dismiss='modal', onclick='report(this)') Let Us Know!
+                button.btn.btn-sm.button(type='button', data-dismiss='modal') Cancel

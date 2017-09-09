@@ -382,7 +382,7 @@ function finish(callback, err, needCancelPulse) {
     executeIfObjectIsFunction(callback);
 }
 
-/** Helper function to make sure that what is passed is a function and not something else
+/** Helper function to make sure that what is passed as an argument is a function and not something else
  *
  * @param func: Object to test
  */
@@ -391,6 +391,13 @@ function executeIfObjectIsFunction(func) {
         func();
 }
 
+/** Shortcut method to trigger a modal
+ *
+ * @param modalID
+ */
+function triggerModal(modalID) {
+    $('#' + modalID).modal('show');
+}
 
 /**
  * Makes our lovely svg elements function and appear properly
@@ -400,3 +407,10 @@ jQuery(document).ready(function() {
     svgConverter();
     appendOnkeydown();
 });
+
+var currentButton = "#love";
+function toggleFeedbackSelection(button) {
+    $(currentButton).removeClass('active');
+    currentButton = "#" + button;
+    $(currentButton).addClass('active');
+}
