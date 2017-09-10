@@ -2,21 +2,31 @@
 	"production": {
 		"value": false,
 		"readable": true,
-		"writable": false
+		"writable": false,
+		"_description": "Whether or not the forum is in a production environment or not"
 	},
 	"databaseSetupNeeded": {
 		"value": true,
 		"readable": true,
-		"writable": false
+		"writable": false,
+		"_description": "Whether or not a database needs to be created for development"
 	},
 	"loadMockData": {
 		"value": true,
 		"readable": true,
-		"writable": false
+		"writable": false,
+		"_description": "Whether or not mock data should be loaded into the database"
 	},
 	"port": {
 		"value": 8080,
 		"readable": true,
-		"writable": false
+		"writable": false,
+		"_description": "The port the forum should run on (i.e. http://localhost:PORT_NUMBER)"
+	},
+	"SQL.Trace": {
+		"value": true,
+		"readable": true,
+		"writable": false,
+		"_description": "Whether or not to log all SQL transations made by the server"
 	}
 }
