@@ -15,7 +15,7 @@ var lit = require('./../Literals.js');
 var pm = require('./../PropertyManager');
 
 const databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/database.json'), 'utf8'));
-const shouldLogSQL = pm.getConfigProperty('SQL.trace');
+const shouldLogSQL = pm.getConfigProperty('SQL.Trace');
 
 exports.DatabaseManager = function() {
 	// the information needed to make the connection to the mySQL database
@@ -46,7 +46,7 @@ exports.DatabaseManager = function() {
 					}
 
 					if (shouldLogSQL)
-						log.log('SQL: ' + queryString);
+						log.log('SQL.Trace: ' + queryString);
 
 					connection.release();
 					resolve(rows);

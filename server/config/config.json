@@ -24,7 +24,7 @@
 		"_description": "The port the forum should run on (i.e. http://localhost:PORT_NUMBER)"
 	},
 	"SQL.Trace": {
-		"value": true,
+		"value": false,
 		"readable": true,
 		"writable": false,
 		"_description": "Whether or not to log all SQL transations made by the server"
