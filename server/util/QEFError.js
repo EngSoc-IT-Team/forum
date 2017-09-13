@@ -40,7 +40,8 @@ module.exports = function(err) {
     }
 
     function _stack(isInProduction) {
-
+        var err = new Error();
+        return err.stack;
     }
 
     log.error("** SYSTEM SEVERE ** " + this.message);

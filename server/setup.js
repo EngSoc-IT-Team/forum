@@ -26,9 +26,21 @@ setup(); // let's set everything up
 function setup() {
 	dependencies.checkDependencies();
 
-	if (PM.getConfigProperty(lit.DATABASE_SETUP_NEEDED))
-		dbsetup.setupDatabase(); // setup all default tables
+    dbsetup.checkIfDataBaseExistsAndCreateIfNecessary().then(function() {
+		if (PM.getConfigProperty(lit.DATABASE_SETUP_NEEDED))
+        	return dbsetup.setupDatabase(); // setup all default tables
 
-	if (PM.getConfigProperty(lit.LOAD_MOCK_DATA))
-		setTimeout(function() {dbsetup.loadDemoData()}, 1000); //wait for database to get set up before we try to insert mock data
+	}).then(function() {
+		// only load demo data if the database schema has just been set up
+		if (PM.getConfigProperty(lit.LOAD_MOCK_DATA) && PM.getConfigProperty(lit.DATABASE_SETUP_NEEDED))
+			return dbsetup.loadDemoData();
+
+	}).catch(function() {
+		log.error('THERE WAS AN ERROR DURING DATABASE SETUP');
+		log.error('PLEASE SEE THE ERROR LOGS FOR MORE INFORMATION');
+	});
 }
+
+process.on('unhandledRejection', function(e) {
+	console.log(e);
+});

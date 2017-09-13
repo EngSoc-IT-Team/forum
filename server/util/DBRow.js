@@ -8,12 +8,10 @@
 "use strict";
 
 var log = require('./log');
-var db = require('./databaseUtil/DatabaseManager');
+var dbm = require('./databaseUtil/DatabaseManager');
 var qb = require('./databaseUtil/QueryBuilder');
 var generator = require('./Generator');
 var lit = require('./Literals.js');
-
-var dbm = new db.DatabaseManager();
 
 
 /** DBRow

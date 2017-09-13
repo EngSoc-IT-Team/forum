@@ -17,21 +17,21 @@ var pm = require('./../PropertyManager');
 const databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/database.json'), 'utf8'));
 const shouldLogSQL = pm.getConfigProperty('SQL.Trace');
 
-exports.DatabaseManager = function() {
-	// the information needed to make the connection to the mySQL database
+function DatabaseManager() {
+	// the information needed to make the connection to mysql, DOES NOT by default specify a database, just credentials to sign in
 	var pool = mysql.createPool({
 		host: databaseInformation[lit.HOST],
 		user: databaseInformation[lit.USER],
 		password: databaseInformation[lit.SECRET],
-		database: databaseInformation[lit.DATABASE],
 		connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
 	});
 
     /** Queries the database by opening a connection and querying and then closes the connection and returns the response.
 	 *
      * @param queryString: The sanitized query string from the query builder to be passed to the database
+	 * @param ignoreFailure: whether or not to ignore query failures
      */
-	this.query = function(queryString) {
+	this.query = function(queryString, ignoreFailure) {
 		return new Promise(function(resolve, reject){
 			pool.getConnection(function(err, connection) {
 				if (err) {
@@ -40,18 +40,37 @@ exports.DatabaseManager = function() {
 				}
 
 				connection.query(queryString, function(err, rows) {
-					if (err) {
+					if (err && !ignoreFailure) {
 						log.error(err.message);
 						return reject(err);
 					}
 
-					if (shouldLogSQL)
-						log.log('SQL.Trace: ' + queryString);
+					logSQLIfRequired(queryString);
 
 					connection.release();
 					resolve(rows);
 				});
 			});
 		})
+	};
+
+	this.useDB = function(DBName) {
+		return new Promise(function(resolve) {
+			pool = mysql.createPool({
+				host: databaseInformation[lit.HOST],
+				user: databaseInformation[lit.USER],
+				password: databaseInformation[lit.SECRET],
+				database: DBName,
+				connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
+			});
+			resolve();
+		});
+	};
+
+	function logSQLIfRequired(str) {
+        if (shouldLogSQL)
+            log.log('SQL.Trace: ' + str);
 	}
-};
+}
+
+module.exports = new DatabaseManager();
