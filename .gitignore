@@ -1,6 +1,15 @@
 server/config/database.json
 
-.idea/*
+.idea/workspace.xml
+
+.idea/forum.iml
+
+.idea/modules.xml
+
+.idea/vcs.xml
+
+.idea/jsLibraryMappings.xml
+.idea/misc.xml
 
 node_modules
 
