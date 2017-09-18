@@ -108,7 +108,7 @@
 	"13": {
 		"table": "comment",
 		"id": "kotkw12crnsvbldigyobt315r4e6tyj5",
-		"parentPost": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
+		"parent": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"content": "I've never taken this class but just wanted to say hey.",
 		"author": "CaptainUnicorn",
 		"upvotes": "1",
@@ -126,7 +126,7 @@
 	"15": {
 		"table": "comment",
 		"id": "3ntcfsbrqunk27yymvmtetdvkrg33es1",
-		"parentPost": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
+		"parent": "g6b1b87ump5tj0bslevbfbgqybu0ykgz",
 		"content": "I have taken this class, but have completely forgotten all useful information about it. My apologies for commenting.",
 		"author": "HotMuffin",
 		"upvotes": "1",
@@ -429,7 +429,7 @@
     "48": {
         "table": "comment",
         "id": "uetr3602jnpxf6s98xbngn7blt5y3052",
-        "parentPost": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
+        "parent": "68i8flx5lllcn0w2a3d8l1jkdqlr9m7x",
         "content": "If you go on the terminal and do rm -f . then you'll hack all the people.",
         "author": "CaptainUnicorn",
         "upvotes": "201",
@@ -440,7 +440,7 @@
     "49": {
         "table": "comment",
         "id": "tnxqkzn1ld4yeq9h8x0b6iiuheschp4r",
-        "parentPost": "6z85epnzcpyp7zq8118xq8jf29uycwct",
+        "parent": "6z85epnzcpyp7zq8118xq8jf29uycwct",
         "content": "A phasor contains some info and there are some complex numbers and stuff.",
         "author": "CaptainUnicorn",
         "upvotes": "4",
@@ -451,7 +451,7 @@
     "50": {
         "table": "comment",
         "id": "3at1dqkbksaqmx3fc5nna4vy6qijz4lo",
-        "parentPost": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
+        "parent": "eijfeg2ri2ixsn5qdypy0uhohb2hjyua",
         "content": "Yeah, everyone rides the curve.",
         "author": "CaptainUnicorn",
         "upvotes": "50",

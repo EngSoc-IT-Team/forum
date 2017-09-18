@@ -88,7 +88,7 @@
 				"type": "tinyint",
 				"default": "0"
 			},
-			"parentPost": {
+			"parent": {
 				"type": "uniqueidentifier",
 				"constraint": "NOT NULL"
 			},
