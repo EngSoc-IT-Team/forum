@@ -9,13 +9,13 @@
 		"value": true,
 		"readable": true,
 		"writable": false,
-		"_description": "Whether or not a database needs to be created for development"
+		"_description": "Whether or not a database needs to be created for development. Will not create a database if one already exists with the same name as specified in config.json"
 	},
 	"loadMockData": {
 		"value": true,
 		"readable": true,
 		"writable": false,
-		"_description": "Whether or not mock data should be loaded into the database"
+		"_description": "Whether or not mock data should be loaded into the database, will not occur if databaseSetupNeeded is false"
 	},
 	"port": {
 		"value": 8080,
