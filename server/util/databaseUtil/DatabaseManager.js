@@ -14,17 +14,28 @@ var log = require('./../log');
 var lit = require('./../Literals.js');
 var pm = require('./../PropertyManager');
 
-const databaseInformation = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'config/database.json'), 'utf8'));
+const databaseInformation = require('../../config/database.json');
+const config = require('../../config/config.json');
 const shouldLogSQL = pm.getConfigProperty('SQL.Trace');
 
 function DatabaseManager() {
 	// the information needed to make the connection to mysql, DOES NOT by default specify a database, just credentials to sign in
-	var pool = mysql.createPool({
-		host: databaseInformation[lit.HOST],
-		user: databaseInformation[lit.USER],
-		password: databaseInformation[lit.SECRET],
-		connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
-	});
+	var pool;
+	if (pm.getConfigProperty(lit.DATABASE_SETUP_NEEDED))
+		pool = mysql.createPool({
+			host: databaseInformation[lit.HOST],
+			user: databaseInformation[lit.USER],
+			password: databaseInformation[lit.SECRET],
+			connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
+		});
+	else
+        pool = mysql.createPool({
+            host: databaseInformation[lit.HOST],
+            user: databaseInformation[lit.USER],
+            password: databaseInformation[lit.SECRET],
+			database: databaseInformation[lit.DATABASE],
+            connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
+        });
 
     /** Queries the database by opening a connection and querying and then closes the connection and returns the response.
 	 *
