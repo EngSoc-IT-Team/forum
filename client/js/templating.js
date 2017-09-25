@@ -58,31 +58,6 @@ var level2CommentTemplate = '<div class="info-block comment-block media" id="{6}
  *
  * Used on the profile and list pages
  */
-var postTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-hastype="post">\
-                        <div class="ratings">\
-                            <span class="thumbs-up pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
-                                <img src="../assets/thumbsUp.svg" class="svg" />\
-                            </span>\
-                            <span id="votes" class="{2}">{3}</span>\
-                            <span class="thumbs-down pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">\
-                                <img src="../assets/thumbsDown.svg" class="svg" />\
-                            </span>\
-                        </div>\
-                        <h2 class="title"><a href="/question?id={0}">{1}</a></h2>\
-                        <p class="date-and-user">\
-                            <span class="positive date">[post]</span>\
-                            <span class="date">{4} by <a href="/profile?username={5}">{6}</a></span>\
-                        </p>\
-                        <p class="description">{7}</p>\
-                        <div class="action-links">\
-                            <a href="/question?id={8}">View</a>\
-                            <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
-                            <a href="javascript: void 0;" onclick="save(this)">Save</a>\
-                            <a href="javascript: void 0;" onclick="report(this)">Report</a>\
-                        </div>\
-                        {9}\
-                        <hr>\
-                     </div>';
 
 var linkTemplate = '<div class="col-sm-12" id="{10}" data-hasvoted="{11}" data-hastype="link">\
                         <div class="ratings">\
@@ -285,8 +260,33 @@ function fillPostTemplate(post) {
     var summary = getSummary(post.summary);
     var date = getDateString(post.date);
 
-    return fillTemplate(postTemplate, post.id, post.title, polarity, post.votes, date, post.author,
-        post.author, summary, post.id, tags, post.id, post.voted);
+    return (
+      `<div class="col-sm-12" id="${post.id}" data-hasvoted="${post.voted}" data-hastype="post">
+          <div class="ratings">
+              <span class="thumbs-up pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">
+                  <img src="../assets/thumbsUp.svg" class="svg" />
+              </span>
+              <span id="votes" class="${polarity}">${post.votes}</span>
+              <span class="thumbs-down pointer" onclick="vote(this)" onkeypress="vote(this)" tabindex="0">
+                  <img src="../assets/thumbsDown.svg" class="svg" />
+              </span>
+          </div>
+          <h2 class="title"><a href="/question?id=${post.id}">${post.title}</a></h2>
+          <p class="date-and-user">
+              <span class="positive date">[post]</span>
+              <span class="date">${date} by <a href="/profile?username=${post.author}">${post.author}</a></span>
+          </p>
+          <p class="description">${summary}</p>
+          <div class="action-links">
+              <a href="/question?id=${post.id}">View</a>
+              <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>
+              <a href="javascript: void 0;" onclick="save(this)">Save</a>
+              <a href="javascript: void 0;" onclick="report(this)">Report</a>
+          </div>
+          ${tags}
+          <hr>
+       </div>`
+    );
 }
 
 /** Fills the link template for the list and profile pages
