@@ -28,7 +28,7 @@ exports.addComment = function (request) {
 
             var comment = new DBRow(lit.COMMENT_TABLE);
             comment.setValue(lit.FIELD_AUTHOR, u.getValue(lit.FIELD_USERNAME));
-            comment.setValue(lit.FIELD_PARENT_POST, request.body.parent);
+            comment.setValue(lit.FIELD_PARENT, request.body.parent);
             comment.setValue(lit.FIELD_PARENT_COMMENT, request.body.parentComment);
             comment.setValue(lit.FIELD_CONTENT, request.body.content);
             comment.setValue(lit.FIELD_COMMENT_LEVEL, request.body.level);
@@ -130,7 +130,7 @@ function getSubComments(comment, item, info, userID, commentInfo) {
     return new Promise(function(resolve, reject) {
         var subComments = new DBRow(lit.COMMENT_TABLE);
         subComments.addQuery(lit.FIELD_COMMENT_LEVEL, 1);
-        subComments.addQuery(lit.FIELD_PARENT_POST, item.getValue(lit.FIELD_ID));
+        subComments.addQuery(lit.FIELD_PARENT, item.getValue(lit.FIELD_ID));
         subComments.addQuery(lit.FIELD_PARENT_COMMENT, comment.getValue(lit.FIELD_ID));
         subComments.orderBy(lit.FIELD_NETVOTES, lit.DESC); //TODO: enable sorting by best or by new
         subComments.setLimit(10);

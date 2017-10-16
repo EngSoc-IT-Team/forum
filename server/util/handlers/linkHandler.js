@@ -24,7 +24,7 @@ exports.handle = function(request) {
                     getLinkInfo(link, info, vote);
                     var comments = new DBRow(lit.COMMENT_TABLE);
                     comments.addQuery(lit.FIELD_COMMENT_LEVEL, 0);
-                    comments.addQuery(lit.FIELD_PARENT_POST, link.getValue(lit.FIELD_ID));
+                    comments.addQuery(lit.FIELD_PARENT, link.getValue(lit.FIELD_ID));
                     comments.orderBy(lit.FIELD_NETVOTES, lit.DESC);
                     comments.setLimit(10);
                     comments.query().then(function() {

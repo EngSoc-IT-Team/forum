@@ -63,7 +63,7 @@ function PropertyManager() {
             return options[optionName].readable === true;
 
         return false;
-    }
+    };
 
     /**
      * Gets the description for a particular configuration property
@@ -77,7 +77,7 @@ function PropertyManager() {
         }
 
         return "No help available for the property '" + optionName + "'.";
-    }
+    };
 }
 
 //Export a single PM instance so that things stay in sync TODO: if multiple instances of the forum exist on different servers pointing at the same database the properties will NOT stay in sync, keep this in mind

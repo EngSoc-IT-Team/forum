@@ -106,6 +106,7 @@ const literals = {
     FIELD_TYPE: "type",
     FIELD_DUPLICATE: "duplicate",
     FIELD_GEN_TAGS: "generatedTags",
+    FIELD_PARENT: "parent",
 
     //fields for post table only
     POST_TABLE: "post",
@@ -115,7 +116,6 @@ const literals = {
     COMMENT_TABLE: "comment",
     FIELD_IS_SOLUTION: "isSolution",
     FIELD_COMMENT_LEVEL: "commentLevel",
-    FIELD_PARENT_POST: "parentPost",
     FIELD_PARENT_COMMENT: "parentComment",
 
     //fields for user table only
@@ -184,7 +184,6 @@ const literals = {
 
     //fields for rating table only
     RATING_TABLE: "rating",
-    FIELD_PARENT: "parent",
     FIELD_RATING: "rating",
 
     //fields for sweeper class

@@ -337,7 +337,7 @@ function getSubscribedContentID(contentID) {
             }
             //if parent of the content is a post, send back that post's ID
             //else it is a comment, so send back that comment's ID
-            (row.getValue(lit.FIELD_PARENT_POST) != lit.UNDEFINED) ? resolve(row.getValue(lit.FIELD_PARENT_POST)) :
+            (row.getValue(lit.FIELD_PARENT) !== lit.UNDEFINED) ? resolve(row.getValue(lit.FIELD_PARENT)) :
                 resolve(row.getValue(lit.FIELD_PARENT_COMMENT));
         }, function () {
             reject("No parent");

@@ -42,5 +42,5 @@ function setup() {
 }
 
 process.on('unhandledRejection', function(e) {
-	console.log(e);
+	log.error(e);
 });

@@ -131,7 +131,7 @@ exports.getCommentInfo = function(item, voteValue, hasVoted) {
         author: item.getValue(lit.FIELD_AUTHOR),
         content: item.getValue(lit.FIELD_CONTENT),
         netVotes: item.getValue(lit.FIELD_NETVOTES),
-        parent: item.getValue(lit.FIELD_PARENT_POST),
+        parent: item.getValue(lit.FIELD_PARENT),
         parentComment: item.getValue(lit.FIELD_PARENT_COMMENT),
         type: lit.COMMENT_TABLE,
         date: item.getValue(lit.FIELD_TIMESTAMP),

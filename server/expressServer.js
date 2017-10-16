@@ -14,6 +14,9 @@ var fs = require('fs');
 var lit = require('./util/Literals.js');
 var PM = require('./util/PropertyManager');
 
+// sets up the database if required
+require('./setup');
+
 const PORT = PM.getConfigProperty(lit.PORT);
 var server = express();
 

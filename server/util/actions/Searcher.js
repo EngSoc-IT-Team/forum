@@ -280,7 +280,7 @@ function getKeyTerms(input) {
                     reject(err);
                 })
         } catch (e) {
-            console.error(e);
+            log.error(e);
             reject('Could not connect to algoithmia! Search failure.')
         }
     });
