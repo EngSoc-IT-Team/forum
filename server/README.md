@@ -48,8 +48,8 @@ so that you have all the dependencies we need to get our server up and running
 		"readable": true,
 		"writable": false,
 		"_description": "Whether or not a database needs to be created for development. Will not create a database if one already exists with the same name as specified in config.json"
-	}
-  ```)
+	}```
+)
 7. Return to the server directory and run the command `node expressServer.js`
 8. Note that a sample user with netid `anon` will be loaded into the database along with the username you requested
 9. If there are no errors in the terminal/shell, the server should now be up and running! Go to `localhost:8080` in your browser of choice
