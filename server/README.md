@@ -78,7 +78,7 @@ so that you have all the dependencies we need to get our server up and running
 6. MAKE SURE TO CHANGE THE `config.json` FILE BACK AS IN STEP 11 OF "Moving Forward - The javascript"
 
 ### Cross-platform way
-1. Open up MySQL Workbench
+1. Open up MySQL Workbench or Command Line Interface
 2. Navigate to the query script editor - to do this you open up a database connection
 2. Run `DROP DATABASE testing;` (click the lightning bolt to run the query)
 4. Change the `config.json` file as indicated in step 6 of "Moving Forward - The javascript"
