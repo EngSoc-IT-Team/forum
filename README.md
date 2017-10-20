@@ -4,7 +4,7 @@ The Engineering Society Forum is a pilot by the Engineering Society Software Dev
 
 ## Getting Started
 
-This project is built with Node.js, MySQL and several key node modules. The following section contains summary notes on how to quickly set up the development environment. For exhaustive instructions please see the  
+This project is built with Node.js, MySQL and several key node modules. The following section contains summary notes on how to quickly set up the development environment. For exhaustive instructions please see the server README.
 
 ### Dependencies
 
