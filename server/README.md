@@ -22,6 +22,18 @@
 5. In the same directory is the much nicer looking client, MySQL Workbench
 6. That's it! So much easier than on Mac! Wow, Windows > Macs!!
 
+# Both!!
+Add the following file to your `forum/server/config` directory as `database.json`
+```
+{
+  "host": "localhost",
+  "user": "root",
+  "secret": "simple",
+  "database": "testing",
+  "maxConnections": "50"
+}
+```
+
 # Moving Forward - The javascript
 1. Make sure your nodejs is up to date (Version 7.0.0 or up please)
 2. Make sure you have npm installed ([try this ](http://blog.npmjs.org/post/85484771375/how-to-install-npm) if you need to install both node and npm)
