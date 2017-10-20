@@ -28,7 +28,7 @@ Add the following file to your `forum/server/config` directory as `database.json
 {
   "host": "localhost",
   "user": "root",
-  "secret": "simple",
+  "secret": "YOUR_MYSQL_PASSWORD_HERE",
   "database": "testing",
   "maxConnections": "50"
 }
