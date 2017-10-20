@@ -41,15 +41,16 @@ Add the following file to your `forum/server/config` directory as `database.json
 so that you have all the dependencies we need to get our server up and running
 4. Navigate to the config directory and run `git update-index --assume-unchanged config.json` and `git update-index --assume-unchanged database.json`. This prevents your local changes to this file from being pushed back to master.
 5. Make sure that in the database.json file, your database name is set to `testing`, that the user is set to `root` and the password is the same as the one set in the previous section
-6. In the file `config.json` set the `value` field in the `databaseSetupNeeded` object to true (i.e. it should now look like:
+6. In the file `config.json` set the `value` field in the `databaseSetupNeeded` object to true (i.e. it should now look like:)
 ```
 "databaseSetupNeeded": {
 		"value": false,
 		"readable": true,
 		"writable": false,
 		"_description": "Whether or not a database needs to be created for development. Will not create a database if one already exists with the same name as specified in config.json"
-	}```
-)
+}
+```
+
 7. Return to the server directory and run the command `node expressServer.js`
 8. Note that a sample user with netid `anon` will be loaded into the database along with the username you requested
 9. If there are no errors in the terminal/shell, the server should now be up and running! Go to `localhost:8080` in your browser of choice
@@ -61,7 +62,9 @@ so that you have all the dependencies we need to get our server up and running
 		"readable": true,
 		"writable": false,
 		"_description": "Whether or not a database needs to be created for development. Will not create a database if one already exists with the same name as specified in config.json"
-	}```
+}
+```
+
 12. You're all set up! Happy developing :)
 
 # Resetting the database
