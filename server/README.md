@@ -73,13 +73,14 @@ so that you have all the dependencies we need to get our server up and running
 1. Open up Sequel Pro and log in as you normally would
 2. Select the database from the top-left dropdown (should be named "testing")
 3. Select Database > Delete Database from the header
-4. Click "Add Database" from the top left dropdown
-5. Make the database name "testing"
-6. Then run the `setup.js` file, and you should be good to go!
+4. Change the `config.json` file as indicated in step 6 of "Moving Forward - The javascript"
+5. Run expressServer.js
+6. MAKE SURE TO CHANGE THE `config.json` FILE BACK AS IN STEP 11 OF "Moving Forward - The javascript"
 
 ### Cross-platform way
 1. Open up MySQL Workbench
 2. Navigate to the query script editor - to do this you open up a database connection
 2. Run `DROP DATABASE testing;` (click the lightning bolt to run the query)
-3. Run `CREATE DATABASE testing;`
-4. Then run the `setup.js` file in the terminal, and you should be good to go!
+4. Change the `config.json` file as indicated in step 6 of "Moving Forward - The javascript"
+5. Run expressServer.js
+6. MAKE SURE TO CHANGE THE `config.json` FILE BACK AS IN STEP 11 OF "Moving Forward - The javascript"
