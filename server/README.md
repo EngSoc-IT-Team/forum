@@ -39,17 +39,30 @@ Add the following file to your `forum/server/config` directory as `database.json
 2. Make sure you have npm installed ([try this ](http://blog.npmjs.org/post/85484771375/how-to-install-npm) if you need to install both node and npm)
 3. Now that you have npm, navigate to the forum main directory where the package.json file is located and run `npm install`
 so that you have all the dependencies we need to get our server up and running
-4. In your mysql client add a database called `testing`
-5. Navigate to the forum/server directory using your terminal or shell
-6. Navigate to the config directory and run `git update-index --assume-unchanged config.json` and `git update-index --assume-unchanged database.json`. This prevents your local changes to this file from being pushed back to master.
-7. Make sure that in the database.json file, your database name is set to `testing`, that the user is set to `root` and the password is the same as the one set in the previous section
-8. Return to the server directory
-9. Run `node setup.js` -- this will make sure you have all the necessary dependencies for the backend and load an empty database into the database `testing`
-10. Note that a sample user with netid `anon` will be loaded into the database along with the username you requested
-11. In terminal, halt the execution of the server using `control` + `c` and run the command `node expressServer.js`
-12. If there are no errors in the terminal/shell, the server should now be up and running! Go to `localhost:8080` in your browser of choice
-13. You should be routed to the login page. Enter `anon` as the netid and whatever you want for the password (we aren't checking for passwords yet)
-14. You're all set up! Happy developing :)
+4. Navigate to the config directory and run `git update-index --assume-unchanged config.json` and `git update-index --assume-unchanged database.json`. This prevents your local changes to this file from being pushed back to master.
+5. Make sure that in the database.json file, your database name is set to `testing`, that the user is set to `root` and the password is the same as the one set in the previous section
+6. In the file `config.json` set the `value` field in the `databaseSetupNeeded` object to true (i.e. it should now look like:
+```
+"databaseSetupNeeded": {
+		"value": false,
+		"readable": true,
+		"writable": false,
+		"_description": "Whether or not a database needs to be created for development. Will not create a database if one already exists with the same name as specified in config.json"
+	}
+  ```)
+7. Return to the server directory and run the command `node expressServer.js`
+8. Note that a sample user with netid `anon` will be loaded into the database along with the username you requested
+9. If there are no errors in the terminal/shell, the server should now be up and running! Go to `localhost:8080` in your browser of choice
+10. You should be routed to the login page. Enter `anon` as the netid and whatever you want for the password (we aren't checking for passwords yet)
+11. *MAKE SURE YOU SET THE `databaseSetupNeeded` VALUE BACK TO `true` I.E:*
+```
+"databaseSetupNeeded": {
+		"value": true,
+		"readable": true,
+		"writable": false,
+		"_description": "Whether or not a database needs to be created for development. Will not create a database if one already exists with the same name as specified in config.json"
+	}```
+12. You're all set up! Happy developing :)
 
 # Resetting the database
 ### Every so often the way the database is setup (or it's "schema") will change. When it does, you'll need to follow these steps. There are two ways of resetting the database. The first is the mac-only way, the second is from the MySQL terminal and can be done cross-platform. Note this should NEVER be done while the `expressServer.js` file is running.
