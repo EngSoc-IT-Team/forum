@@ -25,15 +25,16 @@ function sendQuery() {
     //if (fieldText) // <- ie: if the field has text in it
         //queryString += fieldName + "=" + fieldText
     if(tags.length > 0){
-        queryString += '&tags='+tags.replace(' ', '');
+        queryString += '&tags='+tags.split(" ");
     }
 
     if(keywords.length > 0){
-        queryString += '&keywords='+keywords.split(" ");
+        queryString += '&keywords='+keywords;
     }
 
     if(exactWords.length > 0){
-        queryString += '&exactPhrase='+exactWords.replace(' ', '');
+        queryString += '&exactPhrase='+exactWords;
+        //replace(' ', '');
     }
 
     if(title.length > 0) {
