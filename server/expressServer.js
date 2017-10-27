@@ -1,7 +1,6 @@
 "use strict";
 
 var express = require('express');
-var path = require('path');
 var cp = require('cookie-parser');
 var bp = require('body-parser');
 var log = require('./util/log');
@@ -10,7 +9,6 @@ var compare = require('./util/Compare');
 var Environment = require('./util/evalEnvironment').Environment;
 var requestor = require('./util/requestResponder');
 var action = require('./util/actionResponder');
-var fs = require('fs');
 var lit = require('./util/Literals.js');
 var PM = require('./util/PropertyManager');
 
