@@ -213,7 +213,7 @@ function fillCommentTemplate(comment) {
  */
 function fillReviewTemplate(review) {
 
-    return fillTemplate(reviewTemplate, review.rating,
+    return fillTemplate(reviewTemplate, getRating(review.rating,'yellow-star'),
     getDateString(review.date), review.content, review.id, review.voted, review.parent);
 
 }

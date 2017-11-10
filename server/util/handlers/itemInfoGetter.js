@@ -151,10 +151,10 @@ exports.getRatingInfo = function(item, voteValue, hasVoted) {
     return {
         parent: item.getValue(lit.FIELD_PARENT),
         id: item.getValue(lit.FIELD_ID),
-        rating: item.getValue(lit.FIELD_AVERAGE_RATING),
+        rating: item.getValue(lit.FIELD_RATING),
         author: item.getValue(lit.FIELD_AUTHOR),
         content: item.getValue(lit.FIELD_CONTENT),
-        date: item.getValue('datetime'),
+        date: item.getValue(lit.FIELD_TIMESTAMP),
         type: lit.RATING_TABLE,
         voted: hasVoted
     };
