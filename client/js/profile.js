@@ -36,7 +36,7 @@ var reviewTemplate = '<div class="col-sm-12" id="{3}" data-hasvoted="{4}" data-h
                         <span class="date">on {1}</span>\
                         <p class="description">{2}</p>\
                         <div class="action-links">\
-                            <a href="/link?id={5}">View</a>\
+                            <a href="/class?id={5}">View</a>\
                             <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
                             <a href="javascript: void 0;" onclick="save(this)">Save</a>\
                             <a href="javascript: void 0;" onclick="report(this)">Report</a>\
@@ -177,7 +177,7 @@ function addTags(tags) {
 
 /**
  *
- * @param it object with form {
+ * @param comment object with form {
         id: item.getValue(lit.FIELD_ID),
         author: item.getValue(lit.FIELD_AUTHOR),
         content: item.getValue(lit.FIELD_CONTENT),
@@ -199,7 +199,7 @@ function fillCommentTemplate(comment) {
 
 /**
  *
- * @param it object with form {
+ * @param review object with form {
         parent: item.getValue(lit.FIELD_PARENT),
         id: item.getValue(lit.FIELD_ID),
         rating: item.getValue(lit.FIELD_AVERAGE_RATING),
