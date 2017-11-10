@@ -8,14 +8,11 @@
 "use strict";
 
 var mysql = require('mysql');
-var fs = require('fs');
-var path = require('path');
 var log = require('./../log');
 var lit = require('./../Literals.js');
 var pm = require('./../PropertyManager');
 
 const databaseInformation = require('../../config/database.json');
-const config = require('../../config/config.json');
 const shouldLogSQL = pm.getConfigProperty('SQL.Trace');
 
 function DatabaseManager() {
