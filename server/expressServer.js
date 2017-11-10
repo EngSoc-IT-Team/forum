@@ -239,6 +239,15 @@ server.get(lit.LINK_ROUTE, function(request, response) {
     });
 });
 
+server.get('/report', function(request, response) {
+    if (compare.isEmpty(request.signedCookies))
+        return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
+
+    response.render('report', {
+        title: 'Report :('
+    });
+});
+
 server.get(lit.SETTINGS_ROUTE, function(request, response) {
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.LOGIN_ROUTE + '?redirect=' + request.url);
