@@ -3,7 +3,7 @@
 */
 
 "use strict";
-var dbr = require('../util/DBRow');
+var DBRow = require('../util/DBRow').DBRow;
 var generator = require('../util/Generator');
 var lit = require('../util/Literals.js');
 
@@ -26,7 +26,7 @@ var lit = require('../util/Literals.js');
 ** to do work with it.
 */
 function getARowExample() {
-	var row = new dbr.DBRow(lit.USER_TABLE);
+	var row = new DBRow(lit.USER_TABLE);
 	row.getRow('c1t58gst8anhdpfe54h2fpiq9xvh7gy0').then(function() {
 		if (row.count() < 1) //an example of how to make sure you have a row when you use getRow()
 			return console.log("this means we didn't get a row back!");
@@ -50,7 +50,7 @@ function getARowExample() {
 ** It will only reject if there is an error in the database.
 */
 function insertARowExample() {
-	var newRow = new dbr.DBRow(lit.VOTE_TABLE);
+	var newRow = new DBRow(lit.VOTE_TABLE);
 	var userID = generator.generate();
 	var voteID = generator.generate();
 	newRow.setValue(lit.FIELD_VOTE_VALUE, lit.ZERO); // insert vote with vote value -1
@@ -83,7 +83,7 @@ function insertARowExample() {
 ** specific in the first place! Do everyone a favor and be as specific as you can when querying.
 */
 function queryARowExample() {
-	var row = new dbr.DBRow(lit.VOTE_TABLE);
+	var row = new DBRow(lit.VOTE_TABLE);
 	row.addQuery(lit.FIELD_VOTE_VALUE, lit.ZERO); // let's look for votes with value 0 (display value -1)
 
 	row.query().then(function() {
@@ -116,7 +116,7 @@ function queryARowExample() {
 ** don't do it.
 */
 function updateARow() {
-	var row = new dbr.DBRow(lit.VOTE_TABLE);
+	var row = new DBRow(lit.VOTE_TABLE);
 	row.addQuery(lit.FIELD_VOTE_VALUE, lit.ZERO);
 
 	row.query().then(function() {
@@ -153,13 +153,13 @@ function updateARow() {
 ** deleted in this example. This would be especially important if a post, comment or user is deleted for some reason.
 */
 function deleteARowExample() {
-	var row = new dbr.DBRow(lit.VOTE_TABLE);
+	var row = new DBRow(lit.VOTE_TABLE);
 	row.addQuery(lit.FIELD_VOTE_VALUE, lit.ZERO);
 	row.query().then(function() {
 		if(!row.next())
 			return console.log("There are no votes with value 0 left! You've defeated all the negativity on the Forum!")
 		var idToDelete = row.getValue(lit.FIELD_ID);
-		var rowToDelete = new dbr.DBRow(lit.VOTE_TABLE);
+		var rowToDelete = new DBRow(lit.VOTE_TABLE);
 		rowToDelete.delete(idToDelete).then(function() {
 			console.log("Successfully deleted the row");
 
@@ -186,7 +186,7 @@ function deleteARowExample() {
 ** do that).
 */
 function usingNext() {
-	var anotherRow = new dbr.DBRow(lit.VOTE_TABLE);
+	var anotherRow = new DBRow(lit.VOTE_TABLE);
 	anotherRow.addQuery(lit.FIELD_VOTE_VALUE, '1'); //let's look for votes with value 1 (display value +1)
 	anotherRow.query().then(function() {
 		console.log(anotherRow.count()); //
@@ -211,7 +211,7 @@ function usingNext() {
 ** descending ('DESC') order. orderBy() is capable of sorting by both alphabetic and numerical orders.
 */
 function usingOrderBy() {
-	var anotherRow = new dbr.DBRow(lit.VOTE_TABLE);
+	var anotherRow = new DBRow(lit.VOTE_TABLE);
 	anotherRow.addQuery(lit.FIELD_VOTE_VALUE, lit.ONE); //let's look for votes with value 0 (display value -1)
 	anotherRow.orderBy(lit.FIELD_ID, lit.ASC);
 	anotherRow.query().then(function() {
@@ -241,7 +241,7 @@ function usingOrderBy() {
 **
 */
 function usingWildcardsToFindAPattern() {
-	var row = new dbr.DBRow(lit.POST_TABLE);
+	var row = new DBRow(lit.POST_TABLE);
 	row.addQuery(lit.FIELD_CONTENT, lit.LIKE, "%pls help%");
 	row.query().then(function() {
 		row.next();
@@ -254,7 +254,7 @@ function usingWildcardsToFindAPattern() {
 }
 
 function alternateWildcardExample() { //TODO: Make this work if at all possible
-	var row = new dbr.DBRow(lit.COMMENT_TABLE);
+	var row = new DBRow(lit.COMMENT_TABLE);
 	row.addQuery(lit.FIELD_CONTENT, lit.LIKE, "%taken this class%");
 	row.addQuery(lit.FIELD_AUTHOR, 'HotMuffin');
 	row.query().then(function() {
@@ -273,7 +273,7 @@ function alternateWildcardExample() { //TODO: Make this work if at all possible
  * more than once
  */
 function resetIndexExample() {
-	var row = new dbr.DBRow(lit.COMMENT_TABLE);
+	var row = new DBRow(lit.COMMENT_TABLE);
 	row.addQuery(lit.FIELD_AUTHOR, "WizardPikachu");
 	row.query().then(function() {
 		while(row.next()) {
