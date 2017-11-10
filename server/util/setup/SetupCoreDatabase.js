@@ -44,15 +44,15 @@ exports.setupDatabase = function() {
  * Loads the demo data into the database
  */
 exports.loadDemoData = function() {
+	var loadref = {numComplete: 0};
 	return new Promise(function(resolve, reject) {
         log.info("~~~~~~~~~~~~~~Loading Demo Data~~~~~~~~~~~~~~~");
         var totalLength = Object.keys(demodata).length;
-        numCreated = 0;
         for (var element in demodata) {
             if (!demodata.hasOwnProperty(element))
                 continue;
 
-            loadRow(demodata[element][lit.TABLE], demodata[element], totalLength, numCreated, resolve, reject);
+            loadRow(demodata[element][lit.TABLE], demodata[element], totalLength, loadref, resolve, reject);
         }
     });
 };
@@ -71,7 +71,7 @@ exports.checkIfDataBaseExistsAndCreateIfNecessary = function() {
 		}).catch(function(e) {
             log.error('FAILED TO CREATE OR USE DATABASE');
             log.error('USE THE SQL.Trace PROPERTY TO DETERMINE THE FAILURE REASON');
-			reject();
+			reject(e);
 		});
 	});
 };
@@ -98,21 +98,20 @@ function loadRow(table, fields, numElementsToCreate, numCreated, resolve) {
 	var id = newRow.getValue(lit.FIELD_ID);
 
 	newRow.insert().then(function() {
-		log.info("Example row no. " + numCreated + " created!");
-		numCreated++;
-		if (numElementsToCreate === numCreated) {
-			resolve();
+		log.info("Example row no. " +  numCreated.numComplete + " created!");
+        numCreated.numComplete++;
+		if (numElementsToCreate ===  numCreated.numComplete)
             log.info("~~~~~~~~~~~~~~~End of Demo Data Load~~~~~~~~~~~~~~~~\n\n");
-        }
-	}, function() {
-		log.warn("Row no. " + numCreated + " not inserted, likely due to a previously logged error");
-		log.warn("The id of the failing row was '" + id + "'");
-		numCreated++;
-		if (numElementsToCreate === numCreated) {
-            log.info("~~~~~~~~~~~~~~~End of Demo Data Load~~~~~~~~~~~~~~~~\n");
-            throw new QEFError();
-        }
 
+        resolve();
+	}, function() {
+		log.warn("Row no. " +  numCreated.numComplete + " not inserted, likely due to a previously logged error");
+		log.warn("The id of the failing row was '" + id + "'");
+        numCreated.numComplete++;
+		if (numElementsToCreate ===  numCreated.numComplete)
+            log.info("~~~~~~~~~~~~~~~End of Demo Data Load~~~~~~~~~~~~~~~~\n");
+
+        throw new QEFError();
 	});
 }
 
@@ -188,5 +187,8 @@ function createTable(tableName, fields, numberTablesToCreate, resolve, reject) {
 			throw new QEFError("Failure to create tables for database")
 		}
 
-	});
+	}).catch(function () {
+        log.severe('THERE WAS AN ERROR DURING DATABASE SETUP');
+        log.severe('PLEASE SEE THE ERROR LOGS FOR MORE INFORMATION');
+    });
 }
