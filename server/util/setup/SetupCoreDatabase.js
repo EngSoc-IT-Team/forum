@@ -95,7 +95,7 @@ function loadRow(table, fields, numElementsToCreate, numCreated, resolve) {
 		newRow.addQuery(field, fields[field]);
 	}
 
-	var id = newRow.getValue(lit.FIELD_ID);
+	var id = newRow.getValue(lit.fields.ID);
 
 	newRow.insert().then(function() {
 		log.info("Example row no. " +  numCreated.numComplete + " created!");

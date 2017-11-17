@@ -30,7 +30,7 @@ exports.recursiveGet = function (resolve, reject, rowsToGet, action, actionArgs)
         resolve(actionArgs);
     else {
         var item = new DBRow(rowsToGet.getValue(lit.TYPE));
-        item.getRow(rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function () {
+        item.getRow(rowsToGet.getValue(lit.fields.ITEM_ID)).then(function () {
             action(rowsToGet, item, actionArgs);
             exports.recursiveGet(resolve, reject, rowsToGet, action, actionArgs)
 
@@ -56,11 +56,11 @@ exports.recursiveGetWithVotes = function (resolve, reject, rowsToGet, action, us
     if (!rowsToGet.next())
         resolve(actionArgs);
     else {
-        var type = rowsToGet.getValue(lit.FIELD_TYPE);
+        var type = rowsToGet.getValue(lit.fields.TYPE);
         var item = new DBRow(type);
-        item.getRow(rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function () {
+        item.getRow(rowsToGet.getValue(lit.fields.ITEM_ID)).then(function () {
             if (type == 'link' || type == 'post') {
-                voter.getVote(userID, rowsToGet.getValue(lit.FIELD_ITEM_ID)).then(function (vote) {
+                voter.getVote(userID, rowsToGet.getValue(lit.fields.ITEM_ID)).then(function (vote) {
                     if (vote)
                         action(item, vote, type, actionArgs);
                     else
@@ -72,9 +72,9 @@ exports.recursiveGetWithVotes = function (resolve, reject, rowsToGet, action, us
                 });
             }
             else {
-                var u = new DBRow(lit.USER_TABLE);
+                var u = new DBRow(lit.tables.USER);
                 u.getRow(userID).then(function () {
-                    rater.getRating(u.getValue(lit.FIELD_USERNAME), item.getValue(lit.FIELD_ID)).then(function (rating) {
+                    rater.getRating(u.getValue(lit.fields.USERNAME), item.getValue(lit.fields.ID)).then(function (rating) {
                         if (rating)
                             action(item, rating, type, actionArgs);
                         else
@@ -154,7 +154,7 @@ exports.recursiveGetTags = function (resolve, reject, row, addDocument, table, d
     if (!row.next()) {
         resolve(docInfo);
     } else {
-        var genTags = row.getValue(lit.FIELD_GEN_TAGS);
+        var genTags = row.getValue(lit.fields.GEN_TAGS);
         if (genTags !== null) {
             docInfo.push(addDocument(genTags, row, table));
             exports.recursiveGetTags(resolve, reject, row, addDocument, table, docInfo);

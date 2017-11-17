@@ -11,8 +11,8 @@ var DBRow = require('./DBRow').DBRow;
 var log = require('./log');
 var lit = require('./Literals.js');
 
-const allowedUserKeys = [lit.FIELD_ID, lit.FIELD_USERNAME];
-const urlTableMap = {'/question': lit.POST_TABLE, '/class': lit.CLASS_TABLE, '/link': lit.LINK_TABLE, '/profile': lit.USER_TABLE};
+const allowedUserKeys = [lit.fields.ID, lit.fields.USERNAME];
+const urlTableMap = {'/question': lit.tables.POST, '/class': lit.tables.CLASS, '/link': lit.tables.LINK, '/profile': lit.tables.USER};
 
 /* validateSession(cookie)
  *
@@ -23,7 +23,7 @@ const urlTableMap = {'/question': lit.POST_TABLE, '/class': lit.CLASS_TABLE, '/l
 exports.validateSession = function(cookie) {
 	return new Promise(function(resolve, reject){
 		if (cookie){ //first of all you need to have a cookie for us to expend resources
-			var row = new DBRow(lit.SESSION_TABLE);
+			var row = new DBRow(lit.tables.SESSION);
 			row.getRow(cookie.sessionID).then(function(){
 				resolve(); //allow user to continue
 
@@ -50,8 +50,8 @@ exports.validateSession = function(cookie) {
 exports.loginAndCreateSession = function(postResult) {
 	return new Promise(function(resolve, reject) {
 		if (postResult) {
-			var row = new DBRow(lit.USER_TABLE);
-			row.addQuery(lit.FIELD_NETID, postResult.username);
+			var row = new DBRow(lit.tables.USER);
+			row.addQuery(lit.fields.NETID, postResult.username);
 			// row.addQuery("secret", postResult.secret) // BUT WE DON'T KNOW THE PASSWORD _/(O.O)\_
 
 			row.query().then(function() {
@@ -59,13 +59,13 @@ exports.loginAndCreateSession = function(postResult) {
 					return reject(false);
 					
 				var date = new Date();
-				var newSession = new DBRow(lit.SESSION_TABLE);
+				var newSession = new DBRow(lit.tables.SESSION);
 				var sessionInfo = {sessionStart: date.toISOString().slice(0, date.toISOString().indexOf('T')), 
-									userID: row.getValue(lit.FIELD_ID)};
+									userID: row.getValue(lit.fields.ID)};
 
-				newSession.setValue(lit.FIELD_USER_ID, sessionInfo.userID);
+				newSession.setValue(lit.fields.USER_ID, sessionInfo.userID);
 				newSession.insert().then(function() {
-					sessionInfo.sessionID = newSession.getValue(lit.FIELD_ID);
+					sessionInfo.sessionID = newSession.getValue(lit.fields.ID);
 					resolve(sessionInfo);
 				}, function(err) {
 					log.error(err);
@@ -95,7 +95,7 @@ exports.logout = function(cookie) {
 		if(!cookie)
 			reject(false);
 
-		var row = new DBRow(lit.SESSION_TABLE);
+		var row = new DBRow(lit.tables.SESSION);
 		row.delete(cookie.sessionID).then(function() {
 			resolve(true);
 
@@ -122,12 +122,12 @@ exports.hasRole = function(userID, role) {
 			return;
 		}
 
-		var user = new DBRow(lit.USER_TABLE);
+		var user = new DBRow(lit.tables.USER);
 		user.getRow(userID).then(function() {
 			if (user.count() == 0)
                 return reject(false);
 
-			if(user.getValue(lit.FIELD_PRIVILEGE).includes(role))
+			if(user.getValue(lit.fields.PRIVILEGE).includes(role))
 				resolve(true);
 			else
 				reject(false)
@@ -149,7 +149,7 @@ exports.hasRole = function(userID, role) {
 exports.validateUser = function(request) {
 	return new Promise(function(resolve, reject) {
 
-		var user = new DBRow(lit.USER_TABLE);
+		var user = new DBRow(lit.tables.USER);
 		for (var key in request.query) {
 			if (!request.query.hasOwnProperty(key))
 				continue;

@@ -25,15 +25,18 @@ exports.handle = function (request) {
     var info = [];
     var userID = request.signedCookies.usercookie.userID;
     return new Promise(function (resolve, reject) {
-        var items = new DBRow(lit.ITEM_TABLE);
+        var items = new DBRow(lit.tables.ITEM);
 
         if (request.query.hasOwnProperty('query'))
             return useSearch(resolve, reject, request);
 
+        if (request.query.hasOwnProperty('advanced') && request.query.advanced === true)
+            return executeAdvanced(resolve, reject, request);
+
         for (var key in request.query)
             items.addQuery(key, lit.LIKE, '%' + request.query[key] + '%'); //TODO: Fix tag handling (should be able to get post by tag for any item)
 
-        items.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
+        items.orderBy(lit.fields.TIMESTAMP, lit.DESC);
         items.setLimit(20);
         items.query().then(function () {
             recursion.recursiveGetWithVotes(resolve, reject, items, itemInfo.generalInfo, userID, [info]);
@@ -57,4 +60,8 @@ function useSearch(resolve, reject, request) {
     }).catch(function (err) {
         reject(err);
     });
+}
+
+function executeAdvanced(resolve, reject, request) {
+    // does search
 }

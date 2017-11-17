@@ -177,14 +177,14 @@ function addTags(tags) {
 /**
  *
  * @param comment object with form {
-        id: item.getValue(lit.FIELD_ID),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        content: item.getValue(lit.FIELD_CONTENT),
-        netVotes: item.getValue(lit.FIELD_NETVOTES),
-        parent: item.getValue(lit.FIELD_PARENT_POST),
-        parentComment: item.getValue(lit.FIELD_PARENT_COMMENT),
-        type: lit.COMMENT_TABLE,
-        date: item.getValue(lit.FIELD_TIMESTAMP),
+        id: item.getValue(lit.fields.ID),
+        author: item.getValue(lit.fields.AUTHOR),
+        content: item.getValue(lit.fields.CONTENT),
+        netVotes: item.getValue(lit.fields.NETVOTES),
+        parent: item.getValue(lit.fields.PARENT_POST),
+        parentComment: item.getValue(lit.fields.PARENT_COMMENT),
+        type: lit.tables.COMMENT,
+        date: item.getValue(lit.fields.TIMESTAMP),
         voted: hasVoted
     };
  * @returns {*} the filled template for the comment, to be appended to the document
@@ -199,13 +199,13 @@ function fillCommentTemplate(comment) {
 /**
  *
  * @param review object with form {
-        parent: item.getValue(lit.FIELD_PARENT),
-        id: item.getValue(lit.FIELD_ID),
-        rating: item.getValue(lit.FIELD_AVERAGE_RATING),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        content: item.getValue(lit.FIELD_CONTENT),
+        parent: item.getValue(lit.fields.PARENT),
+        id: item.getValue(lit.fields.ID),
+        rating: item.getValue(lit.fields.AVERAGE_RATING),
+        author: item.getValue(lit.fields.AUTHOR),
+        content: item.getValue(lit.fields.CONTENT),
         date: item.getValue('datetime'),
-        type: lit.RATING_TABLE,
+        type: lit.tables.RATING,
         voted: hasVoted
     }
  * @returns {*} the filled template for the review, to be appended to the document

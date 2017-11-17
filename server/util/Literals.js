@@ -7,6 +7,9 @@
 "use strict";
 
 const routeLiterals = require('./literals/routeLiterals');
+const tableLiterals = require('./literals/tableLiterals');
+const fieldLiterals = require('./literals/fieldLiterals');
+
 const literals = {
 
     //miscellaneous database table information
@@ -74,100 +77,8 @@ const literals = {
     NEED_LOGIN: "needLogin",
 
     //fields common to more than one table
-    FIELD_UPVOTES: "upvotes",
-    FIELD_DOWNVOTES: "downvotes",
-    FIELD_NETVOTES: "netVotes",
-    FIELD_AUTHOR: "author",
-    FIELD_ID: "id",
-    FIELD_CONTENT: "content",
-    FIELD_TIMESTAMP: "timestamp",
-    FIELD_USER_ID: "userID",
-    FIELD_TITLE: "title",
-    FIELD_TAGS: "tags",
-    FIELD_SUMMARY: "summary",
-    FIELD_ITEM_ID: "itemID",
-    FIELD_TYPE: "type",
-    FIELD_DUPLICATE: "duplicate",
-    FIELD_GEN_TAGS: "generatedTags",
-    FIELD_PARENT: "parent",
-
-    //fields for post table only
-    POST_TABLE: "post",
-    FIELD_ANSWERED: "answered",
-
-    //fields for comment table only
-    COMMENT_TABLE: "comment",
-    FIELD_IS_SOLUTION: "isSolution",
-    FIELD_COMMENT_LEVEL: "commentLevel",
-    FIELD_PARENT_COMMENT: "parentComment",
-
-    //fields for user table only
-    USER_TABLE: "user",
-    FIELD_NETID: "netid",
-    FIELD_USERNAME: "username",
-    FIELD_TOTAL_UPVOTES: "totalUpvotes",
-    FIELD_TOTAL_DOWNVOTES: "totalDownvotes",
-    FIELD_TOTAL_SOLVED: "totalSolved",
-    FIELD_REPORT_COUNT: "reportCount",
-    FIELD_DATE_JOINED: "dateJoined",
-    FIELD_ACCEPTED_TERMS: "acceptedTerms",
-    FIELD_PRIVILEGE: "privilege",
-
-    //fields for report table only
-    REPORT_TABLE: "report",
-    FIELD_REPORT_REASON: "reportReason",
-    FIELD_REPORT: "report",
-    FIELD_REPORTING_USER: "reportingUser",
-    FIELD_REPORTED_USER: "reportedUser",
-    FIELD_RELATED_ITEM_ID: "relatedItemID",
-
-    //fields for tag table only
-    TAG_TABLE: "tag",
-    FIELD_NAME: "name",
-    FIELD_RELATED_TAGS: "relatedTags",
-
-    //fields for vote table only
-    VOTE_TABLE: "vote",
-    FIELD_VOTE_VALUE: "voteValue",
-
-    //fields for session table only
-    SESSION_TABLE: "session",
-    FIELD_SESSION_START: "sessionStart",
-
-    //fields for class table only
-    CLASS_TABLE: "class",
-    FIELD_COURSE_CODE: "courseCode",
-    FIELD_LONG_SUMMARY: "longSummary",
-    FIELD_PREREQS: "prereqs",
-    FIELD_AVERAGE_RATING: "averageRating",
-    FIELD_INSTRUCTOR: "instructor",
-    FIELD_CREDIT: "credit",
-    FIELD_RATINGS: "ratings",
-
-    //fields for link table only
-    LINK_TABLE: "link",
-    FIELD_TRUSTED: "trusted",
-    FIELD_LINK: "link",
-    FIELD_ADDED_BY: "addedBy",
-
-    //fields for subscriptions table only
-    SUBSCRIPTIONS_TABLE: "subscriptions",
-    FIELD_LAST_NOTIFIED: "lastNotified",
-    FIELD_NUM_NOTIFICATIONS_MISSED: "numNotificationsMissed",
-    FIELD_NUM_TIME_NOTIFIED: "numTimesNotified",
-
-    //fields for saved table only
-    SAVED_TABLE: "saved",
-
-    //fields for contribution table only
-    CONTRIBUTION_TABLE: "contribution",
-
-    //fields for item table only
-    ITEM_TABLE: "item",
-
-    //fields for rating table only
-    RATING_TABLE: "rating",
-    FIELD_RATING: "rating",
+    tables: tableLiterals,
+    fields: fieldLiterals,
 
     //fields for sweeper class
     SWEEPER_CANCEL_JOB: "cancelJob",

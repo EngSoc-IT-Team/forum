@@ -3,8 +3,10 @@
  *
  * Written by Michael Albinson 11/17/17
  *
+ * Literals for all of the routes serviced by the server
  */
 
+"use strict";
 
 module.exports = {
     LOGIN: "/login",

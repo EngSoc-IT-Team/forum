@@ -24,10 +24,10 @@ exports.vote = function(userId, itemId, voteValue) {
     return new Promise(function(resolve, reject) {
         exports.getVote(userId, itemId).then(function (vote) {
             if (!vote) {
-                var row = new DBRow(lit.VOTE_TABLE);
-                row.setValue(lit.FIELD_USER_ID, userId);
-                row.setValue(lit.FIELD_ITEM_ID, itemId);
-                row.setValue(lit.FIELD_VOTE_VALUE, voteValue);
+                var row = new DBRow(lit.tables.VOTE);
+                row.setValue(lit.fields.USER_ID, userId);
+                row.setValue(lit.fields.ITEM_ID, itemId);
+                row.setValue(lit.fields.VOTE_VALUE, voteValue);
                 row.insert().then(function () {
                     resolve(true);
                 }, function (err) {
@@ -50,14 +50,14 @@ exports.vote = function(userId, itemId, voteValue) {
  */
 exports.changeVote = function(userId, itemId, newVoteValue) {
     return new Promise(function(resolve, reject) {
-        var row = new DBRow(lit.VOTE_TABLE);
-        row.addQuery(lit.FIELD_USER_ID, userId);
-        row.addQuery(lit.FIELD_ITEM_ID, itemId);
+        var row = new DBRow(lit.tables.VOTE);
+        row.addQuery(lit.fields.USER_ID, userId);
+        row.addQuery(lit.fields.ITEM_ID, itemId);
         row.query().then(function () {
             if (!row.next())
                 reject("No matching votes found");
             else {
-                row.setValue(lit.FIELD_VOTE_VALUE, newVoteValue);
+                row.setValue(lit.fields.VOTE_VALUE, newVoteValue);
                 row.update().then(function () {
                     resolve();
                 }, function (err) {
@@ -76,9 +76,9 @@ exports.changeVote = function(userId, itemId, newVoteValue) {
  */
 exports.getVote = function(userId, itemId) {
     return new Promise(function(resolve) {
-        var vote = new DBRow(lit.VOTE_TABLE);
-        vote.addQuery(lit.FIELD_USER_ID, userId);
-        vote.addQuery(lit.FIELD_ITEM_ID, itemId);
+        var vote = new DBRow(lit.tables.VOTE);
+        vote.addQuery(lit.fields.USER_ID, userId);
+        vote.addQuery(lit.fields.ITEM_ID, itemId);
         vote.query().then(function() {
             if (!vote.next())
                 return resolve(undefined);
@@ -146,7 +146,7 @@ function updateItem(itemID, voteValue, type, voteIsUpdated) {
     return new Promise(function(resolve, reject) {
         var it = new DBRow(type);
         it.getRow(itemID).then(function() {
-            it.setValue(lit.FIELD_NETVOTES, it.getValue(lit.FIELD_NETVOTES) + netChange);
+            it.setValue(lit.fields.NETVOTES, it.getValue(lit.fields.NETVOTES) + netChange);
             it.update().then(function() {
                 resolve();
             }, function(err) {

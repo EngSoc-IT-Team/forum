@@ -32,7 +32,7 @@ var recursion = require('../recursion');
 var TfIdf = natural.TfIdf;
 var wordRelater = new TfIdf;
 
-var searchableTables = [lit.CLASS_TABLE, lit.LINK_TABLE, lit.POST_TABLE, lit.COMMENT_TABLE, lit.TAG_TABLE];
+var searchableTables = [lit.tables.CLASS, lit.tables.LINK, lit.tables.PORT, lit.tables.COMMENT, lit.tables.TAG];
 
 /**
  * Function argument used for recursively getting the generated tags of a searchable row. Adds tags to the wordRelater.
@@ -43,7 +43,7 @@ var searchableTables = [lit.CLASS_TABLE, lit.LINK_TABLE, lit.POST_TABLE, lit.COM
  */
 var addDocument = function (tags, row, table) {
     wordRelater.addDocument(tags);
-    return {measure: 0, id: row.getValue(lit.FIELD_ID), table: table};
+    return {measure: 0, id: row.getValue(lit.fields.ID), table: table};
 };
 
 var queryOneTable = function (table) {
@@ -84,7 +84,7 @@ exports.searchForContent = function (inputSearch, table) {
                     res[0] = [];
                     res[1] = [];
                     for (var j in sortedPosts) {
-                        res[0].push(sortedPosts[j][lit.FIELD_ID]);
+                        res[0].push(sortedPosts[j][lit.fields.ID]);
                         res[1].push(sortedPosts[j][lit.TABLE]);
                     }
                     resolve(res);
@@ -129,7 +129,7 @@ exports.generateTags = function (newRow, table) {
                     if (!tags)
                         tags = "NULL";
 
-                    newRow.setValue(lit.FIELD_GEN_TAGS, tags);
+                    newRow.setValue(lit.fields.GEN_TAGS, tags);
                     newRow.update().then(function () {
                         resolve(tags); //string of all tags to be put into field for the new post
                     });
@@ -169,13 +169,13 @@ function searchByUserTag(inputSearch) {
             });
         }).then(function (tagsInSearch) {
             //find posts with tags either matching a tag or that has the same course number that was searched
-            var row = new dbr.DBRow(lit.POST_TABLE);
+            var row = new dbr.DBRow(lit.tables.POST);
             var postsWithTags = [];
             row.query().then(function () {
                 while (row.next()) {
                     for (var index in tagsInSearch) {
-                        if (row.getValue(lit.FIELD_TAGS).includes(tagsInSearch[index])) {
-                            postsWithTags.push({measure: 0, id: row.getValue(lit.FIELD_ID), table: lit.POST_TABLE});
+                        if (row.getValue(lit.fields.TAGS).includes(tagsInSearch[index])) {
+                            postsWithTags.push({measure: 0, id: row.getValue(lit.fields.ID), table: lit.tables.POST});
                         }
                     }
                 }
@@ -198,10 +198,10 @@ function searchByUserTag(inputSearch) {
 function getUserTagsInDB() {
     var tags = [];
     return new Promise(function (resolve, reject) {
-        var row = new dbr.DBRow(lit.TAG_TABLE);
+        var row = new dbr.DBRow(lit.tables.TAG);
         row.query().then(function () {
             while (row.next()) {
-                tags.push(row.getValue(lit.FIELD_NAME));
+                tags.push(row.getValue(lit.fields.NAME));
             }
             resolve(tags);
         }).catch(function (err) {
@@ -225,8 +225,8 @@ function goodInputs(inputSearch, table) {
             return true;
         }
         //check that table is actually a table name
-        return !(!(typeof table === lit.STRING) || (table !== lit.CLASS_TABLE && table !== lit.POST_TABLE && table !== lit.COMMENT_TABLE &&
-        table !== lit.LINK_TABLE && table !== lit.TAG_TABLE && table !== lit.USER_TABLE));
+        return !(!(typeof table === lit.STRING) || (table !== lit.tables.CLASS && table !== lit.tables.POST && table !== lit.tables.COMMENT &&
+        table !== lit.tables.LINK && table !== lit.tables.TAG && table !== lit.tables.USER));
     }
 }
 
@@ -239,27 +239,27 @@ function goodInputs(inputSearch, table) {
 function getSearchableFields(table) {
     var searchableFields = [];
     switch (table) {
-        case lit.CLASS_TABLE:
-            searchableFields.push(lit.FIELD_COURSE_CODE);
-            searchableFields.push(lit.FIELD_TITLE);
-            searchableFields.push(lit.FIELD_SUMMARY);
-            searchableFields.push(lit.FIELD_LONG_SUMMARY);
+        case lit.tables.CLASS:
+            searchableFields.push(lit.fields.COURSE_CODE);
+            searchableFields.push(lit.fields.TITLE);
+            searchableFields.push(lit.fields.SUMMARY);
+            searchableFields.push(lit.fields.LONG_SUMMARY);
             break;
-        case lit.POST_TABLE:
-            searchableFields.push(lit.FIELD_TITLE);
-            searchableFields.push(lit.FIELD_CONTENT);
+        case lit.tables.POST:
+            searchableFields.push(lit.fields.TITLE);
+            searchableFields.push(lit.fields.CONTENT);
             break;
-        case lit.COMMENT_TABLE:
-            searchableFields.push(lit.FIELD_CONTENT);
+        case lit.tables.COMMENT:
+            searchableFields.push(lit.fields.CONTENT);
             break;
-        case lit.LINK_TABLE:
-            searchableFields.push(lit.FIELD_TITLE);
-            searchableFields.push(lit.FIELD_SUMMARY);
+        case lit.tables.LINK:
+            searchableFields.push(lit.fields.TITLE);
+            searchableFields.push(lit.fields.SUMMARY);
             break;
-        case lit.TAG_TABLE:
-            searchableFields.push(lit.FIELD_SUMMARY);
-            searchableFields.push(lit.FIELD_RELATED_TAGS);
-            searchableFields.push(lit.FIELD_NAME);
+        case lit.tables.TAG:
+            searchableFields.push(lit.fields.SUMMARY);
+            searchableFields.push(lit.fields.RELATED_TAGS);
+            searchableFields.push(lit.fields.NAME);
             break;
     }
     return searchableFields;

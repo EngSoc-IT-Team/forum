@@ -24,7 +24,7 @@ const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"];
  * @returns {string}: The escaped query string
  */
 exports.update = function(table, dbObject) {
-	if (!dbObject[lit.FIELD_ID])
+	if (!dbObject[lit.fields.ID])
 		return log.warn("The field 'id' must be set in order to update a row");
 
 	if (!escaper.isValidTableName(table))
@@ -32,7 +32,7 @@ exports.update = function(table, dbObject) {
 
 	var base = "UPDATE " + table + " SET ";
 	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false, true, false, table);
-	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject[lit.FIELD_ID]) + ";";
+	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject[lit.fields.ID]) + ";";
 };
 
 /** Creates an escaped "insert" query provided the table and database object JSON
@@ -42,7 +42,7 @@ exports.update = function(table, dbObject) {
  * @returns {*}: The escaped query string
  */
 exports.insert = function(table, dbObject) {
-	if (!dbObject[lit.FIELD_ID])
+	if (!dbObject[lit.fields.ID])
 		return log.warn("The field 'id' must be set in order to insert a row");
 
 	if (!escaper.isValidTableName(table))

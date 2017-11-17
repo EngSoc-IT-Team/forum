@@ -30,12 +30,12 @@ exports.getArray = function() {
 exports.getTag = function(id) {
     var info = {};
     return new Promise(function (resolve, reject) {
-        var tag = new DBRow(lit.TAG_TABLE);
+        var tag = new DBRow(lit.tables.TAG);
         tag.getRow(id).then(function () {
             info = {
-                name: tag.getValue(lit.FIELD_NAME),
-                summary: tag.getValue(lit.FIELD_SUMMARY),
-                relatedTags: tag.getValue(lit.FIELD_RELATED_TAGS)
+                name: tag.getValue(lit.fields.NAME),
+                summary: tag.getValue(lit.fields.SUMMARY),
+                relatedTags: tag.getValue(lit.fields.RELATED_TAGS)
             };
             resolve(info);
         }, function () {
@@ -50,8 +50,8 @@ exports.getTag = function(id) {
  */
 exports.add = function(tagName) { //TODO: add related tags
     return new Promise(function(resolve, reject) {
-        var tag = new DBRow(lit.TAG_TABLE);
-        tag.setValue(lit.FIELD_NAME, tagName);
+        var tag = new DBRow(lit.tables.TAG);
+        tag.setValue(lit.fields.NAME, tagName);
         tag.insert().then(function () {
             resolve();
             exports.updateTagArray(); // TODO: May want the janitor to auto update instead of updating every time a tag is added
@@ -65,11 +65,11 @@ exports.add = function(tagName) { //TODO: add related tags
 exports.updateTagArray = function() {
     return new Promise(function(resolve, reject) {
         log.info("Updating tag array");
-        var tags = new DBRow(lit.TAG_TABLE);
+        var tags = new DBRow(lit.tables.TAG);
         tags.query().then(function() {
             while(tags.next()) {
-                if (!tagArray.includes(tags.getValue(lit.FIELD_NAME)))
-                    tagArray.push(tags.getValue(lit.FIELD_NAME));
+                if (!tagArray.includes(tags.getValue(lit.fields.NAME)))
+                    tagArray.push(tags.getValue(lit.fields.NAME));
             }
             resolve();
         }, function() {reject()});
