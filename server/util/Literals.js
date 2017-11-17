@@ -6,6 +6,7 @@
 
 "use strict";
 
+const routeLiterals = require('./literals/routeLiterals');
 const literals = {
 
     //miscellaneous database table information
@@ -32,26 +33,7 @@ const literals = {
     STRING: "string",
 
     //web pages routes, with '/'
-    LOGIN_ROUTE: "/login",
-    ABOUT_ROUTE: "/about",
-    NEW_ROUTE: "/new",
-    LIST_ROUTE: "/list",
-    PROFILE_ROUTE: "/profile",
-    QUESTION_ROUTE: "/question",
-    GUIDELINES_ROUTE: "/guidelines",
-    DEV_ROUTE: "/dev",
-    EVAL_ROUTE: "/eval",
-    HELP_ROUTE: "/help",
-    CLASS_ROUTE: "/class",
-    SEARCH_ROUTE: "/search",
-    LOGOUT_ROUTE: "/logout",
-    ACTION_ROUTE: "/action",
-    INFO_ROUTE: "/info",
-    ROOT_ROUTE: "/",
-    LINK_ROUTE: "/link",
-    SETTINGS_ROUTE: "/settings",
-    ADVANCED_SEARCH_ROUTE: "/advanced",
-    REPORT_ROUTE: "/report",
+    routes: routeLiterals,
 
     //values in string format: e.g. boolean value true as \'true\'
     ZERO: "0",
