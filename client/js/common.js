@@ -390,7 +390,13 @@ function executeIfObjectIsFunction(func) {
     if (typeof func === 'function') // if the object is a function, execute it
         return func();
 
-    throw new Error("Input to executeIfObjectIsFunction must be of type function");
+    if (func === undefined)
+        return;
+
+    if (func === {})
+        return;
+
+    console.error("Function passed to executeIfObjectIsFunction was not a function!");
 }
 
 /** Shortcut method to trigger a modal
