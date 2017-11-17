@@ -37,7 +37,6 @@ var reviewTemplate = '<div class="col-sm-12" id="{3}" data-hasvoted="{4}" data-h
                         <p class="description">{2}</p>\
                         <div class="action-links">\
                             <a href="/class?id={5}">View</a>\
-                            <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
                             <a href="javascript: void 0;" onclick="save(this)">Save</a>\
                             <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                         </div>\

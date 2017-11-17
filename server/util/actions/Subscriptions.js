@@ -39,6 +39,9 @@ var mailOptions = {
  */
 exports.onSubscribed = function (contentID, userID, type) {
     return new Promise(function (resolve, reject) {
+        if (type === "review")
+            return reject("You may not subscribe to class reviews");
+
         exports.isSubscribed(contentID, userID).then(function (subscribed) {
             if (!subscribed) {
                 var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
