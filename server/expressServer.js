@@ -1,5 +1,8 @@
 "use strict";
 
+require('./error');
+require('./setup'); // sets up the database if required
+
 var express = require('express');
 var cp = require('cookie-parser');
 var bp = require('body-parser');
@@ -12,10 +15,7 @@ var action = require('./util/actionResponder');
 var lit = require('./util/Literals.js');
 var PM = require('./util/PropertyManager');
 
-// sets up the database if required
-require('./setup');
-
-const PORT = PM.getConfigProperty(lit.PORT);
+const PORT = PM.getConfigProperty(lit.config.PORT);
 var server = express();
 
 // directories from which we serve css, js and assets statically
@@ -24,10 +24,10 @@ server.use('/js', express.static('../client/js'));
 server.use('/assets', express.static('../client/assets'));
 
 // imports all the required middleware to express
-server.use(cp(lit.SIMPLE_SECRET)); //simple secret is an example password
+server.use(cp(lit.sql.SIMPLE_SECRET)); //simple secret is an example password
 server.use(bp.json());
 
-var isInProduction = (PM.getConfigProperty(lit.PRODUCTION) === true);
+var isInProduction = (PM.getConfigProperty(lit.config.PRODUCTION) === true);
 
 // Set the templating engine to use Pug
 server.set('views', '../client/views');

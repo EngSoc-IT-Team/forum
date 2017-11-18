@@ -29,7 +29,7 @@ exports.recursiveGet = function (resolve, reject, rowsToGet, action, actionArgs)
     if (!rowsToGet.next())
         resolve(actionArgs);
     else {
-        var item = new DBRow(rowsToGet.getValue(lit.TYPE));
+        var item = new DBRow(rowsToGet.getValue(lit.sql.TYPE));
         item.getRow(rowsToGet.getValue(lit.fields.ITEM_ID)).then(function () {
             action(rowsToGet, item, actionArgs);
             exports.recursiveGet(resolve, reject, rowsToGet, action, actionArgs)

@@ -39,7 +39,7 @@ exports.isValidField = function (tableName, fieldName) {
 function getTables() {
     var tables = {};
     for (var index in defaultTables) {
-        var tableName = defaultTables[index][lit.TABLE_NAME];
+        var tableName = defaultTables[index][lit.sql.TABLE_NAME];
         tables[tableName] = getFieldNames(index);
     }
     return tables;

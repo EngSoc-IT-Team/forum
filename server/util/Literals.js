@@ -9,16 +9,22 @@
 const routeLiterals = require('./literals/routeLiterals');
 const tableLiterals = require('./literals/tableLiterals');
 const fieldLiterals = require('./literals/fieldLiterals');
+const sqlLiterals = require('./literals/sqlLiterals');
+const configLiterals = require('./literals/configLiterals');
 
 const literals = {
+    //web pages routes, with '/'
+    routes: routeLiterals,
 
-    //miscellaneous database table information
-    TABLE_NAME: "tablename",
-    FIELDS: "fields",
-    TABLE: "table",
-    TYPE: "type",
-    DEFAULT: "default",
-    PRIMARY_KEY: "primaryKey",
+    //database schema literals: table and field names
+    tables: tableLiterals,
+    fields: fieldLiterals,
+
+    //sql setup and query data
+    sql: sqlLiterals,
+
+    // related to the configuration file and DatabaseManager
+    config: configLiterals,
 
     //miscellaneous user information
     PROFILE: "profile",
@@ -35,50 +41,16 @@ const literals = {
     BOOLEAN: "boolean",
     STRING: "string",
 
-    //web pages routes, with '/'
-    routes: routeLiterals,
-
     //values in string format: e.g. boolean value true as \'true\'
     ZERO: "0",
     ONE: "1",
     TRUE: "true",
     FALSE: "false",
 
-    //NOTE: These literals do not follow the same
-    //format because there are uppercase and lowercase instances
-    //sql sort commands
-    DESC: "DESC",
-    desc: "desc",
-    ASC: "ASC",
-    asc: "asc",
-
-    //words for string manipulations, sql strings
-    IN: "in",
-    BETWEEN: "between",
-    LIKE: "like",
-    TO: "to",
-
-    //database configurations
-    HOST: "host",
-    USER: "user",
-    SECRET: "secret",
-    SIMPLE_SECRET: "simplesecret",
-    DATABASE: "database",
-    MAX_CONNECTIONS: "maxConnections",
-    PRODUCTION: "production",
-    DATABASE_SETUP_NEEDED: "databaseSetupNeeded",
-    LOAD_MOCK_DATA: "loadMockData",
-    UTF8: "utf8",
-    PORT: "port",
-
     //session information
     ADMIN: "admin",
     USER_COOKIE: "usercookie",
     NEED_LOGIN: "needLogin",
-
-    //fields common to more than one table
-    tables: tableLiterals,
-    fields: fieldLiterals,
 
     //fields for sweeper class
     SWEEPER_CANCEL_JOB: "cancelJob",

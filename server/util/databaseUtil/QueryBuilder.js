@@ -274,7 +274,7 @@ function checkOperator(op) {
 	if (allowedOperators.includes(op.toLowerCase()))
 		return op.toUpperCase();
 	else {
-		if (op.toLowerCase() === lit.IN || op.toLowerCase() === lit.BETWEEN)
+		if (op.toLowerCase() === lit.sql.query.IN || op.toLowerCase() === lit.sql.query.BETWEEN)
 			log.warn('The operator "' + op + '" has not yet been implemented... \n Using "=" instead.');
 		else
 			log.warn('An unacceptable operator was passed into the query, replacing with the equals operator');

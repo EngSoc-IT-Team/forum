@@ -25,7 +25,7 @@ exports.handle = function(request) {
                     var comments = new DBRow(lit.tables.COMMENT);
                     comments.addQuery(lit.fields.COMMENT_LEVEL, 0);
                     comments.addQuery(lit.fields.PARENT, link.getValue(lit.fields.ID));
-                    comments.orderBy(lit.fields.NETVOTES, lit.DESC);
+                    comments.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC);
                     comments.setLimit(10);
                     comments.query().then(function() {
                         if (comments.count() < 1)

@@ -213,7 +213,7 @@ function usingNext() {
 function usingOrderBy() {
 	var anotherRow = new DBRow(lit.tables.VOTE);
 	anotherRow.addQuery(lit.fields.VOTE_VALUE, lit.ONE); //let's look for votes with value 0 (display value -1)
-	anotherRow.orderBy(lit.fields.ID, lit.ASC);
+	anotherRow.orderBy(lit.fields.ID, lit.sql.query.ASC);
 	anotherRow.query().then(function() {
 		while(anotherRow.next())
 			console.log(anotherRow.getValue('id'));
@@ -242,7 +242,7 @@ function usingOrderBy() {
 */
 function usingWildcardsToFindAPattern() {
 	var row = new DBRow(lit.tables.POST);
-	row.addQuery(lit.fields.CONTENT, lit.LIKE, "%pls help%");
+	row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%pls help%");
 	row.query().then(function() {
 		row.next();
 		console.log(row.getValue(lit.fields.TITLE));
@@ -255,7 +255,7 @@ function usingWildcardsToFindAPattern() {
 
 function alternateWildcardExample() { //TODO: Make this work if at all possible
 	var row = new DBRow(lit.tables.COMMENT);
-	row.addQuery(lit.fields.CONTENT, lit.LIKE, "%taken this class%");
+	row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%taken this class%");
 	row.addQuery(lit.fields.AUTHOR, 'HotMuffin');
 	row.query().then(function() {
 		row.next();

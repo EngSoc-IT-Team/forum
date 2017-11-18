@@ -85,7 +85,7 @@ exports.searchForContent = function (inputSearch, table) {
                     res[1] = [];
                     for (var j in sortedPosts) {
                         res[0].push(sortedPosts[j][lit.fields.ID]);
-                        res[1].push(sortedPosts[j][lit.TABLE]);
+                        res[1].push(sortedPosts[j][lit.sql.TABLE]);
                     }
                     resolve(res);
                 })

@@ -157,7 +157,7 @@ function emailUsers(contentID) {
                 //email users
                 for (var i in netIDs) {
                     //TODO add url to give info
-                    mailOptions[lit.TO] = netIDs[i] + lit.QUEENS_EMAIL;
+                    mailOptions[lit.sql.query.TO] = netIDs[i] + lit.QUEENS_EMAIL;
                     log.log("Mail sent for content: " + contentID);
                     transport.sendMail(mailOptions);
                 }

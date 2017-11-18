@@ -53,9 +53,13 @@ exports.add = function(tagName) { //TODO: add related tags
         var tag = new DBRow(lit.tables.TAG);
         tag.setValue(lit.fields.NAME, tagName);
         tag.insert().then(function () {
+            return exports.updateTagArray(); // TODO: May want the janitor to auto update instead of updating every time a tag is added
+        }).then(function() {
             resolve();
-            exports.updateTagArray(); // TODO: May want the janitor to auto update instead of updating every time a tag is added
-        }, function(){reject()});
+        }).catch(function() {
+           log.error('Error adding tag');
+           reject();
+        });
     });
 };
 
@@ -71,10 +75,15 @@ exports.updateTagArray = function() {
                 if (!tagArray.includes(tags.getValue(lit.fields.NAME)))
                     tagArray.push(tags.getValue(lit.fields.NAME));
             }
-            resolve();
-        }, function() {reject()});
+            resolve('Successfully updated the tag array');
+        }, function() {
+            reject('Failed to update the tag array')
+        });
     });
 };
 
 // update the tag array as soon as the module is required
-exports.updateTagArray();
+function getTagsOnStartup() {
+    exports.updateTagArray().catch(function() {log.error('Failed to update the tag array on startup')})
+}
+setTimeout(getTagsOnStartup, 2000);

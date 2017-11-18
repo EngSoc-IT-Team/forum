@@ -2,7 +2,7 @@
  * DatabaseManager.js
  * Written by Michael Albinson 11/19/16
  *
- * The interface for working with the
+ * The interface object for working with the database
  */
 
 "use strict";
@@ -16,22 +16,22 @@ const databaseInformation = require('../../config/database.json');
 const shouldLogSQL = pm.getConfigProperty('SQL.Trace');
 
 function DatabaseManager() {
-	// the information needed to make the connection to mysql, DOES NOT by default specify a database, just credentials to sign in
 	var pool;
-	if (pm.getConfigProperty(lit.DATABASE_SETUP_NEEDED))
+
+	if (pm.getConfigProperty(lit.config.DATABASE_SETUP_NEEDED) || pm.getConfigProperty(lit.config.DATABASE_TESTING))
 		pool = mysql.createPool({
-			host: databaseInformation[lit.HOST],
-			user: databaseInformation[lit.USER],
-			password: databaseInformation[lit.SECRET],
-			connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
+			host: databaseInformation[lit.sql.HOST],
+			user: databaseInformation[lit.sql.USER],
+			password: databaseInformation[lit.sql.SECRET],
+			connectionLimit: databaseInformation[lit.sql.MAX_CONNECTIONS]
 		});
 	else
         pool = mysql.createPool({
-            host: databaseInformation[lit.HOST],
-            user: databaseInformation[lit.USER],
-            password: databaseInformation[lit.SECRET],
-			database: databaseInformation[lit.DATABASE],
-            connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
+            host: databaseInformation[lit.sql.HOST],
+            user: databaseInformation[lit.sql.USER],
+            password: databaseInformation[lit.sql.SECRET],
+			database: databaseInformation[lit.sql.DATABASE],
+            connectionLimit: databaseInformation[lit.sql.MAX_CONNECTIONS]
         });
 
     /** Queries the database by opening a connection and querying and then closes the connection and returns the response.
@@ -40,7 +40,7 @@ function DatabaseManager() {
 	 * @param ignoreFailure: whether or not to ignore query failures
      */
 	this.query = function(queryString, ignoreFailure) {
-		return new Promise(function(resolve, reject){
+		return new Promise(function(resolve, reject) {
 			pool.getConnection(function(err, connection) {
 				if (err) {
 					log.error(err.message);
@@ -49,27 +49,28 @@ function DatabaseManager() {
 
 				connection.query(queryString, function(err, rows) {
 					if (err && !ignoreFailure) {
-						log.error(err.message);
+						log.error('SQL Error: ' + err.message);
+                        log.error("The corresponding SQL was: " + queryString);
 						return reject(err);
 					}
 
-					logSQLIfRequired(queryString);
+                    logSQLIfRequired(queryString);
 
 					connection.release();
 					resolve(rows);
 				});
 			});
-		})
+		});
 	};
 
 	this.useDB = function(DBName) {
-		return new Promise(function(resolve) {
+		return new Promise(function(resolve, reject) {
 			pool = mysql.createPool({
-				host: databaseInformation[lit.HOST],
-				user: databaseInformation[lit.USER],
-				password: databaseInformation[lit.SECRET],
+				host: databaseInformation[lit.sql.HOST],
+				user: databaseInformation[lit.sql.USER],
+				password: databaseInformation[lit.sql.SECRET],
 				database: DBName,
-				connectionLimit: databaseInformation[lit.MAX_CONNECTIONS]
+				connectionLimit: databaseInformation[lit.sql.MAX_CONNECTIONS]
 			});
 			resolve();
 		});

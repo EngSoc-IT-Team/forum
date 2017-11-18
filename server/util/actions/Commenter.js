@@ -132,7 +132,7 @@ function getSubComments(comment, item, info, userID, commentInfo) {
         subComments.addQuery(lit.fields.COMMENT_LEVEL, 1);
         subComments.addQuery(lit.fields.PARENT, item.getValue(lit.fields.ID));
         subComments.addQuery(lit.fields.PARENT_COMMENT, comment.getValue(lit.fields.ID));
-        subComments.orderBy(lit.fields.NETVOTES, lit.DESC); //TODO: enable sorting by best or by new
+        subComments.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC); //TODO: enable sorting by best or by new
         subComments.setLimit(10);
         subComments.query().then(function() {
             if (subComments.count() < 1)

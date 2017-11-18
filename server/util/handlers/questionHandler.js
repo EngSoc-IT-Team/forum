@@ -30,7 +30,7 @@ exports.handle = function(request) {
                     var comments = new DBRow(lit.tables.COMMENT);
                     comments.addQuery(lit.fields.COMMENT_LEVEL, 0);
                     comments.addQuery(lit.fields.PARENT, question.getValue(lit.fields.ID));
-                    comments.orderBy(lit.fields.NETVOTES, lit.DESC);
+                    comments.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC);
                     comments.setLimit(10);
                     comments.query().then(function() {
                         commenter.getCommentsRecursive(resolve, reject, comments, question, info, request.signedCookies.usercookie.userID);

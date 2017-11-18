@@ -13,7 +13,7 @@ var path = require('path');
 var lit = require('./Literals.js');
 var pm = require('./PropertyManager');
 
-var isInProduction = pm.getConfigProperty(lit.PRODUCTION);
+var isInProduction = pm.getConfigProperty(lit.config.PRODUCTION);
 
 exports.log = function(logString) {
 	var currentTime = _getTime();

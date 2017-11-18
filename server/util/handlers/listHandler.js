@@ -34,9 +34,9 @@ exports.handle = function (request) {
             return executeAdvanced(resolve, reject, request);
 
         for (var key in request.query)
-            items.addQuery(key, lit.LIKE, '%' + request.query[key] + '%'); //TODO: Fix tag handling (should be able to get post by tag for any item)
+            items.addQuery(key, lit.sql.query.LIKE, '%' + request.query[key] + '%'); //TODO: Fix tag handling (should be able to get post by tag for any item)
 
-        items.orderBy(lit.fields.TIMESTAMP, lit.DESC);
+        items.orderBy(lit.fields.TIMESTAMP, lit.sql.query.DESC);
         items.setLimit(20);
         items.query().then(function () {
             recursion.recursiveGetWithVotes(resolve, reject, items, itemInfo.generalInfo, userID, [info]);

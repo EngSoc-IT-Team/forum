@@ -13,6 +13,7 @@ var log = require('./util/log');
 var lit = require('./util/Literals.js');
 var PM = require('./util/PropertyManager');
 
+var creationFailed = false;
 
 setup(); // let's set everything up
 
@@ -22,21 +23,19 @@ setup(); // let's set everything up
  */
 function setup() {
 	dependencies.checkDependencies();
-    if (PM.getConfigProperty(lit.DATABASE_SETUP_NEEDED)) {
+    if (PM.getConfigProperty(lit.config.DATABASE_SETUP_NEEDED)) {
         dbsetup.checkIfDataBaseExistsAndCreateIfNecessary().then(function () {
-            return dbsetup.setupDatabase().catch(function() {
-                log.error('THERE WAS AN ERROR DURING DATABASE SETUP');
-                log.error('PLEASE SEE THE ERROR LOGS FOR MORE INFORMATION');
-			}); // setup all default tables
+            return dbsetup.setupDatabase();
 
         }).then(function () {
             // only load demo data if the database schema has just been set up
-            if (PM.getConfigProperty(lit.LOAD_MOCK_DATA) && PM.getConfigProperty(lit.DATABASE_SETUP_NEEDED))
+            if (PM.getConfigProperty(lit.config.LOAD_MOCK_DATA) && PM.getConfigProperty(lit.config.DATABASE_SETUP_NEEDED))
                 return dbsetup.loadDemoData();
 
         }).catch(function () {
-            log.error('THERE WAS AN ERROR DURING DATABASE SETUP');
-            log.error('PLEASE SEE THE ERROR LOGS FOR MORE INFORMATION');
+            log.severe(':(');
+            log.severe('THERE WAS AN ERROR DURING DATABASE CREATION');
+            log.severe('PLEASE SEE THE ERROR LOGS FOR MORE INFORMATION');
         });
     }
 }

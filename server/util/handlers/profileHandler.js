@@ -102,7 +102,7 @@ function getSaved(user, info) {
         var saved = new DBRow(lit.tables.SAVED);
         saved.addQuery(lit.fields.USER_ID, user.getValue(lit.fields.ID));
         saved.setLimit(5);
-        saved.orderBy(lit.fields.TIMESTAMP, lit.DESC);
+        saved.orderBy(lit.fields.TIMESTAMP, lit.sql.query.DESC);
         saved.query().then(function() {
             recursion.recursiveGetWithVotes(resolve, reject, saved, itemInfo.generalInfo, user.getValue(lit.fields.ID),
                 [info.items.saved]);
@@ -122,7 +122,7 @@ function getSubscribed(user, info) {
         var subscribed = new DBRow(lit.tables.SUBSCRIPTIONS);
         subscribed.addQuery(lit.fields.USER_ID, user.getValue(lit.fields.ID));
         subscribed.setLimit(5);
-        subscribed.orderBy(lit.fields.TIMESTAMP, lit.DESC);
+        subscribed.orderBy(lit.fields.TIMESTAMP, lit.sql.query.DESC);
         subscribed.query().then(function() {
             recursion.recursiveGetWithVotes(resolve, reject, subscribed, itemInfo.generalInfo, user.getValue(lit.fields.ID),
                 [info.items.subscribed]);
@@ -143,7 +143,7 @@ function getContributions(user, info) {
         var contr = new DBRow(lit.tables.CONTRIBUTION);
         contr.addQuery(lit.fields.USER_ID, user.getValue(lit.fields.ID));
         contr.setLimit(5);
-        contr.orderBy(lit.fields.TIMESTAMP, lit.DESC);
+        contr.orderBy(lit.fields.TIMESTAMP, lit.sql.query.DESC);
         contr.query().then(function() {
             recursion.recursiveGetWithVotes(resolve, reject, contr, itemInfo.generalInfo, user.getValue(lit.fields.ID),
                 [info.items.contributions]);

@@ -187,11 +187,12 @@ exports.DBRow = function(table) {
 	 ** No return values
 	**/
 	this.orderBy = function(field, ascOrDesc) { 
-		if (!(ascOrDesc === lit.ASC || ascOrDesc === lit.asc || ascOrDesc === lit.DESC || ascOrDesc === lit.desc || ascOrDesc === undefined))
+		if (!(ascOrDesc === lit.sql.query.ASC || ascOrDesc === lit.sql.query.asc || ascOrDesc === lit.sql.query.DESC ||
+				ascOrDesc === lit.sql.query.desc || ascOrDesc === undefined))
 			return log.error("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
 		if (ascOrDesc === undefined)
-			ascOrDesc = lit.ASC;
+			ascOrDesc = lit.sql.query.ASC;
 		
 		querySort = qb.escapeOrderBy(table, field, ascOrDesc);
 	};

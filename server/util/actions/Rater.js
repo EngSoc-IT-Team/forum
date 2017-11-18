@@ -138,7 +138,7 @@ exports.getRatingList = function(parentID, info, resolve) {
     var ratings = new DBRow(lit.tables.RATING);
     ratings.addQuery(lit.fields.PARENT, parentID);
     ratings.setLimit(10);
-    ratings.orderBy(lit.fields.TIMESTAMP, lit.DESC);
+    ratings.orderBy(lit.fields.TIMESTAMP, lit.sql.query.DESC);
     ratings.query().then(function() {
         while (ratings.next()) {
             ratingList.push(getRatingInfo(ratings));
