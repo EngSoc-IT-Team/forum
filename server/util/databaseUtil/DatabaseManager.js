@@ -18,7 +18,7 @@ const shouldLogSQL = pm.getConfigProperty('SQL.Trace');
 function DatabaseManager() {
 	var pool;
 
-	if (pm.getConfigProperty(lit.config.DATABASE_SETUP_NEEDED) || pm.getConfigProperty(lit.config.DATABASE_TESTING))
+	if (pm.getConfigProperty(lit.config.DATABASE_SETUP_NEEDED) || !pm.getConfigProperty(lit.config.DATABASE_TESTING))
 		pool = mysql.createPool({
 			host: databaseInformation[lit.sql.HOST],
 			user: databaseInformation[lit.sql.USER],

@@ -6,7 +6,7 @@
 		"_description": "Whether or not the forum is in a production environment or not"
 	},
 	"databaseSetupNeeded": {
-		"value": true,
+		"value": false,
 		"readable": true,
 		"writable": false,
 		"_description": "Whether or not a database needs to be created for development. Will not create a database if one already exists with the same name as specified in config.json"
@@ -28,5 +28,11 @@
 		"readable": true,
 		"writable": false,
 		"_description": "Whether or not to log all SQL transations made by the server"
+	},
+	"databaseTesting": {
+		"value": false,
+		"readable": true,
+		"writable": false,
+		"_description": "Allows for testing and using DBRow without the server actively running. A database MUST ALREADY EXIST for this option to be true or there will be SQL connection issues"
 	}
 }
