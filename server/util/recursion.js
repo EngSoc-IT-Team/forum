@@ -59,7 +59,7 @@ exports.recursiveGetWithVotes = function (resolve, reject, rowsToGet, action, us
         var type = rowsToGet.getValue(lit.fields.TYPE);
         var item = new DBRow(type);
         item.getRow(rowsToGet.getValue(lit.fields.ITEM_ID)).then(function () {
-            if (type == 'link' || type == 'post') {
+            if (type === 'link' || type === 'post') {
                 voter.getVote(userID, rowsToGet.getValue(lit.fields.ITEM_ID)).then(function (vote) {
                     if (vote)
                         action(item, vote, type, actionArgs);
@@ -114,6 +114,53 @@ exports.recursiveGetListWithVotes = function (resolve, reject, rowList, tableLis
                 reject(actionArgs, err);
             });
         });
+    }
+};
+
+/**
+ * Gets the votes associated with the rows contained in a DBRow object
+ * MUST HAVE ALREADY GOTTEN THE ROWS FROM THE DATABASE BEFORE CALLING THIS RECURSIVE GET FUNCTION
+ *
+ * @param resolve: the resolve function of the calling function's promise
+ * @param reject: the reject function of the calling function's promise
+ * @param DBRowObj: the DBRow object containing the rows you want to get the information for
+ * @param action: the function to execute after each vote is retrieved
+ * @param userID: the userID of the user to get votes for
+ * @param actionArgs: the function arguments, if any, that need to be passed to the action function
+ */
+exports.recursiveGetRowListWithVotes = function (resolve, reject, DBRowObj, action, userID, actionArgs) {
+    if (!DBRowObj.next()) //if we run out of rows, resolve the promise, otherwise we increment
+        resolve(actionArgs);
+    else {
+        if (DBRowObj.getTable() === 'link' || DBRowObj.getTable() === 'post' || DBRowObj.getTable() === 'comment') {
+            voter.getVote(userID, DBRowObj.getValue(lit.fields.ID)).then(function (vote) {
+                if (vote)
+                    action(DBRowObj, vote, DBRowObj.getTable(), actionArgs);
+                else
+                    action(DBRowObj, undefined, DBRowObj.getTable(), actionArgs);
+
+                exports.recursiveGetRowListWithVotes(resolve, reject, DBRowObj, action, userID, actionArgs)
+            }).catch(function(err) {
+                reject(actionArgs, err);
+            });
+        }
+        else {
+            var u = new DBRow(lit.tables.USER);
+            u.getRow(userID).then(function () {
+                rater.getRating(u.getValue(lit.fields.USERNAME), DBRowObj.getValue(lit.fields.ID)).then(function (rating) {
+                    if (rating)
+                        action(DBRowObj, rating, DBRowObj.getTable(), actionArgs);
+                    else
+                        action(DBRowObj, undefined, DBRowObj.getTable(), actionArgs);
+
+                    exports.recursiveGetRowListWithVotes(resolve, reject, DBRowObj, action, userID, actionArgs)
+                }).catch(function(err) {
+                    reject(actionArgs, err);
+                });
+            }).catch(function(err){
+                reject(actionArgs, err);
+            });
+        }
     }
 };
 

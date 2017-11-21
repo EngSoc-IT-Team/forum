@@ -276,4 +276,13 @@ exports.DBRow = function(table) {
 	this.getRowJSON = function() {
 		return currentRow;
 	};
+
+    /**
+	 * Just in case you forgot what the table is...
+	 *
+	 * @return the table name string
+     */
+	this.getTable = function() {
+		return table;
+	}
 };
