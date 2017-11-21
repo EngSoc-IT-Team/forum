@@ -313,3 +313,25 @@ function exmapleUseOfARecursiveGet() {
         console.log(message);
     });
 }
+
+/**
+ * Tests using multiple wildcards in a single query. Note that the wildcards are all AND linked, so you cannot yet search
+ * <if this OR that> only <if this AND that>
+ */
+function testMultpleWildcards() {
+    var row = new DBRow(lit.tables.POST);
+    row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%pls help%");
+    row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%pls%");
+    row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%I'm%");
+    row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%no%");
+    row.addQuery(lit.fields.TITLE, lit.sql.query.LIKE, "%indeterminate%");
+    row.addQuery(lit.fields.TITLE, lit.sql.query.LIKE, "%analyze%");
+    row.query().then(function () {
+        row.next();
+        console.log(row.getValue(lit.fields.TITLE));
+        console.log(row.getValue(lit.fields.CONTENT));
+
+    }, function (err) {
+        console.log("There was an error")
+    })
+}

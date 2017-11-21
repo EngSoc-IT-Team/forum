@@ -175,11 +175,28 @@ exports.DBRow = function(table) {
 		if (arguments.length === 2)
 			currentRow[property] = value; 
 		else if (arguments.length === 3) {
-			currentRow[property] = {'operator': arguments[1], 'value': arguments[2]};
+            threeArgAddQuery(property, value, arguments[2]);
 		}
 		else
 			return log.error("No more than three arguments are allowed for the addQuery function");
 	};
+
+	function threeArgAddQuery(property, operator, value) {
+		if (operator === lit.sql.query.LIKE) {
+            if (currentRow[property] === undefined || currentRow[property].values === undefined)
+            	currentRow[property] = {
+                	"operator": operator,
+                	values: []
+            	};
+
+            currentRow[property].values.push(value);
+		}
+		else
+            currentRow[property] = {
+				"operator": operator,
+				"value": value
+			}
+	}
 
 	/** orderBy(field, ascOrDesc)
 	 ** field: the field to order the result from the database by

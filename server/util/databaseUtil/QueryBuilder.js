@@ -206,11 +206,13 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 
 			if (!allowSettingId && prop === 'id')
 				continue;
-			
-			if (typeof obj[prop] === 'object' && obj[prop] !== null && obj[prop][lit.OPERATOR])
-				dbObjectString += prop + " " + checkOperator(obj[prop][lit.OPERATOR]) + " " + resolveObjectType(obj[prop][lit.VALUE]);
-			else
-				dbObjectString += prop + "=" + resolveObjectType(obj[prop]);
+
+            if (typeof obj[prop] === 'object' && obj[prop] !== null && obj[prop][lit.OPERATOR]) {
+                if (obj[prop][lit.OPERATOR] === lit.sql.query.LIKE)
+                    dbObjectString += getWildcardQueries(prop, obj[prop].values);
+                else
+                    dbObjectString += prop + " " + checkOperator(obj[prop][lit.OPERATOR]) + " " + resolveObjectType(obj[prop][lit.VALUE]);
+            }
 
 			if (itrs < numOfFields) //until the second to last element do this
 				if (isUpdate) {
@@ -280,4 +282,23 @@ function checkOperator(op) {
 			log.warn('An unacceptable operator was passed into the query, replacing with the equals operator');
 		return '=';
 	}
+}
+
+function getWildcardQueries(property, values) {
+    if (values === undefined)
+        return '';
+
+    var tmp = "";
+    for (var index in values) {
+        if (index !== 0 && values.length !== 1)
+            tmp += "(";
+
+        tmp += property + " " + lit.sql.query.LIKE + " " + resolveObjectType(values[index]);
+
+        if (parseInt(index) + 1 !== values.length)
+            tmp += ") AND "
+        else if (parseInt(index) + 1 === values.length && values.length > 1)
+            tmp += ")"
+    }
+    return tmp;
 }
