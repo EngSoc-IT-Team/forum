@@ -18,21 +18,21 @@ const shouldLogSQL = pm.getConfigProperty('SQL.Trace');
 function DatabaseManager() {
 	var pool;
 
-	if (pm.getConfigProperty(lit.config.DATABASE_SETUP_NEEDED) || !pm.getConfigProperty(lit.config.DATABASE_TESTING))
+	if (pm.getConfigProperty(lit.config.DATABASE_TESTING) || !pm.getConfigProperty(lit.config.DATABASE_SETUP_NEEDED))
+        pool = mysql.createPool({
+            host: databaseInformation[lit.sql.HOST],
+            user: databaseInformation[lit.sql.USER],
+            password: databaseInformation[lit.sql.SECRET],
+            database: databaseInformation[lit.sql.DATABASE],
+            connectionLimit: databaseInformation[lit.sql.MAX_CONNECTIONS]
+        });
+	else
 		pool = mysql.createPool({
 			host: databaseInformation[lit.sql.HOST],
 			user: databaseInformation[lit.sql.USER],
 			password: databaseInformation[lit.sql.SECRET],
 			connectionLimit: databaseInformation[lit.sql.MAX_CONNECTIONS]
 		});
-	else
-        pool = mysql.createPool({
-            host: databaseInformation[lit.sql.HOST],
-            user: databaseInformation[lit.sql.USER],
-            password: databaseInformation[lit.sql.SECRET],
-			database: databaseInformation[lit.sql.DATABASE],
-            connectionLimit: databaseInformation[lit.sql.MAX_CONNECTIONS]
-        });
 
     /** Queries the database by opening a connection and querying and then closes the connection and returns the response.
 	 *
