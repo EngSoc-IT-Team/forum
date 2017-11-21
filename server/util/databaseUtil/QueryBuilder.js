@@ -213,6 +213,8 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
                 else
                     dbObjectString += prop + " " + checkOperator(obj[prop][lit.OPERATOR]) + " " + resolveObjectType(obj[prop][lit.VALUE]);
             }
+            else
+                dbObjectString += prop + "=" + resolveObjectType(obj[prop]);
 
 			if (itrs < numOfFields) //until the second to last element do this
 				if (isUpdate) {
