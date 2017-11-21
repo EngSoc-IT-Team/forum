@@ -6,6 +6,8 @@
 var DBRow = require('../util/DBRow').DBRow;
 var generator = require('../util/Generator');
 var lit = require('../util/Literals.js');
+var recursion = require('../util/recursion');
+var itemInfo = require('../util/handlers/itemInfoGetter');
 
 /* A series of basic functions to help get your head around using the DBRow object
 ** each should be fairly self explanatory, but if there are questions let me know
@@ -284,4 +286,30 @@ function resetIndexExample() {
             console.log(row.getValue(lit.fields.ID));
         }
 	})
+}
+
+/**
+ * Same as the last one except it uses recursiveGetRowListWithVotes to get all of the
+ */
+function exmapleUseOfARecursiveGet() {
+    var row = new DBRow(lit.tables.COMMENT);
+    var info = [[]];
+    var userID = 'ufs6jhhbjavxymgt0m8a1x024pcj7khx';
+    row.addQuery(lit.fields.AUTHOR, "WizardPikachu");
+    row.query().then(function () {
+        while (row.next()) {
+            console.log(row.getValue(lit.fields.ID));
+        }
+        row.resetIndex();
+        return new Promise(function (resolve, reject) {
+            recursion.recursiveGetRowListWithVotes(resolve, reject, row, itemInfo.generalInfo, userID, info);
+        });
+    }).then(function () {
+        console.log('no err!');
+        console.log(info);
+    }).catch(function (err, message) {
+        console.log('err');
+        console.log(err);
+        console.log(message);
+    });
 }
