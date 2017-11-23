@@ -18,7 +18,7 @@ var commentTemplate ='<div class ="col-sm-12" id="{4}" data-hasvoted="{5}" data-
                            <span class="date"> You commented on {2} </span>\
                            <p class="description">{3}</p>\
                            <div class="action-links">\
-                               <a href="/link?id={6}">View</a>\
+                               <a href="/question?id={6}">View</a>\
                                <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
                                <a href="javascript: void 0;" onclick="save(this)">Save</a>\
                                <a href="javascript: void 0;" onclick="report(this)">Report</a>\
@@ -192,7 +192,7 @@ function addTags(tags) {
 function fillCommentTemplate(comment) {
 
         return fillTemplate(commentTemplate, positiveOrNegative(comment.netVotes), comment.netVotes,
-        getDateString(comment.date), comment.content, comment.id, comment.voted, comment.parentName);
+        getDateString(comment.date), comment.content, comment.id, comment.voted, comment.parent);
 
 }
 
