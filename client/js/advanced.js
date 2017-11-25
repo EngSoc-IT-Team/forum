@@ -29,17 +29,17 @@ function sendQuery() {
     }
 
     if(keywords.length > 0){
-        queryString += '&keywords='+keywords;
+        queryString += '&keywords='+keywords.split(" ");
     }
 
     if(exactWords.length > 0){
-        queryString += '&exactPhrase='+exactWords;
+        queryString += '&exactPhrase='+exactWords.split(" ");
         //replace(' ', '');
     }
 
     if(title.length > 0) {
         //var res = title.split(" ");
-        queryString += '&titleContains='+title.split(" ");
+        queryString += '&titleContains='+title;
     }
     //repeat for all fields
 
