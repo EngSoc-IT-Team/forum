@@ -90,9 +90,6 @@ function executeAdvanced(resolve, reject, request) {
             addCommaSeparatedStringToQuery(posts, lit.fields.TAGS, tags);
 
         posts.query().then(function() {
-            if (posts.count() === 0)
-                return reject('No rows match the advanced query!');
-
             recursion.recursiveGetRowListWithVotes(resolve, reject, posts, itemInfo.generalInfo, userID, info)
         }).catch(function(err, message){
             console.log('err receiving rows');
