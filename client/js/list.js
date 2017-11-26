@@ -22,40 +22,22 @@ function whenLoaded() {
     else
         href = '/info';
 
+    AJAXCall(href, content, true, svgConvertAndBuildList, showAskAQuestion, showAskAQuestion, undefined, undefined);
+}
 
+function svgConvertAndBuildList(data) {
+    if (data[0].length < 20) {
+        $('#getMore').hide();
+        $('#foot').append(askAQuestion);
+    }
 
-    startPulsing();
+    buildList(data[0], '#listHead');
+    svgConverter();
+}
 
-    $.ajax({
-        url: href,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(content)
-    }).done(function(data) {
-        stopPulsing();
-        if (data) {
-            if (data[0].length == 0) {
-                $('#getMore').hide();
-                $('#foot').append(askAQuestion);
-                return;
-            }
-            else if (data[0].length < 20) {
-                $('#getMore').hide();
-                $('#foot').append(askAQuestion);
-            }
-            stopPulsing();
-            buildList(data[0], '#listHead');
-            svgConverter();
-        }
-        else {
-            // at some point show "something went wrong" modal
-            $('#aProblemOccurred').modal('toggle');
-        }
-    }).fail(function(err) {
-        // at some point show "something went wrong" modal
-        stopPulsing();
-        console.log(err);
-    });
+function showAskAQuestion() {
+    $('#getMore').hide();
+    $('#foot').append(askAQuestion);
 }
 
 // indicate the index of the posts the page has received (they are returned in sets of 20)
