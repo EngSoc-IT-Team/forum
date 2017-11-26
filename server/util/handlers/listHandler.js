@@ -63,39 +63,7 @@ function useSearch(resolve, reject, request) {
 }
 
 
-
-//.like wildcards for specific searches
-//while loop to check if there is something in the next row
-//check to see if there is a match in each row.
-
-function addTagstoQuery(rowObj, tags){
-    if(tags === undefined)
-        return;
-    var keywordArr = tags.split(',');
-    for(var index in keywordArr)
-        rowObj.addQuery (lit.fields.TAGS, lit.sql.query.LIKE, "%"+keywordArr[index]+"%")
-}
-
-function addExactWordstoQuery(rowObj2, exactW) {
-    if(exactW === undefined)
-        return;
-    var keywordArr2 = exactW.split(',');
-    for(var index in keywordArr2)
-        rowObj2.addQuery (lit.fields.CONTENT, lit.sql.query.LIKE, "%"+keywordArr2[index]+"%");
-
-}
-
-function addKeywordstoQuery(rowObj3, exactK) {
-    if(exactK === undefined)
-        return;
-    var keywordArr3 = exactK.split(',');
-    for(var index in keywordArr3)
-        rowObj3.addQuery (lit.fields.CONTENT, keywordArr3[index]);
-
-}
-
 function executeAdvanced(resolve, reject, request) {
-    // does search
     var info = [[]];
     var userID = request.signedCookies.usercookie.userID;
 
@@ -103,46 +71,39 @@ function executeAdvanced(resolve, reject, request) {
     var table = request.query.table;
     var tags = request.query.tags;
     var keywords = request.query.keywords;
-    var exactWords = request.query.exactPhrase;
+    var exactPhrase = request.query.exactPhrase;
 
 
     if(table === "posts") {
+        var posts = new DBRow(lit.tables.POST);
 
-        var posty = new DBRow(lit.tables.POST);
+        if (title) //
+            addCommaSeparatedStringToQuery(posts, lit.fields.TITLE, title);
 
-        if(title !== "NULL")
-            posty.addQuery(lit.fields.TITLE, title);
-        //if(keywords !== "NULL")
-            //posty.addQuery(lit.fields.CONTENT, keywords);
-        addKeywordstoQuery(posty, keywords);
-        //if(exactWords !== "NULL")
-          //  posty.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%"+exactWords+"%");
-        addExactWordstoQuery(posty, exactWords);
-        //if(tags !== "NULL")
-            //posty.addQuery(lit.fields.TAGS, lit.sql.query.LIKE, "%"+tags+"%");
-        addTagstoQuery(posty, tags);
+        if (keywords) // can be in the content, but don't have to
+            addCommaSeparatedStringToQuery(posts, lit.fields.CONTENT, keywords);
 
-        posty.query().then(function(resolve, reject) {
-            //while(posty.next()) {
-              //  console.log(posty.getValue(lit.fields.TITLE));
-            //}
-           //posty.resetIndex();
-            //return new Promise(function (resolve, reject){
-                recursion.recursiveGetRowListWithVotes(resolve, reject, posty, itemInfo.generalInfo, userID, info)
-            //});
-            //if (!posty.next())
-                //return console.log("nothing");
-           /* }).then(function () {
-            console.log("no error");
-            console.log(info);*/
+        if (exactPhrase) // must be in the content somewhere
+            posts.addQuery(lit.fields.CONTENT, '%'+exactPhrase+'%');
+
+        if (tags) // must be in the tag field
+            addCommaSeparatedStringToQuery(posts, lit.fields.TAGS, tags);
+
+        posts.query().then(function() {
+            if (posts.count() === 0)
+                return reject('No rows match the advanced query!');
+
+            recursion.recursiveGetRowListWithVotes(resolve, reject, posts, itemInfo.generalInfo, userID, info)
         }).catch(function(err, message){
             console.log('err receiving rows');
             console.log(err);
             console.log(message);
+            reject();
         });
 
     }
 
+    // will not work, there is no CONTENT field on link
     if(table === "link"){
 
         var linker = new DBRow(lit.tables.post);
@@ -157,13 +118,14 @@ function executeAdvanced(resolve, reject, request) {
                 linker.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%"+ exactWords +"%");
                 linker.addQuery(lit.fields.TAGS, lit.sql.query.LIKE, "%"+ tags +"%");
             }
-        }, function(err) {
+        }, function() {
             console.log("No rows match, error");
             reject(false);
         });
 
     }
 
+    // will not work, the class table does not have most of these fields
     if(table === "classes"){
 
         var classer = new DBRow(lit.tables.post);
@@ -186,6 +148,7 @@ function executeAdvanced(resolve, reject, request) {
 
     }
 
+    // will not work at all, the user table does not have any of these tags
     if(table === "user"){
 
         var userer = new DBRow(lit.tables.post);
@@ -206,19 +169,17 @@ function executeAdvanced(resolve, reject, request) {
         });
 
     }
-    /*var row = new DBRow(lit.VOTE_TABLE);
-    row.addQuery(lit.FIELD_USER_ID, lit.LIKE, "%"+ "a" +"%");
-    row.addQuery(lit.FIELD_USER_ID, "a");
+}
 
 
-    row.query().then(function() {
-        if (!row.next())
-            return console.log("nothing back!");
+//.like wildcards for specific searches
+//while loop to check if there is something in the next row
+//check to see if there is a match in each row.
+function addCommaSeparatedStringToQuery(rowObj, field, commaSeparatedString){
+    if(commaSeparatedString === undefined)
+        return;
 
-        console.log(row.getValue(lit.FIELD_ID));
-        console.log(row.count());
-    }, function(err) {
-        console.log("No rows match, error");
-    });
-    */
+    var keywordArr = commaSeparatedString.split(',');
+    for(var index in keywordArr)
+        rowObj.addQuery(field, lit.sql.query.LIKE, "%"+keywordArr[index]+"%")
 }
