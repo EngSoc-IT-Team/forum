@@ -102,24 +102,22 @@ function executeAdvanced(resolve, reject, request) {
 
     // will not work, there is no CONTENT field on link
     if(table === "link"){
+        var links = new DBRow(lit.tables.POST);
 
-        var linker = new DBRow(lit.tables.post);
+        if (title) //
+            addCommaSeparatedStringToQuery(links, lit.fields.TITLE, title);
 
-        linker.query().then(function() {
-            if(!linker.next()){
-                return console.log("nothing");
-            }
-            while(linker.next()){
-                linker.addQuery(lit.fields.TITLE, title);
-                linker.addQuery(lit.fields.CONTENT, keywords);
-                linker.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%"+ exactWords +"%");
-                linker.addQuery(lit.fields.TAGS, lit.sql.query.LIKE, "%"+ tags +"%");
-            }
-        }, function() {
-            console.log("No rows match, error");
-            reject(false);
+        if (tags) // must be in the tag field
+            addCommaSeparatedStringToQuery(links, lit.fields.TAGS, tags);
+
+        posts.query().then(function() {
+            recursion.recursiveGetRowListWithVotes(resolve, reject, links, itemInfo.generalInfo, userID, info)
+        }).catch(function(err, message){
+            console.log('err receiving rows');
+            console.log(err);
+            console.log(message);
+            reject();
         });
-
     }
 
     // will not work, the class table does not have most of these fields
