@@ -427,7 +427,7 @@ function sendFeedback() {
     var content = {
         requested: 'feedback',
         type: currentButton.replace('#', ''),
-        reportContent: $('#feedback-text').val()
+        feedbackContent: $('#feedback-text').val()
     };
 
     function onComplete() {
