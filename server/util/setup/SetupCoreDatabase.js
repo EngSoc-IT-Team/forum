@@ -8,8 +8,6 @@
 
 "use strict";
 
-var fs = require('fs');
-var path = require('path');
 var dbm = require('../databaseUtil/DatabaseManager.js');
 var dbr = require('../DBRow.js');
 var log = require('../log.js');
@@ -35,7 +33,7 @@ exports.setupDatabase = function() {
 
         for (var prop in defaults) {
             if (defaults.hasOwnProperty(prop))
-                createTable(defaults[prop][lit.TABLE_NAME], defaults[prop][lit.FIELDS], totalLength, resolve, reject);
+                createTable(defaults[prop][lit.sql.TABLE_NAME], defaults[prop][lit.sql.FIELDS], totalLength, resolve, reject);
         }
 	});
 };
@@ -44,15 +42,15 @@ exports.setupDatabase = function() {
  * Loads the demo data into the database
  */
 exports.loadDemoData = function() {
+	var loadref = {numComplete: 0};
 	return new Promise(function(resolve, reject) {
         log.info("~~~~~~~~~~~~~~Loading Demo Data~~~~~~~~~~~~~~~");
         var totalLength = Object.keys(demodata).length;
-        numCreated = 0;
         for (var element in demodata) {
             if (!demodata.hasOwnProperty(element))
                 continue;
 
-            loadRow(demodata[element][lit.TABLE], demodata[element], totalLength, numCreated, resolve, reject);
+            loadRow(demodata[element][lit.sql.TABLE], demodata[element], totalLength, loadref, resolve, reject);
         }
     });
 };
@@ -64,14 +62,15 @@ exports.checkIfDataBaseExistsAndCreateIfNecessary = function() {
 	return new Promise(function(resolve, reject) {
 		log.info('~~~~~~~~~~~~~~Creating Database ' + databaseConfig.database + '~~~~~~~~~~~~~~~');
 		dbm.query('CREATE DATABASE IF NOT EXISTS ' + databaseConfig.database, true).then(function() {
-			log.info('~~~~~~~~~~~~~~Database Creation Successful~~~~~~~~~~~~~~~\n\n');
 			return dbm.useDB(databaseConfig.database);
 		}).then(function() {
+            log.info('~~~~~~~~~~~~~~Database Creation Successful~~~~~~~~~~~~~~~\n\n');
 			resolve();
 		}).catch(function(e) {
-            log.error('FAILED TO CREATE OR USE DATABASE');
-            log.error('USE THE SQL.Trace PROPERTY TO DETERMINE THE FAILURE REASON');
-			reject();
+            log.severe('FAILED TO CREATE OR USE DATABASE');
+            log.severe('USE THE SQL.Trace PROPERTY TO DETERMINE THE FAILURE REASON');
+            log.error('~~~~~~~~~~~~~~Database Creation Ended~~~~~~~~~~~~~~~\n\n');
+			reject(e);
 		});
 	});
 };
@@ -81,38 +80,40 @@ exports.checkIfDataBaseExistsAndCreateIfNecessary = function() {
  * @param table: the table the new row is on
  * @param fields: the fields that need to be set to add the new table
  * @param numElementsToCreate: the number of new rows to load into the database
+ * @param numCreated
+ * @param resolve
+ * @param reject
  */
-function loadRow(table, fields, numElementsToCreate, numCreated, resolve) {
+function loadRow(table, fields, numElementsToCreate, numCreated, resolve, reject) {
 	var newRow = new dbr.DBRow(table);
 	newRow.setId = false;
 	for (var field in fields) {
         if (!fields.hasOwnProperty(field))
             continue;
 
-		if (field === lit.TABLE)
+		if (field === lit.sql.TABLE)
 			continue;
 
 		newRow.addQuery(field, fields[field]);
 	}
 
-	var id = newRow.getValue(lit.FIELD_ID);
+	var id = newRow.getValue(lit.fields.ID);
 
 	newRow.insert().then(function() {
-		log.info("Example row no. " + numCreated + " created!");
-		numCreated++;
-		if (numElementsToCreate === numCreated) {
-			resolve();
+		log.info("Example row no. " +  numCreated.numComplete + " created!");
+        numCreated.numComplete++;
+		if (numElementsToCreate ===  numCreated.numComplete)
             log.info("~~~~~~~~~~~~~~~End of Demo Data Load~~~~~~~~~~~~~~~~\n\n");
-        }
-	}, function() {
-		log.warn("Row no. " + numCreated + " not inserted, likely due to a previously logged error");
-		log.warn("The id of the failing row was '" + id + "'");
-		numCreated++;
-		if (numElementsToCreate === numCreated) {
-            log.info("~~~~~~~~~~~~~~~End of Demo Data Load~~~~~~~~~~~~~~~~\n");
-            throw new QEFError();
-        }
 
+        resolve();
+	}, function() {
+		log.warn("Row no. " +  numCreated.numComplete + " not inserted, likely due to a previously logged error");
+		log.warn("The id of the failing row was '" + id + "'");
+        numCreated.numComplete++;
+		if (numElementsToCreate ===  numCreated.numComplete)
+            log.info("~~~~~~~~~~~~~~~End of Demo Data Load~~~~~~~~~~~~~~~~\n");
+
+        reject();
 	});
 }
 
@@ -133,17 +134,17 @@ function createTable(tableName, fields, numberTablesToCreate, resolve, reject) {
             continue;
 
 		if(keyCount < Object.keys(fields).length-1) {
-			queryString += field + ' ' + possibleTypes[fields[field][lit.TYPE]];
-			if (fields[field][lit.DEFAULT]) {
-				if (fields[field][lit.DEFAULT] === 'CURRENT_TIMESTAMP' || fields[field][lit.DEFAULT] === 'GETDATE()') {
-					queryString += " DEFAULT " + fields[field][lit.DEFAULT];
+			queryString += field + ' ' + possibleTypes[fields[field][lit.sql.TYPE]];
+			if (fields[field][lit.sql.DEFAULT]) {
+				if (fields[field][lit.sql.DEFAULT] === 'CURRENT_TIMESTAMP' || fields[field][lit.sql.DEFAULT] === 'GETDATE()') {
+					queryString += " DEFAULT " + fields[field][lit.sql.DEFAULT];
 				}
 				else {
-					queryString += " DEFAULT '" + fields[field][lit.DEFAULT] + "'";
+					queryString += " DEFAULT '" + fields[field][lit.sql.DEFAULT] + "'";
 				}
 			}
 
-			if (fields[field][lit.PRIMARY_KEY])
+			if (fields[field][lit.sql.PRIMARY_KEY])
 				queryString += " PRIMARY KEY";
 
 			if (fields[field]["constraint"])
@@ -156,17 +157,17 @@ function createTable(tableName, fields, numberTablesToCreate, resolve, reject) {
 			if (!fields.hasOwnProperty(field))
 				continue;
 
-			queryString += field + ' ' + possibleTypes[fields[field][lit.TYPE]];
-			if (fields[field][lit.DEFAULT]){ //make this better
-				if (fields[field][lit.DEFAULT] === 'CURRENT_TIMESTAMP' || fields[field][lit.DEFAULT] === 'GETDATE()') {
-					queryString += " DEFAULT " + fields[field][lit.DEFAULT];
+			queryString += field + ' ' + possibleTypes[fields[field][lit.sql.TYPE]];
+			if (fields[field][lit.sql.DEFAULT]){ //make this better
+				if (fields[field][lit.sql.DEFAULT] === 'CURRENT_TIMESTAMP' || fields[field][lit.sql.DEFAULT] === 'GETDATE()') {
+					queryString += " DEFAULT " + fields[field][lit.sql.DEFAULT];
 				}
 				else {
-					queryString += " DEFAULT '" + fields[field][lit.DEFAULT] + "'";
+					queryString += " DEFAULT '" + fields[field][lit.sql.DEFAULT] + "'";
 				}
 			}
 
-			if (fields[field][lit.PRIMARY_KEY])
+			if (fields[field][lit.sql.PRIMARY_KEY])
 				queryString += " PRIMARY KEY";
 			
 			queryString += ')';
@@ -177,16 +178,17 @@ function createTable(tableName, fields, numberTablesToCreate, resolve, reject) {
 		numCreated++;
 		log.info("Table '" + tableName + "' created!");
 		if (numberTablesToCreate === numCreated) {
-			resolve();
             log.info("~~~~~~~~~~~~~~~End of Database Setup~~~~~~~~~~~~~~~~\n\n");
+            resolve();
         }
-	}, function() {
-		numCreated++;
-		log.warn("Table '" + tableName + "' not created! Likely due to a previously logged error");
-		if (numberTablesToCreate === numCreated) {
-			log.info("~~~~~~~~~~~~~~~End of Database Setup~~~~~~~~~~~~~~~~\n");
-			throw new QEFError("Failure to create tables for database")
-		}
-
-	});
+	}).catch(function () {
+        numCreated++;
+        log.warn("Table '" + tableName + "' not created! Likely due to a previously logged error");
+        if (numberTablesToCreate === numCreated) {
+            log.info("~~~~~~~~~~~~~~~End of Database Setup~~~~~~~~~~~~~~~~\n");
+            log.severe('THERE WAS AN ERROR DURING DATABASE TABLE CREATION');
+            log.severe('SOME TABLES FAILED TO BE CREATED');
+            reject("Failure to create tables for database");
+        }
+    });
 }

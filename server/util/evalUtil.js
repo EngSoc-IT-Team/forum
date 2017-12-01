@@ -18,7 +18,7 @@ var mockDataTemplate = '"##": {0}';
  * A function to get all the info necessary to paste new rows into mock data rapidly
  */
 exports.getMockData = function(url) {
-    var tableMap = {'question': lit.POST_TABLE, 'link': lit.LINK_TABLE, 'class': lit.CLASS_TABLE};
+    var tableMap = {'question': lit.tables.POST, 'link': lit.tables.LINK, 'class': lit.tables.CLASS};
     var returnString;
     var table = tableMap[url.slice(url.lastIndexOf('/') + 1, url.indexOf('?'))];
     var id =  url.slice(url.indexOf('=') + 1);
@@ -31,20 +31,20 @@ exports.getMockData = function(url) {
 
             returnString = fillTemplate(mockDataTemplate, getRowData(item, table)) + ',\n';
 
-            var contr = new DBRow(lit.CONTRIBUTION_TABLE);
-            contr.addQuery(lit.FIELD_ITEM_ID, item.getValue(lit.FIELD_ID));
+            var contr = new DBRow(lit.tables.CONTRIBUTION);
+            contr.addQuery(lit.fields.ITEM_ID, item.getValue(lit.fields.ID));
             contr.query().then(function() {
                 if(!contr.next())
                     return resolve(returnString);
 
-                returnString += fillTemplate(mockDataTemplate, getRowData(contr, lit.CONTRIBUTION_TABLE)) + ',\n';
-                var itemRow = new DBRow(lit.ITEM_TABLE);
-                itemRow.addQuery(lit.FIELD_ITEM_ID, item.getValue(lit.FIELD_ID));
+                returnString += fillTemplate(mockDataTemplate, getRowData(contr, lit.tables.CONTRIBUTION)) + ',\n';
+                var itemRow = new DBRow(lit.tables.ITEM);
+                itemRow.addQuery(lit.fields.ITEM_ID, item.getValue(lit.fields.ID));
                 itemRow.query().then(function() {
                     if(!itemRow.next())
                         return resolve(returnString);
 
-                    returnString += fillTemplate(mockDataTemplate, getRowData(itemRow, lit.ITEM_TABLE));
+                    returnString += fillTemplate(mockDataTemplate, getRowData(itemRow, lit.tables.ITEM));
                     resolve(returnString);
                 });
             });

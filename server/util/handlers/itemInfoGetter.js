@@ -20,10 +20,10 @@ var lit = require('./../Literals');
  * @param list: the array of item information to push the new information JSON object to
  */
 exports.generalInfo = function(item, vote, type, list) {
-    var hasVoted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
+    var hasVoted = vote ? (vote.getValue(lit.fields.VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
     var voteValue;
     if (type == 'post' || type == 'link')
-        voteValue = vote ? vote.getValue(lit.FIELD_VOTE_VALUE) : 0;
+        voteValue = vote ? vote.getValue(lit.fields.VOTE_VALUE) : 0;
 
     var data;
     switch(type) { //TODO: still need isSubscribed and isSaved information about each row
@@ -58,14 +58,14 @@ exports.generalInfo = function(item, vote, type, list) {
  */
 exports.getQuestionInfo = function(item, voteValue, hasVoted) {
     return {
-        id: item.getValue(lit.FIELD_ID),
-        title: item.getValue(lit.FIELD_TITLE),
-        votes: item.getValue(lit.FIELD_NETVOTES),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        date: item.getValue(lit.FIELD_TIMESTAMP),
-        summary: item.getValue(lit.FIELD_CONTENT),
-        type: lit.POST_TABLE,
-        tags: item.getValue(lit.FIELD_TAGS),
+        id: item.getValue(lit.fields.ID),
+        title: item.getValue(lit.fields.TITLE),
+        votes: item.getValue(lit.fields.NETVOTES),
+        author: item.getValue(lit.fields.AUTHOR),
+        date: item.getValue(lit.fields.TIMESTAMP),
+        summary: item.getValue(lit.fields.CONTENT),
+        type: lit.tables.POST,
+        tags: item.getValue(lit.fields.TAGS),
         voted: hasVoted,
         voteValue: voteValue
     };
@@ -81,15 +81,15 @@ exports.getQuestionInfo = function(item, voteValue, hasVoted) {
  */
 exports.getLinkInfo = function(item, voteValue, hasVoted) {
     return {
-        id: item.getValue(lit.FIELD_ID),
-        title: item.getValue(lit.FIELD_TITLE),
-        votes: item.getValue(lit.FIELD_NETVOTES),
-        author: item.getValue(lit.FIELD_ADDED_BY),
+        id: item.getValue(lit.fields.ID),
+        title: item.getValue(lit.fields.TITLE),
+        votes: item.getValue(lit.fields.NETVOTES),
+        author: item.getValue(lit.fields.ADDED_BY),
         date: item.getValue('datetime'),
-        summary: item.getValue(lit.FIELD_SUMMARY),
-        type: lit.LINK_TABLE,
-        tags: item.getValue(lit.FIELD_TAGS),
-        url: item.getValue(lit.FIELD_LINK),
+        summary: item.getValue(lit.fields.SUMMARY),
+        type: lit.tables.LINK,
+        tags: item.getValue(lit.fields.TAGS),
+        url: item.getValue(lit.fields.LINK),
         voted: hasVoted,
         voteValue: voteValue
     };
@@ -105,14 +105,14 @@ exports.getLinkInfo = function(item, voteValue, hasVoted) {
  */
 exports.getClassInfo = function(item, voteValue, hasVoted) {
     return {
-        id: item.getValue(lit.FIELD_ID),
-        title: item.getValue(lit.FIELD_TITLE),
-        courseCode: item.getValue(lit.FIELD_COURSE_CODE),
-        rating: item.getValue(lit.FIELD_AVERAGE_RATING),
-        author: item.getValue(lit.FIELD_ADDED_BY),
-        summary: item.getValue(lit.FIELD_SUMMARY),
-        type: lit.CLASS_TABLE,
-        tags: item.getValue(lit.FIELD_TAGS),
+        id: item.getValue(lit.fields.ID),
+        title: item.getValue(lit.fields.TITLE),
+        courseCode: item.getValue(lit.fields.COURSE_CODE),
+        rating: item.getValue(lit.fields.AVERAGE_RATING),
+        author: item.getValue(lit.fields.ADDED_BY),
+        summary: item.getValue(lit.fields.SUMMARY),
+        type: lit.tables.CLASS,
+        tags: item.getValue(lit.fields.TAGS),
         voted: hasVoted
     };
 };
@@ -127,14 +127,14 @@ exports.getClassInfo = function(item, voteValue, hasVoted) {
  */
 exports.getCommentInfo = function(item, voteValue, hasVoted) {
     return {
-        id: item.getValue(lit.FIELD_ID),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        content: item.getValue(lit.FIELD_CONTENT),
-        netVotes: item.getValue(lit.FIELD_NETVOTES),
-        parent: item.getValue(lit.FIELD_PARENT),
-        parentComment: item.getValue(lit.FIELD_PARENT_COMMENT),
-        type: lit.COMMENT_TABLE,
-        date: item.getValue(lit.FIELD_TIMESTAMP),
+        id: item.getValue(lit.fields.ID),
+        author: item.getValue(lit.fields.AUTHOR),
+        content: item.getValue(lit.fields.CONTENT),
+        netVotes: item.getValue(lit.fields.NETVOTES),
+        parent: item.getValue(lit.fields.PARENT),
+        parentComment: item.getValue(lit.fields.PARENT_COMMENT),
+        type: lit.tables.COMMENT,
+        date: item.getValue(lit.fields.TIMESTAMP),
         voted: hasVoted
     };
 };
@@ -149,13 +149,13 @@ exports.getCommentInfo = function(item, voteValue, hasVoted) {
  */
 exports.getRatingInfo = function(item, voteValue, hasVoted) {
     return {
-        parent: item.getValue(lit.FIELD_PARENT),
-        id: item.getValue(lit.FIELD_ID),
-        rating: item.getValue(lit.FIELD_AVERAGE_RATING),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        content: item.getValue(lit.FIELD_CONTENT),
-        date: item.getValue('datetime'),
-        type: lit.RATING_TABLE,
+        parent: item.getValue(lit.fields.PARENT),
+        id: item.getValue(lit.fields.ID),
+        rating: item.getValue(lit.fields.RATING),
+        author: item.getValue(lit.fields.AUTHOR),
+        content: item.getValue(lit.fields.CONTENT),
+        date: item.getValue(lit.fields.TIMESTAMP),
+        type: lit.tables.RATING,
         voted: hasVoted
     };
 };

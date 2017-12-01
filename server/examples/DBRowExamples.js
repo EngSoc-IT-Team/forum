@@ -3,9 +3,11 @@
 */
 
 "use strict";
-var dbr = require('../util/DBRow');
+var DBRow = require('../util/DBRow').DBRow;
 var generator = require('../util/Generator');
 var lit = require('../util/Literals.js');
+var recursion = require('../util/recursion');
+var itemInfo = require('../util/handlers/itemInfoGetter');
 
 /* A series of basic functions to help get your head around using the DBRow object
 ** each should be fairly self explanatory, but if there are questions let me know
@@ -26,13 +28,13 @@ var lit = require('../util/Literals.js');
 ** to do work with it.
 */
 function getARowExample() {
-	var row = new dbr.DBRow(lit.USER_TABLE);
+	var row = new DBRow(lit.tables.USER);
 	row.getRow('c1t58gst8anhdpfe54h2fpiq9xvh7gy0').then(function() {
 		if (row.count() < 1) //an example of how to make sure you have a row when you use getRow()
 			return console.log("this means we didn't get a row back!");
 
-		console.log(row.getValue(lit.FIELD_NETID));
-		console.log(row.getValue(lit.FIELD_USERNAME));
+		console.log(row.getValue(lit.fields.NETID));
+		console.log(row.getValue(lit.fields.USERNAME));
 		// other code
 
 	}, function(err) {
@@ -50,13 +52,13 @@ function getARowExample() {
 ** It will only reject if there is an error in the database.
 */
 function insertARowExample() {
-	var newRow = new dbr.DBRow(lit.VOTE_TABLE);
+	var newRow = new DBRow(lit.tables.VOTE);
 	var userID = generator.generate();
 	var voteID = generator.generate();
-	newRow.setValue(lit.FIELD_VOTE_VALUE, lit.ZERO); // insert vote with vote value -1
-	newRow.setValue(lit.FIELD_COMMENT_OR_POST_ID, generator.generate());
-	newRow.setValue(lit.FIELD_USER_ID, userID);
-	newRow.setValue(lit.FIELD_ID, voteID);
+	newRow.setValue(lit.fields.VOTE_VALUE, lit.ZERO); // insert vote with vote value -1
+	newRow.setValue(lit.fields.ITEM_ID, generator.generate());
+	newRow.setValue(lit.fields.USER_ID, userID);
+	newRow.setValue(lit.fields.ID, voteID);
 
 	newRow.insert().then(function() { // if we resolve the promise we go here
 		console.log("insert was successful");
@@ -83,14 +85,14 @@ function insertARowExample() {
 ** specific in the first place! Do everyone a favor and be as specific as you can when querying.
 */
 function queryARowExample() {
-	var row = new dbr.DBRow(lit.VOTE_TABLE);
-	row.addQuery(lit.FIELD_VOTE_VALUE, lit.ZERO); // let's look for votes with value 0 (display value -1)
+	var row = new DBRow(lit.tables.VOTE);
+	row.addQuery(lit.fields.VOTE_VALUE, lit.ZERO); // let's look for votes with value 0 (display value -1)
 
 	row.query().then(function() {
 		if (!row.next()) // go to the next row (the first one)
 			return console.log("If this returns false we got nothing back");
 
-		console.log(row.getValue(lit.FIELD_ID));
+		console.log(row.getValue(lit.fields.ID));
 
 		console.log(row.count()); // but id you're sneaky you'll notice we got more than one row back.. how do we see those too?
 								  // see the usingNext()
@@ -116,12 +118,12 @@ function queryARowExample() {
 ** don't do it.
 */
 function updateARow() {
-	var row = new dbr.DBRow(lit.VOTE_TABLE);
-	row.addQuery(lit.FIELD_VOTE_VALUE, lit.ZERO);
+	var row = new DBRow(lit.tables.VOTE);
+	row.addQuery(lit.fields.VOTE_VALUE, lit.ZERO);
 
 	row.query().then(function() {
 		row.next();
-		row.setValue(lit.FIELD_VOTE_VALUE, 1);
+		row.setValue(lit.fields.VOTE_VALUE, 1);
 		console.log("do stuff")
 		row.update().then(function(res) {
 			console.log("Successfully updated the row");
@@ -153,13 +155,13 @@ function updateARow() {
 ** deleted in this example. This would be especially important if a post, comment or user is deleted for some reason.
 */
 function deleteARowExample() {
-	var row = new dbr.DBRow(lit.VOTE_TABLE);
-	row.addQuery(lit.FIELD_VOTE_VALUE, lit.ZERO);
+	var row = new DBRow(lit.tables.VOTE);
+	row.addQuery(lit.fields.VOTE_VALUE, lit.ZERO);
 	row.query().then(function() {
 		if(!row.next())
 			return console.log("There are no votes with value 0 left! You've defeated all the negativity on the Forum!")
-		var idToDelete = row.getValue(lit.FIELD_ID);
-		var rowToDelete = new dbr.DBRow(lit.VOTE_TABLE);
+		var idToDelete = row.getValue(lit.fields.ID);
+		var rowToDelete = new DBRow(lit.tables.VOTE);
 		rowToDelete.delete(idToDelete).then(function() {
 			console.log("Successfully deleted the row");
 
@@ -186,12 +188,12 @@ function deleteARowExample() {
 ** do that).
 */
 function usingNext() {
-	var anotherRow = new dbr.DBRow(lit.VOTE_TABLE);
-	anotherRow.addQuery(lit.FIELD_VOTE_VALUE, '1'); //let's look for votes with value 1 (display value +1)
+	var anotherRow = new DBRow(lit.tables.VOTE);
+	anotherRow.addQuery(lit.fields.VOTE_VALUE, '1'); //let's look for votes with value 1 (display value +1)
 	anotherRow.query().then(function() {
 		console.log(anotherRow.count()); //
 		while(anotherRow.next()) // next() returns true as long as there's another row
-			console.log(anotherRow.getValue(lit.FIELD_ID));
+			console.log(anotherRow.getValue(lit.fields.ID));
 
 		console.log("done");
 
@@ -211,9 +213,9 @@ function usingNext() {
 ** descending ('DESC') order. orderBy() is capable of sorting by both alphabetic and numerical orders.
 */
 function usingOrderBy() {
-	var anotherRow = new dbr.DBRow(lit.VOTE_TABLE);
-	anotherRow.addQuery(lit.FIELD_VOTE_VALUE, lit.ONE); //let's look for votes with value 0 (display value -1)
-	anotherRow.orderBy(lit.FIELD_ID, lit.ASC);
+	var anotherRow = new DBRow(lit.tables.VOTE);
+	anotherRow.addQuery(lit.fields.VOTE_VALUE, lit.ONE); //let's look for votes with value 0 (display value -1)
+	anotherRow.orderBy(lit.fields.ID, lit.sql.query.ASC);
 	anotherRow.query().then(function() {
 		while(anotherRow.next())
 			console.log(anotherRow.getValue('id'));
@@ -241,12 +243,12 @@ function usingOrderBy() {
 **
 */
 function usingWildcardsToFindAPattern() {
-	var row = new dbr.DBRow(lit.POST_TABLE);
-	row.addQuery(lit.FIELD_CONTENT, lit.LIKE, "%pls help%");
+	var row = new DBRow(lit.tables.POST);
+	row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%pls help%");
 	row.query().then(function() {
 		row.next();
-		console.log(row.getValue(lit.FIELD_TITLE))
-		console.log(row.getValue(lit.FIELD_CONTENT));
+		console.log(row.getValue(lit.fields.TITLE));
+		console.log(row.getValue(lit.fields.CONTENT));
 
 	}, function(err) {
 		console.log("There was an error")
@@ -254,13 +256,13 @@ function usingWildcardsToFindAPattern() {
 }
 
 function alternateWildcardExample() { //TODO: Make this work if at all possible
-	var row = new dbr.DBRow(lit.COMMENT_TABLE);
-	row.addQuery(lit.FIELD_CONTENT, lit.LIKE, "%taken this class%");
-	row.addQuery(lit.FIELD_AUTHOR, 'HotMuffin');
+	var row = new DBRow(lit.tables.COMMENT);
+	row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%taken this class%");
+	row.addQuery(lit.fields.AUTHOR, 'HotMuffin');
 	row.query().then(function() {
 		row.next();
-		console.log(row.getValue(lit.FIELD_AUTHOR) + " wrote:")
-		console.log(row.getValue(lit.FIELD_CONTENT));
+		console.log(row.getValue(lit.fields.AUTHOR) + " wrote:")
+		console.log(row.getValue(lit.fields.CONTENT));
 
 	}, function(err) {
 		console.log("There was an error")
@@ -273,15 +275,63 @@ function alternateWildcardExample() { //TODO: Make this work if at all possible
  * more than once
  */
 function resetIndexExample() {
-	var row = new dbr.DBRow(lit.COMMENT_TABLE);
-	row.addQuery(lit.FIELD_AUTHOR, "WizardPikachu");
+	var row = new DBRow(lit.tables.COMMENT);
+	row.addQuery(lit.fields.AUTHOR, "WizardPikachu");
 	row.query().then(function() {
 		while(row.next()) {
-			console.log(row.getValue(lit.FIELD_ID));
+			console.log(row.getValue(lit.fields.ID));
 		}
 		row.resetIndex();
         while(row.next()) {
-            console.log(row.getValue(lit.FIELD_ID));
+            console.log(row.getValue(lit.fields.ID));
         }
 	})
+}
+
+/**
+ * Same as the last one except it uses recursiveGetRowListWithVotes to get all of the
+ */
+function exmapleUseOfARecursiveGet() {
+    var row = new DBRow(lit.tables.COMMENT);
+    var info = [[]];
+    var userID = 'ufs6jhhbjavxymgt0m8a1x024pcj7khx';
+    row.addQuery(lit.fields.AUTHOR, "WizardPikachu");
+    row.query().then(function () {
+        while (row.next()) {
+            console.log(row.getValue(lit.fields.ID));
+        }
+        row.resetIndex();
+        return new Promise(function (resolve, reject) {
+            recursion.recursiveGetRowListWithVotes(resolve, reject, row, itemInfo.generalInfo, userID, info);
+        });
+    }).then(function () {
+        console.log('no err!');
+        console.log(info);
+    }).catch(function (err, message) {
+        console.log('err');
+        console.log(err);
+        console.log(message);
+    });
+}
+
+/**
+ * Tests using multiple wildcards in a single query. Note that the wildcards are all AND linked, so you cannot yet search
+ * <if this OR that> only <if this AND that>
+ */
+function testMultpleWildcards() {
+    var row = new DBRow(lit.tables.POST);
+    row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%pls help%");
+    row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%pls%");
+    row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%I'm%");
+    row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%no%");
+    row.addQuery(lit.fields.TITLE, lit.sql.query.LIKE, "%indeterminate%");
+    row.addQuery(lit.fields.TITLE, lit.sql.query.LIKE, "%analyze%");
+    row.query().then(function () {
+        row.next();
+        console.log(row.getValue(lit.fields.TITLE));
+        console.log(row.getValue(lit.fields.CONTENT));
+
+    }, function (err) {
+        console.log("There was an error")
+    })
 }

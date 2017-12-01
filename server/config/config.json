@@ -28,5 +28,11 @@
 		"readable": true,
 		"writable": false,
 		"_description": "Whether or not to log all SQL transations made by the server"
+	},
+	"databaseTesting": {
+		"value": false,
+		"readable": true,
+		"writable": false,
+		"_description": "Allows for testing and using DBRow without the server actively running. A database MUST ALREADY EXIST for this option to be true or there will be SQL connection issues. If you set this to true and try to run the server you will most likely run into issues."
 	}
 }

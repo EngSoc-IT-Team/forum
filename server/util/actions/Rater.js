@@ -23,7 +23,7 @@ var log = require('../log');
 exports.addRating = function (request) {
     return new Promise(function(resolve, reject) {
         var userID = request.signedCookies.usercookie.userID;
-        var u = new DBRow(lit.USER_TABLE);
+        var u = new DBRow(lit.tables.USER);
         u.getRow(userID).then(function() {
             if (u.count() < 1)
                 return reject('No user found');
@@ -32,16 +32,16 @@ exports.addRating = function (request) {
                 if (res)
                     return resolve(false);
 
-                var rating = new DBRow(lit.RATING_TABLE);
-                rating.setValue(lit.FIELD_AUTHOR, u.getValue(lit.FIELD_USERNAME));
-                rating.setValue(lit.FIELD_PARENT, request.body.info.parent);
-                rating.setValue(lit.FIELD_CONTENT, request.body.info.content ? request.body.info.content : null);
-                rating.setValue(lit.FIELD_RATING, request.body.info.rating);
+                var rating = new DBRow(lit.tables.RATING);
+                rating.setValue(lit.fields.AUTHOR, u.getValue(lit.fields.USERNAME));
+                rating.setValue(lit.fields.PARENT, request.body.info.parent);
+                rating.setValue(lit.fields.CONTENT, request.body.info.content ? request.body.info.content : null);
+                rating.setValue(lit.fields.RATING, request.body.info.rating);
                 rating.insert().then(function () {
-                    voter.vote(request.signedCookies.usercookie.userID, rating.getValue(lit.FIELD_ID), 1); // don't need to wait for this to complete
-                    contributor.generateContribution(rating, request.signedCookies.usercookie.userID, lit.RATING_TABLE);
-                    exports.setAverageRating(rating.getValue(lit.FIELD_PARENT));
-                    resolve({id: rating.getValue(lit.FIELD_ID), author: rating.getValue(lit.FIELD_AUTHOR)});
+                    voter.vote(request.signedCookies.usercookie.userID, rating.getValue(lit.fields.ID), 1); // don't need to wait for this to complete
+                    contributor.generateContribution(rating, request.signedCookies.usercookie.userID, lit.tables.RATING);
+                    exports.setAverageRating(rating.getValue(lit.fields.PARENT));
+                    resolve({id: rating.getValue(lit.fields.ID), author: rating.getValue(lit.fields.AUTHOR)});
                 }, function (err) {
                     reject(err);
                 });
@@ -60,18 +60,18 @@ exports.addRating = function (request) {
  */
 exports.editRating = function (request) {
     return new Promise(function(resolve, reject) {
-        var rating = new DBRow(lit.RATING_TABLE);
+        var rating = new DBRow(lit.tables.RATING);
         rating.getRow(request.body.id).then(function() {
             if (!rating.count())
                 return reject("No rating to edit found");
 
-            if (rating.getValue(lit.FIELD_USER_ID != request.signedCookies.usercookie.userID))
+            if (rating.getValue(lit.fields.USER_ID != request.signedCookies.usercookie.userID))
                 return reject("The user attempting to edit the row is not the one that inserted it");
 
-            rating.setValue(lit.FIELD_CONTENT, request.body.info.content);
-            rating.setValue(lit.FIELD_RATING, request.body.info.rating);
+            rating.setValue(lit.fields.CONTENT, request.body.info.content);
+            rating.setValue(lit.fields.RATING, request.body.info.rating);
             rating.update().then(function() {
-                exports.setAverageRating(rating.getValue(lit.FIELD_PARENT));
+                exports.setAverageRating(rating.getValue(lit.fields.PARENT));
                 resolve();
             }, function(err) {
                 reject(err)
@@ -86,12 +86,12 @@ exports.editRating = function (request) {
  */
 exports.deleteRating = function(request) {
     return new Promise(function(resolve, reject) {
-        var rating = new DBRow(lit.RATING_TABLE);
+        var rating = new DBRow(lit.tables.RATING);
         rating.getRow(request.body.id).then(function() {
             if (!rating.count())
                 return reject("No comment to delete found");
 
-            if (rating.getValue(lit.FIELD_USER_ID != request.signedCookies.usercookie.userID))
+            if (rating.getValue(lit.fields.USER_ID != request.signedCookies.usercookie.userID))
                 return reject("The user attempting to edit the row is not the one that inserted it");
 
             rating.delete().then(function () {
@@ -113,9 +113,9 @@ exports.deleteRating = function(request) {
  */
 exports.getRating = function(username, parentID) {
     return new Promise(function(resolve) {
-        var rating = new DBRow(lit.RATING_TABLE);
-        rating.addQuery(lit.FIELD_PARENT, parentID);
-        rating.addQuery(lit.FIELD_AUTHOR, username);
+        var rating = new DBRow(lit.tables.RATING);
+        rating.addQuery(lit.fields.PARENT, parentID);
+        rating.addQuery(lit.fields.AUTHOR, username);
         rating.query().then(function() {
             if (rating.next())
                 resolve(rating);
@@ -135,10 +135,10 @@ exports.getRating = function(username, parentID) {
  */
 exports.getRatingList = function(parentID, info, resolve) {
     var ratingList = [];
-    var ratings = new DBRow(lit.RATING_TABLE);
-    ratings.addQuery(lit.FIELD_PARENT, parentID);
+    var ratings = new DBRow(lit.tables.RATING);
+    ratings.addQuery(lit.fields.PARENT, parentID);
     ratings.setLimit(10);
-    ratings.orderBy(lit.FIELD_TIMESTAMP, lit.DESC);
+    ratings.orderBy(lit.fields.TIMESTAMP, lit.sql.query.DESC);
     ratings.query().then(function() {
         while (ratings.next()) {
             ratingList.push(getRatingInfo(ratings));
@@ -155,11 +155,11 @@ exports.getRatingList = function(parentID, info, resolve) {
  */
 function getRatingInfo(rating) {
     return {
-        rating: rating.getValue(lit.FIELD_RATING),
-        author: rating.getValue(lit.FIELD_AUTHOR),
-        date: rating.getValue(lit.FIELD_TIMESTAMP),
-        content: rating.getValue(lit.FIELD_CONTENT),
-        id: rating.getValue(lit.FIELD_ID)
+        rating: rating.getValue(lit.fields.RATING),
+        author: rating.getValue(lit.fields.AUTHOR),
+        date: rating.getValue(lit.fields.TIMESTAMP),
+        content: rating.getValue(lit.fields.CONTENT),
+        id: rating.getValue(lit.fields.ID)
     }
 }
 
@@ -172,9 +172,9 @@ function getRatingInfo(rating) {
  */
 function hasAlreadyRatedItem(user, classID) {
     return new Promise(function(resolve, reject) {
-        var rating = new DBRow(lit.FIELD_RATING);
-        rating.addQuery(lit.FIELD_AUTHOR, user.getValue(lit.FIELD_USERNAME));
-        rating.addQuery(lit.FIELD_PARENT, classID);
+        var rating = new DBRow(lit.fields.RATING);
+        rating.addQuery(lit.fields.AUTHOR, user.getValue(lit.fields.USERNAME));
+        rating.addQuery(lit.fields.PARENT, classID);
         rating.query().then(function() {
             if (rating.next())
                 return resolve(true);
@@ -193,8 +193,8 @@ function hasAlreadyRatedItem(user, classID) {
  */
 exports.setAverageRating = function(classID) {
     return new Promise(function(resolve) {
-        var ratings = new DBRow(lit.RATING_TABLE);
-        ratings.addQuery(lit.FIELD_PARENT, classID);
+        var ratings = new DBRow(lit.tables.RATING);
+        ratings.addQuery(lit.fields.PARENT, classID);
         ratings.query().then(function() {
             var count = ratings.count();
             var aggregate = 0;
@@ -202,13 +202,13 @@ exports.setAverageRating = function(classID) {
                 return resolve(false);
 
             while (ratings.next())
-                aggregate += ratings.getValue(lit.FIELD_RATING);
+                aggregate += ratings.getValue(lit.fields.RATING);
 
             var avgRating = Math.round(aggregate / count);
-            var cl = new DBRow(lit.CLASS_TABLE);
+            var cl = new DBRow(lit.tables.CLASS);
             cl.getRow(classID).then(function() {
-                cl.setValue(lit.FIELD_AVERAGE_RATING, avgRating);
-                cl.setValue(lit.FIELD_RATINGS, count);
+                cl.setValue(lit.fields.AVERAGE_RATING, avgRating);
+                cl.setValue(lit.fields.RATINGS, count);
                 cl.update().then(function() {
                     resolve(true);
                 }).catch(function() {

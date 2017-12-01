@@ -31,28 +31,28 @@ exports.Sweeper = function() {
 
 	this.sweepTable = function(table) {
 		switch(table) {
-			case (lit.USER_TABLE):
+			case (lit.tables.USER):
 				userCleanup();
 				break;
-			case (lit.LINK):
+			case (lit.tables.LINK):
 				linkCleanup();
 				break;
-			case (lit.POST_TABLE):
+			case (lit.tables.POST):
 				postCleanup();
 				break;
-			case (lit.COMMENT_TABLE):
+			case (lit.tables.COMMENT):
 				commentCleanup();
 				break;
-			case (lit.REPORT_TABLE):
+			case (lit.tables.REPORT):
 				reportCleanup();
 				break;
-			case (lit.TAG_TABLE):
+			case (lit.tables.TAG):
 				tagCleanup();
 				break;
-			case (lit.CLASS_TABLE):
+			case (lit.tables.CLASS):
 				classCleanup();
 				break;
-			case (lit.SESSION_TABLE):
+			case (lit.tables.SESSION):
 				sessionCleanup();
 				break;
 			default:
@@ -98,7 +98,7 @@ exports.Sweeper = function() {
 	* marked, check if they are valid. If they are not valid,
 	*/
 	function linkCleanup() {
-		var links = new DBRow(lit.LINK_TABLE);
+		var links = new DBRow(lit.tables.LINK);
 		links.query().then(function() {
 			var href = "";
 

@@ -24,7 +24,7 @@ const allowedOperators = ["like", "<=", ">=", ">", "<", "=", "!=", "<>"];
  * @returns {string}: The escaped query string
  */
 exports.update = function(table, dbObject) {
-	if (!dbObject[lit.FIELD_ID])
+	if (!dbObject[lit.fields.ID])
 		return log.warn("The field 'id' must be set in order to update a row");
 
 	if (!escaper.isValidTableName(table))
@@ -32,7 +32,7 @@ exports.update = function(table, dbObject) {
 
 	var base = "UPDATE " + table + " SET ";
 	var dboBrokenDown = breakdownDBObject(dbObject, false, false, false, true, false, table);
-	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject[lit.FIELD_ID]) + ";";
+	return base + dboBrokenDown + " WHERE id=" + exports.escapeID(dbObject[lit.fields.ID]) + ";";
 };
 
 /** Creates an escaped "insert" query provided the table and database object JSON
@@ -42,7 +42,7 @@ exports.update = function(table, dbObject) {
  * @returns {*}: The escaped query string
  */
 exports.insert = function(table, dbObject) {
-	if (!dbObject[lit.FIELD_ID])
+	if (!dbObject[lit.fields.ID])
 		return log.warn("The field 'id' must be set in order to insert a row");
 
 	if (!escaper.isValidTableName(table))
@@ -206,11 +206,15 @@ function breakdownDBObject(obj, returnAsTwoStrings, allowSettingId, parenthesis,
 
 			if (!allowSettingId && prop === 'id')
 				continue;
-			
-			if (typeof obj[prop] === 'object' && obj[prop] !== null && obj[prop][lit.OPERATOR])
-				dbObjectString += prop + " " + checkOperator(obj[prop][lit.OPERATOR]) + " " + resolveObjectType(obj[prop][lit.VALUE]);
-			else
-				dbObjectString += prop + "=" + resolveObjectType(obj[prop]);
+
+            if (typeof obj[prop] === 'object' && obj[prop] !== null && obj[prop][lit.OPERATOR]) {
+                if (obj[prop][lit.OPERATOR] === lit.sql.query.LIKE)
+                    dbObjectString += getWildcardQueries(prop, obj[prop].values);
+                else
+                    dbObjectString += prop + " " + checkOperator(obj[prop][lit.OPERATOR]) + " " + resolveObjectType(obj[prop][lit.VALUE]);
+            }
+            else
+                dbObjectString += prop + "=" + resolveObjectType(obj[prop]);
 
 			if (itrs < numOfFields) //until the second to last element do this
 				if (isUpdate) {
@@ -274,10 +278,29 @@ function checkOperator(op) {
 	if (allowedOperators.includes(op.toLowerCase()))
 		return op.toUpperCase();
 	else {
-		if (op.toLowerCase() === lit.IN || op.toLowerCase() === lit.BETWEEN)
+		if (op.toLowerCase() === lit.sql.query.IN || op.toLowerCase() === lit.sql.query.BETWEEN)
 			log.warn('The operator "' + op + '" has not yet been implemented... \n Using "=" instead.');
 		else
 			log.warn('An unacceptable operator was passed into the query, replacing with the equals operator');
 		return '=';
 	}
+}
+
+function getWildcardQueries(property, values) {
+    if (values === undefined)
+        return '';
+
+    var tmp = "";
+    for (var index in values) {
+        if (index !== 0 && values.length !== 1)
+            tmp += "(";
+
+        tmp += property + " " + lit.sql.query.LIKE + " " + resolveObjectType(values[index]);
+
+        if (parseInt(index) + 1 !== values.length)
+            tmp += ") AND "
+        else if (parseInt(index) + 1 === values.length && values.length > 1)
+            tmp += ")"
+    }
+    return tmp;
 }

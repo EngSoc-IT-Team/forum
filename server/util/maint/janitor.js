@@ -80,7 +80,7 @@ exports.Janitor = function(isAutomated) {
 	 * Will NOT be able to add schema changes
      */
 	this.freshDatabase = function() {
-		if (PM.getConfigProperty(lit.PRODUCTION))
+		if (PM.getConfigProperty(lit.config.PRODUCTION))
 			return log.error(prefix + "This function is not permitted in a production environment.");
 
 	};

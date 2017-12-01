@@ -175,11 +175,28 @@ exports.DBRow = function(table) {
 		if (arguments.length === 2)
 			currentRow[property] = value; 
 		else if (arguments.length === 3) {
-			currentRow[property] = {'operator': arguments[1], 'value': arguments[2]};
+            threeArgAddQuery(property, value, arguments[2]);
 		}
 		else
 			return log.error("No more than three arguments are allowed for the addQuery function");
 	};
+
+	function threeArgAddQuery(property, operator, value) {
+		if (operator === lit.sql.query.LIKE) {
+            if (currentRow[property] === undefined || currentRow[property].values === undefined)
+            	currentRow[property] = {
+                	"operator": operator,
+                	values: []
+            	};
+
+            currentRow[property].values.push(value);
+		}
+		else
+            currentRow[property] = {
+				"operator": operator,
+				"value": value
+			}
+	}
 
 	/** orderBy(field, ascOrDesc)
 	 ** field: the field to order the result from the database by
@@ -187,11 +204,12 @@ exports.DBRow = function(table) {
 	 ** No return values
 	**/
 	this.orderBy = function(field, ascOrDesc) { 
-		if (!(ascOrDesc === lit.ASC || ascOrDesc === lit.asc || ascOrDesc === lit.DESC || ascOrDesc === lit.desc || ascOrDesc === undefined))
+		if (!(ascOrDesc === lit.sql.query.ASC || ascOrDesc === lit.sql.query.asc || ascOrDesc === lit.sql.query.DESC ||
+				ascOrDesc === lit.sql.query.desc || ascOrDesc === undefined))
 			return log.error("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
 		if (ascOrDesc === undefined)
-			ascOrDesc = lit.ASC;
+			ascOrDesc = lit.sql.query.ASC;
 		
 		querySort = qb.escapeOrderBy(table, field, ascOrDesc);
 	};
@@ -213,7 +231,7 @@ exports.DBRow = function(table) {
 	 ** and your row will not get inserted
 	**/
 	this.setValue = function(property, value) {
-		if (property === lit.FIELD_ID)
+		if (property === lit.fields.ID)
 			log.warn("Once a row's ID has been set it SHOULD NOT be reset. Resetting ID for an update can cause query failures"); //will be removed eventually
 
 		currentRow[property] = value;
@@ -275,4 +293,13 @@ exports.DBRow = function(table) {
 	this.getRowJSON = function() {
 		return currentRow;
 	};
+
+    /**
+	 * Just in case you forgot what the table is...
+	 *
+	 * @return the table name string
+     */
+	this.getTable = function() {
+		return table;
+	}
 };

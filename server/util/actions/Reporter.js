@@ -25,11 +25,11 @@ exports.sendReport = function(userId, itemId, reportReason, reportContent) {
             if (res)
                 reject('sendReport error: This item has already been reported by this user');
 
-            var report = new DBRow(lit.REPORT_TABLE);
-            report.setValue(lit.FIELD_USER_ID, userId);
-            report.setValue(lit.FIELD_RELATED_ITEM_ID, itemId);
-            report.setValue(lit.FIELD_REPORT_REASON, reportReason);
-            report.setValue(lit.FIELD_REPORT, reportContent);
+            var report = new DBRow(lit.tables.REPORT);
+            report.setValue(lit.fields.USER_ID, userId);
+            report.setValue(lit.fields.RELATED_ITEM_ID, itemId);
+            report.setValue(lit.fields.REPORT_REASON, reportReason);
+            report.setValue(lit.fields.REPORT, reportContent);
             report.insert().then(function() {
                 resolve(true);
             }).catch(function (err) {
@@ -50,7 +50,7 @@ exports.sendReport = function(userId, itemId, reportReason, reportContent) {
  */
 exports.resolveReport = function(reportId) {
     return new Promise(function(resolve, reject) {
-        var report = new DBRow(lit.REPORT_TABLE);
+        var report = new DBRow(lit.tables.REPORT);
         report.getRow(reportId).then(function() {
             // TODO: resolve the report somehow
             resolve(true);
@@ -68,9 +68,9 @@ exports.resolveReport = function(reportId) {
  */
 exports.hasBeenReported = function(userID, itemID) {
     return new Promise(function(resolve, reject) {
-        var report = new DBRow(lit.REPORT_TABLE);
-        report.addQuery(lit.FIELD_USER_ID, userID);
-        report.addQuery(lit.FIELD_ITEM_ID, itemID);
+        var report = new DBRow(lit.tables.REPORT);
+        report.addQuery(lit.fields.USER_ID, userID);
+        report.addQuery(lit.fields.ITEM_ID, itemID);
         report.query(reportId).then(function() {
             if (report.next())
                 resolve(report);

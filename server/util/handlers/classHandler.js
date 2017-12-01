@@ -16,11 +16,11 @@ var rater = require('./../actions/Rater');
 exports.handle = function(request) {
     var info = {class: {}, reviews: []};
     return new Promise(function(resolve, reject) {
-        var cl = new DBRow(lit.CLASS_TABLE);
+        var cl = new DBRow(lit.tables.CLASS);
         cl.getRow(request.query.id).then(function() {
             if (cl.count() > 0) {
                 getClassInfo(cl, info);
-                rater.getRatingList(cl.getValue(lit.FIELD_ID), info, resolve);
+                rater.getRatingList(cl.getValue(lit.fields.ID), info, resolve);
             }
             else
                 reject("The class does not exist");
@@ -35,15 +35,15 @@ exports.handle = function(request) {
  */
 function getClassInfo(cl, info) {
     info.class = {
-        courseCode: cl.getValue(lit.FIELD_COURSE_CODE),
-        title: cl.getValue(lit.FIELD_TITLE),
-        summary: cl.getValue(lit.FIELD_SUMMARY),
-        prereqs: cl.getValue(lit.FIELD_PREREQS),
-        instructor: cl.getValue(lit.FIELD_INSTRUCTOR),
-        credit: cl.getValue(lit.FIELD_CREDIT),
-        tags: cl.getValue(lit.FIELD_TAGS),
-        rating: cl.getValue(lit.FIELD_AVERAGE_RATING),
-        isDuplicate: cl.getValue(lit.FIELD_DUPLICATE),
-        id: cl.getValue(lit.FIELD_ID)
+        courseCode: cl.getValue(lit.fields.COURSE_CODE),
+        title: cl.getValue(lit.fields.TITLE),
+        summary: cl.getValue(lit.fields.SUMMARY),
+        prereqs: cl.getValue(lit.fields.PREREQS),
+        instructor: cl.getValue(lit.fields.INSTRUCTOR),
+        credit: cl.getValue(lit.fields.CREDIT),
+        tags: cl.getValue(lit.fields.TAGS),
+        rating: cl.getValue(lit.fields.AVERAGE_RATING),
+        isDuplicate: cl.getValue(lit.fields.DUPLICATE),
+        id: cl.getValue(lit.fields.ID)
     }
 }

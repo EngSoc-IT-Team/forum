@@ -17,12 +17,12 @@ var log = require('../log');
  * @param type: the type of the item being inserted
  */
 exports.generateContribution = function(item, userID, type) {
-    var contr = new DBRow(lit.CONTRIBUTION_TABLE);
-    contr.setValue(lit.FIELD_TYPE, type);
-    contr.setValue(lit.FIELD_USER_ID, userID);
-    contr.setValue(lit.FIELD_ITEM_ID, item.getValue(lit.FIELD_ID));
-    if (item.getValue(lit.FIELD_TAGS))
-        contr.setValue(lit.FIELD_TAGS, item.getValue(lit.FIELD_TAGS));
+    var contr = new DBRow(lit.tables.CONTRIBUTION);
+    contr.setValue(lit.fields.TYPE, type);
+    contr.setValue(lit.fields.USER_ID, userID);
+    contr.setValue(lit.fields.ITEM_ID, item.getValue(lit.fields.ID));
+    if (item.getValue(lit.fields.TAGS))
+        contr.setValue(lit.fields.TAGS, item.getValue(lit.fields.TAGS));
 
     contr.insert().then(function() {}, function(err) {
         log.error(err);

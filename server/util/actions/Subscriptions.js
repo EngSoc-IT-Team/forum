@@ -39,17 +39,20 @@ var mailOptions = {
  */
 exports.onSubscribed = function (contentID, userID, type) {
     return new Promise(function (resolve, reject) {
+        if (type === "review")
+            return reject("You may not subscribe to class reviews");
+
         exports.isSubscribed(contentID, userID).then(function (subscribed) {
             if (!subscribed) {
-                var newRow = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-                newRow.setValue(lit.FIELD_USER_ID, userID);
-                newRow.setValue(lit.FIELD_ITEM_ID, contentID);
-                newRow.setValue(lit.FIELD_TIMESTAMP, new Date());
-                newRow.setValue(lit.FIELD_TYPE, type);
+                var newRow = new dbr.DBRow(lit.tables.SUBSCRIPTIONS);
+                newRow.setValue(lit.fields.USER_ID, userID);
+                newRow.setValue(lit.fields.ITEM_ID, contentID);
+                newRow.setValue(lit.fields.TIMESTAMP, new Date());
+                newRow.setValue(lit.fields.TYPE, type);
                 //get user net ID
-                var userRow = new dbr.DBRow(lit.USER_TABLE);
+                var userRow = new dbr.DBRow(lit.tables.USER);
                 userRow.getRow(userID).then(function () {
-                    newRow.setValue(lit.FIELD_NETID, userRow.getValue(lit.FIELD_NETID));
+                    newRow.setValue(lit.fields.NETID, userRow.getValue(lit.fields.NETID));
                     newRow.insert().then(function () {
                         resolve(true);
                     }, function (err) {
@@ -75,14 +78,14 @@ exports.onSubscribed = function (contentID, userID, type) {
  */
 exports.cancelSubscription = function (contentID, userID) {
     return new Promise(function (resolve, reject) {
-        var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-        row.addQuery(lit.FIELD_USER_ID, userID);
-        row.addQuery(lit.FIELD_ITEM_ID, contentID);
+        var row = new dbr.DBRow(lit.tables.SUBSCRIPTIONS);
+        row.addQuery(lit.fields.USER_ID, userID);
+        row.addQuery(lit.fields.ITEM_ID, contentID);
         row.query().then(function () { // find the row that needs to be deleted by userId and contentId
             if (!row.next())
                 reject();
             else {
-                row.delete(row.getValue(lit.FIELD_ID)).then(function () { // delete it
+                row.delete(row.getValue(lit.fields.ID)).then(function () { // delete it
                     resolve();
                 }, function () {
                     reject();
@@ -103,9 +106,9 @@ exports.cancelSubscription = function (contentID, userID) {
  */
 exports.isSubscribed = function (contentID, userID) {
     return new Promise(function (resolve) {
-        var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-        row.addQuery(lit.FIELD_USER_ID, userID);
-        row.addQuery(lit.FIELD_ITEM_ID, contentID);
+        var row = new dbr.DBRow(lit.tables.SUBSCRIPTIONS);
+        row.addQuery(lit.fields.USER_ID, userID);
+        row.addQuery(lit.fields.ITEM_ID, contentID);
         row.query().then(function () { // find the row that needs to be deleted by userId and contentId
             if (row.count())
                 resolve(true);
@@ -154,7 +157,7 @@ function emailUsers(contentID) {
                 //email users
                 for (var i in netIDs) {
                     //TODO add url to give info
-                    mailOptions[lit.TO] = netIDs[i] + lit.QUEENS_EMAIL;
+                    mailOptions[lit.sql.query.TO] = netIDs[i] + lit.QUEENS_EMAIL;
                     log.log("Mail sent for content: " + contentID);
                     transport.sendMail(mailOptions);
                 }
@@ -180,12 +183,12 @@ function emailUsers(contentID) {
  * use promise to make it synchronous. Chained from  caller method.
  */
 function addToNotificationsMissed(contentID) {
-    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
-    row.addQuery(lit.FIELD_ITEM_ID, contentID);
+    var row = new dbr.DBRow(lit.tables.SUBSCRIPTIONS);
+    row.addQuery(lit.fields.ITEM_ID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) { //increment notifications missed for all users that subscribed to that content
-                row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED) + 1);
+                row.setValue(lit.fields.NUM_NOTIFICATIONS_MISSED, row.getValue(lit.fields.NUM_NOTIFICATIONS_MISSED) + 1);
                 row.update().then(function (err) {
                     reject(err);
                 });
@@ -211,9 +214,9 @@ function setNotificationsMissedToZero(subIDs) {
     if (subIDs.length == 0) {
         return subIDs;
     }
-    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+    var row = new dbr.DBRow(lit.tables.SUBSCRIPTIONS);
     for (var i in subIDs) {
-        row.addQuery(lit.FIELD_ID, subIDs[i]);
+        row.addQuery(lit.fields.ID, subIDs[i]);
     }
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
@@ -239,7 +242,7 @@ function setNotificationsMissedToZero(subIDs) {
  */
 function updateNotificationsMissed(row) {
     return new Promise(function (resolve, reject) {
-            row.setValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED, 0);
+            row.setValue(lit.fields.NUM_NOTIFICATIONS_MISSED, 0);
             row.update().then(function () {
                 resolve();
             }, function (err) {
@@ -261,14 +264,14 @@ function setLastNotifiedToNow(subIDs) {
     if (subIDs.length == 0) {
         return;
     }
-    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+    var row = new dbr.DBRow(lit.tables.SUBSCRIPTIONS);
     for (var i in subIDs) {
-        row.addQuery(lit.FIELD_ID, subIDs[i]);
+        row.addQuery(lit.fields.ID, subIDs[i]);
     }
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) {
-                row.setValue(lit.FIELD_LAST_NOTIFIED, new Date().toISOString());
+                row.setValue(lit.fields.LAST_NOTIFIED, new Date().toISOString());
                 row.update();
             }
             resolve();
@@ -296,15 +299,15 @@ function getSubscriptionIDs(userIDs, contentID) {
         return userIDs;
     }
     var subIDs = [];
-    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+    var row = new dbr.DBRow(lit.tables.SUBSCRIPTIONS);
     for (var i in userIDs) {
-        row.addQuery(lit.FIELD_USER_ID, userIDs[i]);
+        row.addQuery(lit.fields.USER_ID, userIDs[i]);
     }
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             while (row.next()) {
-                if (row.getValue(lit.FIELD_ITEM_ID) == contentID) { //ID of row that was emailed for
-                    subIDs.push(row.getValue(lit.FIELD_ID));
+                if (row.getValue(lit.fields.ITEM_ID) == contentID) { //ID of row that was emailed for
+                    subIDs.push(row.getValue(lit.fields.ID));
                 }
             }
             resolve(subIDs);
@@ -328,8 +331,8 @@ function getSubscriptionIDs(userIDs, contentID) {
  * parameter is passed along the promise chain.
  */
 function getSubscribedContentID(contentID) {
-    var row = new dbr.DBRow(lit.COMMENT_TABLE);
-    row.addQuery(lit.FIELD_ID, contentID);
+    var row = new dbr.DBRow(lit.tables.COMMENT);
+    row.addQuery(lit.fields.ID, contentID);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             if (!row.next()) {
@@ -337,8 +340,8 @@ function getSubscribedContentID(contentID) {
             }
             //if parent of the content is a post, send back that post's ID
             //else it is a comment, so send back that comment's ID
-            (row.getValue(lit.FIELD_PARENT) !== lit.UNDEFINED) ? resolve(row.getValue(lit.FIELD_PARENT)) :
-                resolve(row.getValue(lit.FIELD_PARENT_COMMENT));
+            (row.getValue(lit.fields.PARENT) !== lit.UNDEFINED) ? resolve(row.getValue(lit.fields.PARENT)) :
+                resolve(row.getValue(lit.fields.PARENT_COMMENT));
         }, function () {
             reject("No parent");
         });
@@ -355,23 +358,23 @@ function getSubscribedContentID(contentID) {
  * Chained from caller method. Resolves with an array of userIDs and netIDs for those that should be emailed.
  */
 function findUsersToEmail(contentID) {
-    var row = new dbr.DBRow(lit.SUBSCRIPTIONS_TABLE);
+    var row = new dbr.DBRow(lit.tables.SUBSCRIPTIONS);
     //make matrix to resolve with - first row is userIDs, second is netIDs
     var infoIDs = [];
     infoIDs[0] = [];
     infoIDs[1] = [];
     return new Promise(function (resolve, reject) {
-        row.addQuery(lit.FIELD_ITEM_ID, contentID);
+        row.addQuery(lit.fields.ITEM_ID, contentID);
         row.query().then(function () {
             while (row.next()) {
                 //compare number of missed notifications to preset minimum number needed to email user
                 //also check and make sure that it has been long enough since user was last emailed
                 //both need to pass the compare to email the user
-                var numNotificationsMissed = row.getValue(lit.FIELD_NUM_NOTIFICATIONS_MISSED);
-                var lastNotified = row.getValue(lit.FIELD_LAST_NOTIFIED);
+                var numNotificationsMissed = row.getValue(lit.fields.NUM_NOTIFICATIONS_MISSED);
+                var lastNotified = row.getValue(lit.fields.LAST_NOTIFIED);
                 if (numNotificationsMissed > lit.MIN_NUM_MISSED_NOTIFICATIONS && longEnoughAgo(lastNotified)) {
-                    infoIDs[0].push(row.getValue(lit.FIELD_USER_ID));
-                    infoIDs[1].push(row.getValue(lit.FIELD_NETID));
+                    infoIDs[0].push(row.getValue(lit.fields.USER_ID));
+                    infoIDs[1].push(row.getValue(lit.fields.NETID));
                 }
             }
             resolve(infoIDs);

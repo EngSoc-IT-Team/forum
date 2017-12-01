@@ -334,11 +334,11 @@ function appendOnkeydown() {
  *
  * @param href: STRING The url to POST to
  * @param content: JSON The content to pass to the server
+ * @param shouldPulse: BOOLEAN whether on not the logo should pulse while we process the request
  * @param onSuccessWithData: The function to pass the data object to if the call is successful MUST be a function
  * @param onSuccessNoData: The function to call if the call is successful but there is no data, pass false if no function is needed
  * @param onFailure: The function to call if the response fails, pass false if no function is needed
  * @param callback: The callback function to call regardless of the result of the AJAX call
- * @param shouldPulse: BOOLEAN whether on not the logo should pulse while we process the request
  */
 function AJAXCall(href, content, shouldPulse, onSuccessWithData, onSuccessNoData, onFailure, callback) {
     if (shouldPulse)
@@ -388,7 +388,15 @@ function finish(callback, err, needCancelPulse) {
  */
 function executeIfObjectIsFunction(func) {
     if (typeof func === 'function') // if the object is a function, execute it
-        func();
+        return func();
+
+    if (func === undefined)
+        return;
+
+    if (func === {})
+        return;
+
+    console.error("Function passed to executeIfObjectIsFunction was not a function!");
 }
 
 /** Shortcut method to trigger a modal
@@ -413,4 +421,22 @@ function toggleFeedbackSelection(button) {
     $(currentButton).removeClass('active');
     currentButton = "#" + button;
     $(currentButton).addClass('active');
+}
+
+function sendFeedback() {
+    var content = {
+        requested: 'feedback',
+        type: currentButton.replace('#', ''),
+        reportContent: $('#feedback-text').val()
+    };
+
+    function onComplete() {
+        $('#feedback').modal('hide');
+    }
+
+    function onFailure() {
+        $('#feedback').modal('hide');
+    }
+
+    AJAXCall('/info', content, false, onComplete, onComplete, onFailure);
 }

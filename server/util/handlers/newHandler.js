@@ -19,7 +19,7 @@ var contributor = require('./../actions/Contributor');
 exports.handle = function(request) {
     return new Promise(function(resolve, reject) {
         var userID = request.signedCookies.usercookie.userID;
-        var u = new DBRow(lit.USER_TABLE);
+        var u = new DBRow(lit.tables.USER);
         u.getRow(userID).then(function() {
             switch(request.body.type) {
                 case ("class"):
@@ -50,27 +50,27 @@ exports.handle = function(request) {
 function createClass(body, user, resolve, reject) {
     getTagsIfNotPresent(body);
 
-    var c = new DBRow(lit.CLASS_TABLE);//TODO: Make this not hate you when you don't have prereqs or tags
-    c.setValue(lit.FIELD_TITLE, body.title);
-    c.setValue(lit.FIELD_COURSE_CODE, body.courseCode);
-    c.setValue(lit.FIELD_INSTRUCTOR, body.instructor);
-    c.setValue(lit.FIELD_CREDIT, body.credit);
-    c.setValue(lit.FIELD_SUMMARY, body.summary);
+    var c = new DBRow(lit.tables.CLASS);//TODO: Make this not hate you when you don't have prereqs or tags
+    c.setValue(lit.fields.TITLE, body.title);
+    c.setValue(lit.fields.COURSE_CODE, body.courseCode);
+    c.setValue(lit.fields.INSTRUCTOR, body.instructor);
+    c.setValue(lit.fields.CREDIT, body.credit);
+    c.setValue(lit.fields.SUMMARY, body.summary);
 
-    c.setValue(lit.FIELD_ADDED_BY, user.getValue(lit.FIELD_USERNAME));
+    c.setValue(lit.fields.ADDED_BY, user.getValue(lit.fields.USERNAME));
 
     if (body.prereqs)
-        c.setValue(lit.FIELD_PREREQS, body.prereqs);
+        c.setValue(lit.fields.PREREQS, body.prereqs);
 
     if (!body.tags)
-        c.setValue(lit.FIELD_TAGS, 'DEFAULT');
+        c.setValue(lit.fields.TAGS, 'DEFAULT');
     else
-        c.setValue(lit.FIELD_TAGS, body.tags);
+        c.setValue(lit.fields.TAGS, body.tags);
 
     c.insert().then(function() {
         vote(user, c, resolve); // if we make it this far we will always resolve
-        contributor.generateContribution(c, user.getValue(lit.FIELD_ID), lit.CLASS_TABLE); // we can get away with creating the contribution in parallel in this case
-        generateItem(c, user, lit.CLASS_TABLE); //ditto the item
+        contributor.generateContribution(c, user.getValue(lit.fields.ID), lit.tables.CLASS); // we can get away with creating the contribution in parallel in this case
+        generateItem(c, user, lit.tables.CLASS); //ditto the item
     }, function(err) {
         log.error(err);
         reject("Error entering the new class");
@@ -87,16 +87,16 @@ function createClass(body, user, resolve, reject) {
 function createLink(body, user, resolve, reject) { // check if this link should be trusted
     getTagsIfNotPresent(body);
 
-    var l = new DBRow(lit.LINK_TABLE);
-    l.setValue(lit.FIELD_TITLE, body.title);
-    l.setValue(lit.FIELD_SUMMARY, body.summary);
-    l.setValue(lit.FIELD_LINK, body.href); // get this
-    l.setValue(lit.FIELD_TAGS, body.tags);
-    l.setValue(lit.FIELD_ADDED_BY, user.getValue(lit.FIELD_USERNAME));
+    var l = new DBRow(lit.tables.LINK);
+    l.setValue(lit.fields.TITLE, body.title);
+    l.setValue(lit.fields.SUMMARY, body.summary);
+    l.setValue(lit.fields.LINK, body.href); // get this
+    l.setValue(lit.fields.TAGS, body.tags);
+    l.setValue(lit.fields.ADDED_BY, user.getValue(lit.fields.USERNAME));
     l.insert().then(function() {
         vote(user, l, resolve); // if we make it this far we will always resolve
-        generateContribution(l, user, lit.LINK_TABLE); // we can get away with creating the contribution in parallel in this case
-        contributor.generateItem(l, user.getValue(lit.FIELD_ID), lit.LINK_TABLE); // ditto the item
+        generateContribution(l, user, lit.tables.LINK); // we can get away with creating the contribution in parallel in this case
+        contributor.generateItem(l, user.getValue(lit.fields.ID), lit.tables.LINK); // ditto the item
     }, function(err) {
         log.error(err);
         reject("Error entering the new link");
@@ -113,16 +113,16 @@ function createLink(body, user, resolve, reject) { // check if this link should 
 function createQuestion(body, user, resolve, reject) { // also create a vote
     getTagsIfNotPresent(body);
 
-    var q = new DBRow(lit.POST_TABLE);
-    q.setValue(lit.FIELD_TITLE, body.title);
-    q.setValue(lit.FIELD_CONTENT, body.summary);
-    q.setValue(lit.FIELD_AUTHOR, user.getValue(lit.FIELD_USERNAME)); // get this
-    q.setValue(lit.FIELD_TAGS, body.tags);
+    var q = new DBRow(lit.tables.POST);
+    q.setValue(lit.fields.TITLE, body.title);
+    q.setValue(lit.fields.CONTENT, body.summary);
+    q.setValue(lit.fields.AUTHOR, user.getValue(lit.fields.USERNAME)); // get this
+    q.setValue(lit.fields.TAGS, body.tags);
 
     q.insert().then(function() {
         vote(user, q, resolve); // if we make it this far we will always resolve
-        contributor.generateContribution(q, user.getValue(lit.FIELD_ID), lit.POST_TABLE); // we can get away with creating the contribution in parallel in this case
-        generateItem(q, user, lit.POST_TABLE); //ditto the item
+        contributor.generateContribution(q, user.getValue(lit.fields.ID), lit.tables.POST); // we can get away with creating the contribution in parallel in this case
+        generateItem(q, user, lit.tables.POST); //ditto the item
     }, function(err) {
         log.error(err);
         reject("Error entering the new question");
@@ -147,11 +147,11 @@ function getTagsIfNotPresent(body) {
  * @param resolve: The resolution of the linkHandler.handle function's promise
  */
 function vote(user, item, resolve) {
-    voter.vote(user.getValue(lit.FIELD_ID), item.getValue(lit.FIELD_ID), 1).then(function() {
-        resolve({'id': item.getValue(lit.FIELD_ID)});
+    voter.vote(user.getValue(lit.fields.ID), item.getValue(lit.fields.ID), 1).then(function() {
+        resolve({'id': item.getValue(lit.fields.ID)});
     }, function(err) {
         log.error(err);
-        resolve({'id': item.getValue(lit.FIELD_ID)});
+        resolve({'id': item.getValue(lit.fields.ID)});
     })
 }
 
@@ -162,11 +162,11 @@ function vote(user, item, resolve) {
  * @param type: The type of the newly inserted item (either a class, post or comment)
  */
 function generateItem(item, user, type) {
-    var it = new DBRow(lit.ITEM_TABLE);
-    it.setValue(lit.FIELD_TYPE, type);
-    it.setValue(lit.FIELD_USER_ID, user.getValue(lit.FIELD_ID));
-    it.setValue(lit.FIELD_ITEM_ID, item.getValue(lit.FIELD_ID));
-    it.setValue(lit.FIELD_TAGS, item.getValue(lit.FIELD_TAGS));
+    var it = new DBRow(lit.tables.ITEM);
+    it.setValue(lit.fields.TYPE, type);
+    it.setValue(lit.fields.USER_ID, user.getValue(lit.fields.ID));
+    it.setValue(lit.fields.ITEM_ID, item.getValue(lit.fields.ID));
+    it.setValue(lit.fields.TAGS, item.getValue(lit.fields.TAGS));
     it.insert().then(function() {
 
     }, function(err) {

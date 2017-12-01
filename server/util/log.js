@@ -11,13 +11,12 @@
 var fs = require('fs');
 var path = require('path');
 var lit = require('./Literals.js');
+var pm = require('./PropertyManager');
 
-var config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'config/config.json'), 'utf8'));
-
-var isInProduction = (config[lit.PRODUCTION] == lit.TRUE);
+var isInProduction = pm.getConfigProperty(lit.config.PRODUCTION);
 
 exports.log = function(logString) {
-	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+	var currentTime = _getTime();
 	var logThis = currentTime + ": " + logString;
 	if (isInProduction)
 		writeToFile(logThis);
@@ -26,7 +25,7 @@ exports.log = function(logString) {
 };
 
 exports.warn = function(logString) {
-	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+	var currentTime = _getTime();
 	var logThis = currentTime + " WARNING: " + logString;
 	if (isInProduction)
 		writeToFile(logThis);
@@ -35,7 +34,7 @@ exports.warn = function(logString) {
 };
 
 exports.error = function(logString) {
-	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+	var currentTime = _getTime();
 	var logThis = currentTime + " ERROR: " + logString;
 	if (isInProduction)
 		writeToFile(logThis);
@@ -43,8 +42,17 @@ exports.error = function(logString) {
 		console.error(logThis);
 };
 
+exports.severe = function(logString) {
+    var currentTime = _getTime();
+    var logThis = currentTime + " ERROR: **SYSTEM SEVERE** " + logString;
+    if (isInProduction)
+        writeToFile(logThis);
+    else
+        console.error(logThis);
+};
+
 exports.info = function(logString) {
-	var currentTime = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+	var currentTime = _getTime();
 	var logThis = currentTime + " INFO: " + logString;
 	if (isInProduction)
 		writeToFile(logThis);
@@ -79,5 +87,8 @@ function writeToFile(logString) {
 				console.log(err);
 		});
 	});
+}
 
+function _getTime() {
+	return new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 }
