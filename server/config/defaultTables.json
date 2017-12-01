@@ -503,5 +503,33 @@
 				"type": "string"
 			}
 		}
+	},
+	"14": {
+		"tablename": "feedback",
+		"fields": {
+			"userID": {
+				"type": "uniqueidentifier",
+				"constraint": "NOT NULL"
+			},
+			"feedbackContent": {
+				"type": "commentText",
+				"constraint": "NOT NULL"
+			},
+			"type": {
+				"type": "string",
+				"constraint": "NOT NULL"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			},
+			"timestamp": {
+				"type": "datetime",
+				"default": "CURRENT_TIMESTAMP"
+			},
+			"tags": {
+				"type": "string"
+			}
+		}
 	}
 }
