@@ -23,5 +23,6 @@ module.exports = {
     SAVED: "saved",
     CONTRIBUTION: "contribution",
     ITEM: "item",
-    RATING: "rating"
+    RATING: "rating",
+    FEEDBACK: "feedback"
 };
