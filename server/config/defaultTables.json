@@ -511,7 +511,7 @@
 				"type": "uniqueidentifier",
 				"constraint": "NOT NULL"
 			},
-			"feedbackContent": {
+			"content": {
 				"type": "commentText",
 				"constraint": "NOT NULL"
 			},
