@@ -712,3 +712,15 @@ textarea.modal-plaintext {
   width: 100%;
   height: 80%;
 }
+
+/* Fun Css*/
+.rainbows
+color: white
+text-shadow: rainbow-shadow(50, 0.2, 60%, 45%)
+
+@function rainbow-shadow ($cycle, $depth, $sat, $bri)
+$value: ''
+@for $i from 1 through $cycle
+$value: $value + '-#{$depth * $i}px #{$depth * $i}px 0 hsla(#{$i * (360/$cycle)}, #{$sat}, #{$bri}, 1), '
+$value: $value + '0px 0px 0px hsla(0,0%,0%,0)'
+@return unquote($value)

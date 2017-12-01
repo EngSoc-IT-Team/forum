@@ -1,0 +1,30 @@
+#feedback.modal.fade(role='dialog')
+    .modal-dialog
+        .modal-content
+            .modal-header
+                button.close(type='button', data-dismiss='modal') ×
+                h4.modal-title Report
+            .modal-body
+                .centered
+                    .btn-group(role='group', aria-label='Basic example')
+
+                hr
+                div
+                    .form-group
+
+                        h6(class = "rainbows") What's Wrong?
+
+                        form
+                            input.checkbox (type= 'checkbox') Inappropriate Content
+                            input.checkbox(type= 'checkbox') Inappropriate Language
+                            input.checkbox (type= 'checkbox') Not Relevant
+                       // var list = [" input (type = checkbox) Inappropriate Content", "Inappropriate Language", "Not relavent"]
+                        each item in list
+                        li= item
+/
+                        br
+                        h6 (style='font-weight: bold;') Other...
+                        textarea.modal-plaintext
+            .modal-footer
+                button.btn.btn-sm.button(type='button', data-dismiss='modal', onclick='report(this)') Submit.
+                button.btn.btn-sm.button(type='button', data-dismiss='modal') Cancel
