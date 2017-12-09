@@ -239,15 +239,6 @@ server.get(lit.routes.LINK, function(request, response) {
     });
 });
 
-server.get(lit.routes.REPORT, function(request, response) {
-    if (compare.isEmpty(request.signedCookies))
-        return response.redirect(lit.routes.LOGIN + '?redirect=' + request.url);
-
-    response.render('report', {
-        title: 'Report :('
-    });
-});
-
 server.get(lit.routes.SETTINGS, function(request, response) {
     if (compare.isEmpty(request.signedCookies))
         return response.redirect(lit.routes.LOGIN + '?redirect=' + request.url);
@@ -269,24 +260,6 @@ server.get(lit.routes.ADVANCED_SEARCH, function(request, response) {
         nav: "search"
     });
 });
-//new report page
-server.get('/report', function(request, response) {
-    if (compare.isEmpty(request.signedCookies))
-        response.render('report', {
-            title: 'Report :('
-        });
-    else
-        response.redirect(request.query.redirect ? request.query.redirect : lit.ROOT_ROUTE);
-});
-/*
-server.get(lit.routes.REPORT, function(request, response) {
-    if (compare.isEmpty(request.signedCookies))
-        return response.redirect(lit.routes.LOGIN + '?redirect=' + request.url);
-
-    response.render('report', {
-        title: 'Report :('
-    });
-});*/
 
 /* POST Requests
 **
