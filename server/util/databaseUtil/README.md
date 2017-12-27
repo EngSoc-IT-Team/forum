@@ -17,7 +17,7 @@ Objects used in queries are broken down by this file and are added into the SQL 
 This file extends the SQL query escaping that the mysql module provides, and ensures that all table and fields that are queried are existing tables/fields.
 Each table has its own set of valid fields, so the table name alone can be escaped with this file, but if fields are escaped, the table name is as well by default.
 
-## Query.js
+## SQLQuery.js
 
 This file acts as an abstract representation of each query that a particular row wants to send to the database. Simplifies the implementation
 of further database behaviors by providing an extensible framework for adding additional Query characteristics to each generic

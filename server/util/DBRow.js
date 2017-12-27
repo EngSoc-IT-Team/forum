@@ -10,7 +10,7 @@
 var log = require('./log');
 var dbm = require('./databaseUtil/DatabaseManager');
 var qb = require('./databaseUtil/QueryBuilder');
-var Query = require('./databaseUtil/Query').SQLQuery;
+var Query = require('./databaseUtil/SQLQuery').SQLQuery;
 var generator = require('./Generator');
 var lit = require('./Literals.js');
 

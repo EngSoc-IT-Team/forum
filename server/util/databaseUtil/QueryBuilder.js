@@ -39,7 +39,7 @@ exports.update = function(table, dbObject) {
  *
  * @param table: The table that the row that's being updated is on
  * @param dbObject: The database object JSON to be broken down and escaped
- * @returns {*}: The escaped query string
+ * @returns {string}: The escaped query string
  */
 exports.insert = function(table, dbObject) {
 	if (!dbObject[lit.fields.ID])
@@ -131,8 +131,8 @@ function getAsSingleString(obj, isFirst) {
 
 /** Creates an escaped "delete" query provided the table and database object JSON
  *
- * @param table: The table that the row that's being updated is on
- * @param id: the if of a database row to delete
+ * @param table {string}: The table that the row that's being updated is on
+ * @param id {string}: the if of a database row to delete
  * @returns {string}: The escaped query string
  */
 exports.delete = function(table, id) {
@@ -144,7 +144,7 @@ exports.delete = function(table, id) {
 
 /** Escapes the limit clause for queries
  *
- * @param limitNum: The limit number that needs to be escaped
+ * @param limitNum {int}: The limit number that needs to be escaped
  * @returns {string}: The complete sanitized escape clause
  */
 exports.escapeLimit = function(limitNum) {
@@ -153,9 +153,9 @@ exports.escapeLimit = function(limitNum) {
 
 /** Escapes the order by clause for queries
  *
- * @param table: the table the field to order by should be on
- * @param field: the field to order the query by
- * @param ascOrDesc: indicates whether the field should be ordered by ascending or descending order. Must be the string 'asc' or 'desc' or their upper case versions
+ * @param table {string}: the table the field to order by should be on
+ * @param field {string}: the field to order the query by
+ * @param ascOrDesc {string]: indicates whether the field should be ordered by ascending or descending order. Must be the string 'asc' or 'desc' or their upper case versions
  * @returns {string|undefined}: the escaped order by clause or undefined if the field or operator passed in is invalid
  */
 exports.escapeOrderBy = function(table, field, ascOrDesc) {
@@ -244,7 +244,7 @@ function buildUpdateQueryString(obj, table) {
 /** Resolves the object type of the object that is passed in. This is, perhaps, the core of the security of the website,
  * ensuring objects of unsecured types are rejected, causing queries to fail, and escaping queries to prevent SQL injection.
  *
- * @param resolveThis: the object that needs to be resolved
+ * @param resolveThis {*}: the object/primitive that needs to be resolved
  * @returns {*}: the escaped object, if it is of valid type. Returns undefined otherwise.
  */
 function resolveObjectType(resolveThis) {
@@ -274,23 +274,4 @@ function resolveObjectType(resolveThis) {
 
     if (objectType === lit.SYMBOL || objectType === lit.FUNCTION || objectType === lit.OBJECT)
         return log.warn("Objects with type '" + objectType + "' are not currently implemented, please pass a number, boolean or string");
-}
-
-/** Checks to ensure that the operator being used is a valid one. Replaces invalid operators with the equals operator
- * if the operator passed in is invalid.
- *
- * @param op: The operator trying to be used
- * @returns {*}: The operator if it is valid, returns = if it is invalid
- */
-function checkOperator(op) {
-	if (allowedOperators.includes(op.toLowerCase()))
-		return op.toUpperCase();
-	else {
-		if (op.toLowerCase() === lit.sql.query.IN || op.toLowerCase() === lit.sql.query.BETWEEN)
-			log.warn('The operator "' + op + '" has not yet been implemented... \n Using "=" instead.');
-		else
-			log.warn('An unacceptable operator was passed into the query, replacing with the equals operator');
-
-		return '=';
-	}
 }
