@@ -124,7 +124,7 @@ function updateARow() {
 	row.query().then(function() {
 		row.next();
 		row.setValue(lit.fields.VOTE_VALUE, 1);
-		console.log("do stuff")
+		console.log("do stuff");
 		row.update().then(function(res) {
 			console.log("Successfully updated the row");
 
@@ -291,11 +291,11 @@ function resetIndexExample() {
 /**
  * Same as the last one except it uses recursiveGetRowListWithVotes to get all of the
  */
-function exmapleUseOfARecursiveGet() {
+function exampleUseOfARecursiveGet() {
     var row = new DBRow(lit.tables.COMMENT);
     var info = [[]];
     var userID = 'ufs6jhhbjavxymgt0m8a1x024pcj7khx';
-    row.addQuery(lit.fields.AUTHOR, "WizardPikachu");
+    row.addQuery(lit.fields.AUTHOR, "CaptainUnicorn");
     row.query().then(function () {
         while (row.next()) {
             console.log(row.getValue(lit.fields.ID));
@@ -333,5 +333,44 @@ function testMultpleWildcards() {
 
     }, function (err) {
         console.log("There was an error")
+    })
+}
+
+/**
+ * An example of how to use OR queries to attempt to add queries for multiple values on the same field
+ * In this (extremely trivial) example, we query for votes with vote values 1 or 0 (i.e. everything on the vote table)
+ */
+function orQueryExample() {
+    var row = new DBRow(lit.tables.VOTE);
+    row.addQuery(lit.fields.VOTE_VALUE, 1);
+    row.addOrQuery(lit.fields.VOTE_VALUE, 0);
+    row.query().then(function() {
+        while(row.next())
+            console.log(row.getValue(lit.fields.ID));
+
+    }).catch(function() {
+        console.log('An error occurred!');
+    })
+}
+
+/**
+ * A function to show off why OR Queries are so sweet... they make querying diverse things INFINITELY easier... here's
+ * a simple example of using it to search for
+ */
+function slightlyMoreComplexOrQuery() {
+    var row = new DBRow(lit.tables.COMMENT);
+    // these are the beginning of two comments
+    // in our mock dataset
+    row.addQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%If you go on the terminal%");
+    row.addOrQuery(lit.fields.CONTENT, lit.sql.query.LIKE, "%A phasor contains%"); // note different function name!
+
+    row.query().then(function() { // now just like we normally do...
+        while(row.next()) {
+            console.log('This comment had ID: ' + row.getValue(lit.fields.ID));
+            console.log(row.getValue(lit.fields.CONTENT));
+            // note that we get back two matches even though both conditions are not met on both tables!!
+		}
+    }).catch(function() {
+        console.log('An error occurred!');
     })
 }
