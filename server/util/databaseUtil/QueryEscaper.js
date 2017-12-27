@@ -6,6 +6,7 @@
 
 var defaultTables = require('../../config/defaultTables.json');
 var lit = require('./../Literals.js');
+var log = require('./../log');
 
 var validTables = getTables();
 
@@ -27,6 +28,7 @@ exports.isValidTableName = function (tableName) {
 exports.isValidField = function (tableName, fieldName) {
     //if table doesn't exist, field doesn't exist by default
     if (!exports.isValidTableName(tableName)) {
+        log.error("The field '" + fieldName + "' is not a valid field for the table '" + tableName);
         return false;
     }
     return (validTables[tableName].includes(fieldName));

@@ -18,11 +18,22 @@ module.exports = {
         ASC: "ASC",
         asc: "asc",
 
-        //words for string manipulations, sql strings
-        IN: "in",
-        BETWEEN: "between",
-        LIKE: "like",
-        TO: "to"
+        //operators
+        IN: "IN",
+        BETWEEN: "BETWEEN",
+        LIKE: "LIKE",
+        TO: "TO",
+        EQUALS: "=",
+        GREATER_THAN: ">",
+        GREATER_THAN_OR_EQUAL_TO: ">=",
+        LESS_THAN: "<",
+        LESS_THAN_OR_EQUAL_TO: "<=",
+        NOT_EQUAL: "<>",
+
+
+        // joining words
+        AND: "AND",
+        OR: "OR"
     },
 
     //database configurations
