@@ -26,7 +26,7 @@ var natural = require("natural");
 var algorithmia = require("algorithmia");
 var lit = require('./../Literals.js');
 var log = require('./../log.js');
-var dbr = require('./../DBRow.js');
+var DBRow = require('./../DBRow.js');
 var recursion = require('../recursion');
 
 var TfIdf = natural.TfIdf;
@@ -47,7 +47,7 @@ var addDocument = function (tags, row, table) {
 };
 
 var queryOneTable = function (table) {
-    var row = new dbr.DBRow(table);
+    var row = new DBRow(table);
     return new Promise(function (resolve, reject) {
         row.query().then(function () {
             recursion.recursiveGetTags(resolve, reject, row, addDocument, table, []);
@@ -169,7 +169,7 @@ function searchByUserTag(inputSearch) {
             });
         }).then(function (tagsInSearch) {
             //find posts with tags either matching a tag or that has the same course number that was searched
-            var row = new dbr.DBRow(lit.tables.POST);
+            var row = new DBRow(lit.tables.POST);
             var postsWithTags = [];
             row.query().then(function () {
                 while (row.next()) {
@@ -198,7 +198,7 @@ function searchByUserTag(inputSearch) {
 function getUserTagsInDB() {
     var tags = [];
     return new Promise(function (resolve, reject) {
-        var row = new dbr.DBRow(lit.tables.TAG);
+        var row = new DBRow(lit.tables.TAG);
         row.query().then(function () {
             while (row.next()) {
                 tags.push(row.getValue(lit.fields.NAME));
@@ -272,17 +272,15 @@ function getSearchableFields(table) {
  */
 function getKeyTerms(input) {
     return new Promise(function (resolve, reject) {
-        try { //TODO: if there is no internet connection, the whole server will still fail
-            algorithmia.client(lit.AUTO_TAG_API_KEY).algo(lit.AUTO_TAG_ALGORITHM).pipe(input)
-                .then(function (response) {
+        algorithmia.client(lit.AUTO_TAG_API_KEY).algo(lit.AUTO_TAG_ALGORITHM).pipe(input)
+            .then(function (response) {
+                try {
                     resolve(response.get());
-                }, function (err) {
-                    reject(err);
-                })
-        } catch (e) {
-            log.error(e);
-            reject('Could not connect to algoithmia! Search failure.')
-        }
+                } catch (e) {
+                    log.severe("There was an error connecting to Algorithmia");
+                    reject(e);
+                }
+            });
     });
 }
 
