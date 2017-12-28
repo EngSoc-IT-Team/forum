@@ -351,8 +351,7 @@ server.post(lit.routes.INFO, function(request, response) {
 		response.send(resultToReturn);
 
 	}, function(err) {
-		log.error(err);
-		response.send({res: "not found", error: err});
+		response.status(404).send({res: "not found", error: err});
 
 	}).catch(function(err) {
         log.error(err);

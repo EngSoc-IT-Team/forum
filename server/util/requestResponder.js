@@ -42,7 +42,7 @@ exports.parseRequest = function(request) {
                 listHandler.handle(request).then(function(info) {
 					resolve(info);
 				}, function(err) {
-					reject(err);
+					reject(undefined);
 				});
 				break;
 			case("question"):

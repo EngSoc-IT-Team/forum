@@ -135,7 +135,7 @@ exports.generateTags = function (newRow, table) {
                     });
                 }).catch(function (error) {
                     log.error("tagPosts error: " + error);
-                    reject(error);
+                    reject(undefined);
                 });
             } else {
                 reject("Tried to generate tags for a bad table");
