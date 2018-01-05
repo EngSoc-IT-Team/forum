@@ -94,7 +94,7 @@ function loadRow(table, fields, numElementsToCreate, numCreated, resolve, reject
 		if (field === lit.sql.TABLE)
 			continue;
 
-		newRow.addQuery(field, fields[field]);
+		newRow.setValue(field, fields[field]);
 	}
 
 	var id = newRow.getValue(lit.fields.ID);
