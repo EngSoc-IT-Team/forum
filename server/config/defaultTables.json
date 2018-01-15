@@ -473,6 +473,14 @@
 				"type": "datetime",
 				"constraint": "NOT NULL",
 				"default": "CURRENT_TIMESTAMP"
+			},
+			"upvotes": {
+				"type": "mediumint",
+				"default": "1"
+			},
+			"downvotes": {
+				"type": "mediumint",
+				"default": "0"
 			}
 		}
 	},

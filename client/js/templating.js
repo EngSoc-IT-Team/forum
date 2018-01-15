@@ -130,6 +130,30 @@ var classTemplate = '<div class="col-sm-12" id="{10}" data-hastype="class">\
                         <hr>\
                       </div>';
 
+
+
+var level1ReviewTemplate = '<div class="col-sm-12" id="{0}" data-hasvoted="{8}" data-hastype="rating">\
+                                {1}\
+                                <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
+                                <div class="description show-links">{5}</div>\
+                                <div class="action-links">\
+                                {9}\
+                                    <a onclick="vote(this)" tabindex="0">Helpful</a>\
+                                    <span class="thumbs-up pointer" onclick="vote(this)" tabindex="0">\
+                                        <img src="../assets/thumbsUp.svg" class="svg" />\
+                                    </span>\
+                                    <a onclick="vote(this)" tabindex="0">Not Helpful</a>\
+                                    <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                                    <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                                </div>\
+                                {10}\
+                                <h6><small>_  people of __ found this review helpful</small></h6>\
+                                <span id="votes" class="{6}">{7}</span>\
+                                <hr />\
+                            </div>';
+
+
+
 /**
  * Miscellaneous
  *
@@ -287,6 +311,21 @@ function fillPostTemplate(post) {
 
     return fillTemplate(postTemplate, post.id, post.title, polarity, post.votes, date, post.author,
         post.author, summary, post.id, tags, post.id, post.voted);
+}
+
+
+function fillReviewLevel1Template(review){
+    if(review.voted)
+        updateItemsWithPolarity.push({id: review.id, polarity: review.voted});
+
+    if(!loaded){
+        return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
+            getDateString(review.date), review.author, review.author, review.content, positiveOrNegative(review.votes),
+            review.votes, review.voted);}
+    else{
+        return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
+            getDateString(review.date), review.author, review.author, review.content, positiveOrNegative(review.votes),
+            review.votes, review.voted);}
 }
 
 /** Fills the link template for the list and profile pages

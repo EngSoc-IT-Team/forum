@@ -108,8 +108,8 @@ exports.getCommentsRecursive = function(resolve, reject, comments, item, info, u
     else {
         voter.getVote(userID, comments.getValue(lit.fields.ID)).then(function(vote) {
             var commentInfo = getCommentInfo(comments, vote); // commentInfo is a mutable object that can be modified by getSubComments
-            getSubComments(comments, item, info, userID, commentInfo).then(function () {
-                info.comments.push(commentInfo); // only add to this object when the commentInfo object is complete
+            getSubComments(comments, item, info, userID, commentInfo).then(function () { //this
+                info.comments.push(commentInfo); // only add to this object when the commentInfo object is complete and this
                 exports.getCommentsRecursive(resolve, reject, comments, item, info, userID);
             }, function (err) {
                 reject(err);

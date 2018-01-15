@@ -52,18 +52,27 @@ var classTemplate = '<div class="info-block clearfix">\
                             </div>\
                         </div>';
 
-var level1ReviewTemplate = '<div class="col-sm-12" id="{0}">\
+/*var level1ReviewTemplate = '<div class="col-sm-12" id="{0}" data-hasvoted="{8}" data-hastype="rating">\
                                 {1}\
                                 <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
                                 <div class="description show-links">{5}</div>\
-                                <button class="btn btn-sm button" onclick="save(this)">Save</button>\
-                                <button class="btn btn-sm button" onclick="report(this)">Report</button>\
+                                <div class="action-links">\
+                                {9}\
+                                    <a href="javascript: void 0;" onclick="vote(this)">Helpful</a>\
+                                    <a href="javascript: void 0;" onclick="vote(this)">Not Helpful</a>\
+                                    <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                                    <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                                </div>\
+                                {10}\
+                                <h6><small>_  people of __ found this review helpful</small></h6>\
+                                <span id="votes" class="{6}">{7}</span>\
                                 <hr />\
-                            </div>';
+                            </div>';*/
 
 // hold the class ID and the user rating for the page as global variables
 var classID;
 var starRating = 0;
+var loaded = false;
 
 /**
  * Once the page is loaded, gets the class item from the server as well as all of its corresponding reviews,
@@ -183,7 +192,24 @@ function addReviews(reviews) {
         if (!reviews.hasOwnProperty(review))
             continue;
 
+        if(reviews[review].voted)
+            updateItemsWithPolarity.push({id: reviews[review].id, polarity: reviews[review].voted});
+
         template = fillReviewLevel1Template(reviews[review]);
+
+        if (reviews[review].children) {
+            for (var child in reviews[review].children) {
+                if (!reviews[review].children.hasOwnProperty(child))
+                    continue;
+
+                if (reviews[review].children[child].voted)
+                    updateItemsWithPolarity.push({id: reviews[review].children[child].id,
+                        polarity: reviews[review].children[child].voted});
+
+                template += fillCommentLevel2Template(comments[comment].children[child]);
+            }
+        }
+
         $('#reviews').append(template);
     }
 }
@@ -193,11 +219,39 @@ function addReviews(reviews) {
  * @param review: The review item json to be displayed
  * @returns {*} The filled review template's HTML string
  */
-function fillReviewLevel1Template(review) {
+/*function fillReviewLevel1Template(review) {
     return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
         getDateString(review.date), review.author, review.author, review.content);
-}
+}*/
 
+/*function fillReviewLevel1Template(review){
+    if(review.voted)
+        updateItemsWithPolarity.push({id: review.id, polarity: review.voted});
+
+    var replyThings = getReplyItems();
+    if(!loaded){
+        return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
+            getDateString(review.date), review.author, review.author, review.content, positiveOrNegative(review.votes),
+            review.votes, review.voted, replyThings[0], replyThings[1]);}
+    else{
+        return [fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
+            getDateString(review.date), review.author, review.author, review.content, positiveOrNegative(review.votes),
+            review.votes, review.voted, replyThings[0], replyThings[1]), replyThings[2]];}
+}*/
+
+/*function getReplyItems() {
+    var items = [];
+    var editorName = 'e' + numEditors;
+    var editorId = 'edID' + numEditors;
+    items.push(fillTemplate(replyTemplate, editorId));
+    items.push(fillTemplate(editorTemplate, editorId, editorName, editorName, editorId));
+    editorNames.push(editorName);
+    if (loaded)
+        items.push(editorName);
+
+    numEditors++;
+    return items;
+}*/
 /** Rates the class by either submitting a review and rating or just a rating
  *
  * @param element: The element containing the rating information

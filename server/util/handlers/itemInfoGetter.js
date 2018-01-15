@@ -148,14 +148,15 @@ exports.getCommentInfo = function(item, voteValue, hasVoted) {
  * @returns {{parent, id, rating, author, content, date, type: string, voted: *}}
  */
 exports.getRatingInfo = function(item, voteValue, hasVoted) {
-    return {
-        parent: item.getValue(lit.fields.PARENT),
-        id: item.getValue(lit.fields.ID),
-        rating: item.getValue(lit.fields.RATING),
-        author: item.getValue(lit.fields.AUTHOR),
-        content: item.getValue(lit.fields.CONTENT),
-        date: item.getValue(lit.fields.TIMESTAMP),
-        type: lit.tables.RATING,
-        voted: hasVoted
+                    return {
+                        parent: item.getValue(lit.fields.PARENT),
+                        id: item.getValue(lit.fields.ID),
+                        rating: item.getValue(lit.fields.RATING),
+                        author: item.getValue(lit.fields.AUTHOR),
+                        content: item.getValue(lit.fields.CONTENT),
+                        netVotes: item.getValue(lit.fields.NETVOTES),
+                        date: item.getValue(lit.fields.TIMESTAMP),
+                        type: lit.tables.RATING,
+                        voted: hasVoted
     };
 };
