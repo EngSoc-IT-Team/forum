@@ -481,6 +481,10 @@
 			"downvotes": {
 				"type": "mediumint",
 				"default": "0"
+			},
+			"netvotes": {
+				"type": "mediumint",
+				"default": "0"
 			}
 		}
 	},

@@ -133,32 +133,17 @@ exports.getRating = function(username, parentID) {
  *
  * Resolves the JSON object containing all of the ratings stored in an array ordered by the date they were added
  */
-exports.getRatingList = function(parentID, info, resolve) {
-    //var ratingList = [];
-    var ratings = new DBRow(lit.tables.RATING);
-    ratings.addQuery(lit.fields.PARENT, parentID);
-    ratings.setLimit(10);
-    ratings.orderBy(lit.fields.TIMESTAMP, lit.sql.query.DESC);
-    ratings.query().then(function() {
-        exports.getRatingsRecursive = function(resolve, reject, ratings, item, info, userID){         //implemented recursive function to receive votes
-            if(!ratings.next())
-                return resolve(info);
-            else{
-                rater.getVote(userID, ratings.getValue(lit.fields.ID)).then(function(vote){
-                    var ratingInfo = (ratings, vote);
-                    info.ratings.push(ratingInfo);
-                    exports.getRatingsRecursive(resolve, reject, ratings, item, info, userID);
-                })
-            }
-        }
-
-
-        /*while (ratings.next()) {
-            ratingList.push(getRatingInfo(ratings));
-        }
-        info.reviews = ratingList;
-        resolve(info);*/
-   })
+//exports.getRatingList = function(parentID, info, resolve) {
+exports.getRatingsRecursive = function(resolve, reject, ratings, item, info, userID){
+    if(!ratings.next())
+        return resolve(info);
+    else{
+        voter.getVote(userID, ratings.getValue(lit.fields.ID)).then(function(vote){
+            var ratingInfo = getRatingInfo(ratings, vote);
+            info.ratings.push(ratingInfo);
+            exports.getRatingsRecursive(resolve, reject, ratings, item, info, userID);
+        });
+    }
 };
 
 /** Gets the rating information for a rating from its DBRow and formats it to be passed to the client

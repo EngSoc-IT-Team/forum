@@ -8,6 +8,7 @@
 var DBRow = require('./../DBRow').DBRow;
 var lit = require('./../Literals.js');
 var rater = require('./../actions/Rater');
+var voter = require('./../actions/Voter');
 
 /** Handles the request from the client by getting information about the class and its reviews and returning it to the client.
  *
@@ -19,8 +20,22 @@ exports.handle = function(request) {
         var cl = new DBRow(lit.tables.CLASS);
         cl.getRow(request.query.id).then(function() {
             if (cl.count() > 0) {
-                getClassInfo(cl, info);
-                rater.getRatingList(cl.getValue(lit.fields.ID), info, resolve);
+                voter.getVote(request.signedCookies.usercookie.userID, request.query.id).then(function (vote) {
+                    getClassInfo(cl, info, vote);
+                    var ratingList = [];
+                    var ratings = new DBRow(lit.tables.RATING);
+                    ratings.addQuery(lit.fields.PARENT, cl.getValue(lit.fields.ID));
+                    ratings.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC);
+                    ratings.setLimit(10);
+                    ratings.query().then(function() {
+                        while (ratings.next()) {
+                            ratingList.push(getRatingInfo(ratings));
+                        }
+                        info.reviews = ratingList;
+                        resolve(info);
+                        rater.getRatingsRecursive(resolve, reject, ratings, cl, info, request.signedCookies.usercookie.userID);
+                    });
+                })
             }
             else
                 reject("The class does not exist");
@@ -32,18 +47,19 @@ exports.handle = function(request) {
  *
  * @param cl: The class DBRow
  * @param info: the object to be returned to the client in the format {class: {}, reviews: []}
+ * @param vote: The vote DBRow for the question and the user that has requested the page
  */
-function getClassInfo(cl, info) {
-    info.class = {
-        courseCode: cl.getValue(lit.fields.COURSE_CODE),
-        title: cl.getValue(lit.fields.TITLE),
-        summary: cl.getValue(lit.fields.SUMMARY),
-        prereqs: cl.getValue(lit.fields.PREREQS),
-        instructor: cl.getValue(lit.fields.INSTRUCTOR),
-        credit: cl.getValue(lit.fields.CREDIT),
-        tags: cl.getValue(lit.fields.TAGS),
-        rating: cl.getValue(lit.fields.AVERAGE_RATING),
-        isDuplicate: cl.getValue(lit.fields.DUPLICATE),
-        id: cl.getValue(lit.fields.ID)
-    }
+function getClassInfo(cl, info, vote) {
+    info.class.courseCode = cl.getValue(lit.fields.COURSE_CODE);
+    info.class.title = cl.getValue(lit.fields.TITLE);
+    info.class.summary = cl.getValue(lit.fields.SUMMARY);
+    info.class.prereqs = cl.getValue(lit.fields.PREREQS);
+    info.class.instructor = cl.getValue(lit.fields.INSTRUCTOR);
+    info.class.credit = cl.getValue(lit.fields.CREDIT);
+    info.class.tags = cl.getValue(lit.fields.TAGS);
+    info.class.rating = cl.getValue(lit.fields.AVERAGE_RATING);
+    info.class.isDuplicate = cl.getValue(lit.fields.DUPLICATE);
+    info.class.id = cl.getValue(lit.fields.ID);
+    info.class.votes = cl.getValue(lit.fields.NETVOTES);
+    info.class.voted = vote ? (cl.getValue(lit.fields.VOTE_VALUE) ? "positive" : "negative") : undefined;
 }
