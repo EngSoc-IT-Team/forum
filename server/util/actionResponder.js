@@ -20,8 +20,6 @@ var voter = require('./actions/Voter');
 var tagger = require('./actions/Tagger');
 var commenter = require('./actions/Commenter');
 var rater = require('./actions/Rater');
-// var getter = require('./actions/Getter');
-var DBRow = require('./DBRow').DBRow;
 
 
 exports.respond = function(request) {
@@ -102,7 +100,7 @@ function vote(request) {
 
 function report(request) {
     return new Promise(function(resolve, reject) {
-        if (request.body.sub == 'enter')
+        if (request.body.sub === 'enter')
             reporter.sendReport(request.signedCookies.usercookie.userID, request.body.itemId, request.body.reportReason, request.body.content)
                 .then(function() {resolve(true)}, function() {reject(false)});
         else
@@ -113,11 +111,11 @@ function report(request) {
 
 function tag(request) {
     return new Promise(function(resolve, reject){
-        if (request.body.sub == "getArray")
+        if (request.body.sub === "getArray")
             tagger.getArray().then(function(tags) {resolve(tags)}, function() {reject(false)});
-        else if (request.body.sub == "getTag")
+        else if (request.body.sub === "getTag")
             tagger.getTag(request.body.id).then(function(tag) {resolve(tag)}, function() {reject(false)});
-        else if (request.body.sub == "add")
+        else if (request.body.sub === "add")
             tagger.add(request.body.tagName).then(function() {resolve(true)}, function() {reject(false)});
         else
             log.error("Invalid request for tags");
@@ -126,11 +124,11 @@ function tag(request) {
 
 function comment(request) {
     return new Promise(function(resolve, reject){
-        if (request.body.sub == "add")
+        if (request.body.sub === "add")
             commenter.addComment(request).then(function(res) {resolve(res)}, function() {reject(false)});
-        else if (request.body.sub == "edit")
+        else if (request.body.sub === "edit")
             commenter.editComment(request).then(function() {resolve(true)}, function() {reject(false)});
-        else if (request.body.sub == "delete")
+        else if (request.body.sub === "delete")
             commenter.deleteComment(request).then(function() {resolve(true)}, function() {reject(false)});
         else
             log.error("Invalid request for commenting");
