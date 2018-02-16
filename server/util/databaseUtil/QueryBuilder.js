@@ -162,10 +162,10 @@ exports.escapeOrderBy = function(table, field, ascOrDesc) {
     var asc = "asc";
     var desc = "desc";
     if (!escaper.isValidField(table, field))
-		return;
+		return log.error('QueryBuilder Error: Field \'' + field + '\' is not valid for table \'' + table + '\'');
 
     if (ascOrDesc !== asc && ascOrDesc !== asc.toUpperCase() && ascOrDesc !== desc && ascOrDesc !== desc.toUpperCase())
-    	return;
+    	return log.error('QueryBuilder Error: Order \'' + ascOrDesc + '\' is not one of "asc", "desc", "ASC", "DESC"');
 
 	return "ORDER BY " + field + " " + ascOrDesc;
 };
