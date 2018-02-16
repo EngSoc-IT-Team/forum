@@ -482,7 +482,7 @@
 				"type": "mediumint",
 				"default": "0"
 			},
-			"netvotes": {
+			"netVotes": {
 				"type": "mediumint",
 				"default": "0"
 			}
