@@ -36,6 +36,7 @@ function setup() {
             log.severe(':(');
             log.severe('THERE WAS AN ERROR DURING DATABASE CREATION');
             log.severe('PLEASE SEE THE ERROR LOGS FOR MORE INFORMATION');
+            process.exit(1);
         });
     }
 }
