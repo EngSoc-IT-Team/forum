@@ -239,19 +239,6 @@ function addReviews(reviews) {
             review.votes, review.voted, replyThings[0], replyThings[1]), replyThings[2]];}
 }*/
 
-/*function getReplyItems() {
-    var items = [];
-    var editorName = 'e' + numEditors;
-    var editorId = 'edID' + numEditors;
-    items.push(fillTemplate(replyTemplate, editorId));
-    items.push(fillTemplate(editorTemplate, editorId, editorName, editorName, editorId));
-    editorNames.push(editorName);
-    if (loaded)
-        items.push(editorName);
-
-    numEditors++;
-    return items;
-}*/
 /** Rates the class by either submitting a review and rating or just a rating
  *
  * @param element: The element containing the rating information

@@ -164,6 +164,7 @@ function getRatingInfo(rating, vote, justAdded) {
         content: rating.getValue(lit.fields.CONTENT),
         id: rating.getValue(lit.fields.ID),
         netVotes: rating.getValue(lit.fields.NETVOTES),
+        isSelf: true,
         type: lit.tables.RATING,
         voted: hasVoted
     };
