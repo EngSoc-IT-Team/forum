@@ -151,6 +151,7 @@ exports.getRatingsRecursive = function(resolve, reject, ratings, item, info, use
  * @param rating: the rating DBRow to get info for
  * @returns {{rating, author, date, content, id}}
  */
+//NOT USED AT THE MOMENT
 function getRatingInfo(rating, vote, justAdded) {
     var hasVoted;
     if(!justAdded)
@@ -161,11 +162,11 @@ function getRatingInfo(rating, vote, justAdded) {
         rating: rating.getValue(lit.fields.RATING),
         author: rating.getValue(lit.fields.AUTHOR),
         date: rating.getValue(lit.fields.TIMESTAMP),
-        content: rating.getValue(lit.fields.CONTENT),
+        summary: rating.getValue(lit.fields.CONTENT),
         id: rating.getValue(lit.fields.ID),
-        netVotes: rating.getValue(lit.fields.NETVOTES),
+        votes: rating.getValue(lit.fields.NETVOTES),
         isSelf: true,
-        type: lit.tables.RATING,
+        //type: lit.tables.RATING,
         voted: hasVoted
     };
 }

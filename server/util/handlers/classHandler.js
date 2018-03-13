@@ -20,15 +20,14 @@ exports.handle = function(request) {
         var cl = new DBRow(lit.tables.CLASS);
         cl.getRow(request.query.id).then(function() {
             if (cl.count() > 0) {
-                voter.getVote(request.signedCookies.usercookie.userID, request.query.id).then(function (vote) {
+                voter.getVote(request.signedCookies.usercookie.userID, request.query.id).then(function () {
                     getClassInfo(cl, info);
                     var ratingList = [];
                     var ratings = new DBRow(lit.tables.RATING);
                     ratings.addQuery(lit.fields.PARENT, cl.getValue(lit.fields.ID));
                     ratings.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC);
                     ratings.setLimit(10);
-                    ratings.query().then
-                    (function() {
+                    ratings.query().then(function() {
                         while (ratings.next()) {
                             ratingList.push(getRatingInfo(ratings));
                         }
@@ -75,11 +74,11 @@ function getRatingInfo(rating, vote, justAdded) {
         rating: rating.getValue(lit.fields.RATING),
         author: rating.getValue(lit.fields.AUTHOR),
         date: rating.getValue(lit.fields.TIMESTAMP),
-        content: rating.getValue(lit.fields.CONTENT),
+        summary: rating.getValue(lit.fields.CONTENT),
         id: rating.getValue(lit.fields.ID),
         votes: rating.getValue(lit.fields.NETVOTES),
         isSelf: true,
-        type: lit.tables.RATING,
+        //type: lit.tables.RATING,
         voted: hasVoted
     };
 }
