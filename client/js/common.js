@@ -155,6 +155,65 @@ function vote(el) {
     });
 }
 
+function ratingVote(el) {
+    el = $(el);
+    var itemID = el.parent().parent().attr('id');
+    var voteValue;
+    var hasVoted = el.parent().parent().attr('data-hasvoted');
+    var itemType = el.parent().parent().attr('data-hastype');
+    var votes = el.parent().parent().children('small').children('#votes');
+    var currentVotes = votes[0].innerHTML;
+    var voteCount;
+
+    if (el.hasClass('thumbs-up') && hasVoted !== 'positive') {
+        voteValue = 1;
+
+        if (hasVoted === 'negative')
+            voteCount = Number(currentVotes) + 2;
+        else
+            voteCount = ++currentVotes;
+
+        displayNewVotes(voteCount, votes);
+
+        el.parent().parent().attr('data-hasVoted', 'positive');
+    }
+    else if (el.hasClass('thumbs-down') && hasVoted !== 'negative') {
+        voteValue = 0;
+
+        if (hasVoted === 'positive')
+            voteCount = Number(currentVotes) - 2;
+        else
+            voteCount = --currentVotes;
+
+        displayNewVotes(voteCount, votes);
+
+        el.parent().parent().attr('data-hasVoted', 'negative');
+    }
+    else
+        return; // they already voted on the thumb they selected
+
+    hasVoted = hasVoted === 'positive' || hasVoted === 'negative'; // true if data-hasvoted has been set, false otherwise
+
+    // send the vote to the server
+    $.ajax({
+        url: '/action',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({itemId: itemID, value: voteValue, voted: hasVoted, type: itemType, action:"vote"})
+    }).done(function(data) {
+        if (data) {
+            // TODO: indicate the success
+            console.log("Successful vote");
+        }
+        else {
+            // TODO: display some error message
+            console.log(data);
+        }
+    }).fail(function(err) {
+        console.error(err);
+    });
+}
+
 /** Changes the color of the vote count if necessary when a vote is added or changed
  *
  * @param count: the new vote count of the item

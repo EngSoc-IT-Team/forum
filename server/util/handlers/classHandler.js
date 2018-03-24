@@ -20,28 +20,35 @@ exports.handle = function(request) {
         var cl = new DBRow(lit.tables.CLASS);
         cl.getRow(request.query.id).then(function() {
             if (cl.count() > 0) {
-                voter.getVote(request.signedCookies.usercookie.userID, request.query.id).then(function () {
-                    getClassInfo(cl, info);
-                    var ratingList = [];
-                    var ratings = new DBRow(lit.tables.RATING);
-                    ratings.addQuery(lit.fields.PARENT, cl.getValue(lit.fields.ID));
-                    ratings.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC);
-                    ratings.setLimit(10);
-                    ratings.query().then(function() {
-                        while (ratings.next()) {
-                            ratingList.push(getRatingInfo(ratings));
-                        }
-                        info.reviews = ratingList;
-                        resolve(info);
-                        rater.getRatingsRecursive(resolve, reject, ratings, cl, info, request.signedCookies.usercookie.userID);
-                    });
-                })
+                getClassInfo(cl, info);
+                var ratingList = [];
+                var ratings = new DBRow(lit.tables.RATING);
+                ratings.addQuery(lit.fields.PARENT, cl.getValue(lit.fields.ID));
+                ratings.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC);
+                ratings.setLimit(10);
+                ratings.query().then(function() {
+                    // TODO: AYRTON this all needs to be encapsulated in a recursive function seperate from this function
+                    info.ratingList = [];
+                    getRatingsRecursive(ratings, info, request.signedCookies.usercookie.userID, resolve, reject);
+                });
             }
             else
                 reject("The class does not exist");
         });
     });
 };
+
+function getRatingsRecursive(ratings, info, userID, resolve, reject) {
+    if (!ratings.next())
+        return resolve(info);
+
+    voter.getVote(userID, ratings.getValue(lit.fields.ID)).then(function(vote) {
+        info.ratingList.push(getRatingInfo(ratings, vote));
+        getRatingsRecursive(ratings, info, userID, resolve, reject);
+    }).catch(function(err) {
+        reject(info);
+    })
+}
 
 /** Gets all the information about a class and appends it to the JSON object that will be returned to the client
  *
@@ -78,7 +85,6 @@ function getRatingInfo(rating, vote, justAdded) {
         id: rating.getValue(lit.fields.ID),
         votes: rating.getValue(lit.fields.NETVOTES),
         isSelf: true,
-        //type: lit.tables.RATING,
         voted: hasVoted
     };
 }

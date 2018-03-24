@@ -37,6 +37,8 @@ exports.addRating = function (request) {
                 rating.setValue(lit.fields.PARENT, request.body.info.parent);
                 rating.setValue(lit.fields.CONTENT, request.body.info.content ? request.body.info.content : null);
                 rating.setValue(lit.fields.RATING, request.body.info.rating);
+                rating.setValue(lit.fields.NETVOTES, 1);
+                rating.setValue(lit.fields.UPVOTES, 1);
                 rating.insert().then(function () {
                     voter.vote(request.signedCookies.usercookie.userID, rating.getValue(lit.fields.ID), 1); // don't need to wait for this to complete
                     contributor.generateContribution(rating, request.signedCookies.usercookie.userID, lit.tables.RATING);

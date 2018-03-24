@@ -95,7 +95,7 @@ function whenLoaded() {
 function onSuccess(data) {
     classID = data.class.id;
     fillInClassHeader(data.class);
-    addReviews(data.reviews);
+    addReviews(data.ratingList);
     CKEDITOR.replace('editor1');
 }
 
@@ -179,7 +179,7 @@ function fillInClassHeader(cl) {
  */
 function addReviews(reviews) {
     var template;
-    if (reviews.length == 0) {
+    if (reviews.length === 0) {
         $('#getMore').hide();
         $('#foot').append("<h6 class='info-block'>Nothing here yet! Add a comment to get the discussion going!</h6>");
         return;
@@ -278,14 +278,19 @@ function getRatingInfo(element, withComment) {
     if(!withComment) {
         return {
             rating: starRating,
-            parent: classID
+            parent: classID,
+            voted: 'positive',
+            votes: 1
         }
     }
     else {
         return {
             rating: starRating,
             parent: classID,
-            content: CKEDITOR.instances['message-text'].getData()
+            summary: CKEDITOR.instances['message-text'].getData(),
+            content: CKEDITOR.instances['message-text'].getData(),
+            voted: 'positive',
+            votes: 1
         }
     }
 }
