@@ -52,23 +52,6 @@ var classTemplate = '<div class="info-block clearfix">\
                             </div>\
                         </div>';
 
-/*var level1ReviewTemplate = '<div class="col-sm-12" id="{0}" data-hasvoted="{8}" data-hastype="rating">\
-                                {1}\
-                                <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
-                                <div class="description show-links">{5}</div>\
-                                <div class="action-links">\
-                                {9}\
-                                    <a href="javascript: void 0;" onclick="vote(this)">Helpful</a>\
-                                    <a href="javascript: void 0;" onclick="vote(this)">Not Helpful</a>\
-                                    <a href="javascript: void 0;" onclick="save(this)">Save</a>\
-                                    <a href="javascript: void 0;" onclick="report(this)">Report</a>\
-                                </div>\
-                                {10}\
-                                <h6><small>_  people of __ found this review helpful</small></h6>\
-                                <span id="votes" class="{6}">{7}</span>\
-                                <hr />\
-                            </div>';*/
-
 // hold the class ID and the user rating for the page as global variables
 var classID;
 var starRating = 0;
@@ -214,31 +197,6 @@ function addReviews(reviews) {
     }
 }
 
-/** Function used to create a HTML string for the review JSON object that is passed in
- *
- * @param review: The review item json to be displayed
- * @returns {*} The filled review template's HTML string
- */
-/*function fillReviewLevel1Template(review) {
-    return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
-        getDateString(review.date), review.author, review.author, review.content);
-}*/
-
-/*function fillReviewLevel1Template(review){
-    if(review.voted)
-        updateItemsWithPolarity.push({id: review.id, polarity: review.voted});
-
-    var replyThings = getReplyItems();
-    if(!loaded){
-        return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
-            getDateString(review.date), review.author, review.author, review.content, positiveOrNegative(review.votes),
-            review.votes, review.voted, replyThings[0], replyThings[1]);}
-    else{
-        return [fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
-            getDateString(review.date), review.author, review.author, review.content, positiveOrNegative(review.votes),
-            review.votes, review.voted, replyThings[0], replyThings[1]), replyThings[2]];}
-}*/
-
 /** Rates the class by either submitting a review and rating or just a rating
  *
  * @param element: The element containing the rating information
@@ -274,7 +232,6 @@ function rate(element) {
  * @returns {*} A JSON object containing the rating and comment, if there is one
  */
 function getRatingInfo(element, withComment) {
-    var rating = $(element); //TODO huh, what did I do here
     if(!withComment) {
         return {
             rating: starRating,

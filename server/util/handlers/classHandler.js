@@ -21,13 +21,11 @@ exports.handle = function(request) {
         cl.getRow(request.query.id).then(function() {
             if (cl.count() > 0) {
                 getClassInfo(cl, info);
-                var ratingList = [];
                 var ratings = new DBRow(lit.tables.RATING);
                 ratings.addQuery(lit.fields.PARENT, cl.getValue(lit.fields.ID));
                 ratings.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC);
                 ratings.setLimit(10);
                 ratings.query().then(function() {
-                    // TODO: AYRTON this all needs to be encapsulated in a recursive function seperate from this function
                     info.ratingList = [];
                     getRatingsRecursive(ratings, info, request.signedCookies.usercookie.userID, resolve, reject);
                 });
