@@ -473,6 +473,18 @@
 				"type": "datetime",
 				"constraint": "NOT NULL",
 				"default": "CURRENT_TIMESTAMP"
+			},
+			"upvotes": {
+				"type": "mediumint",
+				"default": "1"
+			},
+			"downvotes": {
+				"type": "mediumint",
+				"default": "0"
+			},
+			"netVotes": {
+				"type": "mediumint",
+				"default": "0"
 			}
 		}
 	},
@@ -490,6 +502,34 @@
 			"itemID": {
 				"type": "uniqueidentifier",
 				"constraint": "UNIQUE"
+			},
+			"id": {
+				"type": "uniqueidentifier",
+				"primaryKey": "true"
+			},
+			"timestamp": {
+				"type": "datetime",
+				"default": "CURRENT_TIMESTAMP"
+			},
+			"tags": {
+				"type": "string"
+			}
+		}
+	},
+	"14": {
+		"tablename": "feedback",
+		"fields": {
+			"userID": {
+				"type": "uniqueidentifier",
+				"constraint": "NOT NULL"
+			},
+			"content": {
+				"type": "commentText",
+				"constraint": "NOT NULL"
+			},
+			"type": {
+				"type": "string",
+				"constraint": "NOT NULL"
 			},
 			"id": {
 				"type": "uniqueidentifier",

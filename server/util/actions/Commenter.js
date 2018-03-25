@@ -21,20 +21,20 @@ var contributor = require('./Contributor');
  */
 exports.addComment = function (request) {
     return new Promise(function(resolve, reject) {
-        var u = new DBRow(lit.USER_TABLE);
+        var u = new DBRow(lit.tables.USER);
         u.getRow(request.signedCookies.usercookie.userID).then(function() {
             if (u.count() < 1)
                 return reject('unauthorized user');
 
-            var comment = new DBRow(lit.COMMENT_TABLE);
-            comment.setValue(lit.FIELD_AUTHOR, u.getValue(lit.FIELD_USERNAME));
-            comment.setValue(lit.FIELD_PARENT, request.body.parent);
-            comment.setValue(lit.FIELD_PARENT_COMMENT, request.body.parentComment);
-            comment.setValue(lit.FIELD_CONTENT, request.body.content);
-            comment.setValue(lit.FIELD_COMMENT_LEVEL, request.body.level);
+            var comment = new DBRow(lit.tables.COMMENT);
+            comment.setValue(lit.fields.AUTHOR, u.getValue(lit.fields.USERNAME));
+            comment.setValue(lit.fields.PARENT, request.body.parent);
+            comment.setValue(lit.fields.PARENT_COMMENT, request.body.parentComment);
+            comment.setValue(lit.fields.CONTENT, request.body.content);
+            comment.setValue(lit.fields.COMMENT_LEVEL, request.body.level);
             comment.insert().then(function () {
-                voter.vote(request.signedCookies.usercookie.userID, comment.getValue(lit.FIELD_ID), 1); // don't need to wait for this to complete
-                contributor.generateContribution(comment, request.signedCookies.usercookie.userID, lit.COMMENT_TABLE); //or this
+                voter.vote(request.signedCookies.usercookie.userID, comment.getValue(lit.fields.ID), 1); // don't need to wait for this to complete
+                contributor.generateContribution(comment, request.signedCookies.usercookie.userID, lit.tables.COMMENT); //or this
                 resolve(getCommentInfo(comment, undefined, true));
             }, function (err) {
                 reject(err);
@@ -49,12 +49,12 @@ exports.addComment = function (request) {
  */
 exports.editComment = function (request) {
     return new Promise(function(resolve, reject) {
-        var comment = new DBRow(lit.COMMENT_TABLE);
+        var comment = new DBRow(lit.tables.COMMENT);
         comment.getRow(request.body.id).then(function() {
             if (!comment.count())
                 return reject("No comment to edit found");
 
-            comment.setValue(lit.FIELD_CONTENT, request.body.content); // once a comment is inserted, we only need update its content
+            comment.setValue(lit.fields.CONTENT, request.body.content); // once a comment is inserted, we only need update its content
             comment.update().then(function() {
                 resolve();
             }, function(err) {
@@ -70,7 +70,7 @@ exports.editComment = function (request) {
  */
 exports.deleteComment = function(request) {
     return new Promise(function(resolve, reject) {
-        var comment = new DBRow(lit.COMMENT_TABLE);
+        var comment = new DBRow(lit.tables.COMMENT);
         comment.getRow(request.body.id).then(function() {
             if (!comment.count())
                 return reject("No comment to delete found");
@@ -106,10 +106,10 @@ exports.getCommentsRecursive = function(resolve, reject, comments, item, info, u
     if (!comments.next())
         return resolve(info);
     else {
-        voter.getVote(userID, comments.getValue(lit.FIELD_ID)).then(function(vote) {
+        voter.getVote(userID, comments.getValue(lit.fields.ID)).then(function(vote) {
             var commentInfo = getCommentInfo(comments, vote); // commentInfo is a mutable object that can be modified by getSubComments
-            getSubComments(comments, item, info, userID, commentInfo).then(function () {
-                info.comments.push(commentInfo); // only add to this object when the commentInfo object is complete
+            getSubComments(comments, item, info, userID, commentInfo).then(function () { //this
+                info.comments.push(commentInfo); // only add to this object when the commentInfo object is complete and this
                 exports.getCommentsRecursive(resolve, reject, comments, item, info, userID);
             }, function (err) {
                 reject(err);
@@ -128,11 +128,11 @@ exports.getCommentsRecursive = function(resolve, reject, comments, item, info, u
  */
 function getSubComments(comment, item, info, userID, commentInfo) {
     return new Promise(function(resolve, reject) {
-        var subComments = new DBRow(lit.COMMENT_TABLE);
-        subComments.addQuery(lit.FIELD_COMMENT_LEVEL, 1);
-        subComments.addQuery(lit.FIELD_PARENT, item.getValue(lit.FIELD_ID));
-        subComments.addQuery(lit.FIELD_PARENT_COMMENT, comment.getValue(lit.FIELD_ID));
-        subComments.orderBy(lit.FIELD_NETVOTES, lit.DESC); //TODO: enable sorting by best or by new
+        var subComments = new DBRow(lit.tables.COMMENT);
+        subComments.addQuery(lit.fields.COMMENT_LEVEL, 1);
+        subComments.addQuery(lit.fields.PARENT, item.getValue(lit.fields.ID));
+        subComments.addQuery(lit.fields.PARENT_COMMENT, comment.getValue(lit.fields.ID));
+        subComments.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC); //TODO: enable sorting by best or by new
         subComments.setLimit(10);
         subComments.query().then(function() {
             if (subComments.count() < 1)
@@ -160,7 +160,7 @@ function subCommentRecurse(resolve, reject, subComments, commentInfo, item, info
     if (!subComments.next())
         return resolve(info);
     else {
-        voter.getVote(userID, subComments.getValue(lit.FIELD_ID)).then(function(vote) {
+        voter.getVote(userID, subComments.getValue(lit.fields.ID)).then(function(vote) {
             getSubCommentInfo(subComments, vote, commentInfo);
             subCommentRecurse(resolve, reject, subComments, commentInfo, item, info, userID);
 
@@ -180,16 +180,16 @@ function subCommentRecurse(resolve, reject, subComments, commentInfo, item, info
 function getCommentInfo(comment, vote, justAdded) {
     var hasVoted;
     if (!justAdded)
-        hasVoted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
+        hasVoted = vote ? (vote.getValue(lit.fields.VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
     else
         hasVoted = "positive";
 
     return {
-        summary: comment.getValue(lit.FIELD_CONTENT),
-        author: comment.getValue(lit.FIELD_AUTHOR),
-        votes: comment.getValue(lit.FIELD_NETVOTES),
-        date: comment.getValue(lit.FIELD_TIMESTAMP),
-        id: comment.getValue(lit.FIELD_ID),
+        summary: comment.getValue(lit.fields.CONTENT),
+        author: comment.getValue(lit.fields.AUTHOR),
+        votes: comment.getValue(lit.fields.NETVOTES),
+        date: comment.getValue(lit.fields.TIMESTAMP),
+        id: comment.getValue(lit.fields.ID),
         isSelf: true, //TODO: pass this information in
         voted: hasVoted,
         children: []
@@ -206,16 +206,16 @@ function getCommentInfo(comment, vote, justAdded) {
 function getSubCommentInfo(sub, vote, commentInfo, justAdded) {
     var hasVoted;
     if (!justAdded)
-        hasVoted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
+        hasVoted = vote ? (vote.getValue(lit.fields.VOTE_VALUE) ? "positive" : "negative") : undefined; // true if there is a vote, false if there is no vote
     else
         hasVoted = "positive";
 
     var info = {
-        summary: sub.getValue(lit.FIELD_CONTENT),
-        author: sub.getValue(lit.FIELD_AUTHOR),
-        votes: sub.getValue(lit.FIELD_NETVOTES),
-        date: sub.getValue(lit.FIELD_TIMESTAMP),
-        id: sub.getValue(lit.FIELD_ID),
+        summary: sub.getValue(lit.fields.CONTENT),
+        author: sub.getValue(lit.fields.AUTHOR),
+        votes: sub.getValue(lit.fields.NETVOTES),
+        date: sub.getValue(lit.fields.TIMESTAMP),
+        id: sub.getValue(lit.fields.ID),
         isSelf: true, //TODO: pass this information in
         voted: hasVoted
     };

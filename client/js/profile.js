@@ -18,7 +18,7 @@ var commentTemplate ='<div class ="col-sm-12" id="{4}" data-hasvoted="{5}" data-
                            <span class="date"> You commented on {2} </span>\
                            <p class="description">{3}</p>\
                            <div class="action-links">\
-                               <a href="/link?id={6}">View</a>\
+                               <a href="/question?id={6}">View</a>\
                                <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
                                <a href="javascript: void 0;" onclick="save(this)">Save</a>\
                                <a href="javascript: void 0;" onclick="report(this)">Report</a>\
@@ -36,8 +36,7 @@ var reviewTemplate = '<div class="col-sm-12" id="{3}" data-hasvoted="{4}" data-h
                         <span class="date">on {1}</span>\
                         <p class="description">{2}</p>\
                         <div class="action-links">\
-                            <a href="/link?id={5}">View</a>\
-                            <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
+                            <a href="/class?id={5}">View</a>\
                             <a href="javascript: void 0;" onclick="save(this)">Save</a>\
                             <a href="javascript: void 0;" onclick="report(this)">Report</a>\
                         </div>\
@@ -177,15 +176,15 @@ function addTags(tags) {
 
 /**
  *
- * @param it object with form {
-        id: item.getValue(lit.FIELD_ID),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        content: item.getValue(lit.FIELD_CONTENT),
-        netVotes: item.getValue(lit.FIELD_NETVOTES),
-        parent: item.getValue(lit.FIELD_PARENT_POST),
-        parentComment: item.getValue(lit.FIELD_PARENT_COMMENT),
-        type: lit.COMMENT_TABLE,
-        date: item.getValue(lit.FIELD_TIMESTAMP),
+ * @param comment object with form {
+        id: item.getValue(lit.fields.ID),
+        author: item.getValue(lit.fields.AUTHOR),
+        content: item.getValue(lit.fields.CONTENT),
+        netVotes: item.getValue(lit.fields.NETVOTES),
+        parent: item.getValue(lit.fields.PARENT_POST),
+        parentComment: item.getValue(lit.fields.PARENT_COMMENT),
+        type: lit.tables.COMMENT,
+        date: item.getValue(lit.fields.TIMESTAMP),
         voted: hasVoted
     };
  * @returns {*} the filled template for the comment, to be appended to the document
@@ -193,27 +192,27 @@ function addTags(tags) {
 function fillCommentTemplate(comment) {
 
         return fillTemplate(commentTemplate, positiveOrNegative(comment.netVotes), comment.netVotes,
-        getDateString(comment.date), comment.content, comment.id, comment.voted, comment.parentName);
+        getDateString(comment.date), comment.content, comment.id, comment.voted, comment.parent);
 
 }
 
 /**
  *
- * @param it object with form {
-        parent: item.getValue(lit.FIELD_PARENT),
-        id: item.getValue(lit.FIELD_ID),
-        rating: item.getValue(lit.FIELD_AVERAGE_RATING),
-        author: item.getValue(lit.FIELD_AUTHOR),
-        content: item.getValue(lit.FIELD_CONTENT),
+ * @param review object with form {
+        parent: item.getValue(lit.fields.PARENT),
+        id: item.getValue(lit.fields.ID),
+        rating: item.getValue(lit.fields.AVERAGE_RATING),
+        author: item.getValue(lit.fields.AUTHOR),
+        content: item.getValue(lit.fields.CONTENT),
         date: item.getValue('datetime'),
-        type: lit.RATING_TABLE,
+        type: lit.tables.RATING,
         voted: hasVoted
     }
  * @returns {*} the filled template for the review, to be appended to the document
  */
 function fillReviewTemplate(review) {
 
-    return fillTemplate(reviewTemplate, review.rating,
+    return fillTemplate(reviewTemplate, getRating(review.rating,'yellow-star'),
     getDateString(review.date), review.content, review.id, review.voted, review.parent);
 
 }

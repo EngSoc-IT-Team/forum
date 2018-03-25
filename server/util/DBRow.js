@@ -10,6 +10,7 @@
 var log = require('./log');
 var dbm = require('./databaseUtil/DatabaseManager');
 var qb = require('./databaseUtil/QueryBuilder');
+var Query = require('./databaseUtil/SQLQuery').SQLQuery;
 var generator = require('./Generator');
 var lit = require('./Literals.js');
 
@@ -27,10 +28,12 @@ exports.DBRow = function(table) {
 	var currentIndex = -1;
 	var rows = [];
 	var currentRow = {}; // left as an empty object in case we are creating a new row
+	var queries = [];
+	var registeredProperties = [];
 
 	this.setId = true; // allows setting of rows manually
 
-	if (!table){
+	if (!table) {
 		log.error("No table was specified for the DBRow, all queries will fail!! Object instantiation terminated.");
 		return;
 	}
@@ -72,7 +75,7 @@ exports.DBRow = function(table) {
 	 ** Note: if a row does not match this query, undefined will be returned and the promise is not rejected.
 	**/
 	this.query = function() {
-		var qs =  qb.query(table, currentRow) + ' ' + querySort + ' ' + returnLimit;
+		var qs =  qb.query(table, queries, registeredProperties) + ' ' + querySort + ' ' + returnLimit;
 		log.log("QUERY with query string: '" + qs + "'");
 		return new Promise(function(resolve, reject) {
 			dbm.query(qs).then(function(row) {
@@ -89,9 +92,9 @@ exports.DBRow = function(table) {
 
 	/** update()
 	 ** No input parameters
-	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
+	 ** Resolves if the query is successful, rejects with the error if the query has an error
 	 **
-	 ** Updates the current row. Cannot be used interchangably with insert().
+	 ** Updates the current row. Cannot be used interchangeably with insert().
 	 **
 	 ** Any errors during update will be logged
 	**/
@@ -111,7 +114,7 @@ exports.DBRow = function(table) {
 
 	/** insert()
 	 ** No input parameters
-	 ** Resolves if the query is sucessful, rejects with the error if the query has an error
+	 ** Resolves if the query is successful, rejects with the error if the query has an error
 	 **
 	 ** Inserts a new row into the database. The id of the row will be randomly generated before insertion and
 	 ** should not be set beforehand
@@ -169,17 +172,29 @@ exports.DBRow = function(table) {
 	 ** No return values
 	 **
 	 ** Adds a field-value pair to filter the rows of the table by
-	 ** TODO: Implement three argument addQuery that is more specific (i.e. not queries, >=, <= queries)
 	**/
 	this.addQuery = function(property, value) { // with three arguments it will be interpreted as operator (OR, AND) property, value
 		if (arguments.length === 2)
-			currentRow[property] = value; 
-		else if (arguments.length === 3) {
-			currentRow[property] = {'operator': arguments[1], 'value': arguments[2]};
-		}
+            addQueryAndRegisterProperty(table, property, lit.sql.query.EQUALS, value, lit.sql.query.AND);
+		else if (arguments.length === 3)
+            addQueryAndRegisterProperty(table, property, value, arguments[2], lit.sql.query.AND);
 		else
 			return log.error("No more than three arguments are allowed for the addQuery function");
 	};
+
+    /**
+	 *
+     * @param property
+     * @param value
+     */
+    this.addOrQuery = function(property, value) {
+        if (arguments.length === 2)
+            addQueryAndRegisterProperty(table, property, lit.sql.query.EQUALS, value, lit.sql.query.OR);
+        else if (arguments.length === 3)
+            addQueryAndRegisterProperty(table, property, value, arguments[2], lit.sql.query.OR);
+        else
+            return log.error("No more than three arguments are allowed for the addQuery function");
+    };
 
 	/** orderBy(field, ascOrDesc)
 	 ** field: the field to order the result from the database by
@@ -187,11 +202,12 @@ exports.DBRow = function(table) {
 	 ** No return values
 	**/
 	this.orderBy = function(field, ascOrDesc) { 
-		if (!(ascOrDesc === lit.ASC || ascOrDesc === lit.asc || ascOrDesc === lit.DESC || ascOrDesc === lit.desc || ascOrDesc === undefined))
+		if (!(ascOrDesc === lit.sql.query.ASC || ascOrDesc === lit.sql.query.asc || ascOrDesc === lit.sql.query.DESC ||
+				ascOrDesc === lit.sql.query.desc || ascOrDesc === undefined))
 			return log.error("orderBy() calls require that the ascOrDesc argument contain the string 'ASC' or 'DESC'");
 
 		if (ascOrDesc === undefined)
-			ascOrDesc = lit.ASC;
+			ascOrDesc = lit.sql.query.ASC;
 		
 		querySort = qb.escapeOrderBy(table, field, ascOrDesc);
 	};
@@ -213,7 +229,7 @@ exports.DBRow = function(table) {
 	 ** and your row will not get inserted
 	**/
 	this.setValue = function(property, value) {
-		if (property === lit.FIELD_ID)
+		if (property === lit.fields.ID)
 			log.warn("Once a row's ID has been set it SHOULD NOT be reset. Resetting ID for an update can cause query failures"); //will be removed eventually
 
 		currentRow[property] = value;
@@ -275,4 +291,18 @@ exports.DBRow = function(table) {
 	this.getRowJSON = function() {
 		return currentRow;
 	};
+
+    /**
+	 * Just in case you forgot what the table is...
+	 *
+	 * @return the table name string
+     */
+	this.getTable = function() {
+		return table;
+	};
+
+	function addQueryAndRegisterProperty(table, property, operator, value, joiner) {
+        queries.push(new Query(table, property, operator, value, joiner));
+        registeredProperties.push(property);
+	}
 };

@@ -24,10 +24,10 @@ exports.save = function(request) {
     return new Promise(function(resolve, reject) {
         exports.isSaved(userID, itemID).then(function(res) {
             if (!res) {
-                var row = new DBRow(lit.SAVED_TABLE);
-                row.setValue(lit.FIELD_USER_ID, request.signedCookies.usercookie.userID);
-                row.setValue(lit.FIELD_ITEM_ID, request.body.itemId);
-                row.setValue(lit.FIELD_TYPE, request.body.contentType);
+                var row = new DBRow(lit.tables.SAVED);
+                row.setValue(lit.fields.USER_ID, request.signedCookies.usercookie.userID);
+                row.setValue(lit.fields.ITEM_ID, request.body.itemId);
+                row.setValue(lit.fields.TYPE, request.body.contentType);
                 row.insert().then(function() {
                     resolve(true);
                 }).catch(function(err) {
@@ -56,7 +56,7 @@ exports.removeSave = function(request) {
     return new Promise(function(resolve, reject) {
         exports.isSaved(userID, itemID).then(function(row) {
             if (row) {
-                row.delete(row.getValue(lit.FIELD_ID)).then(function () {
+                row.delete(row.getValue(lit.fields.ID)).then(function () {
                     resolve(true);
                 }).catch(function (err) {
                     log.error(err);
@@ -74,9 +74,9 @@ exports.removeSave = function(request) {
  */
 exports.isSaved = function(userId, itemId) {
     return new Promise(function(resolve, reject) {
-        var row = new DBRow(lit.SAVED_TABLE);
-        row.addQuery(lit.FIELD_USER_ID, userId);
-        row.addQuery(lit.FIELD_ITEM_ID, itemId);
+        var row = new DBRow(lit.tables.SAVED);
+        row.addQuery(lit.fields.USER_ID, userId);
+        row.addQuery(lit.fields.ITEM_ID, itemId);
         row.query().then(function () {
             if (!row.next())
                 resolve(false);

@@ -155,6 +155,65 @@ function vote(el) {
     });
 }
 
+function ratingVote(el) {
+    el = $(el);
+    var itemID = el.parent().parent().attr('id');
+    var voteValue;
+    var hasVoted = el.parent().parent().attr('data-hasvoted');
+    var itemType = el.parent().parent().attr('data-hastype');
+    var votes = el.parent().parent().children('small').children('#votes');
+    var currentVotes = votes[0].innerHTML;
+    var voteCount;
+
+    if (el.hasClass('thumbs-up') && hasVoted !== 'positive') {
+        voteValue = 1;
+
+        if (hasVoted === 'negative')
+            voteCount = Number(currentVotes) + 2;
+        else
+            voteCount = ++currentVotes;
+
+        displayNewVotes(voteCount, votes);
+
+        el.parent().parent().attr('data-hasVoted', 'positive');
+    }
+    else if (el.hasClass('thumbs-down') && hasVoted !== 'negative') {
+        voteValue = 0;
+
+        if (hasVoted === 'positive')
+            voteCount = Number(currentVotes) - 2;
+        else
+            voteCount = --currentVotes;
+
+        displayNewVotes(voteCount, votes);
+
+        el.parent().parent().attr('data-hasVoted', 'negative');
+    }
+    else
+        return; // they already voted on the thumb they selected
+
+    hasVoted = hasVoted === 'positive' || hasVoted === 'negative'; // true if data-hasvoted has been set, false otherwise
+
+    // send the vote to the server
+    $.ajax({
+        url: '/action',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({itemId: itemID, value: voteValue, voted: hasVoted, type: itemType, action:"vote"})
+    }).done(function(data) {
+        if (data) {
+            // TODO: indicate the success
+            console.log("Successful vote");
+        }
+        else {
+            // TODO: display some error message
+            console.log(data);
+        }
+    }).fail(function(err) {
+        console.error(err);
+    });
+}
+
 /** Changes the color of the vote count if necessary when a vote is added or changed
  *
  * @param count: the new vote count of the item
@@ -334,11 +393,11 @@ function appendOnkeydown() {
  *
  * @param href: STRING The url to POST to
  * @param content: JSON The content to pass to the server
+ * @param shouldPulse: BOOLEAN whether on not the logo should pulse while we process the request
  * @param onSuccessWithData: The function to pass the data object to if the call is successful MUST be a function
  * @param onSuccessNoData: The function to call if the call is successful but there is no data, pass false if no function is needed
  * @param onFailure: The function to call if the response fails, pass false if no function is needed
  * @param callback: The callback function to call regardless of the result of the AJAX call
- * @param shouldPulse: BOOLEAN whether on not the logo should pulse while we process the request
  */
 function AJAXCall(href, content, shouldPulse, onSuccessWithData, onSuccessNoData, onFailure, callback) {
     if (shouldPulse)
@@ -388,7 +447,15 @@ function finish(callback, err, needCancelPulse) {
  */
 function executeIfObjectIsFunction(func) {
     if (typeof func === 'function') // if the object is a function, execute it
-        func();
+        return func();
+
+    if (func === undefined)
+        return;
+
+    if (func === {})
+        return;
+
+    console.error("Function passed to executeIfObjectIsFunction was not a function!");
 }
 
 /** Shortcut method to trigger a modal
@@ -413,4 +480,22 @@ function toggleFeedbackSelection(button) {
     $(currentButton).removeClass('active');
     currentButton = "#" + button;
     $(currentButton).addClass('active');
+}
+
+function sendFeedback() {
+    var content = {
+        requested: 'feedback',
+        type: currentButton.replace('#', ''),
+        feedbackContent: $('#feedback-text').val()
+    };
+
+    function onComplete() {
+        $('#feedback').modal('hide');
+    }
+
+    function onFailure() {
+        $('#feedback').modal('hide');
+    }
+
+    AJAXCall('/info', content, false, onComplete, onComplete, onFailure);
 }

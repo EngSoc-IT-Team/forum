@@ -22,7 +22,7 @@ var level1CommentTemplate = '<div class="col-sm-12" id="{6}" data-hasvoted="{7}"
                                     </span>\
                                 </div>\
                                 <span class="date">{2} by <a href="/profile?username={3}">{4}</a></span>\
-                                <p class="description">{5}</p>\
+                                <div class="description">{5}</div>\
                                 <div class="action-links">\
                                 {8}\
                                 <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
@@ -44,7 +44,7 @@ var level2CommentTemplate = '<div class="info-block comment-block media" id="{6}
                                     </span>\
                                 </div>\
                                 <span class="date">{2} by <a href="/profile?username={3}">{4}</a></span>\
-                                <p class="description">{5}</p>\
+                                <div class="description">{5}</div>\
                                 <div class="action-links">\
                                 <a href="javascript: void 0;" onclick="subscribe(this)">Subscribe</a>\
                                 <a href="javascript: void 0;" onclick="save(this)">Save</a>\
@@ -129,6 +129,28 @@ var classTemplate = '<div class="col-sm-12" id="{10}" data-hastype="class">\
                         {9}\
                         <hr>\
                       </div>';
+
+
+
+var level1ReviewTemplate = '<div class="col-sm-12" id="{0}" data-hasvoted="{8}" data-hastype="rating">\
+                                {1}\
+                                <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
+                                <div class="description show-links">{5}</div>\
+                                <div class="action-links">\
+                                    <a href="javascript: void 0;" onclick="save(this)">Save</a>\
+                                    <a href="javascript: void 0;" onclick="report(this)">Report</a>\
+                                    <a class="thumbs-up pointer" onclick="ratingVote(this)" tabindex="0" >Helpful </a>\
+                                    <a class="thumbs-down pointer" onclick="ratingVote(this)" tabindex="0">Not Helpful</a>\
+                                </div>\
+                                <br>\
+                                <small>\
+                                    <span id="votes" class="{6}">{7}</span>\
+                                    people found this review helpful\
+                                </small>\
+                                <hr />\
+                            </div>';
+
+
 
 /**
  * Miscellaneous
@@ -237,6 +259,16 @@ function fillCommentLevel2Template(comment) {
         getDateString(comment.date), comment.author, comment.author, comment.summary, comment.id, comment.voted);
 }
 
+
+function fillReviewLevel1Template(review){
+    if(review.voted)
+        updateItemsWithPolarity.push({id: review.id, polarity: review.voted});
+
+    return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
+        getDateString(review.date), review.author, review.author, review.summary, positiveOrNegative(review.votes),
+        review.votes, review.voted);
+}
+
 // the number of editors on the page and the names of additional editors added to the page
 var numEditors = 0;
 var editorNames = [];
@@ -288,6 +320,7 @@ function fillPostTemplate(post) {
     return fillTemplate(postTemplate, post.id, post.title, polarity, post.votes, date, post.author,
         post.author, summary, post.id, tags, post.id, post.voted);
 }
+
 
 /** Fills the link template for the list and profile pages
  *

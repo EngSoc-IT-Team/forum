@@ -22,15 +22,15 @@ var voter = require('./../actions/Voter');
 exports.handle = function(request) {
     var info = {question: {}, comments: []};
     return new Promise(function(resolve, reject) {
-        var question = new DBRow(lit.POST_TABLE);
+        var question = new DBRow(lit.tables.POST);
         question.getRow(request.query.id).then(function() {
             if (question.count() > 0) {
                 voter.getVote(request.signedCookies.usercookie.userID, request.query.id).then(function (vote) {
                     getQuestionInfo(question, info, vote);
-                    var comments = new DBRow(lit.COMMENT_TABLE);
-                    comments.addQuery(lit.FIELD_COMMENT_LEVEL, 0);
-                    comments.addQuery(lit.FIELD_PARENT, question.getValue(lit.FIELD_ID));
-                    comments.orderBy(lit.FIELD_NETVOTES, lit.DESC);
+                    var comments = new DBRow(lit.tables.COMMENT);
+                    comments.addQuery(lit.fields.COMMENT_LEVEL, 0);
+                    comments.addQuery(lit.fields.PARENT, question.getValue(lit.fields.ID));
+                    comments.orderBy(lit.fields.NETVOTES, lit.sql.query.DESC);
                     comments.setLimit(10);
                     comments.query().then(function() {
                         commenter.getCommentsRecursive(resolve, reject, comments, question, info, request.signedCookies.usercookie.userID);
@@ -50,14 +50,14 @@ exports.handle = function(request) {
  * @param vote: The vote DBRow for the question and the user that has requested the page
  */
 function getQuestionInfo(question, info, vote) {
-    info.question.title = question.getValue(lit.FIELD_TITLE);
-    info.question.date = question.getValue(lit.FIELD_TIMESTAMP);
-    info.question.author = question.getValue(lit.FIELD_AUTHOR);
-    info.question.tags = question.getValue(lit.FIELD_TAGS);
-    info.question.summary = question.getValue(lit.FIELD_CONTENT);
-    info.question.votes = question.getValue(lit.FIELD_NETVOTES);
-    info.question.isDuplicate = question.getValue(lit.FIELD_DUPLICATE);
+    info.question.title = question.getValue(lit.fields.TITLE);
+    info.question.date = question.getValue(lit.fields.TIMESTAMP);
+    info.question.author = question.getValue(lit.fields.AUTHOR);
+    info.question.tags = question.getValue(lit.fields.TAGS);
+    info.question.summary = question.getValue(lit.fields.CONTENT);
+    info.question.votes = question.getValue(lit.fields.NETVOTES);
+    info.question.isDuplicate = question.getValue(lit.fields.DUPLICATE);
     info.question.isSelf = false; //TODO: check if this user owns the post
-    info.question.id = question.getValue(lit.FIELD_ID);
-    info.question.voted = vote ? (vote.getValue(lit.FIELD_VOTE_VALUE) ? "positive" : "negative") : undefined;
+    info.question.id = question.getValue(lit.fields.ID);
+    info.question.voted = vote ? (vote.getValue(lit.fields.VOTE_VALUE) ? "positive" : "negative") : undefined;
 }

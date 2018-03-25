@@ -17,6 +17,7 @@ var newHandler = require('./handlers/newHandler');
 var linkHandler = require('./handlers/linkHandler');
 var classHandler = require('./handlers/classHandler');
 var lit = require('./Literals.js');
+var feedbackHandler = require('./handlers/feedbackHandler');
 
 
 
@@ -41,7 +42,7 @@ exports.parseRequest = function(request) {
                 listHandler.handle(request).then(function(info) {
 					resolve(info);
 				}, function(err) {
-					reject(err);
+					reject(undefined);
 				});
 				break;
 			case("question"):
@@ -69,6 +70,13 @@ exports.parseRequest = function(request) {
                 linkHandler.handle(request).then(function(info) {
                     resolve(info);
                 }, function (err) {
+                    reject(err);
+                });
+				break;
+			case('feedback'):
+				feedbackHandler.handle(request).then(function(info){
+					resolve (info);
+                }, function(err) {
                     reject(err);
                 });
 				break;

@@ -44,5 +44,5 @@ module.exports = function(err) {
         return err.stack;
     }
 
-    log.error("** SYSTEM SEVERE ** " + this.message);
+    log.severe(this.message);
 };

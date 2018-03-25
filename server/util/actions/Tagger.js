@@ -30,12 +30,12 @@ exports.getArray = function() {
 exports.getTag = function(id) {
     var info = {};
     return new Promise(function (resolve, reject) {
-        var tag = new DBRow(lit.TAG_TABLE);
+        var tag = new DBRow(lit.tables.TAG);
         tag.getRow(id).then(function () {
             info = {
-                name: tag.getValue(lit.FIELD_NAME),
-                summary: tag.getValue(lit.FIELD_SUMMARY),
-                relatedTags: tag.getValue(lit.FIELD_RELATED_TAGS)
+                name: tag.getValue(lit.fields.NAME),
+                summary: tag.getValue(lit.fields.SUMMARY),
+                relatedTags: tag.getValue(lit.fields.RELATED_TAGS)
             };
             resolve(info);
         }, function () {
@@ -50,12 +50,16 @@ exports.getTag = function(id) {
  */
 exports.add = function(tagName) { //TODO: add related tags
     return new Promise(function(resolve, reject) {
-        var tag = new DBRow(lit.TAG_TABLE);
-        tag.setValue(lit.FIELD_NAME, tagName);
+        var tag = new DBRow(lit.tables.TAG);
+        tag.setValue(lit.fields.NAME, tagName);
         tag.insert().then(function () {
+            return exports.updateTagArray(); // TODO: May want the janitor to auto update instead of updating every time a tag is added
+        }).then(function() {
             resolve();
-            exports.updateTagArray(); // TODO: May want the janitor to auto update instead of updating every time a tag is added
-        }, function(){reject()});
+        }).catch(function() {
+           log.error('Error adding tag');
+           reject();
+        });
     });
 };
 
@@ -65,16 +69,21 @@ exports.add = function(tagName) { //TODO: add related tags
 exports.updateTagArray = function() {
     return new Promise(function(resolve, reject) {
         log.info("Updating tag array");
-        var tags = new DBRow(lit.TAG_TABLE);
+        var tags = new DBRow(lit.tables.TAG);
         tags.query().then(function() {
             while(tags.next()) {
-                if (!tagArray.includes(tags.getValue(lit.FIELD_NAME)))
-                    tagArray.push(tags.getValue(lit.FIELD_NAME));
+                if (!tagArray.includes(tags.getValue(lit.fields.NAME)))
+                    tagArray.push(tags.getValue(lit.fields.NAME));
             }
-            resolve();
-        }, function() {reject()});
+            resolve('Successfully updated the tag array');
+        }, function() {
+            reject('Failed to update the tag array')
+        });
     });
 };
 
 // update the tag array as soon as the module is required
-exports.updateTagArray();
+function getTagsOnStartup() {
+    exports.updateTagArray().catch(function() {log.error('Failed to update the tag array on startup')})
+}
+setTimeout(getTagsOnStartup, 2000);

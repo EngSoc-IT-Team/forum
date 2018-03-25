@@ -13,9 +13,9 @@
                 hr
                 div
                     .form-group
-                        label.form-control-label(for='report-text') What's on your mind?
+                        label.form-control-label(for='feedback-text') What's on your mind?
                         br
-                        textarea.modal-plaintext
+                        textarea.modal-plaintext#feedback-text
             .modal-footer
-                button.btn.btn-sm.button(type='button', data-dismiss='modal', onclick='report(this)') Let Us Know!
+                button.btn.btn-sm.button(type='button', onclick='sendFeedback()') Let Us Know!
                 button.btn.btn-sm.button(type='button', data-dismiss='modal') Cancel

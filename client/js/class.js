@@ -52,18 +52,10 @@ var classTemplate = '<div class="info-block clearfix">\
                             </div>\
                         </div>';
 
-var level1ReviewTemplate = '<div class="col-sm-12" id="{0}">\
-                                {1}\
-                                <span class="date">{2} by <a href="profile/username={3}">{4}</a></span>\
-                                <div class="description show-links">{5}</div>\
-                                <button class="btn btn-sm button" onclick="save(this)">Save</button>\
-                                <button class="btn btn-sm button" onclick="report(this)">Report</button>\
-                                <hr />\
-                            </div>';
-
 // hold the class ID and the user rating for the page as global variables
 var classID;
 var starRating = 0;
+var loaded = false;
 
 /**
  * Once the page is loaded, gets the class item from the server as well as all of its corresponding reviews,
@@ -86,7 +78,7 @@ function whenLoaded() {
 function onSuccess(data) {
     classID = data.class.id;
     fillInClassHeader(data.class);
-    addReviews(data.reviews);
+    addReviews(data.ratingList);
     CKEDITOR.replace('editor1');
 }
 
@@ -170,7 +162,7 @@ function fillInClassHeader(cl) {
  */
 function addReviews(reviews) {
     var template;
-    if (reviews.length == 0) {
+    if (reviews.length === 0) {
         $('#getMore').hide();
         $('#foot').append("<h6 class='info-block'>Nothing here yet! Add a comment to get the discussion going!</h6>");
         return;
@@ -183,19 +175,26 @@ function addReviews(reviews) {
         if (!reviews.hasOwnProperty(review))
             continue;
 
+        if(reviews[review].voted)
+            updateItemsWithPolarity.push({id: reviews[review].id, polarity: reviews[review].voted});
+
         template = fillReviewLevel1Template(reviews[review]);
+
+        if (reviews[review].children) {
+            for (var child in reviews[review].children) {
+                if (!reviews[review].children.hasOwnProperty(child))
+                    continue;
+
+                if (reviews[review].children[child].voted)
+                    updateItemsWithPolarity.push({id: reviews[review].children[child].id,
+                        polarity: reviews[review].children[child].voted});
+
+                template += fillCommentLevel2Template(comments[comment].children[child]);
+            }
+        }
+
         $('#reviews').append(template);
     }
-}
-
-/** Function used to create a HTML string for the review JSON object that is passed in
- *
- * @param review: The review item json to be displayed
- * @returns {*} The filled review template's HTML string
- */
-function fillReviewLevel1Template(review) {
-    return fillTemplate(level1ReviewTemplate, review.id, getRating(review.rating, 'yellow-star'),
-        getDateString(review.date), review.author, review.author, review.content);
 }
 
 /** Rates the class by either submitting a review and rating or just a rating
@@ -233,18 +232,22 @@ function rate(element) {
  * @returns {*} A JSON object containing the rating and comment, if there is one
  */
 function getRatingInfo(element, withComment) {
-    var rating = $(element); //TODO huh, what did I do here
     if(!withComment) {
         return {
             rating: starRating,
-            parent: classID
+            parent: classID,
+            voted: 'positive',
+            votes: 1
         }
     }
     else {
         return {
             rating: starRating,
             parent: classID,
-            content: CKEDITOR.instances['message-text'].getData()
+            summary: CKEDITOR.instances['message-text'].getData(),
+            content: CKEDITOR.instances['message-text'].getData(),
+            voted: 'positive',
+            votes: 1
         }
     }
 }
